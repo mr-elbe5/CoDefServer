@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="fop">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../BandikaDocuments/lib/fop.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../BandikaDocuments/lib/opencsv-5.7.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../BandikaDocuments/lib/xmlgraphics-commons-2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
