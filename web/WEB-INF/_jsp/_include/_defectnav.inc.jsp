@@ -1,13 +1,13 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
-<%@ page import="de.elbe5.request.SessionRequestData" %>
+<%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
-<%@ page import="de.elbe5.defecttracker.project.ProjectData" %>
-<%@ page import="de.elbe5.defecttracker.ViewFilter" %>
+<%@ page import="de.elbe5.codef.project.ProjectData" %>
+<%@ page import="de.elbe5.codef.ViewFilter" %>
 <%
-    SessionRequestData rdata = SessionRequestData.getRequestData(request);
+    RequestData rdata = RequestData.getRequestData(request);
     ViewFilter filter= ViewFilter.getFilter(rdata);
     if (filter.getProjectId()!=0){
         ProjectData project = ContentCache.getContent(filter.getProjectId(),ProjectData.class);

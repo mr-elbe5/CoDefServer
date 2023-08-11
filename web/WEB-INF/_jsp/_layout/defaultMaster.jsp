@@ -9,20 +9,21 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
-<%@ page import="de.elbe5.request.SessionRequestData" %>
+<%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.application.Configuration" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%
-    SessionRequestData rdata = SessionRequestData.getRequestData(request);
+    RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentContent();
+    ContentData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
     List<Integer> parentIds = ContentCache.getParentContentIds(contentData);
     String title = Configuration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
 %>
 <!DOCTYPE html>
-<html lang="<%=Configuration.getDefaultLocale().getLanguage()%>">
+<html lang="<%=Configuration.getLocale().getLanguage()%>">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

@@ -2,10 +2,10 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="de.elbe5.defecttracker.ViewFilter" %>
-<%@ page import="de.elbe5.request.SessionRequestData" %>
+<%@ page import="de.elbe5.codef.ViewFilter" %>
+<%@ page import="de.elbe5.request.RequestData" %>
 <%
-  SessionRequestData rdata = SessionRequestData.getRequestData(request);
+  RequestData rdata = RequestData.getRequestData(request);
   ViewFilter filter= ViewFilter.getFilter(rdata);
 %>
 
