@@ -192,7 +192,7 @@ public class ViewFilter implements Comparator<DefectData> {
     }
 
     public List<DefectData> getLocationDefects(int locationId){
-        List<Integer> ids= DefectBean.getInstance().getLocationDefectIds(locationId);
+        List<Integer> ids= DefectBean.getInstance().getUnitDefectIds(locationId);
         List<DefectData> list = ContentCache.getContents(DefectData.class);
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);

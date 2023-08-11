@@ -6,23 +6,22 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.defect;
+package de.elbe5.codef.defectstatus;
 
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.codef.defect.DefectData;
+import de.elbe5.codef.defect.DefectImageData;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
-import de.elbe5.user.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefectStatusData extends ContentData {
-
-    public static final String KEY_COMMENT = "statusData";
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -31,33 +30,8 @@ public class DefectStatusData extends ContentData {
         fileClasses.add(DefectImageData.class);
     }
 
-    protected int defectId = 0;
-    protected DefectData defect =null;
     protected String comment = "";
     protected String state="";
-
-    public String getCreatorName(){
-        UserData user=UserCache.getUser(getCreatorId());
-        if (user!=null)
-            return user.getName();
-        return "";
-    }
-
-    public int getDefectId() {
-        return defectId;
-    }
-
-    public void setDefectId(int defectId) {
-        this.defectId = defectId;
-    }
-
-    public DefectData getDefect() {
-        return defect;
-    }
-
-    public void setDefect(DefectData defect) {
-        this.defect = defect;
-    }
 
     public String getComment() {
         return comment;
@@ -92,13 +66,12 @@ public class DefectStatusData extends ContentData {
         return DefectStatusData.fileClasses;
     }
 
-
-    public void setCreateValues(DefectData defect, int creatorId){
-        setNew(true);
-        setId(DefectBean.getInstance().getNextCommentId());
-        setDefectId(defect.getId());
-        setCreatorId(creatorId);
-        setState(defect.getState());
+    @Override
+    public void setCreateValues(ContentData parent, RequestData rdata) {
+        super.setCreateValues(parent, rdata);
+        if (parent instanceof DefectData data) {
+            setState(data.getState());
+        }
     }
 
     public void readRequestData(RequestData rdata) {

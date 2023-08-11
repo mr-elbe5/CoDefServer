@@ -12,6 +12,7 @@ import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
+import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.unit.UnitData;
@@ -47,7 +48,7 @@ public class DefectData extends ContentData {
     }
 
     protected int displayId = 0;
-    protected int locationId = 0;
+    protected int unitId = 0;
     protected int projectId = 0;
     protected int planId = 0;
     protected int assignedId = 0;
@@ -90,8 +91,8 @@ public class DefectData extends ContentData {
         this.displayId = displayId;
     }
 
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
+    public void setUnitId(int unitId) {
+        this.unitId = unitId;
     }
 
     public int getProjectId() {
@@ -102,7 +103,7 @@ public class DefectData extends ContentData {
         this.projectId = projectId;
     }
 
-    public int getLocationId() {
+    public int getUnitId() {
         return parentId;
     }
 
@@ -153,7 +154,6 @@ public class DefectData extends ContentData {
     public int getCosts() {
         return costs;
     }
-
 
     public String getCostsString() {
         return costs==0 ? "" : Integer.toString(costs);
@@ -230,7 +230,7 @@ public class DefectData extends ContentData {
 
     public String getLocationName() {
         if (locationName.isEmpty()){
-            UnitData data= ContentCache.getContent(locationId, UnitData.class);
+            UnitData data= ContentCache.getContent(unitId, UnitData.class);
             if (data!=null)
                 locationName=data.getDisplayName();
         }
@@ -269,10 +269,6 @@ public class DefectData extends ContentData {
         return rdata.hasContentEditRight();
     }
 
-    public boolean hasUserGlobalEditRight(RequestData rdata) {
-        return rdata.hasContentEditRight();
-    }
-
     // view
 
     @Override
@@ -300,18 +296,17 @@ public class DefectData extends ContentData {
     @Override
     public void setCreateValues(ContentData parent, RequestData rdata) {
         super.setCreateValues(parent, rdata);
-        if (!(this.parent instanceof UnitData)) {
+        if (!(this.parent instanceof UnitData unit)) {
             Log.error("parent of defect page should be location page");
             return;
         }
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
-        UnitData location = (UnitData) this.parent;
-        ProjectData project = (ProjectData) location.getParent();
-        setLocationId(location.getId());
+        ProjectData project = (ProjectData) unit.getParent();
+        setUnitId(unit.getId());
         setProjectId(project.getId());
         setState(STATE_OPEN);
         setNavType(NAV_TYPE_NONE);
-        setPlanId(location.getPlan() == null ? 0 : location.getPlan().getId());
+        setPlanId(unit.getPlan() == null ? 0 : unit.getPlan().getId());
     }
 
     @Override
@@ -371,7 +366,7 @@ public class DefectData extends ContentData {
         setState(rdata.getAttributes().getString("state"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
         setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
-        setLocationId(rdata.getAttributes().getInt("locationId"));
+        setUnitId(rdata.getAttributes().getInt("locationId"));
     }
 
 

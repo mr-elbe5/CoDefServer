@@ -11,7 +11,7 @@ package de.elbe5.codef;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.codef.defect.DefectStatusData;
+import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.codef.defect.DefectData;
 import de.elbe5.codef.defect.DefectImageData;
 import de.elbe5.codef.unit.UnitData;

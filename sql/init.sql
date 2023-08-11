@@ -179,6 +179,95 @@ CREATE TABLE IF NOT EXISTS t_content_log
     CONSTRAINT t_content_log_fk1 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS t_project
+(
+    id INTEGER NOT NULL,
+    group_id   INTEGER NOT NULL,
+    CONSTRAINT t_project_pk PRIMARY KEY (id),
+    CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_project_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id)
+);
+
+CREATE TABLE IF NOT EXISTS t_unit
+(
+    id                 INTEGER      NOT NULL,
+    project_id         INTEGER      NOT NULL,
+    approve_date       TIMESTAMP    NULL,
+    CONSTRAINT t_unit_pk PRIMARY KEY (id),
+    CONSTRAINT t_unit_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_unit_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE IF NOT EXISTS s_defect_id START 1000;
+
+CREATE TABLE IF NOT EXISTS t_defect
+(
+    id               INTEGER       NOT NULL,
+    display_id       INTEGER       NOT NULL,
+    unit_id      INTEGER       NOT NULL,
+    project_id       INTEGER       NOT NULL,
+    assigned_id      INTEGER       NOT NULL,
+    notified         BOOLEAN       NOT NULL DEFAULT FALSE,
+    lot              VARCHAR(255)  NOT NULL DEFAULT '',
+    state            VARCHAR(20)   NOT NULL,
+    costs            INTEGER       NOT NULL DEFAULT 0,
+    plan_id          INTEGER       NOT NULL,
+    position_x       INTEGER       NOT NULL DEFAULT 0,
+    position_y       INTEGER       NOT NULL DEFAULT 0,
+    position_comment VARCHAR(255)  NOT NULL DEFAULT '',
+    due_date1        TIMESTAMP     NULL,
+    due_date2        TIMESTAMP     NULL,
+    close_date       TIMESTAMP     NULL,
+    CONSTRAINT t_defect_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_fk2 FOREIGN KEY (unit_id) REFERENCES t_unit (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_fk3 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_fk4 FOREIGN KEY (plan_id) REFERENCES t_image (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_fk5 FOREIGN KEY (assigned_id) REFERENCES t_user (id)
+);
+
+CREATE TABLE IF NOT EXISTS t_defect_status
+(
+    id            INTEGER       NOT NULL,
+    comment       VARCHAR(2000) NOT NULL DEFAULT '',
+    state         VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
+    CONSTRAINT t_defect_status_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS t_defect_comment
+(
+    id            INTEGER       NOT NULL,
+    defect_id     INTEGER       NOT NULL,
+    creation_date TIMESTAMP     NOT NULL DEFAULT now(),
+    creator_id    INTEGER       NOT NULL,
+    comment       VARCHAR(2000) NOT NULL DEFAULT '',
+    state         VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
+    CONSTRAINT t_defect_comment_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_comment_fk1 FOREIGN KEY (defect_id) REFERENCES t_defect (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_comment_fk2 FOREIGN KEY (creator_id) REFERENCES t_user (id)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS t_defect_comment_document
+(
+    id            INTEGER       NOT NULL,
+    comment_id    INTEGER       NOT NULL,
+    CONSTRAINT t_defect_comment_document_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_comment_document_fk1 FOREIGN KEY (id) REFERENCES t_file (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_comment_document_fk2 FOREIGN KEY (comment_id) REFERENCES t_defect_comment (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS t_defect_comment_image
+(
+    id            INTEGER       NOT NULL,
+    comment_id    INTEGER       NOT NULL,
+    CONSTRAINT t_defect_comment_image_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_comment_image_fk1 FOREIGN KEY (id) REFERENCES t_image (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_comment_image_fk2 FOREIGN KEY (comment_id) REFERENCES t_defect_comment (id) ON DELETE CASCADE
+);
+
 -- root user
 INSERT INTO t_user (id,first_name,last_name,email,login,pwd)
 VALUES (1,'System','Administrator','root@localhost','root','');

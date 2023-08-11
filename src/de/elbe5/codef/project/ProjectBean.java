@@ -32,9 +32,8 @@ public class ProjectBean extends ContentBean {
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectData))
+        if (!(contentData instanceof ProjectData data))
             return;
-        ProjectData data = (ProjectData) contentData;
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(GET_CONTENT_EXTRAS_SQL);
@@ -53,9 +52,8 @@ public class ProjectBean extends ContentBean {
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectData))
+        if (!(contentData instanceof ProjectData data))
             return;
-        ProjectData data = (ProjectData) contentData;
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
@@ -69,13 +67,12 @@ public class ProjectBean extends ContentBean {
         }
     }
 
-    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project set group_id=?, where id=?";
+    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project set group_id=? where id=?";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectData))
+        if (!(contentData instanceof ProjectData data))
             return;
-        ProjectData data = (ProjectData) contentData;
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);

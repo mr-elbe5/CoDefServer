@@ -6,31 +6,32 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.unit;
+package de.elbe5.codef.defectstatus;
 
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
-import de.elbe5.file.ImageBean;
+import de.elbe5.file.FileBean;
+import de.elbe5.file.FileData;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 
-public class UnitBean extends ContentBean {
+public class DefectStatusBean extends ContentBean {
 
-    private static UnitBean instance = null;
+    private static DefectStatusBean instance = null;
 
-    public static UnitBean getInstance() {
+    public static DefectStatusBean getInstance() {
         if (instance == null) {
-            instance = new UnitBean();
+            instance = new DefectStatusBean();
         }
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT project_id, approve_date FROM t_unit WHERE id=?";
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT comment " +
+            "FROM t_defect_status  WHERE id=?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof UnitData data))
+        if (!(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -38,13 +39,8 @@ public class UnitBean extends ContentBean {
             pst.setInt(1, data.getId());
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    int i = 1;
-                    data.setProjectId(rs.getInt(i++));
-                    Timestamp ts = rs.getTimestamp(i);
-                    if (ts != null)
-                        data.setApproveDateTime(ts.toLocalDateTime());
-                    else
-                        data.setApproveDate(null);
+                    int i=1;
+                    data.setComment(rs.getString(i++));
                 }
             }
         } finally {
@@ -52,57 +48,52 @@ public class UnitBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_unit (project_id,approve_date,id) values(?,?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (" +
+            "comment,id) " +
+            "values(?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!contentData.isNew() || !(contentData instanceof UnitData data))
+        if (!contentData.isNew() || !(contentData instanceof DefectStatusData data))
             return;
-        LocalDateTime now = getServerTime(con);
-        data.setChangeDate(now);
-        if (data.isNew()) {
-            data.setCreationDate(now);
-        }
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setInt(i++, data.getProjectId());
-            if (data.getApproveDate() != null)
-                pst.setTimestamp(i++, Timestamp.valueOf(data.getApproveDateTime()));
-            else
-                pst.setNull(i++, Types.TIMESTAMP);
+            pst.setString(i++, data.getComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
         } finally {
             closeStatement(pst);
         }
-        if (data.getPlan()!=null)
-            ImageBean.getInstance().saveFile(con,data.getPlan(),true);
+        for (FileData file : data.getFiles()){
+            FileBean.getInstance().saveFile(con, file, true);
+        }
     }
 
-    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_unit set approve_date = ? where id = ?";
+    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status " +
+            "set comment=? where id=? ";
 
     @Override
-    public void updateContentExtras(Connection con, ContentData contentData) throws SQLException{
-        if (contentData.isNew() || !(contentData instanceof UnitData data))
+    public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
+        if (!(contentData instanceof DefectStatusData data))
             return;
-        if (data.getPlan()!=null)
-            ImageBean.getInstance().saveFile(con,data.getPlan(),true);
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
-            if (data.getApproveDate() != null)
-                pst.setTimestamp(i++, Timestamp.valueOf(data.getApproveDateTime()));
-            else
-                pst.setNull(i++, Types.TIMESTAMP);
+            pst.setString(i++, data.getComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
         } finally {
             closeStatement(pst);
+        }
+        for (FileData file : data.getFiles()){
+            if (file.isNew()) {
+                FileBean.getInstance().saveFile(con, file, true);
+            }
         }
     }
 
