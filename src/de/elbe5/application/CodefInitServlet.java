@@ -24,6 +24,7 @@ import de.elbe5.timer.CleanupTaskData;
 import de.elbe5.timer.HeartbeatTaskData;
 import de.elbe5.timer.Timer;
 import de.elbe5.timer.TimerController;
+import de.elbe5.user.CodefUserController;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserController;
 
@@ -53,10 +54,10 @@ public class CodefInitServlet extends InitServlet {
         ImageController.register(new ImageController());
         GroupController.register(new GroupController());
         TimerController.register(new TimerController());
-        UserController.register(new UserController());
+        UserController.register(new CodefUserController());
         ProjectController.register(new ProjectController());
         DefectController.register(new DefectController());
-        DefectStatusController.register(new DefectController());
+        DefectStatusController.register(new DefectStatusController());
         UnitController.register(new UnitController());
 
         ContentCache.load();

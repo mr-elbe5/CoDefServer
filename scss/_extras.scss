@@ -36,12 +36,24 @@ $light-blue: #617fb3;
 $light:         #f8f9fa; //gray-100
 $dark:          #343a40; //gray-800
 
+$body-color: $dark;
+$header-color: $light;
+$main-color: $dark;
+$footer-color: $light;
+
 $primary: $mid-blue;
 
 $headings-font-weight:        400;
 
 $color-dark-background: rgb(51,51,51);
 $color-light-background: rgb(255,255,255);
+$color-droparea: #aaffaa;
+
+$main-background: #ffffff;
+$gray-background: #f0f0f0;
+$background-body: $light url(img-path('bricksred_bg.png'));
+$background-admin-body: $light url(img-path('bricks_bg.png'));
+
 
 $enable-prefers-reduced-motion-media-query:   false;
 
@@ -59,18 +71,16 @@ $font-size-base:              1rem;
 
 $link-decoration:             none;
 
-$font-size-sm:                ($font-size-base * .9);
 $font-size-xsm:               ($font-size-base * .8);
 $font-size-xxsm:              ($font-size-base * .7);
 
 $h1-font-size:                $font-size-base * 2;
-$h2-font-size:                $font-size-base * 1.75;
-$h3-font-size:                $font-size-base * 1.375;
-$h4-font-size:                $font-size-base * 1.25;
+$h2-font-size:                $font-size-base * 1.5;
+$h3-font-size:                $font-size-base * 1.125;
+$h4-font-size:                $font-size-base;
 $h5-font-size:                $font-size-base;
 $h6-font-size:                $font-size-base;
 
-$grid-gutter-width:           16px;
 
 
 

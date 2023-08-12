@@ -1,32 +1,12 @@
-@charset "UTF-8";
 body {
-  font-family: MPlus1p, Helvetica, sans-serif;
-  background: #e5e8eb url("../img/papier.jpg");
+  background: #f8f9fa url("../img/bricksred_bg.png");
+  position: relative;
   color: #343a40;
+  height: 100%;
 }
 
 a, a:active, a:hover, a:visited {
   color: #343a40;
-}
-
-.spacer1 {
-  height: 1rem;
-}
-
-.spacer2 {
-  height: 2rem;
-}
-
-.underlined {
-  border-bottom: 1px solid #343a40;
-}
-
-.padded {
-  padding: 10px;
-}
-
-.center {
-  text-align: center;
 }
 
 button:focus, a:focus, .btn:focus {
@@ -34,189 +14,255 @@ button:focus, a:focus, .btn:focus {
   box-shadow: none;
 }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 500;
-  background: #e5e8eb url("../img/papier.jpg");
+.table th {
+  font-weight: normal;
 }
-header .header {
-  display: table;
+
+.htmlBox {
+  padding: 1rem;
+}
+
+.imageBox {
+  padding: 0;
+}
+.imageBox img {
   width: 100%;
-  border-bottom: solid 1px #6c757d;
-  padding-bottom: 5px;
-}
-header .header .logo-area {
-  display: table-cell;
-  height: 6.5rem;
-}
-header .header .nav-area {
-  display: table-cell;
-  vertical-align: top;
-  height: 6.5rem;
-}
-header .header .nav-area .sysnav {
-  font-size: 0.8rem;
-  height: 1rem;
-  margin: 0.5rem 0.25rem 3.5rem 0;
-  text-align: right;
-  vertical-align: top;
-}
-header .header .nav-area .sysnav a {
-  cursor: pointer;
-}
-header .header .nav-area .sysnav .nav-link {
-  padding: 0 0 0 1rem;
-}
-header .header .nav-area .sysnav .dropdown-menu {
-  padding: 0;
-}
-header .header .nav-area .sysnav .dropdown-menu .dropdown-item {
-  color: #343a40;
-  font-size: 0.8rem;
-}
-header .header .nav-area .menu-area {
-  text-align: right;
-  vertical-align: bottom;
-}
-header .header .nav-area .menu-area a {
-  cursor: pointer;
-}
-header .header .nav-area .menu-area .menu-link.mainLink {
-  font-size: 1.2rem;
-}
-header .header .nav-area .menu-area .navIcon.linkNav {
-  height: 1rem;
-  padding-bottom: 0.2rem;
-  margin-right: 1rem;
-}
-header .header .nav-area .menu-area .dropdown-item {
-  color: #343a40;
-  padding: 0.25rem 0.5rem;
-}
-header .header .nav-area .menu-area .dropdown-item.level2 {
-  padding-left: 1rem;
-  font-size: 95%;
-}
-header .header .nav-area .menu-area .dropdown-item.level3 {
-  padding-left: 1.5rem;
-  font-size: 90%;
-}
-header .header .nav-area .menu-area .dropdown-item.level4 {
-  padding-left: 2rem;
-  font-size: 85%;
-}
-header .header .nav-area .menu-area .dropdown-item.active, header .header .nav-area .menu-area .dropdown-item:active {
-  color: #343a40;
 }
 
-.breadcrumb {
+.imageScrollBox {
+  padding: 0;
+  overflow-x: auto;
+}
+
+div#pageContainer {
+  background: white;
+}
+
+header {
   background: transparent;
-  font-size: 0.8rem;
-  margin: 0.25rem 0;
-  padding: 0 1rem;
+  color: #343a40;
+  position: fixed;
+  z-index: 1030;
+  top: 0.5rem;
+  left: 0;
+  right: 0;
+  height: 6.5rem;
 }
-
-.navbar {
+header .navbar-collapse {
+  position: relative;
+}
+header > .container {
+  margin-top: 0.5rem;
+  background: #f0f0f0;
+  border-radius: 5px 5px 0 0;
+}
+header div.top a {
+  text-decoration: none;
+  color: #343a40;
+}
+header div.top section.sysnav {
+  background: transparent;
+}
+header div.top section.sysnav a.nav-link {
   padding: 0;
+  margin: 0.25rem 0 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  color: #343a40;
+}
+header div.top section.sysnav a.nav-link.toggle {
+  font-size: 0.7rem;
+  margin-top: 0.35rem;
+}
+header div.menu {
+  background: transparent;
+}
+header div.menu section.menu nav.navbar {
+  padding: 0.25rem 0;
+}
+header div.menu section.menu nav.navbar .navbar-toggler span {
+  color: #343a40;
+}
+header div.menu section.menu nav.navbar a.navbar-brand {
+  padding: 0;
+  font-size: 1.5em;
+}
+header div.menu section.menu nav.navbar a.navbar-brand img {
+  height: 40px;
+}
+header div.menu section.menu nav.navbar .navbar-collapse {
+  border-bottom: 1px solid #343a40;
+}
+header div.menu section.menu nav.navbar .nav-item a {
+  color: #343a40;
+}
+header div.menu section.menu nav.navbar .nav-link {
+  padding: 0.25rem 1rem;
+}
+header div.menu section.menu nav.navbar .dropdown-toggle::after {
+  vertical-align: 0.1em;
+}
+header div.menu section.menu nav.navbar .dropdown-menu {
+  background: #f0f0f0;
+  padding: 0.25rem 0;
+  margin: 0;
+  border-color: #343a40;
+  border-width: 0 1px 1px 1px;
+  border-radius: 0;
+  max-height: 30em;
+  overflow-y: scroll;
+}
+header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item:focus, header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item:active, header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  text-decoration: underline;
+}
+header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item.subitem {
+  padding-left: 3rem;
+  font-size: 0.875rem;
+}
+header div.menu section.menu nav.navbar .dropdown-menu .nav-item a {
+  color: #343a40;
+}
+header section.bc .filter li, header section.filter .filter li {
+  margin-left: 1rem;
+}
+header section.bc .filter a, header section.filter .filter a {
+  margin: 0.25rem 0 0.25rem 1.5rem;
+  font-size: 0.8rem;
+  color: #343a40;
+  cursor: pointer;
+}
+header section.bc .breadcrumb, header section.filter .breadcrumb {
+  background: transparent;
+  color: #343a40;
+  margin: 0;
+  font-size: 0.8rem;
+  padding: 0.25rem 0;
+}
+header section.bc .breadcrumb .breadcrumb-item.active, header section.filter .breadcrumb .breadcrumb-item.active {
+  color: #343a40;
+}
+header section.bc .breadcrumb a, header section.filter .breadcrumb a {
+  color: #343a40;
+  text-decoration: none;
 }
 
 main {
-  padding-bottom: 1rem;
+  position: fixed;
+  top: 7.1rem;
+  bottom: 2.2rem;
+  left: 0;
+  right: 0;
+  background: transparent;
 }
-main div#pageContent h1, main div#pageContent h2, main div#pageContent h3, main div#pageContent h4 {
+
+.contentTop {
+  margin-bottom: 0.5rem;
+}
+
+div#pageContainer {
+  position: relative;
+  height: 100%;
+  overflow-y: scroll;
+  background: white;
+  color: #343a40;
+  border: solid black;
+  border-width: 1px 0 1px 0;
+}
+
+div#pageContent {
+  padding: 1rem 0;
+}
+div#pageContent h1, div#pageContent h2, div#pageContent h3 {
   margin: 0;
 }
-main div#pageContent h1.title {
-  margin-bottom: 1rem;
+div#pageContent .headerBox {
+  padding: 0.5rem 1rem;
+}
+div#pageContent .headerBox h1 {
   text-align: center;
 }
-main div#pageContent .partWrapper .paragraph {
-  background: rgba(255, 255, 255, 0.33);
-  border: 1px solid #d8d8d8;
-  border-radius: 10px;
+div#pageContent h3.partHeader {
+  background: #343a40;
+  padding: 0.5rem 1rem;
+}
+div#pageContent .paragraph {
+  border: solid 1px #343a40;
+  border-radius: 5px;
   padding: 1rem;
-  height: 100%;
+  margin: 1rem 0;
+  height: calc(100% - 2rem);
   overflow: hidden;
 }
-main div#pageContent .partWrapper .paragraph h2 {
+div#pageContent .paragraph h2 {
   border-bottom: 1px solid;
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
 }
-main div#pageContent .partWrapper .paragraph h3 {
+div#pageContent .paragraph h3 {
   border-width: 1px 0;
   border-style: solid;
   padding: 0.5rem 0;
   margin: 0.5rem 0;
 }
-main div#pageContent .partWrapper .paragraph img {
-  max-width: 100%;
+div#pageContent .contentSection.tableContent {
+  overflow-y: hidden;
+  overflow-x: scroll;
 }
-main div#pageContent .partWrapper .paragraph img[style*="float: left;"], main div#pageContent .partWrapper .paragraph img[style*="float:left;"] {
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
-}
-main div#pageContent .partWrapper .paragraph img[style*="float: right;"], main div#pageContent .partWrapper .paragraph img[style*="float:right;"] {
-  margin-left: 0.5em;
-  margin-bottom: 0.5em;
+div#pageContent .asideSection .paragraph {
+  background: #f8f9fa;
+  border-color: #343a40;
 }
 
 footer {
-  position: sticky;
-  bottom: 0;
-  z-index: 500;
-  background: #e5e8eb url("../img/papier.jpg");
-  border-top: solid 1px #6c757d;
+  position: fixed;
+  z-index: 1030;
+  bottom: 0.2rem;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  color: #343a40;
   font-size: 0.8rem;
+  padding: 0;
 }
-
-#searchboxform {
-  padding: 1rem 0;
+footer > .container {
+  height: 100%;
+  background: #f0f0f0;
+  border-radius: 0 0 5px 5px;
 }
-#searchboxform .form-control {
-  height: auto;
-  padding: 0 0.75rem;
-}
-
-div.searchResults {
-  padding-top: 1rem;
-}
-div.searchResults div.searchResult {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #343a40;
-}
-div.searchResults div.searchResult div.searchTitle {
-  font-size: 1.2em;
-}
-div.searchResults div.searchResult div.searchDescription {
-  padding-top: 0.5em;
-  font-style: italic;
-}
-div.searchResults div.searchResult div.searchContent {
-  padding-top: 0.5em;
+footer a, footer a:active, footer a:hover, footer a:focus, footer a:visited {
+  color: #343a40;
 }
 
 .searchHighlight {
-  background: yellow;
+  background: #ffc107;
 }
 
-body.admin main {
-  top: 6.5rem;
+#planContainer {
+  margin: 0;
+  padding: 0;
 }
-body.admin div#pageContainer {
-  background: white;
+#planContainer #plan {
+  max-width: 100%;
+}
+#planContainer #planPositioner {
+  position: relative;
+  width: 60px;
+}
+#planContainer #planPositioner span {
+  position: relative;
+  left: -8px;
+  top: 8px;
+  color: red;
+  font-size: 75%;
 }
 
 /* admin */
+body.admin {
+  background: #f8f9fa url("../img/bricks_bg.png");
+}
 body.admin div#pageContainer {
-  margin-top: 1rem;
   background: white;
   min-height: 500px;
-}
-body.admin .header .nav-area .sysnav {
-  margin: 0.5rem 0.25rem 2.5rem 0;
 }
 
 /* login */
@@ -227,11 +273,20 @@ body.login {
   left: 0;
   right: 0;
 }
+body.login #main {
+  top: 0;
+}
 body.login #main .loginSection .form {
   width: 100%;
   max-width: 360px;
   padding: 30px;
   margin: 20% auto;
+  background: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 5px;
+}
+body.login #main .loginSection .form img {
+  height: 50px;
 }
 body.login #main .loginSection .form .form-control:focus {
   z-index: 2;
@@ -242,16 +297,77 @@ body.login #main .loginSection .form input[type=text] {
 body.login #main .loginSection .form input[type=password] {
   margin-bottom: 2rem;
 }
-
-a.link::before {
-  content: "›";
-  padding-right: 0.25em;
+body.login #main .loginSection .form .container {
+  padding-bottom: 1rem;
+}
+body.login #main .loginSection .form .container label {
+  padding-left: 0;
 }
 
-a.mail::before {
-  content: "\f003";
-  font-family: FontAwesome;
-  padding-right: 0.25em;
+div.projectSelector {
+  text-align: center;
+}
+div.projectSelector h1 {
+  font-size: 1.25rem;
+}
+div.projectSelector h1, div.projectSelector div {
+  margin-bottom: 1rem !important;
+}
+
+#plan {
+  cursor: crosshair;
+}
+
+table.defect-table {
+  font-size: 0.8em;
+}
+table.defect-table th {
+  white-space: nowrap;
+  position: sticky;
+}
+table.defect-table th a.fa {
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+table.defect-table th div.dropdown-menu {
+  padding: 0.25em 0;
+  font-size: 1em;
+}
+table.defect-table th div.dropdown-menu label {
+  margin: 0;
+}
+table.defect-table th div.dropdown-menu a {
+  cursor: pointer;
+}
+
+div.defectimage {
+  height: 150px;
+}
+div.defectimage img {
+  height: 100%;
+}
+
+div.boxContainer {
+  font-size: 0.8em;
+}
+div.boxContainer div.box div.boxTitle {
+  padding: 1em 1em 0 1em;
+  border-bottom: 1px solid black;
+  font-weight: bold;
+}
+div.boxContainer div.box div.boxText {
+  padding: 0 1em 1em 1em;
+}
+div.boxContainer div.box div.boxImage {
+  padding: 0.5em 1em 1em 1em;
+}
+div.boxContainer div.box div.boxSubtitle {
+  padding: 0 1em 1em 1em;
+}
+
+span.inactive {
+  color: #6c757d;
 }
 
 /*# sourceMappingURL=layout.css.map */

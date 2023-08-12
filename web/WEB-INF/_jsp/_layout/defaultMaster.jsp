@@ -29,7 +29,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title><%=$H(title)%></title>
     <link rel="shortcut icon" href="/favicon.ico"/>
-    <link rel="stylesheet" href="/static-content/css/bandika.css?v=200527"/>
+    <link rel="stylesheet" href="/static-content/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/static-content/css/bandika.css"/>
+    <link rel="stylesheet" href="/static-content/css/layout.css"/>
     <script type="text/javascript" src="/static-content/js/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="/static-content/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/static-content/js/bootstrap.tree.js"></script>

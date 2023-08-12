@@ -11,9 +11,9 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.defecttracker.project.ProjectData" %>
-<%@ page import="de.elbe5.defecttracker.ViewFilter" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
+<%@ page import="de.elbe5.codef.ViewFilter" %>
+<%@ page import="de.elbe5.codef.project.ProjectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);

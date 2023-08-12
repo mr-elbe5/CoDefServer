@@ -36,9 +36,12 @@ public class CodefUserController extends UserController {
                 filter.setProjectId(projectIds.get(0));
                 break;
             default:
-                int id=Integer.parseInt(cookieValues.get("projectId"));
-                if (projectIds.contains(id))
-                    filter.setProjectId(id);
+                String s =  cookieValues.get("projectId");
+                if (s!=null) {
+                    int id = Integer.parseInt(s);
+                    if (projectIds.contains(id))
+                        filter.setProjectId(id);
+                }
                 break;
 
         }
