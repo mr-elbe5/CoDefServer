@@ -7,7 +7,7 @@
     <servlet>
         <!--suppress ServletWithoutMappingInspection -->
         <servlet-name>initServlet</servlet-name>
-        <servlet-class>de.elbe5.application.DefectTrackerInitServlet</servlet-class>
+        <servlet-class>de.elbe5.application.CoDefInitServlet</servlet-class>
         <load-on-startup>10</load-on-startup>
     </servlet>
     <servlet>
@@ -40,15 +40,11 @@
     </servlet>
     <servlet>
         <servlet-name>content</servlet-name>
-        <servlet-class>de.elbe5.servlet.DefectContentServlet</servlet-class>
+        <servlet-class>de.elbe5.servlet.ContentServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>controller</servlet-name>
         <servlet-class>de.elbe5.servlet.ControllerServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>api</servlet-name>
-        <servlet-class>de.elbe5.servlet.ApiServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
@@ -60,12 +56,9 @@
         <url-pattern>*.jsp</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>api</servlet-name>
-        <url-pattern>/api/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>controller</servlet-name>
         <url-pattern>/ctrl/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>content</servlet-name>

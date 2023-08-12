@@ -355,7 +355,7 @@ public class DefectData extends ContentData {
         }
     }
 
-    public void readApiRequestData(RequestData rdata) {
+    public void readRequestData(RequestData rdata) {
         setCreatorId(rdata.getAttributes().getInt("creatorId"));
         setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
