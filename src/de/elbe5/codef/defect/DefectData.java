@@ -19,6 +19,7 @@ import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentData;
 import de.elbe5.codef.project.ProjectData;
 import de.elbe5.file.FileData;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.rights.SystemZone;
 import de.elbe5.user.UserCache;
@@ -44,7 +45,7 @@ public class DefectData extends ContentData {
 
     static {
         childClasses.add(DefectStatusData.class);
-        fileClasses.add(DefectImageData.class);
+        fileClasses.add(ImageData.class);
     }
 
     protected int displayId = 0;
@@ -345,7 +346,7 @@ public class DefectData extends ContentData {
         List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
         for (BinaryFile f : newFiles) {
             if (f.isImage()){
-                DefectImageData image = new DefectImageData();
+                ImageData image = new ImageData();
                 image.setCreateValues(this, rdata);
                 if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
                     continue;

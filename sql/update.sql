@@ -127,3 +127,17 @@ update t_file t1 set parent_id = content_id from t_defect_comment_image t2 where
 drop table t_defect_comment_image;
 drop table t_defect_comment_document;
 drop table t_defect_comment;
+
+UPDATE t_content set type = 'de.elbe5.codef.root.RootPageData' where type = 'RootPageData';
+UPDATE t_content set type = 'de.elbe5.codef.project.ProjectData' where type = 'ProjectData';
+UPDATE t_content set type = 'de.elbe5.codef.unit.UnitData' where type = 'LocationData';
+UPDATE t_content set type = 'de.elbe5.codef.defect.DefectData' where type = 'DefectData';
+--UPDATE t_content set type = 'de.elbe5.codef.defectstatus.DefectStatusData' where type = 'DefectStatusData';
+
+UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'ImageData';
+UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DocumentData';
+UPDATE t_file set type = 'de.elbe5.codef.unit.PlanImageData' where type = 'PlanImageData';
+UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectImageData';
+UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectCommentImageData';
+UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectDocumentData';
+UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectCommentDocumentData';

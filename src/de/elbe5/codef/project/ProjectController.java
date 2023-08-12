@@ -12,13 +12,13 @@ import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.defect.DefectImageData;
 import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.codef.unit.PlanImageData;
 import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.content.ContentResponse;
+import de.elbe5.file.ImageData;
 import de.elbe5.group.GroupBean;
 import de.elbe5.group.GroupData;
 import de.elbe5.request.RequestData;
@@ -181,12 +181,12 @@ public class ProjectController extends ContentController {
                     jsDefects.add(jsDefect);
                     JSONArray jsImages = new JSONArray();
                     jsDefect.put("images", jsImages);
-                    for (DefectImageData image : defect.getFiles(DefectImageData.class)) {
+                    for (ImageData image : defect.getFiles(ImageData.class)) {
                         JSONObject jsImage = image.getJson();
                         jsImages.add(jsImage);
                     }
                     //todo
-                    List<DefectImageData> commentImages = defect.getFiles(DefectImageData.class);
+                    List<ImageData> commentImages = defect.getFiles(ImageData.class);
                     JSONArray jsComments = new JSONArray();
                     jsDefect.put("comments", jsComments);
                     for (DefectStatusData comment : defect.getComments()) {
@@ -194,7 +194,7 @@ public class ProjectController extends ContentController {
                         jsComments.add(jsComment);
                         JSONArray jsCommentImages = new JSONArray();
                         jsComment.put("images", jsCommentImages);
-                        /*for (DefectImageData image : commentImages) {
+                        /*for (ImageData image : commentImages) {
                             if (image.getCommentId() == comment.getId()) {
                                 JSONObject jsImage = image.getJson();
                                 jsCommentImages.add(jsImage);

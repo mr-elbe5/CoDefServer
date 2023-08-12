@@ -13,10 +13,10 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.defect.DefectImageData;
-import de.elbe5.codef.unit.UnitData;
 import de.elbe5.codef.unit.PlanImageData;
 import de.elbe5.file.FileBean;
+import de.elbe5.codef.unit.UnitData;
+import de.elbe5.file.ImageData;
 import de.elbe5.file.PdfCreator;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
@@ -56,7 +56,7 @@ public abstract class DefectFopBean extends PdfCreator {
         sb.append("</image>");
     }
 
-    protected void addLocationDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeComments) {
+    protected void addUnitDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeComments) {
         for (DefectData defect : defects){
             sb.append("<locationdefect>");
             sb.append("<description>").append(LocalizedStrings.xml("_defect")).append(": ").append(xml(defect.getDescription())).append("</description>");
@@ -85,12 +85,12 @@ public abstract class DefectFopBean extends PdfCreator {
                 sb.append("<label1>").append(LocalizedStrings.xml("_positionComment")).append("</label1><content1>").append(xml(defect.getPositionComment())).append("</content1>");
                 sb.append("</defectrow>");
             }
-            for (DefectImageData image : defect.getFiles(DefectImageData.class)){
+            for (ImageData image : defect.getFiles(ImageData.class)){
                 BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
                 addIndentedImage(sb, file, "8.0cm");
             }
             if (includeComments) {
-                List<DefectImageData> files = new ArrayList<>();
+                List<ImageData> files = new ArrayList<>();
                 for (DefectStatusData comment : defect.getComments()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
@@ -111,13 +111,11 @@ public abstract class DefectFopBean extends PdfCreator {
                             .append(DateHelper.toHtmlDateTime(comment.getCreationDate()))
                             .append("</content2>");
                     sb.append("</defectrow>");
-                    List<DefectImageData> defectCommentImages=defect.getFiles(DefectImageData.class);
+                    List<ImageData> defectCommentImages=defect.getFiles(ImageData.class);
                     files.clear();
-                    for (DefectImageData file : defectCommentImages) {
-                        //todo
-                        files.add(file);
-                    }
-                    for (DefectImageData image : files){
+                    //todo
+                    files.addAll(defectCommentImages);
+                    for (ImageData image : files){
                         BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
                         addIndentedImage(sb, file, "8.0cm");
                     }

@@ -12,9 +12,9 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.defect.DefectImageData;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
 
@@ -27,7 +27,7 @@ public class DefectStatusData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        fileClasses.add(DefectImageData.class);
+        fileClasses.add(ImageData.class);
     }
 
     protected String comment = "";

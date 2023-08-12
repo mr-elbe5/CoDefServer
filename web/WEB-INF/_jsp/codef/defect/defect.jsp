@@ -13,13 +13,9 @@
 <%@ page import="de.elbe5.user.UserData" %>
 <%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.file.FileData" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="de.elbe5.rights.SystemZone" %>
 <%@ page import="de.elbe5.codef.defect.DefectData" %>
 <%@ page import="de.elbe5.request.ContentRequestKeys" %>
-<%@ page import="de.elbe5.codef.defect.DefectImageData" %>
-<%@ page import="de.elbe5.file.DocumentData" %>
 <%@ page import="de.elbe5.codef.defectstatus.DefectStatusData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
@@ -29,11 +25,6 @@
     assert(defect !=null);
     UserData assignedUser = UserCache.getUser(defect.getAssignedId());
     String assignedName = assignedUser == null ? "" : assignedUser.getName();
-    List<FileData> files = new ArrayList<>();
-    files.addAll(defect.getFiles(DocumentData.class));
-    files.addAll(defect.getFiles(DefectImageData.class));
-    List<DocumentData> defectCommentDocuments=defect.getFiles(DocumentData.class);
-    List<DefectImageData> defectCommentImages=defect.getFiles(DefectImageData.class);
     boolean isEditor=defect.hasUserEditRight(rdata);
     boolean isAssigned=rdata.getUserId()==defect.getAssignedId();
     if (isEditor || isAssigned){
@@ -105,9 +96,9 @@
             </div>
         </div>
 
-        <% if (!files.isEmpty()){%>
+        <% if (!defect.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : files){%>
+            <% for (FileData file : defect.getFiles()){%>
             <div class="box">
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
                 <div class="boxImage">
@@ -122,27 +113,20 @@
         </div>
         <%}%>
     </div>
-    <% for (DefectStatusData comment : defect.getComments()){%>
+    <% for (DefectStatusData status : defect.getComments()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_comment")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(comment.getCreatorId()).getName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(comment.getCreationDate())%> - <%=$SH("_state")%>:<%=$SH(comment.getState())%>
+                <div class="boxTitle"><%=$SH("_status")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(status.getCreatorId()).getName())%>&nbsp;
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(status.getCreationDate())%> - <%=$SH("_state")%>:<%=$SH(status.getState())%>
                 </div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(comment.getComment())%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(status.getComment())%></div>
             </div>
         </div>
         <%
-            files.clear();
-            for (DocumentData file : defectCommentDocuments){
-                files.add(file);
-            }
-            for (DefectImageData file : defectCommentImages){
-                files.add(file);
-            }
-        if (!files.isEmpty()){%>
+        if (!status.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : files){
+            <% for (FileData file : status.getFiles()){
             %>
             <div class="box">
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>

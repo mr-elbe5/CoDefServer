@@ -15,6 +15,7 @@ import de.elbe5.codef.DefectFopBean;
 import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.codef.unit.PlanImageData;
 import de.elbe5.file.FileBean;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
@@ -89,7 +90,7 @@ public class DefectPdfBean extends DefectFopBean {
         BinaryFile file = plan.createCroppedDefectPlan(arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
         addLabeledImage(sb,LocalizedStrings.string("_position"), file,"5.0cm");
         addLabeledContent(sb,LocalizedStrings.string("_positionComment"),data.getPositionComment());
-        for (DefectImageData image : data.getFiles(DefectImageData.class)){
+        for (ImageData image : data.getFiles(ImageData.class)){
             file = FileBean.getInstance().getBinaryFile(image.getId());
             addLabeledImage(sb,LocalizedStrings.string("_image"),file,"5.0cm");
         }
@@ -101,7 +102,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<title>").append(LocalizedStrings.xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_comment"),data.getComment());
-        for (DefectImageData image : data.getFiles(DefectImageData.class)){
+        for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(data.getId());
             addLabeledImage(sb, LocalizedStrings.string("_image"), file, "5.0cm");
         }

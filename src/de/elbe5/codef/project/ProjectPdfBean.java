@@ -8,7 +8,6 @@
  */
 package de.elbe5.codef.project;
 
-import de.elbe5.application.Configuration;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
@@ -16,7 +15,6 @@ import de.elbe5.content.ContentCache;
 import de.elbe5.codef.DefectFopBean;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.unit.UnitBean;
 import de.elbe5.codef.unit.UnitData;
 import de.elbe5.codef.unit.PlanImageData;
 import de.elbe5.file.ImageBean;
@@ -53,7 +51,7 @@ public class ProjectPdfBean extends DefectFopBean {
                 sb.append(": ");
                 sb.append(xml(location.getDisplayName()));
                 sb.append("</title></locationheader>");
-                addLocationDefectsXml(sb, location, defects, includeComments);
+                addUnitDefectsXml(sb, location, defects, includeComments);
                 PlanImageData plan = location.getPlan();
                 if (plan != null) {
                     PlanImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, PlanImageData.class);

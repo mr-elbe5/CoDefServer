@@ -16,6 +16,7 @@ import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.*;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageBean;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
@@ -52,8 +53,8 @@ public class DefectController extends ContentController {
 
     public IResponse openCreateContentFrontend(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
-        UnitData parent= (UnitData) ContentCache.getContent(parentId);
-        checkRights(parent.hasUserGlobalEditRight(rdata));
+        UnitData parent= ContentCache.getContent(parentId, UnitData.class);
+        checkRights(parent != null && parent.hasUserEditRight(rdata));
         DefectData data = new DefectData();
         data.setCreateValues(parent, rdata);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
@@ -161,10 +162,6 @@ public class DefectController extends ContentController {
         return view;
     }
 
-    private IResponse showCreateDefectComment() {
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/defect/createComment.ajax.jsp");
-    }
-
     //api
 
     public IResponse uploadNewDefect(RequestData rdata) {
@@ -200,7 +197,7 @@ public class DefectController extends ContentController {
         assert(defect != null);
         BinaryFile file = rdata.getAttributes().getFile("file");
         assert(file!=null);
-        DefectImageData image = new DefectImageData();
+        ImageData image = new ImageData();
         image.setCreateValues(defect, rdata);
         if (!image.createFromBinaryFile(file, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);

@@ -10,15 +10,10 @@ package de.elbe5.codef.defectstatus;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.base.Token;
-import de.elbe5.codef.defect.DefectBean;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.defect.DefectImageData;
-import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.*;
-import de.elbe5.file.DocumentData;
-import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageBean;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
@@ -28,8 +23,6 @@ import de.elbe5.rights.SystemZone;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.List;
 
 public class DefectStatusController extends ContentController {
 
@@ -57,9 +50,9 @@ public class DefectStatusController extends ContentController {
 
     public IResponse openCreateContentFrontend(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
-        UnitData parent= (UnitData) ContentCache.getContent(parentId);
-        checkRights(parent.hasUserGlobalEditRight(rdata));
-        DefectData data = new DefectData();
+        DefectData parent = ContentCache.getContent(parentId, DefectData.class);
+        checkRights(parent != null && parent.hasUserEditRight(rdata));
+        DefectStatusData data = new DefectStatusData();
         data.setCreateValues(parent, rdata);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
@@ -67,8 +60,8 @@ public class DefectStatusController extends ContentController {
     }
 
     public IResponse openEditContentFrontend(RequestData rdata) {
-        int defectId=rdata.getId();
-        DefectData data = ContentBean.getInstance().getContent(defectId,DefectData.class);
+        int statusId=rdata.getId();
+        DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
         checkRights(data.hasUserEditRight(rdata));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
@@ -78,7 +71,7 @@ public class DefectStatusController extends ContentController {
     //frontend
     public IResponse saveContentFrontend(RequestData rdata) {
         int contentId=rdata.getId();
-        DefectData data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT, DefectData.class);
+        DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assert(data != null && data.getId() == contentId);
         checkRights(data.hasUserEditRight(rdata));
         if (data.isNew())
@@ -100,77 +93,9 @@ public class DefectStatusController extends ContentController {
         return show(rdata);
     }
 
-    public IResponse showDefectComment(RequestData rdata) {
-        int id = rdata.getId();
-        if (!rdata.hasContentEditRight()) {
-            String token=rdata.getAttributes().getString("token");
-            checkRights(Token.matchToken(id,token));
-        }
-        DefectStatusData defectComment = DefectStatusBean.getInstance().getContent(id, DefectStatusData.class);
-        rdata.getAttributes().put(ContentRequestKeys.KEY_CONTENT,defectComment);
-        return showDefectComment();
-    }
-
-    public IResponse openCreateDefectComment(RequestData rdata) {
-        int defectId=rdata.getId();
-        DefectData defect=ContentCache.getContent(defectId,DefectData.class);
-        assert(defect!=null);
-        checkRights(defect.hasUserReadRight(rdata));
-        rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT,defect);
-        DefectStatusData data = new DefectStatusData();
-        data.setCreateValues(defect, rdata);
-        rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT, data);
-        return showCreateDefectComment();
-    }
-
-    public IResponse saveDefectComment(RequestData rdata) {
-        DefectData defectData = (DefectData) ContentCache.getContent(rdata.getId());
-        checkRights(defectData.hasUserReadRight(rdata));
-        DefectStatusData data = (DefectStatusData) rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT);
-        assert(data!=null);
-        data.readRequestData(rdata);
-        if (!rdata.checkFormErrors()) {
-            return showCreateDefectComment();
-        }
-        if (!DefectStatusBean.getInstance().saveContent(data)) {
-            setSaveError(rdata);
-            return showCreateDefectComment();
-        }
-        List<BinaryFile> documents = rdata.getAttributes().getFileList("files");
-        for (BinaryFile f : documents) {
-            if (f.isImage()){
-                DefectImageData image = new DefectImageData();
-                image.setCreateValues(defectData, rdata);
-                if (!image.createFromBinaryFile(f,image.getMaxWidth(),image.getMaxHeight(),image.getMaxPreviewWidth(),image.getMaxPreviewHeight(),false))
-                    continue;
-                image.setChangerId(rdata.getUserId());
-                FileBean.getInstance().saveFile(image,true);
-            }
-            else {
-                DocumentData document = new DocumentData();
-                document.setCreateValues(defectData, rdata);
-                document.createFromBinaryFile(f);
-                document.setChangerId(rdata.getUserId());
-                FileBean.getInstance().saveFile(document,true);
-            }
-        }
-        rdata.setMessage(LocalizedStrings.string("_defectCommentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
-        defectData.getComments().add(data);
-        ContentCache.setDirty();
-        return new CloseDialogResponse("/ctrl/content/show/"+defectData.getId());
-    }
-
-    private IResponse showDefectComment() {
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/defect/comment.ajax.jsp");
-    }
-
-    private IResponse showCreateDefectComment() {
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/defect/createComment.ajax.jsp");
-    }
-
     //api
 
-    public IResponse uploadNewComment(RequestData rdata) {
+    public IResponse uploadNewStatus(RequestData rdata) {
         //Log.log("uploadNewComment");
         UserData user = rdata.getLoginUser();
         if (user == null)
@@ -191,7 +116,7 @@ public class DefectStatusController extends ContentController {
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }
 
-    public IResponse uploadNewCommentImage(RequestData rdata) {
+    public IResponse uploadNewStatusImage(RequestData rdata) {
         //Log.log("uploadNewCommentImage");
         UserData user = rdata.getLoginUser();
         if (user == null)
@@ -203,7 +128,7 @@ public class DefectStatusController extends ContentController {
         assert(defect !=null);
         BinaryFile file = rdata.getAttributes().getFile("file");
         assert(file!=null);
-        DefectImageData image = new DefectImageData();
+        ImageData image = new ImageData();
         image.setCreateValues(defect, rdata);
         if (!image.createFromBinaryFile(file, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);

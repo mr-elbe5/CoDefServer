@@ -43,7 +43,7 @@ public class UnitPdfBean extends DefectFopBean {
         addLocationHeaderXml(sb,location);
         sb.append("<location>");
         List<DefectData> defects = ViewFilter.getFilter(rdata).getLocationDefects(location.getId());
-        addLocationDefectsXml(sb,location, defects, includeComments);
+        addUnitDefectsXml(sb,location, defects, includeComments);
         PlanImageData plan = location.getPlan();
         if (plan!=null) {
             PlanImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, PlanImageData.class);

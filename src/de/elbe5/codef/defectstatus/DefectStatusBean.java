@@ -40,7 +40,7 @@ public class DefectStatusBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     int i=1;
-                    data.setComment(rs.getString(i++));
+                    data.setComment(rs.getString(i));
                 }
             }
         } finally {

@@ -132,11 +132,6 @@ public class UnitData extends ContentData {
         return rdata.hasContentEditRight();
     }
 
-    public boolean hasUserGlobalEditRight(RequestData rdata) {
-        return rdata.hasContentEditRight();
-    }
-
-
     // multiple data
 
     @Override

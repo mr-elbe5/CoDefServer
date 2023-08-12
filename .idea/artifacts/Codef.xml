@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="Codef">
+    <output-path>$USER_HOME$/tomcat/develop/codef</output-path>
+    <root id="archive" name="ROOT.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="BandikaBase" />
+          <element id="module-output" name="BandikaWebBase" />
+          <element id="module-output" name="BandikaContent" />
+          <element id="module-output" name="BandikaDocuments" />
+          <element id="module-output" name="CoDefServer" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="baselibs" />
+          <element id="library" level="project" name="fop" />
+          <element id="library" level="project" name="poi" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="BandikaWebBase/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaContent/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
+      <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
+    </root>
+  </artifact>
+</component>
