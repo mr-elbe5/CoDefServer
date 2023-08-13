@@ -1,7 +1,14 @@
 @import "extras";
-@import "../../BandikaWebBase/scss/bootstrap/functions";
-@import "../../BandikaWebBase/scss/bootstrap/variables";
-@import "../../BandikaWebBase/scss/bootstrap/mixins";
+
+$body-color: $dark;
+$header-color: $light;
+$main-color: $dark;
+$footer-color: $light;
+$main-background: #ffffff;
+$gray-background: #f0f0f0;
+$background-body: $light url(img-path('bricks_light.png'));
+$background-admin-body: $light url(img-path('bricks_dark.png'));
+$zindex-fixed: 1030 !default;
 
 body {
   background: $background-body;
@@ -304,7 +311,7 @@ footer {
 }
 
 .searchHighlight{
-  background: $yellow;
+  //background: $yellow;
 }
 
 #planContainer{
@@ -360,10 +367,11 @@ body.login {
         padding: 30px;
         margin: 20% auto;
         background: $light;
-        border: 1px solid $gray-100;
+        border: 1px solid $light;
         border-radius: 5px;
         img {
           height: 50px;
+          text-align: left;
         }
 
         .form-control:focus {
@@ -472,7 +480,5 @@ div.boxContainer{
 span.inactive{
   color: #6c757d;
 }
-
-
 
 

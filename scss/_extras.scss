@@ -32,14 +32,8 @@ $dark-blue: #222a43;
 $mid-blue: #27446a;
 $light-blue: #617fb3;
 
-
 $light:         #f8f9fa; //gray-100
 $dark:          #343a40; //gray-800
-
-$body-color: $dark;
-$header-color: $light;
-$main-color: $dark;
-$footer-color: $light;
 
 $primary: $mid-blue;
 
@@ -47,23 +41,12 @@ $headings-font-weight:        400;
 
 $color-dark-background: rgb(51,51,51);
 $color-light-background: rgb(255,255,255);
-$color-droparea: #aaffaa;
-
-$main-background: #ffffff;
-$gray-background: #f0f0f0;
-$background-body: $light url(img-path('bricks_light.png'));
-$background-admin-body: $light url(img-path('bricks_dark.png'));
-
 
 $enable-prefers-reduced-motion-media-query:   false;
 
 $dropdown-link-active-bg:         rgba(255,255,255,0.8) !default;
 
-// for ckeditor
-$zindex-modal-backdrop: 11040;
-$zindex-modal: 11050;
-$zindex-popover: 11060;
-$zindex-tooltip: 11070;
+$zindex-fixed:                1030 !default;
 
 $modal-dialog-margin-wide: 3rem !default;
 
@@ -71,6 +54,7 @@ $font-size-base:              1rem;
 
 $link-decoration:             none;
 
+$font-size-sm:                ($font-size-base * .9);
 $font-size-xsm:               ($font-size-base * .8);
 $font-size-xxsm:              ($font-size-base * .7);
 

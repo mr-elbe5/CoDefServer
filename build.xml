@@ -88,7 +88,7 @@
     </target>
 
     <target name="compile" depends="makeDirs">
-        <javac srcdir="${buildSrc.dir}" destdir="${buildClasses.dir}" includeantruntime="false" debug="true" source="15" target="15">
+        <javac srcdir="${buildSrc.dir}" destdir="${buildClasses.dir}" includeantruntime="false" debug="true" source="18" target="18">
             <classpath>
                 <path refid="classpath"/>
             </classpath>

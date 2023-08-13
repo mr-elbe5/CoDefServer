@@ -117,7 +117,7 @@ header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item:focus, hea
 }
 header div.menu section.menu nav.navbar .dropdown-menu .dropdown-item.subitem {
   padding-left: 3rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 header div.menu section.menu nav.navbar .dropdown-menu .nav-item a {
   color: #343a40;
@@ -233,10 +233,6 @@ footer a, footer a:active, footer a:hover, footer a:focus, footer a:visited {
   color: #343a40;
 }
 
-.searchHighlight {
-  background: #ffc107;
-}
-
 #planContainer {
   margin: 0;
   padding: 0;
@@ -287,6 +283,7 @@ body.login #main .loginSection .form {
 }
 body.login #main .loginSection .form img {
   height: 50px;
+  text-align: left;
 }
 body.login #main .loginSection .form .form-control:focus {
   z-index: 2;

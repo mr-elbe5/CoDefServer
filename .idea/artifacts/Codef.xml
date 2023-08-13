@@ -16,10 +16,10 @@
           <element id="library" level="project" name="poi" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="BandikaWebBase/web/Web" />
-      <element id="javaee-facet-resources" facet="BandikaContent/web/Web" />
-      <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
       <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaContent/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaWebBase/web/Web" />
     </root>
   </artifact>
 </component>
