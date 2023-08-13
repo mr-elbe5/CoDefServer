@@ -1,5 +1,5 @@
 body {
-  background: #f8f9fa url("../img/bricksred_bg.png");
+  background: #f8f9fa url("../img/bricks_light.png");
   position: relative;
   color: #343a40;
   height: 100%;
@@ -258,7 +258,7 @@ footer a, footer a:active, footer a:hover, footer a:focus, footer a:visited {
 
 /* admin */
 body.admin {
-  background: #f8f9fa url("../img/bricks_bg.png");
+  background: #f8f9fa url("../img/bricks_dark.png");
 }
 body.admin div#pageContainer {
   background: white;

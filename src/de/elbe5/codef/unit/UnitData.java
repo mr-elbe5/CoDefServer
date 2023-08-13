@@ -12,6 +12,7 @@ import de.elbe5.base.*;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.defect.DefectData;
 import de.elbe5.codef.project.ProjectData;
+import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.ContentRequestKeys;
@@ -44,6 +45,10 @@ public class UnitData extends ContentData {
     PlanImageData plan = null;
 
     public UnitData() {
+    }
+
+    public ContentBean getBean() {
+        return UnitBean.getInstance();
     }
 
     public int getProjectId() {

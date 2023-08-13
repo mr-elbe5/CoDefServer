@@ -11,6 +11,8 @@ package de.elbe5.user;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.project.ProjectBean;
 import de.elbe5.request.RequestData;
+import de.elbe5.response.ForwardResponse;
+import de.elbe5.response.IResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,11 @@ public class CodefUserController extends UserController {
 
         }
         filter.initWatchedUsers();
+    }
+
+    @Override
+    protected IResponse showHome() {
+        return new ForwardResponse("/home.html");
     }
 
 }

@@ -12,6 +12,7 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.codef.defect.DefectData;
+import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
@@ -32,6 +33,10 @@ public class DefectStatusData extends ContentData {
 
     protected String comment = "";
     protected String state="";
+
+    public ContentBean getBean() {
+        return DefectStatusBean.getInstance();
+    }
 
     public String getComment() {
         return comment;

@@ -8,6 +8,7 @@
  */
 package de.elbe5.codef;
 
+import de.elbe5.codef.defect.DefectComparator;
 import de.elbe5.content.ContentCache;
 import de.elbe5.codef.defect.DefectBean;
 import de.elbe5.codef.defect.DefectData;
@@ -21,19 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class ViewFilter implements Comparator<DefectData> {
-
-    public static final int TYPE_MY = 0;
-    public static final int TYPE_CREATION = 1;
-    public static final int TYPE_CHANGER = 2;
-    public static final int TYPE_CHANGE = 3;
-    public static final int TYPE_DUE_DATE = 4;
-    public static final int TYPE_CLOSE_DATE = 5;
-    public static final int TYPE_LOCATION = 6;
-    public static final int TYPE_STATE = 7;
-    public static final int TYPE_ASSIGNED = 8;
-    public static final int TYPE_DESCRIPTION = 9;
-    public static final int TYPE_NOTIFIED = 10;
+public class ViewFilter {
 
     public static ViewFilter getFilter(RequestData rdata){
         ViewFilter filter=rdata.getSessionObject("$filterData", ViewFilter.class);
@@ -44,31 +33,18 @@ public class ViewFilter implements Comparator<DefectData> {
         return filter;
     }
 
-    private int sortType=TYPE_CREATION;
-    private boolean ascending = false;
     private int currentUserId = 0;
     private boolean isEditor= false;
     private int projectId = 0;
     private List<Integer> watchedIds = new ArrayList<>();
     private boolean showClosed =false;
 
+    private DefectComparator comparator = new DefectComparator();
+
     private final List<Integer> ownProjectIds=new ArrayList<>();
 
     public List<Integer> getOwnProjectIds() {
         return ownProjectIds;
-    }
-
-    public int getSortType() {
-        return sortType;
-    }
-
-    public void setSortType(int sortType) {
-        if (this.sortType==sortType)
-            ascending=!ascending;
-        else {
-            this.sortType = sortType;
-            ascending = true;
-        }
     }
 
     public int getCurrentUserId() {
@@ -77,6 +53,7 @@ public class ViewFilter implements Comparator<DefectData> {
 
     public void setCurrentUserId(int currentUserId) {
         this.currentUserId = currentUserId;
+        comparator.setUserId(currentUserId);
     }
 
     public boolean isEditor() {
@@ -107,13 +84,18 @@ public class ViewFilter implements Comparator<DefectData> {
         this.watchedIds = watchedIds;
     }
 
+    public DefectComparator getComparator() {
+        return comparator;
+    }
+
     public void initWatchedUsers(){
         watchedIds.clear();
         if (isEditor){
             ProjectData project=ContentCache.getContent(getProjectId(), ProjectData.class);
             if (project!=null) {
                 GroupData group = GroupBean.getInstance().getGroup(project.getGroupId());
-                watchedIds.addAll(group.getUserIds());
+                if (group != null)
+                    watchedIds.addAll(group.getUserIds());
             }
 
         }
@@ -128,67 +110,6 @@ public class ViewFilter implements Comparator<DefectData> {
 
     public void setShowClosed(boolean showClosed) {
         this.showClosed = showClosed;
-    }
-
-    @Override
-    public int compare(DefectData o1, DefectData o2) {
-        int result=0;
-        switch (sortType){
-            case TYPE_CREATION:
-                result = o1.getCreationDate().compareTo(o2.getCreationDate());
-                break;
-            case TYPE_CHANGER:
-                result = o1.getChangerName().toLowerCase().compareTo(o2.getChangerName().toLowerCase());
-                break;
-            case TYPE_CHANGE:
-                result = o1.getChangeDate().compareTo(o2.getChangeDate());
-                break;
-            case TYPE_DUE_DATE:
-                result = compareLocalDates(o1.getDueDate(),o2.getDueDate());
-                break;
-            case TYPE_CLOSE_DATE:
-                result = compareLocalDates(o1.getCloseDate(),o2.getCloseDate());
-                break;
-            case TYPE_LOCATION:
-                result = o1.getLocationName().toLowerCase().compareTo(o2.getLocationName().toLowerCase());
-                break;
-            case TYPE_STATE:
-                result = o1.getState().compareTo(o2.getState());
-                break;
-            case TYPE_ASSIGNED: {
-                if (o1.getAssignedId()== currentUserId && o2.getAssignedId()== currentUserId)
-                    // 0
-                    break;
-                else if (o1.getAssignedId()== currentUserId)
-                    result =  -1;
-                else if (o2.getAssignedId()== currentUserId)
-                    result =  1;
-                else
-                    result = o1.getAssignedName().toLowerCase().compareTo(o2.getAssignedName().toLowerCase());
-                break;
-            }
-            case TYPE_NOTIFIED:
-                if (o1.isNotified() == o2.isNotified())
-                    // 0
-                    break;
-                else
-                    result = o1.isNotified() ? 1 : -1;
-                break;
-            case TYPE_DESCRIPTION:
-                result = o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase());
-                break;
-        }
-        return ascending ? result : -result;
-    }
-
-    private int compareLocalDates(LocalDate date1, LocalDate date2){
-        if (date1==null && date2==null)
-            return 0;
-        if (date1==null)
-            return -1;
-        if (date2==null)
-            return 1;
-        return date1.compareTo(date2);
     }
 
     public List<DefectData> getLocationDefects(int locationId){
@@ -212,7 +133,7 @@ public class ViewFilter implements Comparator<DefectData> {
                 list.remove(i);
             }
         }
-        list.sort(this);
+        list.sort(comparator);
         return list;
     }
 
@@ -237,7 +158,7 @@ public class ViewFilter implements Comparator<DefectData> {
                 list.remove(i);
             }
         }
-        list.sort(this);
+        list.sort(comparator);
         return list;
     }
 }

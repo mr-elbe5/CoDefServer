@@ -13,6 +13,7 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.codef.defectstatus.DefectStatusData;
+import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.unit.UnitData;
@@ -73,6 +74,10 @@ public class DefectData extends ContentData {
     protected String locationName="";
 
     // base data
+
+    public ContentBean getBean() {
+        return DefectBean.getInstance();
+    }
 
     @Override
     public String getName(){

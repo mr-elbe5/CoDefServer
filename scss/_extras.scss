@@ -51,8 +51,8 @@ $color-droparea: #aaffaa;
 
 $main-background: #ffffff;
 $gray-background: #f0f0f0;
-$background-body: $light url(img-path('bricksred_bg.png'));
-$background-admin-body: $light url(img-path('bricks_bg.png'));
+$background-body: $light url(img-path('bricks_light.png'));
+$background-admin-body: $light url(img-path('bricks_dark.png'));
 
 
 $enable-prefers-reduced-motion-media-query:   false;

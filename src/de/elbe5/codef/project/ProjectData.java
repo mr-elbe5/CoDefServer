@@ -12,6 +12,7 @@ import de.elbe5.base.JsonObject;
 import de.elbe5.base.StringHelper;
 import de.elbe5.codef.ViewFilter;
 import de.elbe5.codef.unit.UnitData;
+import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.ContentRequestKeys;
@@ -36,6 +37,10 @@ public class ProjectData extends ContentData {
     protected int groupId=0;
 
     public ProjectData() {
+    }
+
+    public ContentBean getBean() {
+        return ProjectBean.getInstance();
     }
 
     public int getGroupId() {

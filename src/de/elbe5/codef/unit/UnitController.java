@@ -81,7 +81,7 @@ public class UnitController extends ContentController {
     public IResponse sort(RequestData rdata) {
         int sortType = rdata.getAttributes().getInt("sortType");
         ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setSortType(sortType);
+        filter.getComparator().setSortType(sortType);
         return show(rdata);
     }
 
