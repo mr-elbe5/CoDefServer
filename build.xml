@@ -75,7 +75,7 @@
     <target name="collectFiles" depends="createCss">
         <copy todir="${buildLibs.dir}">
             <fileset dir="../BandikaBase/lib" />
-
+            <fileset dir="../BandikaDocuments/lib" />
         </copy>
         <copy todir="${buildSrc.dir}" overwrite="true">
             <fileset dir="../BandikaBase/src" />

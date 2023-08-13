@@ -8,6 +8,7 @@
  */
 package de.elbe5.application;
 
+import de.elbe5.administration.ContentAdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.codef.defect.DefectController;
@@ -48,7 +49,7 @@ public class CodefInitServlet extends InitServlet {
         if (!DbConnector.getInstance().initialize("jdbc/codef"))
             return;
         Configuration.setAppTitle("CoDef");
-        AdminController.register(new AdminController());
+        AdminController.register(new ContentAdminController());
         ContentController.register(new ContentController());
         DocumentController.register(new DocumentController());
         ImageController.register(new ImageController());
