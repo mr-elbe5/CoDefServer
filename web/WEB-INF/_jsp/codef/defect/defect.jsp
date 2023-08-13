@@ -15,13 +15,13 @@
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.rights.SystemZone" %>
 <%@ page import="de.elbe5.codef.defect.DefectData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%@ page import="de.elbe5.codef.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectData defect = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, DefectData.class);
+    DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
     assert(defect !=null);
     UserData assignedUser = UserCache.getUser(defect.getAssignedId());
     String assignedName = assignedUser == null ? "" : assignedUser.getName();
@@ -113,7 +113,7 @@
         </div>
         <%}%>
     </div>
-    <% for (DefectStatusData status : defect.getComments()){%>
+    <% for (DefectStatusData status : defect.getStatuses()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">

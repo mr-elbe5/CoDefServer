@@ -16,9 +16,9 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentContent();
+    ContentData contentData = ContentData.getCurrentContent(rdata);
     assert contentData != null;
-    int fileId=rdata.getInt("fileId");
+    int fileId=rdata.getAttributes().getInt("fileId");
 %>
         <li class="images">
             <span>[<%=$SH("_images")%>]</span>

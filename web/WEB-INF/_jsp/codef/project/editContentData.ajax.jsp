@@ -14,12 +14,12 @@
 <%@ page import="de.elbe5.group.GroupBean" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.codef.project.ProjectData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ProjectData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ProjectData.class);
+    ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
     List<GroupData> groups = GroupBean.getInstance().getAllGroups();
     String url = "/ctrl/content/saveContentData/" + contentData.getId();%>

@@ -10,12 +10,11 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+    ContentData contentData = ContentData.getCurrentContent(rdata, ContentData.class);
     assert contentData != null;
 %>
 <li class="open">
@@ -30,7 +29,7 @@
     <%}%>
     <ul>
         <jsp:include page="/WEB-INF/_jsp/content/defect/treeContentDocuments.inc.jsp" flush="true" />
-        <jsp:include page="/WEB-INF/_jsp/defecttracker/defect/treeContentImages.inc.jsp" flush="true" />
+        <jsp:include page="/WEB-INF/_jsp/codef/defect/treeContentImages.inc.jsp" flush="true" />
     </ul>
 </li>
 

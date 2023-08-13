@@ -209,13 +209,13 @@ public class DefectBean extends ContentBean {
 
     private static final String GET_UNIT_DEFECT_IDS_SQL = "SELECT id FROM t_defect  WHERE unit_id=?";
 
-    public List<Integer> getUnitDefectIds(int locationId) {
+    public List<Integer> getUnitDefectIds(int unitId) {
         Connection con = startTransaction();
         PreparedStatement pst = null;
         List<Integer> ids=new ArrayList<>();
         try {
             pst = con.prepareStatement(GET_UNIT_DEFECT_IDS_SQL);
-            pst.setInt(1,locationId);
+            pst.setInt(1,unitId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 ids.add(rs.getInt(1));

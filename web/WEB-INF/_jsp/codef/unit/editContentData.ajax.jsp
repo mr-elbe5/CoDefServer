@@ -10,14 +10,15 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.defecttracker.location.UnitData" %>
+<%@ page import="de.elbe5.codef.unit.UnitData" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    UnitData contentData = rdata.getCurrentContent(UnitData.class);
+    UnitData contentData = ContentData.getCurrentContent(rdata, UnitData.class);
     assert (contentData != null);
-    String url = "/ctrl/location/saveContentData/" + contentData.getId();
+    String url = "/ctrl/unit/saveContentData/" + contentData.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

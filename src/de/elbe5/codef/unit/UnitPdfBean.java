@@ -33,54 +33,54 @@ public class UnitPdfBean extends DefectFopBean {
         return instance;
     }
 
-    public BinaryFile getLocationReport(int locationId, RequestData rdata, boolean includeComments){
+    public BinaryFile getUnitReport(int unitId, RequestData rdata, boolean includeComments){
         LocalDateTime now= LocalDateTime.now();
-        UnitData location= ContentCache.getContent(locationId,UnitData.class);
-        if (location==null)
+        UnitData unit= ContentCache.getContent(unitId,UnitData.class);
+        if (unit==null)
             return null;
         StringBuilder sb=new StringBuilder();
         sb.append("<root>");
-        addLocationHeaderXml(sb,location);
-        sb.append("<location>");
-        List<DefectData> defects = ViewFilter.getFilter(rdata).getLocationDefects(location.getId());
-        addUnitDefectsXml(sb,location, defects, includeComments);
-        PlanImageData plan = location.getPlan();
+        addUnitHeaderXml(sb,unit);
+        sb.append("<unit>");
+        List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
+        addUnitDefectsXml(sb,unit, defects, includeComments);
+        PlanImageData plan = unit.getPlan();
         if (plan!=null) {
             PlanImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, PlanImageData.class);
             byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
-            defects = ViewFilter.getFilter(rdata).getLocationDefects(location.getId());
-            BinaryFile file = fullplan.createLocationDefectPlan(arrowBytes, defects, 1);
-            addLocationPlanXml(sb, location, plan, file);
+            defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
+            BinaryFile file = fullplan.createUnitDefectPlan(arrowBytes, defects, 1);
+            addUnitPlanXml(sb, unit, plan, file);
         }
-        sb.append("</location>");
-        addLocationFooterXml(sb,location,now);
+        sb.append("</unit>");
+        addUnitFooterXml(sb,unit,now);
         sb.append("</root>");
         //System.out.println(sb.toString());
-        String fileName="report-of-location-defects-" + location.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
+        String fileName="report-of-unit-defects-" + unit.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
         return getPdf(sb.toString(), "pdf.xsl", fileName);
     }
 
-    private void addLocationHeaderXml(StringBuilder sb, UnitData location) {
-        ProjectData project=ContentCache.getContent(location.getProjectId(),ProjectData.class);
+    private void addUnitHeaderXml(StringBuilder sb, UnitData unit) {
+        ProjectData project=ContentCache.getContent(unit.getProjectId(),ProjectData.class);
         assert(project!=null);
-        sb.append("<locationheader><title>");
+        sb.append("<unitheader><title>");
         sb.append(LocalizedStrings.xml("_reports"));
         sb.append(": ");
         sb.append(xml(project.getDisplayName()));
         sb.append(", ");
-        sb.append(xml(location.getDisplayName()));
-        sb.append("</title></locationheader>");
+        sb.append(xml(unit.getDisplayName()));
+        sb.append("</title></unitheader>");
     }
 
-    private void addLocationFooterXml(StringBuilder sb, UnitData location, LocalDateTime now) {
-        ProjectData project=ContentCache.getContent(location.getProjectId(),ProjectData.class);
+    private void addUnitFooterXml(StringBuilder sb, UnitData unit, LocalDateTime now) {
+        ProjectData project=ContentCache.getContent(unit.getProjectId(),ProjectData.class);
         assert(project!=null);
         sb.append("<footer><docAndDate>");
         sb.append(LocalizedStrings.xml("_project"))
                 .append(" ")
                 .append(xml(project.getDisplayName()))
-                .append(", ").append(LocalizedStrings.xml("_location"))
-                .append(" ").append(xml(location.getDisplayName()))
+                .append(", ").append(LocalizedStrings.xml("_unit"))
+                .append(" ").append(xml(unit.getDisplayName()))
                 .append(" - ")
                 .append(DateHelper.toHtmlDateTime(now));
         sb.append("</docAndDate></footer>");

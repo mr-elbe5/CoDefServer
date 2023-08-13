@@ -91,14 +91,14 @@ public class UnitData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/defecttracker/location/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/codef/unit/editContentData.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/defecttracker/location/location.jsp");
+        context.include("/WEB-INF/_jsp/codef/unit/unit.jsp");
         writer.write("</div>");
     }
 
@@ -106,9 +106,9 @@ public class UnitData extends ContentData {
     public void displayTreeContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         if (hasUserReadRight(rdata)) {
             //backup
-            ContentData currentContent=rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+            ContentData currentContent=ContentData.getCurrentContent(rdata);
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, this);
-            context.include("/WEB-INF/_jsp/defecttracker/location/treeContent.inc.jsp", true);
+            context.include("/WEB-INF/_jsp/codef/unit/treeContent.inc.jsp", true);
             //restore
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, currentContent);
         }
@@ -143,7 +143,7 @@ public class UnitData extends ContentData {
     public void setCreateValues(ContentData parent, RequestData rdata) {
         super.setCreateValues(parent,rdata);
         if (!(parent instanceof ProjectData)){
-            Log.error("parent of location part page should be project page");
+            Log.error("parent of unit page should be project page");
             return;
         }
         setProjectId(parent.getId());

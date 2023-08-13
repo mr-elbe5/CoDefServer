@@ -41,7 +41,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<root>");
         addDefectHeaderXml(sb,data);
         addDefectXml(sb,data,rdata.getSessionHost());
-        for (DefectStatusData commnet : data.getComments()){
+        for (DefectStatusData commnet : data.getStatuses()){
             addDefectCommentXml(sb, data, commnet, rdata.getSessionHost());
         }
         addDefectFooterXml(sb,data,now);
@@ -57,7 +57,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append(": ");
         sb.append(LocalizedStrings.xml(data.getProjectName()));
         sb.append(", ");
-        sb.append(LocalizedStrings.xml(data.getLocationName()));
+        sb.append(LocalizedStrings.xml(data.getUnitName()));
         sb.append(", ");
         sb.append(LocalizedStrings.xml(data.getDisplayName()));
         sb.append("</title></defectheader>");

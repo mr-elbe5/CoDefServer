@@ -14,11 +14,12 @@
 <%@ page import="de.elbe5.codef.ViewFilter" %>
 <%@ page import="de.elbe5.codef.defect.DefectData" %>
 <%@ page import="java.util.List" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
+<%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.codef.defect.DefectComparator" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    ProjectData project = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ProjectData.class);
+    ProjectData project = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (project != null);
 
     int id=project.getId();
@@ -35,34 +36,34 @@
             <th style="width:5%"><%=$SH("_id")%>
             </th>
             <th style="width:18%"><%=$SH("_description")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_DESCRIPTION%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
             </th>
-            <th style="width:8%"><%=$SH("_location")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_LOCATION%>");>&nbsp;</a>
+            <th style="width:8%"><%=$SH("_unit")%>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_UNIT%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_creationDate")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_CREATION%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CREATION%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_editedBy")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_CHANGER%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CHANGER%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_changeDate")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_CHANGE%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CHANGE%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_due")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_DUE_DATE%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DUE_DATE%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_closed")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_CLOSE_DATE%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CLOSE_DATE%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_state")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_STATE%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_STATE%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_assigned")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_ASSIGNED%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_ASSIGNED%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_notified")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/location/sort/<%=id%>?sortType=<%=ViewFilter.TYPE_NOTIFIED%>");>&nbsp;</a>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_NOTIFIED%>");>&nbsp;</a>
             </th>
             <th style="width:5%"></th>
         </tr>
@@ -72,7 +73,7 @@
         <tr>
             <td><%=defect.getDisplayId()%></td>
             <td><%=$H(defect.getDescription())%></td>
-            <td><%=$H(defect.getLocationName())%></td>
+            <td><%=$H(defect.getUnitName())%></td>
             <td><%=$DT(defect.getCreationDate())%></td>
             <td><%=$H(defect.getChangerName())%></td>
             <td><%=$DT(defect.getChangeDate())%></td>

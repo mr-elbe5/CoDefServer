@@ -42,7 +42,7 @@ public class PlanImageData extends ImageData {
         return STD_SIZE;
     }
 
-    public BinaryFile createLocationDefectPlan(byte[] primaryArrowBytes, List<DefectData> defects, float scale){
+    public BinaryFile createUnitDefectPlan(byte[] primaryArrowBytes, List<DefectData> defects, float scale){
         BinaryFile file=null;
         try {
             BufferedImage bi = ImageHelper.createImage(getBytes(), "image/jpeg");

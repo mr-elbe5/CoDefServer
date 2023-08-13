@@ -8,7 +8,6 @@
  */
 package de.elbe5.codef.unit;
 
-import de.elbe5.application.Configuration;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
@@ -29,7 +28,7 @@ import java.util.List;
 
 public class UnitController extends ContentController {
 
-    public static final String KEY = "location";
+    public static final String KEY = "unit";
 
     private static UnitController instance = null;
 
@@ -62,8 +61,8 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         PlanImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,PlanImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
-        List<DefectData> defects = ViewFilter.getFilter(rdata).getLocationDefects(data.getId());
-        BinaryFile file = plan.createLocationDefectPlan(arrowBytes,defects,1);
+        List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(data.getId());
+        BinaryFile file = plan.createUnitDefectPlan(arrowBytes,defects,1);
         assert(file!=null);
         return new MemoryFileResponse(file);
     }
@@ -71,7 +70,7 @@ public class UnitController extends ContentController {
     public IResponse getReport(RequestData rdata) {
         boolean includeComments = rdata.getAttributes().getBoolean("includeComments");
         int contentId = rdata.getId();
-        BinaryFile file = UnitPdfBean.getInstance().getLocationReport(contentId, rdata, includeComments);
+        BinaryFile file = UnitPdfBean.getInstance().getUnitReport(contentId, rdata, includeComments);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -87,11 +86,11 @@ public class UnitController extends ContentController {
 
     // api
 
-    public IResponse downloadLocationDefectPlan(RequestData rdata) {
+    public IResponse downloadUnitDefectPlan(RequestData rdata) {
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        Log.info("loading location defect plan");
+        Log.info("loading unit defect plan");
         int scalePercent = rdata.getAttributes().getInt("scale", 100);
         boolean isEditor = user.hasContentEditRight();
         int id = rdata.getId();
@@ -107,8 +106,8 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         PlanImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,PlanImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("red_arrow.png");
-        List<DefectData> defects = filter.getLocationDefects(data.getId());
-        BinaryFile file = plan.createLocationDefectPlan(arrowBytes,defects,((float)scalePercent)/100);
+        List<DefectData> defects = filter.getUnitDefects(data.getId());
+        BinaryFile file = plan.createUnitDefectPlan(arrowBytes,defects,((float)scalePercent)/100);
         if (file==null) {
             Log.error("file is null");
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);

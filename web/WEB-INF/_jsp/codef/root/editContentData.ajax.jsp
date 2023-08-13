@@ -11,12 +11,12 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.codef.root.RootPageData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    RootPageData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, RootPageData.class);
+    RootPageData contentData = ContentData.getCurrentContent(rdata, RootPageData.class);
     assert (contentData != null);
     String url = "/ctrl/landingpage/saveContentData/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">

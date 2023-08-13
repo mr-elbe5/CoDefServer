@@ -58,7 +58,7 @@ public abstract class DefectFopBean extends PdfCreator {
 
     protected void addUnitDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeComments) {
         for (DefectData defect : defects){
-            sb.append("<locationdefect>");
+            sb.append("<unitdefect>");
             sb.append("<description>").append(LocalizedStrings.xml("_defect")).append(": ").append(xml(defect.getDescription())).append("</description>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(LocalizedStrings.xml("_id")).append("</label1><content1>").append(defect.getDisplayId()).append("</content1>");
@@ -91,7 +91,7 @@ public abstract class DefectFopBean extends PdfCreator {
             }
             if (includeComments) {
                 List<ImageData> files = new ArrayList<>();
-                for (DefectStatusData comment : defect.getComments()) {
+                for (DefectStatusData comment : defect.getStatuses()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
                             .append(LocalizedStrings.xml("_comment"))
@@ -121,15 +121,15 @@ public abstract class DefectFopBean extends PdfCreator {
                     }
                 }
             }
-            sb.append("</locationdefect>");
+            sb.append("</unitdefect>");
         }
     }
 
-    protected void addLocationPlanXml(StringBuilder sb, UnitData data, PlanImageData plan, BinaryFile file) {
-        sb.append("<locationplan>");
+    protected void addUnitPlanXml(StringBuilder sb, UnitData data, PlanImageData plan, BinaryFile file) {
+        sb.append("<unitplan>");
         sb.append("<name>").append(xml(plan.getDisplayName())).append("</name>");
         sb.append("<src>").append(getBase64SrcString(file)).append("</src>");
-        sb.append("</locationplan>");
+        sb.append("</unitplan>");
     }
 
 }

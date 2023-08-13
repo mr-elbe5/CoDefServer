@@ -16,17 +16,17 @@
 <%@ page import="de.elbe5.group.GroupBean" %>
 <%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.codef.defect.DefectData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%@ page import="de.elbe5.codef.unit.UnitData" %>
 <%@ page import="de.elbe5.codef.project.ProjectData" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectData defect = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, DefectData.class);
+    DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
     assert(defect !=null);
-    UnitData location= ContentCache.getContent(defect.getUnitId(), UnitData.class);
-    assert(location!=null);
+    UnitData unit = ContentCache.getContent(defect.getUnitId(), UnitData.class);
+    assert(unit !=null);
     ProjectData project= ContentCache.getContent(defect.getProjectId(),ProjectData.class);
     assert(project!=null);
     GroupData group= GroupBean.getInstance().getGroup(project.getGroupId());

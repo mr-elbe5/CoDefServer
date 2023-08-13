@@ -11,6 +11,7 @@ package de.elbe5.codef.project;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.codef.unit.UnitBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.codef.DefectFopBean;
 import de.elbe5.codef.ViewFilter;
@@ -42,26 +43,25 @@ public class ProjectPdfBean extends DefectFopBean {
         StringBuilder sb=new StringBuilder();
         sb.append("<root>");
         addProjectHeaderXml(sb,project);
-        for (UnitData location : project.getChildren(UnitData.class)) {
-            List<DefectData> defects = ViewFilter.getFilter(rdata).getLocationDefects(location.getId());
+        for (UnitData unit : project.getChildren(UnitData.class)) {
+            List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
             if (!defects.isEmpty()) {
-                sb.append("<location>");
-                sb.append("<locationheader><title>");
-                sb.append(xml("_location"));
+                sb.append("<unit>");
+                sb.append("<unitheader><title>");
+                sb.append(xml("_unit"));
                 sb.append(": ");
-                sb.append(xml(location.getDisplayName()));
-                sb.append("</title></locationheader>");
-                addUnitDefectsXml(sb, location, defects, includeComments);
-                PlanImageData plan = location.getPlan();
+                sb.append(xml(unit.getDisplayName()));
+                sb.append("</title></unitheader>");
+                addUnitDefectsXml(sb, unit, defects, includeComments);
+                PlanImageData plan = unit.getPlan();
                 if (plan != null) {
                     PlanImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, PlanImageData.class);
-                    //todo
-                    /*byte[] arrowBytes = UnitBean.getInstance().getImageBytes(Configuration.getArrowPng());
-                    defects = ViewFilter.getFilter(rdata).getLocationDefects(location.getId());
-                    BinaryFile file = fullplan.createLocationDefectPlan(arrowBytes, defects, 1);
-                    addLocationPlanXml(sb, location, plan, file);*/
+                    byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
+                    defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
+                    BinaryFile file = fullplan.createUnitDefectPlan(arrowBytes, defects, 1);
+                    addUnitPlanXml(sb, unit, plan, file);
                 }
-                sb.append("</location>");
+                sb.append("</unit>");
             }
         }
         addProjectFooterXml(sb,project,now);

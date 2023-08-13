@@ -10,16 +10,16 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.application.Configuration" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
+<%@ page import="de.elbe5.codef.unit.UnitData" %>
+<%@ page import="de.elbe5.application.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+    ContentData contentData = ContentData.getCurrentContent(rdata);
     assert contentData != null;
 %>
-<% if (contentData.isActive() || Configuration.isShowInactiveContent()){%>
+<% if (contentData.isActive() || CodefConfiguration.isShowInactiveContent()){%>
 <li class="open">
     <span class="<%=!contentData.isActive() ? "inactive" : ""%>">
         <%=$H(contentData.getDisplayName())%>

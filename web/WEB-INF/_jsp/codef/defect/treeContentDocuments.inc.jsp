@@ -12,12 +12,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.file.DocumentData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+    ContentData contentData = ContentData.getCurrentContent(rdata, ContentData.class);
     assert contentData != null;
     int fileId=rdata.getAttributes().getInt("fileId");
 %>

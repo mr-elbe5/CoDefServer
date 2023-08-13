@@ -148,7 +148,7 @@
     </fo:table-row>
   </xsl:template>
 
-  <xsl:template match="locationheader">
+  <xsl:template match="unitheader">
     <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
       <fo:block>
         <xsl:value-of select="title"/>
@@ -156,7 +156,7 @@
     </fo:block-container>
   </xsl:template>
 
-  <xsl:template match="locationdefect">
+  <xsl:template match="unitdefect">
     <fo:block page-break-inside="avoid" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
       <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
         <xsl:value-of select="description" />
@@ -173,7 +173,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="locationplan">
+  <xsl:template match="unitplan">
     <fo:block page-break-inside="avoid" margin-bottom="5mm">
       <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="1mm">
         <xsl:value-of select="name" />
@@ -188,9 +188,9 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="location">
+  <xsl:template match="unit">
     <fo:block>
-      <xsl:apply-templates select="locationheader | locationdefect | locationplan"/>
+      <xsl:apply-templates select="unitheader | unitdefect | unitplan"/>
     </fo:block>
   </xsl:template>
 

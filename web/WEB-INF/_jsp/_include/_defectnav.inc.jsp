@@ -17,7 +17,7 @@
     </a>
 </li>
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"><%=$SH("_locations")%>
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"><%=$SH("_units")%>
     </a>
     <div class="dropdown-menu">
         <% for (ContentData child : project.getChildren()){

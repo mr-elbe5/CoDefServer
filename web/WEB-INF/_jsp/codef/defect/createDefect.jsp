@@ -17,15 +17,15 @@
 <%@ page import="de.elbe5.codef.defect.DefectData" %>
 <%@ page import="de.elbe5.codef.project.ProjectData" %>
 <%@ page import="de.elbe5.codef.unit.UnitData" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
+<%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectData defect = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, DefectData.class);
+    DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
     assert (defect != null);
-    UnitData location = ContentCache.getContent(defect.getUnitId(), UnitData.class);
-    assert (location != null);
+    UnitData unit = ContentCache.getContent(defect.getUnitId(), UnitData.class);
+    assert (unit != null);
     ProjectData project = ContentCache.getContent(defect.getProjectId(), ProjectData.class);
     assert (project != null);
     GroupData group = GroupBean.getInstance().getGroup(project.getGroupId());
@@ -57,7 +57,7 @@
         <form:text name="lot" label="_lot" value="<%=$H(defect.getLot())%>"/>
         <form:text name="costs" label="_costs" value="<%=defect.getCostsString()%>"/>
         <form:date name="dueDate1" label="_dueDate" value="<%=DateHelper.toHtmlDate(defect.getDueDate1())%>" required="true"/>
-        <% if (location.getPlan() != null) {%>
+        <% if (unit.getPlan() != null) {%>
         <form:line label="_position"> </form:line>
         <div id="planContainer">
             <img id="plan" src="/ctrl/image/show/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
@@ -74,14 +74,14 @@
         <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
         <form:line><%=$SH("_uploadHint")%></form:line>
         <div>
-            <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/unit/show/<%=location.getId()%>');"><%=$SH("_cancel")%>
+            <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/unit/show/<%=unit.getId()%>');"><%=$SH("_cancel")%>
             </button>
             <button type="submit" class="btn btn-primary"><%=$SH("_save")%>
             </button>
         </div>
     </form:form>
 </section>
-<% if (location.getPlan() != null) {%>
+<% if (unit.getPlan() != null) {%>
 <script type="text/javascript">
     let posX = 0;
     let posY = 0;

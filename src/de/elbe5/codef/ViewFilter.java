@@ -17,9 +17,7 @@ import de.elbe5.group.GroupBean;
 import de.elbe5.group.GroupData;
 import de.elbe5.request.RequestData;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ViewFilter {
@@ -112,8 +110,8 @@ public class ViewFilter {
         this.showClosed = showClosed;
     }
 
-    public List<DefectData> getLocationDefects(int locationId){
-        List<Integer> ids= DefectBean.getInstance().getUnitDefectIds(locationId);
+    public List<DefectData> getUnitDefects(int unitId){
+        List<Integer> ids= DefectBean.getInstance().getUnitDefectIds(unitId);
         List<DefectData> list = ContentCache.getContents(DefectData.class);
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);

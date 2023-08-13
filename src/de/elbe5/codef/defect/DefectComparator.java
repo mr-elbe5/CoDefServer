@@ -19,7 +19,7 @@ public class DefectComparator implements Comparator<DefectData> {
     public static final int TYPE_CHANGE = 3;
     public static final int TYPE_DUE_DATE = 4;
     public static final int TYPE_CLOSE_DATE = 5;
-    public static final int TYPE_LOCATION = 6;
+    public static final int TYPE_UNIT = 6;
     public static final int TYPE_STATE = 7;
     public static final int TYPE_ASSIGNED = 8;
     public static final int TYPE_DESCRIPTION = 9;
@@ -61,8 +61,8 @@ public class DefectComparator implements Comparator<DefectData> {
             case TYPE_CHANGE -> result = o1.getChangeDate().compareTo(o2.getChangeDate());
             case TYPE_DUE_DATE -> result = compareLocalDates(o1.getDueDate(), o2.getDueDate());
             case TYPE_CLOSE_DATE -> result = compareLocalDates(o1.getCloseDate(), o2.getCloseDate());
-            case TYPE_LOCATION ->
-                    result = o1.getLocationName().toLowerCase().compareTo(o2.getLocationName().toLowerCase());
+            case TYPE_UNIT ->
+                    result = o1.getUnitName().toLowerCase().compareTo(o2.getUnitName().toLowerCase());
             case TYPE_STATE -> result = o1.getState().compareTo(o2.getState());
             case TYPE_ASSIGNED -> {
                 if (o1.getAssignedId() == userId && o2.getAssignedId() == userId)

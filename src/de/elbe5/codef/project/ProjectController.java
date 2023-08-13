@@ -55,7 +55,7 @@ public class ProjectController extends ContentController {
     public IResponse openWatchFilter(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
         int contentId=rdata.getId();
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/project/watchFilter.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/codef/project/watchFilter.ajax.jsp");
     }
 
     public IResponse setWatchFilter(RequestData rdata) {
@@ -67,12 +67,12 @@ public class ProjectController extends ContentController {
 
     public IResponse updateWatchedUsers(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/project/projectUsers.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/codef/project/projectUsers.ajax.jsp");
     }
 
     public IResponse openStateFilter(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/project/stateFilter.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/codef/project/stateFilter.ajax.jsp");
     }
 
     public IResponse setStateFilter(RequestData rdata) {
@@ -150,24 +150,24 @@ public class ProjectController extends ContentController {
             jsProject.put("users",jsUsers);
             //Log.info("found project users: " + jsUsers.size());
             jsProjects.add(jsProject);
-            JSONArray jsLocations=new JSONArray();
-            jsProject.put("locations", jsLocations);
-            for (UnitData location : project.getChildren(UnitData.class)) {
-                //Log.info("location is: " + (location == null ? "null" : location.getName()));
-                if (!location.isActive()){
-                    Log.warn("skipping inactive location: " + location.getName());
+            JSONArray jsUnits=new JSONArray();
+            jsProject.put("units", jsUnits);
+            for (UnitData unit : project.getChildren(UnitData.class)) {
+                //Log.info("unit is: " + (unit == null ? "null" : unit.getName()));
+                if (!unit.isActive()){
+                    Log.warn("skipping inactive unit: " + unit.getName());
                     continue;
                 }
-                JSONObject jsLocation = location.getJson();
-                jsLocations.add(jsLocation);
-                PlanImageData plan = location.getPlan();
+                JSONObject jsUnit = unit.getJson();
+                jsUnits.add(jsUnit);
+                PlanImageData plan = unit.getPlan();
                 if (plan != null) {
                     JSONObject jsPlan = plan.getJson();
-                    jsLocation.put("plan", jsPlan);
+                    jsUnit.put("plan", jsPlan);
                 }
                 JSONArray jsDefects = new JSONArray();
-                jsLocation.put("defects", jsDefects);
-                for (DefectData defect : location.getChildren(DefectData.class)) {
+                jsUnit.put("defects", jsDefects);
+                for (DefectData defect : unit.getChildren(DefectData.class)) {
                     //Log.info("defect is: " + (defect == null ? "null" : defect.getName()));
                     if (!defect.isActive()){
                         Log.warn("skipping inactive defect: " + defect.getDisplayId());
@@ -189,7 +189,7 @@ public class ProjectController extends ContentController {
                     List<ImageData> commentImages = defect.getFiles(ImageData.class);
                     JSONArray jsComments = new JSONArray();
                     jsDefect.put("comments", jsComments);
-                    for (DefectStatusData comment : defect.getComments()) {
+                    for (DefectStatusData comment : defect.getStatuses()) {
                         JSONObject jsComment = comment.getJson();
                         jsComments.add(jsComment);
                         JSONArray jsCommentImages = new JSONArray();

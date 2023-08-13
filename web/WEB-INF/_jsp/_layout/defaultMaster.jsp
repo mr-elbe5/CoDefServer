@@ -14,11 +14,10 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="java.util.List" %>
-<%@ page import="de.elbe5.request.ContentRequestKeys" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+    ContentData contentData = ContentData.getCurrentContent(rdata);
     List<Integer> parentIds = ContentCache.getParentContentIds(contentData);
     String title = Configuration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
 %>

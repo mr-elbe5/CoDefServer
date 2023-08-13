@@ -51,8 +51,13 @@ public class CodefUserController extends UserController {
     }
 
     @Override
-    protected IResponse showHome() {
+    protected IResponse showLoginHome() {
         return new ForwardResponse("/home.html");
+    }
+
+    @Override
+    protected IResponse showLogoutHome() {
+        return new ForwardResponse("/ctrl/user/openLogin");
     }
 
 }

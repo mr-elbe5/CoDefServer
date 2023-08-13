@@ -109,8 +109,8 @@ public class DefectController extends ContentController {
         data.setViewType(ContentData.VIEW_TYPE_SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
-        UnitData location = ContentCache.getContent(data.getUnitId(), UnitData.class);
-        return new ContentResponse(location);
+        UnitData unit = ContentCache.getContent(data.getUnitId(), UnitData.class);
+        return new ContentResponse(unit);
     }
 
     public IResponse showCroppedDefectPlan(RequestData rdata) {
@@ -131,7 +131,7 @@ public class DefectController extends ContentController {
     }
 
     public IResponse openFullDefectPlan(RequestData rdata) {
-        return new ForwardResponse("/WEB-INF/_jsp/defecttracker/defect/defectPlan.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/codef/defect/defectPlan.ajax.jsp");
     }
 
     public IResponse showFullDefectPlan(RequestData rdata) {
@@ -169,13 +169,13 @@ public class DefectController extends ContentController {
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int locationId=rdata.getId();
-        UnitData location=ContentCache.getContent(locationId, UnitData.class);
-        if (location == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !location.hasUserRight(user, Right.READ)) {
+        int unitId=rdata.getId();
+        UnitData unit=ContentCache.getContent(unitId, UnitData.class);
+        if (unit == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !unit.hasUserRight(user, Right.READ)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectData data = new DefectData();
-        data.setCreateValues(location, rdata);
+        data.setCreateValues(unit, rdata);
         data.readRequestData(rdata);
         //Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {

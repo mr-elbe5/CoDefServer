@@ -73,14 +73,14 @@ public class ProjectData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/defecttracker/project/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/codef/project/editContentData.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/defecttracker/project/project.jsp");
+        context.include("/WEB-INF/_jsp/codef/project/project.jsp");
         writer.write("</div>");
     }
 
@@ -90,7 +90,7 @@ public class ProjectData extends ContentData {
             //backup
             ContentData currentContent=rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, this);
-            context.include("/WEB-INF/_jsp/defecttracker/project/treeContent.inc.jsp", true);
+            context.include("/WEB-INF/_jsp/codef/project/treeContent.inc.jsp", true);
             //restore
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, currentContent);
         }

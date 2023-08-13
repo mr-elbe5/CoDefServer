@@ -66,12 +66,8 @@ public class DefectData extends ContentData {
     protected LocalDate dueDate2 = null;
     protected LocalDate closeDate = null;
 
-    protected List<DefectStatusData> comments = new ArrayList<>();
-
-    // runtime
-
     protected String projectName="";
-    protected String locationName="";
+    protected String unitName ="";
 
     // base data
 
@@ -221,8 +217,10 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<DefectStatusData> getComments() {
-        return comments;
+    public List<DefectStatusData> getStatuses() {
+        List<DefectStatusData> statuses = new ArrayList<>();
+        statuses.addAll(getChildren(DefectStatusData.class));
+        return statuses;
     }
 
     public String getProjectName() {
@@ -234,13 +232,13 @@ public class DefectData extends ContentData {
         return projectName;
     }
 
-    public String getLocationName() {
-        if (locationName.isEmpty()){
+    public String getUnitName() {
+        if (unitName.isEmpty()){
             UnitData data= ContentCache.getContent(unitId, UnitData.class);
             if (data!=null)
-                locationName=data.getDisplayName();
+                unitName =data.getDisplayName();
         }
-        return locationName;
+        return unitName;
     }
 
     public String getAssignedName() {
@@ -279,7 +277,7 @@ public class DefectData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/defecttracker/defect/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/codef/defect/editContentData.ajax.jsp";
     }
 
     @Override
@@ -288,11 +286,11 @@ public class DefectData extends ContentData {
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
         if (ContentData.VIEW_TYPE_EDIT.equals(getViewType())) {
             if (isNew())
-                context.include("/WEB-INF/_jsp/defecttracker/defect/createDefect.jsp");
+                context.include("/WEB-INF/_jsp/codef/defect/createDefect.jsp");
             else
-                context.include("/WEB-INF/_jsp/defecttracker/defect/editDefect.jsp");
+                context.include("/WEB-INF/_jsp/codef/defect/editDefect.jsp");
         } else {
-            context.include("/WEB-INF/_jsp/defecttracker/defect/defect.jsp");
+            context.include("/WEB-INF/_jsp/codef/defect/defect.jsp");
         }
         writer.write("</div>");
     }
@@ -303,7 +301,7 @@ public class DefectData extends ContentData {
     public void setCreateValues(ContentData parent, RequestData rdata) {
         super.setCreateValues(parent, rdata);
         if (!(this.parent instanceof UnitData unit)) {
-            Log.error("parent of defect page should be location page");
+            Log.error("parent of defect page should be unit page");
             return;
         }
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
@@ -372,7 +370,7 @@ public class DefectData extends ContentData {
         setState(rdata.getAttributes().getString("state"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
         setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
-        setUnitId(rdata.getAttributes().getInt("locationId"));
+        setUnitId(rdata.getAttributes().getInt("unitId"));
     }
 
 

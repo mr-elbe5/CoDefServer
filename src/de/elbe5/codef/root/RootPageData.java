@@ -43,9 +43,9 @@ public class RootPageData extends ContentData {
     public void displayTreeContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         if (hasUserReadRight(rdata)) {
             //backup
-            ContentData currentContent=rdata.getCurrentDataInRequestOrSession(ContentRequestKeys.KEY_CONTENT, ContentData.class);
+            ContentData currentContent=ContentData.getCurrentContent(rdata);
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, this);
-            context.include("/WEB-INF/_jsp/defecttracker/root/treeContent.inc.jsp", true);
+            context.include("/WEB-INF/_jsp/codef/root/treeContent.inc.jsp", true);
             //restore
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, currentContent);
         }

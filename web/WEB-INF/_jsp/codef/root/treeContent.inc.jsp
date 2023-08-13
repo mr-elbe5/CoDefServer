@@ -10,12 +10,12 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defecttracker.project.ProjectData" %>
+<%@ page import="de.elbe5.codef.project.ProjectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = rdata.getCurrentContent();
+    ContentData contentData = ContentData.getCurrentContent(rdata);
     assert contentData != null;
 %>
 <li class="open">
