@@ -16,6 +16,7 @@ import de.elbe5.codef.defectstatus.DefectStatusController;
 import de.elbe5.codef.project.ProjectController;
 import de.elbe5.codef.unit.UnitController;
 import de.elbe5.company.CompanyCache;
+import de.elbe5.company.CompanyController;
 import de.elbe5.content.*;
 import de.elbe5.database.DbConnector;
 import de.elbe5.file.*;
@@ -49,20 +50,24 @@ public class CodefInitServlet extends InitServlet {
         if (!DbConnector.getInstance().initialize("jdbc/codef"))
             return;
         Configuration.setAppTitle("CoDef");
+        Configuration.setLogContent(false);
+        Configuration.setEmailMandatory(false);
+
         AdminController.register(new ContentAdminController());
         ContentController.register(new ContentController());
         DocumentController.register(new DocumentController());
         ImageController.register(new ImageController());
         GroupController.register(new GroupController());
         TimerController.register(new TimerController());
+        CompanyController.register(new CompanyController());
         UserController.register(new CodefUserController());
         ProjectController.register(new ProjectController());
+        UnitController.register(new UnitController());
         DefectController.register(new DefectController());
         DefectStatusController.register(new DefectStatusController());
-        UnitController.register(new UnitController());
 
-        ContentCache.load();
         CompanyCache.load();
+        ContentCache.load();
         UserCache.load();
         Timer.getInstance().registerTimerTask(new HeartbeatTaskData());
         Timer.getInstance().registerTimerTask(new CleanupTaskData());

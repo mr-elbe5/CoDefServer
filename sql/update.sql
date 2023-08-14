@@ -48,9 +48,6 @@ CREATE TABLE IF NOT EXISTS t_company
     CONSTRAINT t_company_pk PRIMARY KEY (id)
 );
 
-alter table t_user add company_id INTEGER NULL;
-alter table t_user add CONSTRAINT t_user_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE SET NULL;
-
 alter table t_location rename to t_unit;
 alter table t_unit rename constraint t_location_pk to t_unit_pk;
 alter table t_unit rename constraint t_location_fk1 to t_unit_fk1;
@@ -141,3 +138,12 @@ UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectImageData
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectCommentImageData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectDocumentData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectCommentDocumentData';
+
+CREATE TABLE IF NOT EXISTS t_company2project
+(
+    company_id INTEGER     NOT NULL,
+    project_id   INTEGER     NOT NULL,
+    CONSTRAINT t_company2project_pk PRIMARY KEY (company_id, project_id),
+    CONSTRAINT t_company2project_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
+);

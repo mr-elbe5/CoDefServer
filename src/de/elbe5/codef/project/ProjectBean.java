@@ -42,6 +42,25 @@ public class ProjectBean extends ContentBean {
             if (rs.next()){
                 int i=1;
                 data.setGroupId(rs.getInt(i));
+                readProjectCompanies(con, data);
+            }
+        } finally {
+            closeStatement(pst);
+        }
+    }
+
+    private static final String READ_PROJECT_COMPANIES_SQL = "SELECT company_id FROM t_company2project WHERE project_id=?";
+
+    protected void readProjectCompanies(Connection con, ProjectData data) throws SQLException {
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(READ_PROJECT_COMPANIES_SQL);
+            pst.setInt(1, data.getId());
+            try (ResultSet rs = pst.executeQuery()) {
+                data.getCompanyIds().clear();
+                while (rs.next()) {
+                    data.getCompanyIds().add(rs.getInt(1));
+                }
             }
         } finally {
             closeStatement(pst);
@@ -58,10 +77,11 @@ public class ProjectBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i=1;
-            pst.setInt(i++, data.getGroupId());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
+            writeProjectCompanies(con, data);
+
         } finally {
             closeStatement(pst);
         }
@@ -81,6 +101,30 @@ public class ProjectBean extends ContentBean {
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
+            writeProjectCompanies(con, data);
+        } finally {
+            closeStatement(pst);
+        }
+    }
+
+    private static final String DELETE_PROJECTCOMPANIES_SQL = "DELETE FROM t_company2project WHERE project_id=?";
+    private static final String INSERT_PROJECTCOMPANIES_SQL = "INSERT INTO t_company2project (project_id,company_id) VALUES(?,?)";
+
+    protected void writeProjectCompanies(Connection con, ProjectData data) throws SQLException {
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(DELETE_PROJECTCOMPANIES_SQL);
+            pst.setInt(1, data.getId());
+            pst.execute();
+            if (data.getCompanyIds() != null) {
+                pst.close();
+                pst = con.prepareStatement(INSERT_PROJECTCOMPANIES_SQL);
+                pst.setInt(1, data.getId());
+                for (int companyId : data.getCompanyIds()) {
+                    pst.setInt(2, companyId);
+                    pst.executeUpdate();
+                }
+            }
         } finally {
             closeStatement(pst);
         }

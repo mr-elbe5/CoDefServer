@@ -170,15 +170,6 @@ CREATE TABLE IF NOT EXISTS t_content_right
     CONSTRAINT t_content_right_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS t_content_log
-(
-    content_id INTEGER     NOT NULL,
-    day        DATE        NOT NULL,
-    count      INTEGER 	   NOT NULL,
-    CONSTRAINT t_content_log_pk PRIMARY KEY (content_id, day),
-    CONSTRAINT t_content_log_fk1 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS t_project
 (
     id INTEGER NOT NULL,
@@ -186,6 +177,15 @@ CREATE TABLE IF NOT EXISTS t_project
     CONSTRAINT t_project_pk PRIMARY KEY (id),
     CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
     CONSTRAINT t_project_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id)
+);
+
+CREATE TABLE IF NOT EXISTS t_company2project
+(
+    company_id INTEGER     NOT NULL,
+    project_id   INTEGER     NOT NULL,
+    CONSTRAINT t_company2project_pk PRIMARY KEY (company_id, project_id),
+    CONSTRAINT t_company2project_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_unit

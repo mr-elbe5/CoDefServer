@@ -18,7 +18,7 @@
 
     UnitData contentData = ContentData.getCurrentContent(rdata, UnitData.class);
     assert (contentData != null);
-    String url = "/ctrl/unit/saveContentData/" + contentData.getId();
+    String url = "/ctrl/unit/saveData/" + contentData.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

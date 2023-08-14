@@ -15,6 +15,8 @@
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.codef.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.company.CompanyBean" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -22,7 +24,8 @@
     ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
     List<GroupData> groups = GroupBean.getInstance().getAllGroups();
-    String url = "/ctrl/content/saveContentData/" + contentData.getId();%>
+    List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
+    String url = "/ctrl/project/saveData/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -32,7 +35,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
+        <form:form url="<%=url%>" name="pageform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
@@ -52,6 +55,12 @@
                     <option value="<%=group.getId()%>" <%=contentData.getGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
+                <form:line label="_companies" padded="true">
+                    <% for (CompanyData company : companies){%>
+                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
+                    </form:check><br/>
+                    <%}%>
+                </form:line>
                 <form:line label="_active" padded="true">
                     <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
                 </form:line>

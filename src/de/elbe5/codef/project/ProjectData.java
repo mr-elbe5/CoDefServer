@@ -23,7 +23,9 @@ import jakarta.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProjectData extends ContentData {
 
@@ -35,6 +37,8 @@ public class ProjectData extends ContentData {
     }
 
     protected int groupId=0;
+
+    protected Set<Integer> companyIds = new HashSet<>();
 
     public ProjectData() {
     }
@@ -49,6 +53,14 @@ public class ProjectData extends ContentData {
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
+    }
+
+    public Set<Integer> getCompanyIds() {
+        return companyIds;
+    }
+
+    public void setCompanyIds(Set<Integer> companyIds) {
+        this.companyIds = companyIds;
     }
 
     @Override
@@ -104,6 +116,7 @@ public class ProjectData extends ContentData {
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
         setGroupId(rdata.getAttributes().getInt("groupId"));
+        setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         setActive(rdata.getAttributes().getBoolean("active"));
         setNavType(ContentData.NAV_TYPE_HEADER);
         if (getDisplayName().isEmpty()) {
