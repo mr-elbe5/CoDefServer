@@ -94,6 +94,10 @@ public class DefectStatusData extends ContentData {
         setComment(rdata.getAttributes().getString("comment"));
     }
 
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/codef/defectstatus/adminTreeContent.inc.jsp";
+    }
+
     @SuppressWarnings("unchecked")
     public JsonObject getJson(){
         JsonObject json = super.getJson();

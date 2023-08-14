@@ -9,27 +9,36 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
+<%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.file.DocumentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     ContentData contentData = ContentData.getCurrentContent(rdata, ContentData.class);
     assert contentData != null;
+    int fileId=rdata.getAttributes().getInt("fileId");
 %>
-<li class="open">
-    <span class="<%=contentData.isActive() ? "" : "inactive"%>">
-        <%=$H(contentData.getDisplayName())%>
-    </span>
-    <%if (contentData.hasUserEditRight(rdata)) {%>
-    <div class="icons">
-        <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
-        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditContentData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
-    </div>
-    <%}%>
-    <ul>
-        <jsp:include page="/WEB-INF/_jsp/content/defect/treeContentDocuments.inc.jsp" flush="true" />
-        <jsp:include page="/WEB-INF/_jsp/codef/defect/treeContentImages.inc.jsp" flush="true" />
-    </ul>
-</li>
+        <li class="documents">
+            <span>[<%=$SH("_documents")%>]</span>
+            <ul>
+                <%
+                    List<DocumentData> documents = contentData.getFiles(DocumentData.class);
+                    for (DocumentData document : documents) {%>
+                <li class="<%=fileId==document.getId() ? "current" : ""%>">
+                    <div class="treeline">
+                        <span id="<%=document.getId()%>">
+                            <%=document.getDisplayName()%>
+                        </span>
+                        <div class="icons">
+                            <a class="icon fa fa-eye" href="/ctrl/document/show/<%=document.getId()%>" target="_blank" title="<%=$SH("_view")%>"> </a>
+                            <a class="icon fa fa-download" href="/ctrl/document/download/<%=document.getId()%>" title="<%=$SH("_download")%>"> </a>
+                        </div>
+                    </div>
+                </li>
+                <%}%>
+            </ul>
+        </li>
+
 

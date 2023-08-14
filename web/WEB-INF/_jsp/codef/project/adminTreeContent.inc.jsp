@@ -28,24 +28,14 @@
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditContentData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
-        <%if (contentData.hasChildren()){%>
-        <a class="icon fa fa-sort" href="" onclick="return openModalDialog('/ctrl/content/openSortChildPages/<%=contentData.getId()%>');" title="<%=$SH("_sortChildPages")%>"> </a>
-        <%}%>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
-        <a class="icon fa fa-plus dropdown-toggle" data-toggle="dropdown" title="<%=$SH("_newContent")%>"></a>
-        <div class="dropdown-menu">
-            <%
-                String type = UnitData.class.getSimpleName();
-                String name = $SH(type);%>
-            <a class="dropdown-item" onclick="return openModalDialog('/ctrl/content/openCreateContentData?parentId=<%=contentData.getId()%>&type=<%=type%>');"><%=name%>
-            </a>
-        </div>
+        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/content/openCreateData?parentId=<%=contentData.getId()%>&type=de.elbe5.codef.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
     </div>
     <%}%>
     <ul>
         <%if (contentData.hasChildren()) {
             for (ContentData childData : contentData.getChildren()) {
-                childData.displayTreeContent(pageContext, rdata);
+                childData.displayAdminTreeContent(pageContext, rdata);
             }
         }%>
     </ul>

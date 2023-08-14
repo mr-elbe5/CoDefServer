@@ -280,6 +280,10 @@ public class DefectData extends ContentData {
         return "/WEB-INF/_jsp/codef/defect/editContentData.ajax.jsp";
     }
 
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/codef/defect/adminTreeContent.inc.jsp";
+    }
+
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();

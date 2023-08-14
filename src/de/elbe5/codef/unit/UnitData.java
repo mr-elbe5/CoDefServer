@@ -102,16 +102,8 @@ public class UnitData extends ContentData {
         writer.write("</div>");
     }
 
-    //used in jsp
-    public void displayTreeContent(PageContext context, RequestData rdata) throws IOException, ServletException {
-        if (hasUserReadRight(rdata)) {
-            //backup
-            ContentData currentContent=ContentData.getCurrentContent(rdata);
-            rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, this);
-            context.include("/WEB-INF/_jsp/codef/unit/treeContent.inc.jsp", true);
-            //restore
-            rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, currentContent);
-        }
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/codef/unit/adminTreeContent.inc.jsp";
     }
 
     @Override
