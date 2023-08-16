@@ -403,20 +403,19 @@ public class DefectData extends ContentData {
     @Override
     @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonObject json = getJson();
         JsonArray jsImages = new JsonArray();
-        json.put("images", jsImages);
         for (ImageData image : getFiles(ImageData.class)) {
             JsonObject jsImage = image.getJson();
             jsImages.add(jsImage);
         }
-        JSONArray jsStatusChanges = new JsonArray();
-        json.put("statusChanges", jsStatusChanges);
+        JsonArray jsStatusChanges = new JsonArray();
         for (DefectStatusData statusChange : getStatuses()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
-        return json;
+        return getJson()
+                .add("statusChanges", jsStatusChanges)
+                .add("images", jsImages);
     }
 
 }

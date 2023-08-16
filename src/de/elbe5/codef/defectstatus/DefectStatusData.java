@@ -16,6 +16,7 @@ import de.elbe5.codef.defect.DefectData;
 import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
+import de.elbe5.file.DocumentData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
@@ -115,13 +116,18 @@ public class DefectStatusData extends ContentData {
     @Override
     @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonObject json = getJson();
         JsonArray jsImages = new JsonArray();
-        json.put("images", jsImages);
         for (ImageData image : getFiles(ImageData.class)) {
             JsonObject jsImage = image.getJson();
             jsImages.add(jsImage);
         }
-        return json;
+        JsonArray jsDocuments = new JsonArray();
+        for (DocumentData document : getFiles(DocumentData.class)) {
+            JsonObject jsDocument = document.getJson();
+            jsDocuments.add(jsDocument);
+        }
+        return getJson()
+                .add("images", jsImages)
+                .add("documents", jsDocuments);
     }
 }

@@ -195,22 +195,17 @@ public class UnitData extends ContentData {
     @Override
     @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonObject json = getJson();
         PlanImageData plan = getPlan();
-        if (plan != null) {
-            JsonObject jsPlan = plan.getJson();
-            json.put("plan", jsPlan);
-        }
         JsonArray jsDefects = new JsonArray();
-        json.put("defects", jsDefects);
         for (DefectData defect : getChildren(DefectData.class)) {
             if (!defect.isActive() || defect.isClosed())
                 continue;
             JsonObject jsDefect = defect.getJsonRecursive();
             jsDefects.add(jsDefect);
         }
-
-        return json;
+        return getJson()
+                .add("plan", plan != null ? plan.getJson() : null)
+                .add("defects", jsDefects);
     }
 
 }

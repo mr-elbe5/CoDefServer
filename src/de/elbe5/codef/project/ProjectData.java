@@ -130,18 +130,15 @@ public class ProjectData extends ContentData {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonObject json = getJson();
         JsonArray jsUnits = new JsonArray();
-        json.put("units", jsUnits);
         for (UnitData unit : getChildren(UnitData.class)) {
             if (!unit.isActive())
                 continue;
-            JsonObject jsUnit = unit.getJsonRecursive();
-            jsUnits.add(jsUnit);
+            jsUnits.add(unit.getJsonRecursive());
         }
-        return json;
+        return getJson()
+                .add("units", jsUnits);
     }
 
 }

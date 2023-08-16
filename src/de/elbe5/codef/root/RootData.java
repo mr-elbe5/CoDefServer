@@ -22,16 +22,13 @@ public class RootData implements IJsonData {
 
     @SuppressWarnings("unchecked")
     public JsonObject getJson() {
-        JsonObject json = new JsonObject();
         List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
         JsonArray jsCompanies = new JsonArray();
-        json.add("companies", jsCompanies);
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
             jsCompanies.add(jsCompany);
         }
         JsonArray jsProjects = new JsonArray();
-        json.put("projects", jsProjects);
         for (int projectId : projectIds) {
             ProjectData project = ContentCache.getContent(projectId, ProjectData.class);
             if (project == null || !project.isActive())
@@ -39,7 +36,9 @@ public class RootData implements IJsonData {
             JsonObject jsProject = project.getJsonRecursive();
             jsProjects.add(jsProject);
         }
-        return json;
+        return new JsonObject()
+                .add("companies", jsCompanies)
+                .add("projects", jsProjects);
     }
 
 }
