@@ -10,10 +10,10 @@ package de.elbe5.codef.defect;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 
 public class DefectComparator implements Comparator<DefectData> {
 
-    public static final int TYPE_MY = 0;
     public static final int TYPE_CREATION = 1;
     public static final int TYPE_CHANGER = 2;
     public static final int TYPE_CHANGE = 3;
@@ -25,10 +25,16 @@ public class DefectComparator implements Comparator<DefectData> {
     public static final int TYPE_DESCRIPTION = 9;
     public static final int TYPE_NOTIFIED = 10;
 
+    public static DefectComparator instance = new DefectComparator();
+
+    public void sort(List<DefectData> defects,int sortType, boolean ascending){
+        this.sortType = sortType;
+        this.ascending = ascending;
+        defects.sort(this);
+    }
 
     private int sortType=TYPE_CREATION;
     private boolean ascending = false;
-    private int userId = 0;
 
     public int getSortType() {
         return sortType;
@@ -41,14 +47,6 @@ public class DefectComparator implements Comparator<DefectData> {
             this.sortType = sortType;
             ascending = true;
         }
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     @Override
@@ -64,17 +62,7 @@ public class DefectComparator implements Comparator<DefectData> {
             case TYPE_UNIT ->
                     result = o1.getUnitName().toLowerCase().compareTo(o2.getUnitName().toLowerCase());
             case TYPE_STATE -> result = o1.getState().compareTo(o2.getState());
-            case TYPE_ASSIGNED -> {
-                if (o1.getAssignedId() == userId && o2.getAssignedId() == userId)
-                    // 0
-                    break;
-                else if (o1.getAssignedId() == userId)
-                    result = -1;
-                else if (o2.getAssignedId() == userId)
-                    result = 1;
-                else
-                    result = o1.getAssignedName().toLowerCase().compareTo(o2.getAssignedName().toLowerCase());
-            }
+            case TYPE_ASSIGNED -> result = o1.getAssignedName().toLowerCase().compareTo(o2.getAssignedName().toLowerCase());
             case TYPE_NOTIFIED -> {
                 if (o1.isNotified() != o2.isNotified())
                     result = o1.isNotified() ? 1 : -1;

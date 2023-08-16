@@ -8,6 +8,7 @@
  */
 package de.elbe5.codef.project;
 
+import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.StringHelper;
 import de.elbe5.codef.ViewFilter;
@@ -15,7 +16,6 @@ import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
-import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 
 import jakarta.servlet.ServletException;
@@ -126,6 +126,21 @@ public class ProjectData extends ContentData {
         json.put("name",getDisplayName());
         json.put("description",getDescription());
         json.put("phase", "DEFAULT");
+        return json;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public JsonObject getJsonRecursive(){
+        JsonObject json = getJson();
+        JsonArray jsUnits = new JsonArray();
+        json.put("units", jsUnits);
+        for (UnitData unit : getChildren(UnitData.class)) {
+            if (!unit.isActive())
+                continue;
+            JsonObject jsUnit = unit.getJsonRecursive();
+            jsUnits.add(jsUnit);
+        }
         return json;
     }
 

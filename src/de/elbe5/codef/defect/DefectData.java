@@ -8,10 +8,7 @@
  */
 package de.elbe5.codef.defect;
 
-import de.elbe5.base.BinaryFile;
-import de.elbe5.base.DateHelper;
-import de.elbe5.base.JsonObject;
-import de.elbe5.base.Log;
+import de.elbe5.base.*;
 import de.elbe5.codef.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
@@ -28,6 +25,8 @@ import de.elbe5.user.UserData;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
+import org.json.simple.JSONArray;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
@@ -398,6 +397,25 @@ public class DefectData extends ContentData {
         json.put("state", getState());
         json.put("dueDate", DateHelper.asMillis(getDueDate()));
         json.put("phase", "DEFAULT");
+        return json;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public JsonObject getJsonRecursive(){
+        JsonObject json = getJson();
+        JsonArray jsImages = new JsonArray();
+        json.put("images", jsImages);
+        for (ImageData image : getFiles(ImageData.class)) {
+            JsonObject jsImage = image.getJson();
+            jsImages.add(jsImage);
+        }
+        JSONArray jsStatusChanges = new JsonArray();
+        json.put("statusChanges", jsStatusChanges);
+        for (DefectStatusData statusChange : getStatuses()) {
+            JsonObject jsStatusChange = statusChange.getJsonRecursive();
+            jsStatusChanges.add(jsStatusChange);
+        }
         return json;
     }
 

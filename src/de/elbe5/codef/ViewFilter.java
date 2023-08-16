@@ -37,8 +37,21 @@ public class ViewFilter {
     private List<Integer> watchedIds = new ArrayList<>();
     private boolean showClosed =false;
 
-    private DefectComparator comparator = new DefectComparator();
+    private int sortType=DefectComparator.TYPE_CREATION;
+    private boolean ascending = false;
 
+    public int getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(int sortType) {
+        if (this.sortType==sortType)
+            ascending=!ascending;
+        else {
+            this.sortType = sortType;
+            ascending = true;
+        }
+    }
     private final List<Integer> ownProjectIds=new ArrayList<>();
 
     public List<Integer> getOwnProjectIds() {
@@ -51,7 +64,6 @@ public class ViewFilter {
 
     public void setCurrentUserId(int currentUserId) {
         this.currentUserId = currentUserId;
-        comparator.setUserId(currentUserId);
     }
 
     public boolean isEditor() {
@@ -80,10 +92,6 @@ public class ViewFilter {
 
     public void setWatchedIds(List<Integer> watchedIds) {
         this.watchedIds = watchedIds;
-    }
-
-    public DefectComparator getComparator() {
-        return comparator;
     }
 
     public void initWatchedUsers(){
@@ -131,7 +139,7 @@ public class ViewFilter {
                 list.remove(i);
             }
         }
-        list.sort(comparator);
+        DefectComparator.instance.sort(list, sortType, ascending);
         return list;
     }
 
@@ -156,7 +164,7 @@ public class ViewFilter {
                 list.remove(i);
             }
         }
-        list.sort(comparator);
+        DefectComparator.instance.sort(list, sortType, ascending);
         return list;
     }
 }

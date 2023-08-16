@@ -9,9 +9,11 @@
 package de.elbe5.codef.defectstatus;
 
 import de.elbe5.base.DateHelper;
+import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.codef.defect.DefectData;
+import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
@@ -107,6 +109,19 @@ public class DefectStatusData extends ContentData {
         json.put("creatorName", getCreatorName());
         json.put("comment",getComment());
         json.put("state",getState());
+        return json;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public JsonObject getJsonRecursive(){
+        JsonObject json = getJson();
+        JsonArray jsImages = new JsonArray();
+        json.put("images", jsImages);
+        for (ImageData image : getFiles(ImageData.class)) {
+            JsonObject jsImage = image.getJson();
+            jsImages.add(jsImage);
+        }
         return json;
     }
 }

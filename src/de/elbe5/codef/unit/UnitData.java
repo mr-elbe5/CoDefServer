@@ -15,6 +15,7 @@ import de.elbe5.codef.project.ProjectData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 
@@ -188,6 +189,27 @@ public class UnitData extends ContentData {
         json.put("name",getDisplayName());
         json.put("description",getDescription());
         json.put("approveDate", DateHelper.asMillis(getApproveDate()));
+        return json;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public JsonObject getJsonRecursive(){
+        JsonObject json = getJson();
+        PlanImageData plan = getPlan();
+        if (plan != null) {
+            JsonObject jsPlan = plan.getJson();
+            json.put("plan", jsPlan);
+        }
+        JsonArray jsDefects = new JsonArray();
+        json.put("defects", jsDefects);
+        for (DefectData defect : getChildren(DefectData.class)) {
+            if (!defect.isActive() || defect.isClosed())
+                continue;
+            JsonObject jsDefect = defect.getJsonRecursive();
+            jsDefects.add(jsDefect);
+        }
+
         return json;
     }
 
