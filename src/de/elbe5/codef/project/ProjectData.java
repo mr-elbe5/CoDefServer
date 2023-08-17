@@ -20,6 +20,9 @@ import de.elbe5.request.RequestData;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -119,14 +122,10 @@ public class ProjectData extends ContentData {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public JsonObject getJson(){
-        JsonObject json = super.getJson();
-        json.put("id",getId());
-        json.put("name",getDisplayName());
-        json.put("description",getDescription());
-        json.put("phase", "DEFAULT");
-        return json;
+        return super.getJson()
+                .add("phase", "DEFAULT");
     }
 
     @Override
@@ -139,6 +138,32 @@ public class ProjectData extends ContentData {
         }
         return getJson()
                 .add("units", jsUnits);
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+    }
+
+    @Override
+    public void fromJsonRecursive(JSONObject json) {
+        fromJson(json);
+        addUnitsFromJson(json);
+    }
+
+    public void addUnitsFromJson(JSONObject json) {
+        JSONArray jsUnits = getJSONArray(json, "units");
+        if (jsUnits != null){
+            for (Object obj : jsUnits){
+                if (obj instanceof JSONObject jsObj){
+                    UnitData unit = new UnitData();
+                    unit.setProjectId(getId());
+                    unit.fromJsonRecursive(jsObj);
+                    if (unit.hasValidData())
+                        getChildren().add(unit);
+                }
+            }
+        }
     }
 
 }

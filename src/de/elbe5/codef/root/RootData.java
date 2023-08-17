@@ -13,32 +13,66 @@ import de.elbe5.codef.project.ProjectData;
 import de.elbe5.company.CompanyBean;
 import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentCache;
+import de.elbe5.request.RequestData;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RootData implements IJsonData {
 
-    List<Integer> projectIds = new ArrayList<>();
+    List<ProjectData> projects = new ArrayList<>();
+    List<CompanyData> companies = new ArrayList<>();
 
-    @SuppressWarnings("unchecked")
+    public void init(List<Integer> projectIds){
+        for (int projectId : projectIds) {
+            ProjectData project = ContentCache.getContent(projectId, ProjectData.class);
+            if (project != null && project.isActive())
+                projects.add(project);
+        }
+        companies = CompanyBean.getInstance().getAllCompanies();
+    }
+
     public JsonObject getJson() {
-        List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
         JsonArray jsCompanies = new JsonArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
             jsCompanies.add(jsCompany);
         }
         JsonArray jsProjects = new JsonArray();
-        for (int projectId : projectIds) {
-            ProjectData project = ContentCache.getContent(projectId, ProjectData.class);
-            if (project == null || !project.isActive())
-                continue;
+        for (ProjectData project : projects) {
             JsonObject jsProject = project.getJsonRecursive();
             jsProjects.add(jsProject);
         }
         return new JsonObject()
                 .add("companies", jsCompanies)
                 .add("projects", jsProjects);
+    }
+
+    public void readRequestData(RequestData rdata){
+        JSONArray jsProjects = rdata.getAttributes().get("projects", JSONArray.class);
+        if (jsProjects != null){
+            for (Object obj : jsProjects){
+                if (obj instanceof JSONObject jsObj){
+                    ProjectData project = new ProjectData();
+                    project.fromJsonRecursive(jsObj);
+                    if (project.hasValidData())
+                        projects.add(project);
+                }
+            }
+        }
+        JSONArray jsCompanies = rdata.getAttributes().get("companies", JSONArray.class);
+        if (jsCompanies != null){
+            for (Object obj : jsCompanies){
+                if (obj instanceof JSONObject jsObj){
+                    CompanyData company = new CompanyData();
+                    company.fromJsonRecursive(jsObj);
+                    if (company.hasValidData())
+                        companies.add(company);
+                }
+            }
+        }
     }
 
 }

@@ -21,6 +21,9 @@ import de.elbe5.request.RequestData;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
@@ -182,18 +185,13 @@ public class UnitData extends ContentData {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public JsonObject getJson(){
-        JsonObject json = super.getJson();
-        json.put("id",getId());
-        json.put("name",getDisplayName());
-        json.put("description",getDescription());
-        json.put("approveDate", DateHelper.asMillis(getApproveDate()));
-        return json;
+        return super.getJson()
+                .add("approveDate", getApproveDate());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
         PlanImageData plan = getPlan();
         JsonArray jsDefects = new JsonArray();
@@ -206,6 +204,34 @@ public class UnitData extends ContentData {
         return getJson()
                 .add("plan", plan != null ? plan.getJson() : null)
                 .add("defects", jsDefects);
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+        LocalDate date = getLocalDate(json, "approveDate");
+        if (date != null)
+            setApproveDate(date);
+    }
+
+    @Override
+    public void fromJsonRecursive(JSONObject json) {
+        fromJson(json);
+        addDefectsFromJson(json);
+    }
+
+    public void addDefectsFromJson(JSONObject json) {
+        JSONArray jsDefects = getJSONArray(json, "defects");
+        if (jsDefects != null){
+            for (Object obj : jsDefects){
+                if (obj instanceof JSONObject jsObj){
+                    DefectData defect = new DefectData();
+                    defect.fromJsonRecursive(jsObj);
+                    if (defect.hasValidData())
+                        getChildren().add(defect);
+                }
+            }
+        }
     }
 
 }

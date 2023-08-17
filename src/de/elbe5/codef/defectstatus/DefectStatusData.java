@@ -21,7 +21,10 @@ import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,33 +104,50 @@ public class DefectStatusData extends ContentData {
         return "/WEB-INF/_jsp/codef/defectstatus/adminTreeContent.inc.jsp";
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public JsonObject getJson(){
-        JsonObject json = super.getJson();
-        json.put("id",getId());
-        json.put("creationDate", DateHelper.asMillis(getCreationDate()));
-        json.put("creatorId", getCreatorId());
-        json.put("creatorName", getCreatorName());
-        json.put("comment",getComment());
-        json.put("state",getState());
-        return json;
+        return super.getJson()
+                .add("comment",getComment())
+                .add("state",getState());
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonArray jsImages = new JsonArray();
-        for (ImageData image : getFiles(ImageData.class)) {
-            JsonObject jsImage = image.getJson();
-            jsImages.add(jsImage);
-        }
-        JsonArray jsDocuments = new JsonArray();
-        for (DocumentData document : getFiles(DocumentData.class)) {
-            JsonObject jsDocument = document.getJson();
-            jsDocuments.add(jsDocument);
-        }
         return getJson()
-                .add("images", jsImages)
-                .add("documents", jsDocuments);
+                .add("images", getImagesForJson())
+                .add("documents", getDocumentsForJson());
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+        String s = getString(json, "comment");
+        if (s!=null)
+            setComment(s);
+        s = getString(json, "state");
+        if (s!=null)
+            setState(s);
+    }
+
+    @Override
+    public void fromJsonRecursive(JSONObject json) {
+        fromJson(json);
+        addImagesFromJson(json);
+        addDocumentsFromJson(json);
+        addStatusChangesFromJson(json);
+    }
+
+    public void addStatusChangesFromJson(JSONObject json) {
+        JSONArray jsStatusChanges = getJSONArray(json, "statusChanges");
+        if (jsStatusChanges != null){
+            for (Object obj : jsStatusChanges){
+                if (obj instanceof JSONObject jsObj){
+                    DefectStatusData statusChange = new DefectStatusData();
+                    statusChange.fromJsonRecursive(jsObj);
+                    if (statusChange.hasValidData())
+                        getChildren().add(statusChange);
+                }
+            }
+        }
     }
 }

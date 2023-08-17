@@ -48,7 +48,7 @@ public class RootController extends ContentController {
 
     private JSONObject getProjectsJson(UserData user) {
         RootData data = new RootData();
-        data.projectIds= ProjectBean.getInstance().getUserProjectIds(user.getId(),user.hasContentEditRight());
+        data.init(ProjectBean.getInstance().getUserProjectIds(user.getId(),user.hasContentEditRight()));
         return data.getJson();
     }
 

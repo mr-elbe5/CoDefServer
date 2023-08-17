@@ -26,6 +26,7 @@ import de.elbe5.user.UserData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -217,9 +218,7 @@ public class DefectData extends ContentData {
     }
 
     public List<DefectStatusData> getStatuses() {
-        List<DefectStatusData> statuses = new ArrayList<>();
-        statuses.addAll(getChildren(DefectStatusData.class));
-        return statuses;
+        return new ArrayList<>(getChildren(DefectStatusData.class));
     }
 
     public String getProjectName() {
@@ -376,38 +375,23 @@ public class DefectData extends ContentData {
         setUnitId(rdata.getAttributes().getInt("unitId"));
     }
 
-
-    @SuppressWarnings("unchecked")
     @Override
     public JsonObject getJson(){
-        JsonObject json = super.getJson();
-        json.put("id",getId());
-        json.put("creationDate", DateHelper.asMillis(getCreationDate()));
-        json.put("creatorId", getCreatorId());
-        json.put("creatorName", getCreatorName());
-        json.put("displayId",getDisplayId());
-        json.put("description",getDescription());
-        json.put("assignedId",getAssignedId());
-        json.put("assignedName",getAssignedName());
-        json.put("lot",getLot());
-        json.put("planId",getPlanId());
-        json.put("positionX",getPositionX());
-        json.put("positionY",getPositionY());
-        json.put("positionComment",getPositionComment());
-        json.put("state", getState());
-        json.put("dueDate", DateHelper.asMillis(getDueDate()));
-        json.put("phase", "DEFAULT");
-        return json;
+        return super.getJson()
+                .add("displayId",getDisplayId())
+                .add("assignedId",getAssignedId())
+                .add("assignedName",getAssignedName())
+                .add("planId",getPlanId())
+                .add("positionX",getPositionX())
+                .add("positionY",getPositionY())
+                .add("positionComment",getPositionComment())
+                .add("state", getState())
+                .add("dueDate", getDueDate())
+                .add("phase", "DEFAULT");
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonArray jsImages = new JsonArray();
-        for (ImageData image : getFiles(ImageData.class)) {
-            JsonObject jsImage = image.getJson();
-            jsImages.add(jsImage);
-        }
         JsonArray jsStatusChanges = new JsonArray();
         for (DefectStatusData statusChange : getStatuses()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
@@ -415,7 +399,59 @@ public class DefectData extends ContentData {
         }
         return getJson()
                 .add("statusChanges", jsStatusChanges)
-                .add("images", jsImages);
+                .add("images", getImagesForJson())
+                .add("documents", getDocumentsForJson());
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+        int i = getInt(json, "displayId");
+        if (i!=0)
+            setDisplayId(i);
+        i = getInt(json, "assignedId");
+        if (i!=0)
+            setAssignedId(i);
+        i = getInt(json, "planId");
+        if (i!=0)
+            setPlanId(i);
+        i = getInt(json, "positionX");
+        if (i!=0)
+            setPositionX(i);
+        i = getInt(json, "positionY");
+        if (i!=0)
+            setPositionY(i);
+        String s = getString(json, "positionComment");
+        if (s != null)
+            setPositionComment(s);
+        s = getString(json, "state");
+        if (s != null)
+            setState(s);
+        LocalDate date = getLocalDate(json, "dueDate");
+        if (date != null)
+            setDueDate1(date);
+    }
+
+    @Override
+    public void fromJsonRecursive(JSONObject json) {
+        fromJson(json);
+        addImagesFromJson(json);
+        addDocumentsFromJson(json);
+        addStatusChangesFromJson(json);
+    }
+
+    public void addStatusChangesFromJson(JSONObject json) {
+        JSONArray jsStatusChanges = getJSONArray(json, "statusChanges");
+        if (jsStatusChanges != null){
+            for (Object obj : jsStatusChanges){
+                if (obj instanceof JSONObject jsObj){
+                    DefectStatusData statusChange = new DefectStatusData();
+                    statusChange.fromJsonRecursive(jsObj);
+                    if (statusChange.hasValidData())
+                        getChildren().add(statusChange);
+                }
+            }
+        }
     }
 
 }
