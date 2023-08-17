@@ -36,7 +36,7 @@ public class RootController extends ContentController {
         return KEY;
     }
 
-    public IResponse getProjects(RequestData rdata) {
+    public IResponse getData(RequestData rdata) {
         /*UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
@@ -44,6 +44,16 @@ public class RootController extends ContentController {
         UserData user = UserCache.getUser(UserData.ID_ROOT);
         JSONObject json = getProjectsJson(user);
         return new JsonResponse(json.toJSONString());
+    }
+
+    public IResponse uploadData(RequestData rdata) {
+        /*UserData user = rdata.getLoginUser();
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+         */
+        RootData data = new RootData();
+        data.readRequestData(rdata);
+        return new JsonResponse(data.getJson().toJSONString());
     }
 
     private JSONObject getProjectsJson(UserData user) {
