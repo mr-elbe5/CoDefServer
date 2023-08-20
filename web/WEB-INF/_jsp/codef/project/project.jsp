@@ -56,8 +56,8 @@
             <th style="width:8%"><%=$SH("_closed")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CLOSE_DATE%>");>&nbsp;</a>
             </th>
-            <th style="width:8%"><%=$SH("_state")%>
-                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_STATE%>");>&nbsp;</a>
+            <th style="width:8%"><%=$SH("_status")%>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_STATUS%>");>&nbsp;</a>
             </th>
             <th style="width:8%"><%=$SH("_assigned")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_ASSIGNED%>");>&nbsp;</a>
@@ -79,7 +79,7 @@
             <td><%=$DT(defect.getChangeDate())%></td>
             <td><%=$D(defect.getDueDate())%></td>
             <td><%=$D(defect.getCloseDate())%></td>
-            <td><%=$SH(defect.getState())%></td>
+            <td><%=$SH(defect.getStatus())%></td>
             <td><%=$H(defect.getAssignedName())%></td>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
             <td>

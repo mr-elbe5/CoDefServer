@@ -36,12 +36,12 @@
             <div class="modal-body">
                 <form:formerror/>
                 <form:line label="_defect" padded="true"><%=$H(defect.getDescription())%></form:line>
-                <form:textarea name="comment" label="_comment" height="8em" required="true"><%=$H(comment.getComment())%></form:textarea>
-                <form:select name="state" label="_state">
-                    <option value="<%=DefectData.STATE_OPEN%>" <%=DefectData.STATE_OPEN.equals(defect.getState()) ? "selected" : ""%>><%=$SH(DefectData.STATE_OPEN)%></option>
-                    <option value="<%=DefectData.STATE_DISPUTED%>" <%=DefectData.STATE_DISPUTED.equals(defect.getState()) ? "selected" : ""%>><%=$SH(DefectData.STATE_DISPUTED)%></option>
-                    <option value="<%=DefectData.STATE_REJECTED%>" <%=DefectData.STATE_REJECTED.equals(defect.getState()) ? "selected" : ""%>><%=$SH(DefectData.STATE_REJECTED)%></option>
-                    <option value="<%=DefectData.STATE_DONE%>" <%=DefectData.STATE_DONE.equals(defect.getState()) ? "selected" : ""%>><%=$SH(DefectData.STATE_DONE)%></option>
+                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(comment.getDescription())%></form:textarea>
+                <form:select name="status" label="_status">
+                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
+                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
+                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
+                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
                 </form:select>
                 <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
                 <form:line><%=$SH("_uploadHint")%></form:line>

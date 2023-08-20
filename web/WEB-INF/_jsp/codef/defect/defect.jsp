@@ -67,8 +67,8 @@
                 <div class="boxText"><%=$H(defect.getLot())%></div>
             </div>
             <div class="box">
-                <div class="boxTitle"><%=$SH("_state")%></div>
-                <div class="boxText"><%=$SH(defect.getState())%></div>
+                <div class="boxTitle"><%=$SH("_status")%></div>
+                <div class="boxText"><%=$SH(defect.getStatus())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate1")%></div>
@@ -118,7 +118,7 @@
         <div class="boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(status.getCreatorId()).getName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(status.getCreationDate())%> - <%=$SH("_state")%>:<%=$SH(status.getState())%>
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(status.getCreationDate())%> - <%=$SH("_state")%>:<%=$SH(status.getStatus())%>
                 </div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(status.getComment())%></div>
             </div>

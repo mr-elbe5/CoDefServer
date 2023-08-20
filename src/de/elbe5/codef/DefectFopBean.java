@@ -77,7 +77,7 @@ public abstract class DefectFopBean extends PdfCreator {
             sb.append("<label2>").append(LocalizedStrings.xml("_dueDate2")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(LocalizedStrings.xml("_state")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getState())).append("</content1>");
+            sb.append("<label1>").append(LocalizedStrings.xml("_state")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus())).append("</content1>");
             sb.append("<label2>").append(LocalizedStrings.xml("_closeDate")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
             if (!defect.getPositionComment().isEmpty()) {
@@ -94,9 +94,9 @@ public abstract class DefectFopBean extends PdfCreator {
                 for (DefectStatusData comment : defect.getStatuses()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
-                            .append(LocalizedStrings.xml("_comment"))
+                            .append(LocalizedStrings.xml("_description"))
                             .append("</label1><content1>")
-                            .append(xml(comment.getComment()))
+                            .append(xml(comment.getDescription()))
                             .append("</content1>");
                     sb.append("<label2>")
                             .append(LocalizedStrings.xml("_by"))

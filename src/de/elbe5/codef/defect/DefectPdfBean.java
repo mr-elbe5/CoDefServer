@@ -79,7 +79,7 @@ public class DefectPdfBean extends DefectFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_creator"),user.getName());
         addLabeledContent(sb,LocalizedStrings.string("_creationDate"),DateHelper.toHtmlDateTime(data.getCreationDate()));
-        addLabeledContent(sb,LocalizedStrings.string("_state"),LocalizedStrings.string(data.getState()));
+        addLabeledContent(sb,LocalizedStrings.string("_state"),LocalizedStrings.string(data.getStatus()));
         addLabeledContent(sb,LocalizedStrings.string("_assigned"),data.getAssignedName());
         addLabeledContent(sb,LocalizedStrings.string("_lot"),data.getLot());
         addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
@@ -101,7 +101,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<comment>");
         sb.append("<title>").append(LocalizedStrings.xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
-        addLabeledContent(sb,LocalizedStrings.string("_comment"),data.getComment());
+        addLabeledContent(sb,LocalizedStrings.string("_description"),data.getDescription());
         for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(data.getId());
             addLabeledImage(sb, LocalizedStrings.string("_image"), file, "5.0cm");

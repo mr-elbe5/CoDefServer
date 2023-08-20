@@ -9,14 +9,11 @@
 package de.elbe5.codef.defectstatus;
 
 import de.elbe5.base.DateHelper;
-import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
-import de.elbe5.file.DocumentData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
@@ -24,7 +21,6 @@ import de.elbe5.user.UserCache;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,31 +33,22 @@ public class DefectStatusData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
-    protected String comment = "";
-    protected String state="";
+    protected String status ="";
 
     public ContentBean getBean() {
         return DefectStatusBean.getInstance();
     }
 
-    public String getComment() {
-        return comment;
+    public String getStatus() {
+        return status;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String geTitle(){
-        return LocalizedStrings.string("_comment")
+        return LocalizedStrings.string("_statusChange")
                 +" "+ LocalizedStrings.string("_by")
                 +" "+ UserCache.getUser(getCreatorId()).getName()
                 +" "+ LocalizedStrings.string("_ofDate")
@@ -81,23 +68,23 @@ public class DefectStatusData extends ContentData {
     public void setCreateValues(ContentData parent, RequestData rdata) {
         super.setCreateValues(parent, rdata);
         if (parent instanceof DefectData data) {
-            setState(data.getState());
+            setStatus(data.getStatus());
         }
     }
 
     public void readRequestData(RequestData rdata) {
-        setComment(rdata.getAttributes().getString("comment"));
-        setState(rdata.getAttributes().getString("state"));
-        if (getComment().isEmpty()) {
-            rdata.addIncompleteField("comment");
+        setDescription(rdata.getAttributes().getString("description"));
+        setStatus(rdata.getAttributes().getString("status"));
+        if (getDescription().isEmpty()) {
+            rdata.addIncompleteField("description");
         }
     }
 
     public void readApiRequestData(RequestData rdata) {
         setCreatorId(rdata.getAttributes().getInt("creatorId"));
-        setState(rdata.getAttributes().getString("state"));
+        setStatus(rdata.getAttributes().getString("status"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
-        setComment(rdata.getAttributes().getString("comment"));
+        setDescription(rdata.getAttributes().getString("description"));
     }
 
     public String getAdminContentTreeJsp() {
@@ -107,8 +94,7 @@ public class DefectStatusData extends ContentData {
     @Override
     public JsonObject getJson(){
         return super.getJson()
-                .add("comment",getComment())
-                .add("state",getState());
+                .add("status", getStatus());
     }
 
     @Override
@@ -121,12 +107,9 @@ public class DefectStatusData extends ContentData {
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
-        String s = getString(json, "comment");
+        String s = getString(json, "status");
         if (s!=null)
-            setComment(s);
-        s = getString(json, "state");
-        if (s!=null)
-            setState(s);
+            setStatus(s);
     }
 
     @Override

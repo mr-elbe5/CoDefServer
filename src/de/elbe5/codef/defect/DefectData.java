@@ -36,10 +36,10 @@ import java.util.List;
 
 public class DefectData extends ContentData {
 
-    public static final String STATE_OPEN = "OPEN";
-    public static final String STATE_DISPUTED = "DISPUTED";
-    public static final String STATE_REJECTED = "REJECTED";
-    public static final String STATE_DONE = "DONE";
+    public static final String STATUS_OPEN = "OPEN";
+    public static final String STATUS_DISPUTED = "DISPUTED";
+    public static final String STATUS_REJECTED = "REJECTED";
+    public static final String STATUS_DONE = "DONE";
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -57,7 +57,7 @@ public class DefectData extends ContentData {
 
     protected boolean notified = false;
     protected String lot = "";
-    protected String state = STATE_OPEN;
+    protected String status = STATUS_OPEN;
     protected int costs = 0;
     protected int positionX = 0; // Percent * 100
     protected int positionY = 0; // Percent * 100
@@ -141,12 +141,12 @@ public class DefectData extends ContentData {
         this.lot = lot;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public boolean isClosed(){
@@ -310,7 +310,7 @@ public class DefectData extends ContentData {
         ProjectData project = (ProjectData) unit.getParent();
         setUnitId(unit.getId());
         setProjectId(project.getId());
-        setState(STATE_OPEN);
+        setStatus(STATUS_OPEN);
         setNavType(NAV_TYPE_NONE);
         setPlanId(unit.getPlan() == null ? 0 : unit.getPlan().getId());
     }
@@ -369,7 +369,7 @@ public class DefectData extends ContentData {
         setPositionX(rdata.getAttributes().getInt("positionX"));
         setPositionY(rdata.getAttributes().getInt("positionY"));
         setPositionComment(rdata.getAttributes().getString("positionComment"));
-        setState(rdata.getAttributes().getString("state"));
+        setStatus(rdata.getAttributes().getString("state"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
         setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
         setUnitId(rdata.getAttributes().getInt("unitId"));
@@ -385,7 +385,7 @@ public class DefectData extends ContentData {
                 .add("positionX",getPositionX())
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())
-                .add("state", getState())
+                .add("state", getStatus())
                 .add("dueDate", getDueDate())
                 .add("phase", "DEFAULT");
     }
@@ -426,7 +426,7 @@ public class DefectData extends ContentData {
             setPositionComment(s);
         s = getString(json, "state");
         if (s != null)
-            setState(s);
+            setStatus(s);
         LocalDate date = getLocalDate(json, "dueDate");
         if (date != null)
             setDueDate1(date);

@@ -26,7 +26,7 @@ public class DefectStatusBean extends ContentBean {
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT comment " +
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status " +
             "FROM t_defect_status  WHERE id=?";
 
     @Override
@@ -40,7 +40,7 @@ public class DefectStatusBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     int i=1;
-                    data.setComment(rs.getString(i));
+                    data.setStatus(rs.getString(i));
                 }
             }
         } finally {
@@ -49,7 +49,7 @@ public class DefectStatusBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (" +
-            "comment,id) " +
+            "status,id) " +
             "values(?,?)";
 
     @Override
@@ -60,7 +60,7 @@ public class DefectStatusBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setString(i++, data.getComment());
+            pst.setString(i++, data.getStatus());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -73,7 +73,7 @@ public class DefectStatusBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status " +
-            "set comment=? where id=? ";
+            "set status=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -83,7 +83,7 @@ public class DefectStatusBean extends ContentBean {
         try {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setString(i++, data.getComment());
+            pst.setString(i++, data.getStatus());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

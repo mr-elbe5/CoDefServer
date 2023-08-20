@@ -147,3 +147,5 @@ CREATE TABLE IF NOT EXISTS t_company2project
     CONSTRAINT t_company2project_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
     CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
+
+alter table t_defect rename column state to status;
