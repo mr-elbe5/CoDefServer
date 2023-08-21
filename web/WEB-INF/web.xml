@@ -40,7 +40,7 @@
     </servlet>
     <servlet>
         <servlet-name>content</servlet-name>
-        <servlet-class>de.elbe5.servlet.ContentServlet</servlet-class>
+        <servlet-class>de.elbe5.servlet.CodefContentServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>file</servlet-name>
