@@ -19,13 +19,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="baselibs" level="project" />
+    <orderEntry type="library" exported="" name="baselibs" level="project" />
     <orderEntry type="library" name="catalina" level="project" />
-    <orderEntry type="library" name="fop" level="project" />
+    <orderEntry type="library" exported="" name="fop" level="project" />
     <orderEntry type="library" name="poi" level="project" />
-    <orderEntry type="module" module-name="BandikaBase" />
-    <orderEntry type="module" module-name="BandikaContent" />
-    <orderEntry type="module" module-name="BandikaDocuments" />
-    <orderEntry type="module" module-name="BandikaWebBase" />
+    <orderEntry type="module" module-name="BandikaBase" exported="" />
+    <orderEntry type="module" module-name="BandikaDocuments" exported="" />
   </component>
 </module>

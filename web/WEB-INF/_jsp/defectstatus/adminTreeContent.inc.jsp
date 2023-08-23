@@ -10,34 +10,26 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.application.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = ContentData.getCurrentContent(rdata);
+    ContentData contentData = ContentData.getCurrentContent(rdata, ContentData.class);
     assert contentData != null;
 %>
-<% if (contentData.isActive() || CodefConfiguration.isShowInactiveContent()){%>
-<li>
+<li class="open">
     <span class="<%=contentData.isActive() ? "" : "inactive"%>">
         <%=$H(contentData.getDisplayName())%>
     </span>
     <%if (contentData.hasUserEditRight(rdata)) {%>
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
-        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditContentData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
     </div>
     <%}%>
     <ul>
-        <jsp:include page="/WEB-INF/_jsp/codef/unit/treeContentImages.inc.jsp" flush="true" />
-        <%if (contentData.hasChildren()) {
-            for (ContentData childData : contentData.getChildren()) {
-                childData.displayAdminTreeContent(pageContext, rdata);
-            }
-        }%>
+        <jsp:include page="/WEB-INF/_jsp/defectstatus/treeContentDocuments.inc.jsp" flush="true" />
+        <jsp:include page="/WEB-INF/_jsp/defectstatus/treeContentImages.inc.jsp" flush="true" />
     </ul>
 </li>
-<%}%>
 

@@ -105,7 +105,7 @@
                     <% if (file.isImage()){%>
                     <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
                     <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
+                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/../../BandikaWebBase/web/static-content/img/document.png" alt="" /></a>
                     <%}%></div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
@@ -134,7 +134,7 @@
                     <% if (file.isImage()){%>
                     <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
                     <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
+                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/../../BandikaWebBase/web/static-content/img/document.png" alt="" /></a>
                     <%}%></div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>

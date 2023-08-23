@@ -55,7 +55,7 @@ public class ProjectController extends ContentController {
     public IResponse openWatchFilter(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
         int contentId=rdata.getId();
-        return new ForwardResponse("/WEB-INF/_jsp/codef/project/watchFilter.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/project/watchFilter.ajax.jsp");
     }
 
     public IResponse setWatchFilter(RequestData rdata) {
@@ -67,12 +67,12 @@ public class ProjectController extends ContentController {
 
     public IResponse updateWatchedUsers(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/codef/project/projectUsers.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/project/projectUsers.ajax.jsp");
     }
 
     public IResponse openStateFilter(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/codef/project/stateFilter.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/project/stateFilter.ajax.jsp");
     }
 
     public IResponse setStateFilter(RequestData rdata) {

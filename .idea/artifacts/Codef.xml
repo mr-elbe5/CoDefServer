@@ -5,8 +5,6 @@
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="BandikaBase" />
-          <element id="module-output" name="BandikaWebBase" />
-          <element id="module-output" name="BandikaContent" />
           <element id="module-output" name="BandikaDocuments" />
           <element id="module-output" name="CoDefServer" />
         </element>
@@ -18,8 +16,7 @@
       </element>
       <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
       <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
-      <element id="javaee-facet-resources" facet="BandikaContent/web/Web" />
-      <element id="javaee-facet-resources" facet="BandikaWebBase/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaBase/web/Web" />
     </root>
   </artifact>
 </component>

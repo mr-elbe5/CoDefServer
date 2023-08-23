@@ -29,13 +29,13 @@ public class RootPageData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/codef/root/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/root/editContentData.ajax.jsp";
     }
 
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/codef/root/page.jsp");
+        context.include("/WEB-INF/_jsp/root/page.jsp");
         writer.write("</div>");
     }
 
@@ -45,7 +45,7 @@ public class RootPageData extends ContentData {
             //backup
             ContentData currentContent=ContentData.getCurrentContent(rdata);
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, this);
-            context.include("/WEB-INF/_jsp/codef/root/treeContent.inc.jsp", true);
+            context.include("/WEB-INF/_jsp/root/treeContent.inc.jsp", true);
             //restore
             rdata.setRequestObject(ContentRequestKeys.KEY_CONTENT, currentContent);
         }

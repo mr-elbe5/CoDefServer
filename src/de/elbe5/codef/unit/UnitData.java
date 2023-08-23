@@ -95,19 +95,19 @@ public class UnitData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/codef/unit/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/unit/editContentData.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/codef/unit/unit.jsp");
+        context.include("/WEB-INF/_jsp/unit/unit.jsp");
         writer.write("</div>");
     }
 
     public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/codef/unit/adminTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/unit/adminTreeContent.inc.jsp";
     }
 
     @Override

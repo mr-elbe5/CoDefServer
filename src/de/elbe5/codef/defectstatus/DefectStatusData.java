@@ -88,7 +88,7 @@ public class DefectStatusData extends ContentData {
     }
 
     public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/codef/defectstatus/adminTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/defectstatus/adminTreeContent.inc.jsp";
     }
 
     @Override

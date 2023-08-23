@@ -88,19 +88,19 @@ public class ProjectData extends ContentData {
 
     @Override
     public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/codef/project/editContentData.ajax.jsp";
+        return "/WEB-INF/_jsp/project/editContentData.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/codef/project/project.jsp");
+        context.include("/WEB-INF/_jsp/project/project.jsp");
         writer.write("</div>");
     }
 
     public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/codef/project/adminTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/project/adminTreeContent.inc.jsp";
     }
 
     // multiple data

@@ -131,7 +131,7 @@ public class DefectController extends ContentController {
     }
 
     public IResponse openFullDefectPlan(RequestData rdata) {
-        return new ForwardResponse("/WEB-INF/_jsp/codef/defect/defectPlan.ajax.jsp");
+        return new ForwardResponse("/WEB-INF/_jsp/defect/defectPlan.ajax.jsp");
     }
 
     public IResponse showFullDefectPlan(RequestData rdata) {
