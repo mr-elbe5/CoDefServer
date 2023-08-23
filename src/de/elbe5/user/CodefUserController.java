@@ -8,8 +8,8 @@
  */
 package de.elbe5.user;
 
-import de.elbe5.codef.ViewFilter;
-import de.elbe5.codef.project.ProjectBean;
+import de.elbe5.application.ViewFilter;
+import de.elbe5.project.ProjectBean;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.ForwardResponse;
 import de.elbe5.response.IResponse;

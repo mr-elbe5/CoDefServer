@@ -4,8 +4,8 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
-<%@ page import="de.elbe5.codef.project.ProjectData" %>
-<%@ page import="de.elbe5.codef.ViewFilter" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="de.elbe5.application.ViewFilter" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
     ViewFilter filter= ViewFilter.getFilter(rdata);

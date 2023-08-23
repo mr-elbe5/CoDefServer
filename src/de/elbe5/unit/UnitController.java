@@ -6,13 +6,13 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.unit;
+package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
-import de.elbe5.codef.ViewFilter;
-import de.elbe5.codef.defect.DefectData;
+import de.elbe5.application.ViewFilter;
+import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;

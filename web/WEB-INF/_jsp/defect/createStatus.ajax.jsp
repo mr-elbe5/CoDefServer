@@ -11,8 +11,8 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.codef.defect.DefectData" %>
-<%@ page import="de.elbe5.codef.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defect.DefectData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%

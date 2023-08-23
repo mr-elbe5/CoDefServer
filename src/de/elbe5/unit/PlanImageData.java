@@ -1,9 +1,9 @@
-package de.elbe5.codef.unit;
+package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.ImageHelper;
 import de.elbe5.base.Log;
-import de.elbe5.codef.defect.DefectData;
+import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
 
 import javax.imageio.ImageIO;

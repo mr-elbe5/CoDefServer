@@ -6,16 +6,16 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef;
+package de.elbe5.file;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.codef.defectstatus.DefectStatusData;
-import de.elbe5.codef.defect.DefectData;
-import de.elbe5.codef.unit.PlanImageData;
+import de.elbe5.defectstatus.DefectStatusData;
+import de.elbe5.defect.DefectData;
+import de.elbe5.unit.PlanImageData;
 import de.elbe5.file.FileBean;
-import de.elbe5.codef.unit.UnitData;
+import de.elbe5.unit.UnitData;
 import de.elbe5.file.ImageData;
 import de.elbe5.file.PdfCreator;
 import de.elbe5.user.UserCache;

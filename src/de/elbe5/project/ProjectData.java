@@ -6,13 +6,13 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.project;
+package de.elbe5.project;
 
 import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.StringHelper;
-import de.elbe5.codef.ViewFilter;
-import de.elbe5.codef.unit.UnitData;
+import de.elbe5.application.ViewFilter;
+import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;

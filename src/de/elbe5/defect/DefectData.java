@@ -6,16 +6,16 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.defect;
+package de.elbe5.defect;
 
 import de.elbe5.base.*;
-import de.elbe5.codef.defectstatus.DefectStatusData;
+import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
-import de.elbe5.codef.ViewFilter;
-import de.elbe5.codef.unit.UnitData;
+import de.elbe5.application.ViewFilter;
+import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
-import de.elbe5.codef.project.ProjectData;
+import de.elbe5.project.ProjectData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;

@@ -6,12 +6,12 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.codef.defectstatus;
+package de.elbe5.defectstatus;
 
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.codef.defect.DefectData;
+import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;

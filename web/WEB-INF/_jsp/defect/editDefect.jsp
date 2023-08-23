@@ -15,9 +15,9 @@
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupBean" %>
 <%@ page import="de.elbe5.user.UserCache" %>
-<%@ page import="de.elbe5.codef.defect.DefectData" %>
-<%@ page import="de.elbe5.codef.unit.UnitData" %>
-<%@ page import="de.elbe5.codef.project.ProjectData" %>
+<%@ page import="de.elbe5.defect.DefectData" %>
+<%@ page import="de.elbe5.unit.UnitData" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
