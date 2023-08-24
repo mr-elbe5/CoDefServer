@@ -36,7 +36,7 @@ public class CompanyBean extends DbBean {
         return changedItem(con, CHANGED_SQL, data);
     }
 
-    private static final String SELECT_COMPANY_SQL = "SELECT id,change_date,name,street,zipcode,city,country,email,phone,fax FROM t_company";
+    private static final String SELECT_COMPANY_SQL = "SELECT id,change_date,name,street,zipcode,city,email,phone,notes FROM t_company";
 
     private static final String GET_ALL_COMPANIES_SQL = SELECT_COMPANY_SQL + " ORDER BY name";
 
@@ -94,10 +94,9 @@ public class CompanyBean extends DbBean {
         data.setStreet(rs.getString(i++));
         data.setZipCode(rs.getString(i++));
         data.setCity(rs.getString(i++));
-        data.setCountry(rs.getString(i++));
         data.setEmail(rs.getString(i++));
         data.setPhone(rs.getString(i++));
-        data.setFax(rs.getString(i));
+        data.setNotes(rs.getString(i));
     }
 
     public boolean saveCompany(CompanyData data) {
@@ -114,8 +113,8 @@ public class CompanyBean extends DbBean {
         }
     }
 
-    private static final String INSERT_COMPANY_SQL = "insert into t_company (change_date,name,street,zipcode,city,country,email,phone,fax,id) values(?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_COMPANY_SQL = "update t_company set change_date=?,name=?,street=?,zipcode=?,city=?,country=?,email=?,phone=?,fax=? where id=?";
+    private static final String INSERT_COMPANY_SQL = "insert into t_company (change_date,name,street,zipcode,city,email,phone,notes,id) values(?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_COMPANY_SQL = "update t_company set change_date=?,name=?,street=?,zipcode=?,city=?,email=?,phone=?,notes=? where id=?";
 
     protected void writeCompany(Connection con, CompanyData data) throws SQLException {
         PreparedStatement pst = null;
@@ -127,10 +126,9 @@ public class CompanyBean extends DbBean {
             pst.setString(i++, data.getStreet());
             pst.setString(i++, data.getZipCode());
             pst.setString(i++, data.getCity());
-            pst.setString(i++, data.getCountry());
             pst.setString(i++, data.getEmail());
             pst.setString(i++, data.getPhone());
-            pst.setString(i++, data.getFax());
+            pst.setString(i++, data.getNotes());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

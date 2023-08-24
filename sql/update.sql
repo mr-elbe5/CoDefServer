@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS t_company
     email         VARCHAR(255)  NOT NULL,
     phone         VARCHAR(50)   NOT NULL DEFAULT '',
     fax           VARCHAR(50)   NOT NULL DEFAULT '',
-    description   VARCHAR(2000) NOT NULL DEFAULT '',
+    notes         VARCHAR(2000) NOT NULL DEFAULT '',
     CONSTRAINT t_company_pk PRIMARY KEY (id)
 );
 

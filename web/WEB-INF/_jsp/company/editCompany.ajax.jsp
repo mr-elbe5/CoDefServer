@@ -18,7 +18,6 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
     CompanyData company = rdata.getSessionObject("companyData",CompanyData.class);
-    List<UserData> users = UserBean.getInstance().getCompanyUsers(company.getId());
     String url = "/ctrl/company/saveCompany/" + company.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
@@ -41,15 +40,10 @@
                 <form:text name="street" label="_street" value="<%=$H(company.getStreet())%>"/>
                 <form:text name="zipCode" label="_zipCode" value="<%=$H(company.getZipCode())%>"/>
                 <form:text name="city" label="_city" value="<%=$H(company.getCity())%>"/>
-                <form:text name="country" label="_country" value="<%=$H(company.getCountry())%>"/>
                 <form:text name="email" label="_email" required="true" value="<%=$H(company.getEmail())%>"/>
                 <form:text name="phone" label="_phone" value="<%=$H(company.getPhone())%>"/>
-                <form:text name="fax" label="_fax" value="<%=$H(company.getFax())%>"/>
-                <form:line label="_employees">
-                    <% for (UserData udata : users) {%>
-                    <div><%=udata.getName()%></div>
-                    <%}%>
-                </form:line>
+                <form:textarea name="notes" label="_notes" height="5rem"><%=$H(company.getNotes())%>
+                </form:textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>

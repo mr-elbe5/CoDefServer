@@ -9,7 +9,11 @@
 package de.elbe5.company;
 
 import de.elbe5.base.BaseData;
+import de.elbe5.base.JsonObject;
 import de.elbe5.request.RequestData;
+import org.json.simple.JSONObject;
+
+import java.time.LocalDate;
 
 public class CompanyData extends BaseData {
 
@@ -17,11 +21,9 @@ public class CompanyData extends BaseData {
     protected String street="";
     protected String zipCode="";
     protected String city="";
-    protected String country="";
     protected String email="";
     protected String phone="";
-    protected String fax="";
-    protected String description="";
+    protected String notes="";
 
     // base data
 
@@ -57,14 +59,6 @@ public class CompanyData extends BaseData {
         this.city = city;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -81,20 +75,12 @@ public class CompanyData extends BaseData {
         this.phone = phone;
     }
 
-    public String getFax() {
-        return fax;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setFax(String fax) {
-        this.fax = fax;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     // multiple data
@@ -104,10 +90,33 @@ public class CompanyData extends BaseData {
         setStreet(rdata.getAttributes().getString("street"));
         setZipCode(rdata.getAttributes().getString("zipCode"));
         setCity(rdata.getAttributes().getString("city"));
-        setCountry(rdata.getAttributes().getString("country"));
         setEmail(rdata.getAttributes().getString("email"));
         setPhone(rdata.getAttributes().getString("phone"));
-        setFax(rdata.getAttributes().getString("fax"));
-        setDescription(rdata.getAttributes().getString("description"));
+        setNotes(rdata.getAttributes().getString("notes"));
     }
+
+    @Override
+    public JsonObject getJson(){
+        return super.getJson()
+                .add("name", getName())
+                .add("street", street)
+                .add("zipCode", zipCode)
+                .add("city", city)
+                .add("email", email)
+                .add("phone", phone)
+                .add("notes", notes);
+    }
+
+    @Override
+    public void fromJson(JSONObject json) {
+        super.fromJson(json);
+        setName(getString(json, "name"));
+        setStreet(getString(json, "street"));
+        setZipCode(getString(json, "zipCode"));
+        setCity(getString(json, "city"));
+        setEmail(getString(json, "email"));
+        setPhone(getString(json, "phone"));
+        setNotes(getString(json, "notes"));
+    }
+
 }
