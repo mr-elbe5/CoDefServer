@@ -15,8 +15,9 @@
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.rights.SystemZone" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -113,7 +114,7 @@
         </div>
         <%}%>
     </div>
-    <% for (DefectStatusData status : defect.getStatuses()){%>
+    <% for (StatusChangeData status : defect.getStatuses()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">

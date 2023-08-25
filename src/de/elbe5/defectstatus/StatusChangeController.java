@@ -10,6 +10,7 @@ package de.elbe5.defectstatus;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.base.Log;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.*;
 import de.elbe5.file.ImageBean;
@@ -24,21 +25,21 @@ import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class DefectStatusController extends ContentController {
+public class StatusChangeController extends ContentController {
 
-    public static final String KEY = "defectstatus";
+    public static final String KEY = "statuschange";
 
-    private static DefectStatusController instance = null;
+    private static StatusChangeController instance = null;
 
-    public static void setInstance(DefectStatusController instance) {
-        DefectStatusController.instance = instance;
+    public static void setInstance(StatusChangeController instance) {
+        StatusChangeController.instance = instance;
     }
 
-    public static DefectStatusController getInstance() {
+    public static StatusChangeController getInstance() {
         return instance;
     }
 
-    public static void register(DefectStatusController controller){
+    public static void register(StatusChangeController controller){
         setInstance(controller);
         ControllerCache.addController(controller.getKey(),getInstance());
     }
@@ -52,7 +53,7 @@ public class DefectStatusController extends ContentController {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         checkRights(parent != null && parent.hasUserEditRight(rdata));
-        DefectStatusData data = new DefectStatusData();
+        StatusChangeData data = new StatusChangeData();
         data.setCreateValues(parent, rdata);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
@@ -61,7 +62,7 @@ public class DefectStatusController extends ContentController {
 
     public IResponse openEditContentFrontend(RequestData rdata) {
         int statusId=rdata.getId();
-        DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
+        StatusChangeData data = ContentData.getCurrentContent(rdata, StatusChangeData.class);
         checkRights(data.hasUserEditRight(rdata));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
@@ -71,7 +72,7 @@ public class DefectStatusController extends ContentController {
     //frontend
     public IResponse saveContentFrontend(RequestData rdata) {
         int contentId=rdata.getId();
-        DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
+        StatusChangeData data= ContentData.getCurrentContent(rdata, StatusChangeData.class);
         assert(data != null && data.getId() == contentId);
         checkRights(data.hasUserEditRight(rdata));
         if (data.isNew())
@@ -95,8 +96,8 @@ public class DefectStatusController extends ContentController {
 
     //api
 
-    public IResponse uploadNewStatus(RequestData rdata) {
-        //Log.log("uploadNewComment");
+    public IResponse uploadStatusChange(RequestData rdata) {
+        Log.log("uploadStatusChange");
         UserData user = rdata.getLoginUser();
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
@@ -105,10 +106,10 @@ public class DefectStatusController extends ContentController {
         if (defect == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !defect.hasUserRight(user, Right.READ)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        DefectStatusData data = new DefectStatusData();
+        StatusChangeData data = new StatusChangeData();
         data.setCreateValues(defect, rdata);
         data.readRequestData(rdata);
-        if (!DefectStatusBean.getInstance().saveContent(data)) {
+        if (!StatusChangeBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
@@ -116,13 +117,13 @@ public class DefectStatusController extends ContentController {
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }
 
-    public IResponse uploadNewStatusImage(RequestData rdata) {
-        //Log.log("uploadNewCommentImage");
+    public IResponse uploadStatusChangeImage(RequestData rdata) {
+        Log.log("uploadStatusChangeImage");
         UserData user = rdata.getLoginUser();
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int commentId = rdata.getId();
-        DefectStatusData comment=DefectStatusBean.getInstance().getContent(commentId, DefectStatusData.class);
+        StatusChangeData comment= StatusChangeBean.getInstance().getContent(commentId, StatusChangeData.class);
         assert(comment !=null);
         DefectData defect = ContentCache.getContent(comment.getParentId(),DefectData.class);
         assert(defect !=null);

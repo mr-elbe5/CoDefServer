@@ -12,15 +12,17 @@
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     DefectData defect = ContentCache.getContent(rdata.getId(),DefectData.class);
     assert (defect != null);
-    DefectStatusData comment = ContentData.getSessionContent(rdata, DefectStatusData.class);
+    StatusChangeData comment = ContentData.getSessionContent(rdata, StatusChangeData.class);
     String url = "/ctrl/defect/saveDefectComment/" + defect.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">

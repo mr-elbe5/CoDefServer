@@ -24,7 +24,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefectStatusData extends ContentData {
+public class StatusChangeData extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -36,7 +36,7 @@ public class DefectStatusData extends ContentData {
     protected String status ="";
 
     public ContentBean getBean() {
-        return DefectStatusBean.getInstance();
+        return StatusChangeBean.getInstance();
     }
 
     public String getStatus() {
@@ -57,11 +57,11 @@ public class DefectStatusData extends ContentData {
 
     @Override
     public List<Class<? extends ContentData>> getChildClasses(){
-        return DefectStatusData.childClasses;
+        return StatusChangeData.childClasses;
     }
 
     public List<Class<? extends FileData>> getFileClasses(){
-        return DefectStatusData.fileClasses;
+        return StatusChangeData.fileClasses;
     }
 
     @Override
@@ -125,7 +125,7 @@ public class DefectStatusData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    DefectStatusData statusChange = new DefectStatusData();
+                    StatusChangeData statusChange = new StatusChangeData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

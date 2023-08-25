@@ -9,7 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.*;
-import de.elbe5.defectstatus.DefectStatusData;
+import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.application.ViewFilter;
@@ -45,7 +45,7 @@ public class DefectData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        childClasses.add(DefectStatusData.class);
+        childClasses.add(StatusChangeData.class);
         fileClasses.add(ImageData.class);
     }
 
@@ -217,8 +217,8 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<DefectStatusData> getStatuses() {
-        return new ArrayList<>(getChildren(DefectStatusData.class));
+    public List<StatusChangeData> getStatuses() {
+        return new ArrayList<>(getChildren(StatusChangeData.class));
     }
 
     public String getProjectName() {
@@ -393,7 +393,7 @@ public class DefectData extends ContentData {
     @Override
     public JsonObject getJsonRecursive(){
         JsonArray jsStatusChanges = new JsonArray();
-        for (DefectStatusData statusChange : getStatuses()) {
+        for (StatusChangeData statusChange : getStatuses()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
@@ -445,7 +445,7 @@ public class DefectData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    DefectStatusData statusChange = new DefectStatusData();
+                    StatusChangeData statusChange = new StatusChangeData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

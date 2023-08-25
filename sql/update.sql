@@ -154,5 +154,7 @@ UPDATE t_content set type = 'de.elbe5.root.RootPageData' where type = 'de.elbe5.
 UPDATE t_content set type = 'de.elbe5.project.ProjectData' where type = 'de.elbe5.codef.project.ProjectData';
 UPDATE t_content set type = 'de.elbe5.unit.UnitData' where type = 'de.elbe5.codef.unit.UnitData';
 UPDATE t_content set type = 'de.elbe5.defect.DefectData' where type = 'de.elbe5.codef.defect.DefectData';
-UPDATE t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type = 'de.elbe5.codef.defectstatus.DefectStatusData';
+UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type = 'de.elbe5.codef.defectstatus.DefectStatusData';
 UPDATE t_file set type = 'de.elbe5.unit.PlanImageData' where type = 'de.elbe5.codef.unit.PlanImageData';
+
+UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type = 'de.elbe5.defectstatus.DefectStatusData';

@@ -14,6 +14,7 @@ import de.elbe5.request.RequestData;
 import de.elbe5.response.*;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 public class RootController extends ContentController {
@@ -36,20 +37,17 @@ public class RootController extends ContentController {
     }
 
     public IResponse getData(RequestData rdata) {
-        /*UserData user = rdata.getLoginUser();
+        UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-         */
-        UserData user = UserCache.getUser(UserData.ID_ROOT);
         JSONObject json = getProjectsJson(user);
         return new JsonResponse(json.toJSONString());
     }
 
     public IResponse uploadData(RequestData rdata) {
-        /*UserData user = rdata.getLoginUser();
+        UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-         */
         RootData data = new RootData();
         data.readRequestData(rdata);
         return new JsonResponse(data.getJson().toJSONString());

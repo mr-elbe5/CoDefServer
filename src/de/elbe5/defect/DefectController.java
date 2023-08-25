@@ -10,6 +10,7 @@ package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.base.Log;
 import de.elbe5.base.Token;
 import de.elbe5.unit.PlanImageData;
 import de.elbe5.unit.UnitData;
@@ -164,8 +165,8 @@ public class DefectController extends ContentController {
 
     //api
 
-    public IResponse uploadNewDefect(RequestData rdata) {
-        //Log.log("uploadNewDefect");
+    public IResponse uploadDefect(RequestData rdata) {
+        Log.log("uploadDefect");
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
@@ -177,7 +178,7 @@ public class DefectController extends ContentController {
         DefectData data = new DefectData();
         data.setCreateValues(unit, rdata);
         data.readRequestData(rdata);
-        //Log.log(data.getJson().toJSONString());
+        Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -187,8 +188,8 @@ public class DefectController extends ContentController {
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }
 
-    public IResponse uploadNewDefectImage(RequestData rdata) {
-        //Log.log("uploadNewDefectImage");
+    public IResponse uploadDefectImage(RequestData rdata) {
+        Log.log("uploadDefectImage");
         UserData user = rdata.getLoginUser();
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);

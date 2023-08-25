@@ -11,8 +11,8 @@ package de.elbe5.defect;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.file.DefectFopBean;
-import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.unit.PlanImageData;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
@@ -41,7 +41,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<root>");
         addDefectHeaderXml(sb,data);
         addDefectXml(sb,data,rdata.getSessionHost());
-        for (DefectStatusData commnet : data.getStatuses()){
+        for (StatusChangeData commnet : data.getStatuses()){
             addDefectCommentXml(sb, data, commnet, rdata.getSessionHost());
         }
         addDefectFooterXml(sb,data,now);
@@ -97,7 +97,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("</defect>");
     }
 
-    private void addDefectCommentXml(StringBuilder sb, DefectData defect, DefectStatusData data, String host) {
+    private void addDefectCommentXml(StringBuilder sb, DefectData defect, StatusChangeData data, String host) {
         sb.append("<comment>");
         sb.append("<title>").append(LocalizedStrings.xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
