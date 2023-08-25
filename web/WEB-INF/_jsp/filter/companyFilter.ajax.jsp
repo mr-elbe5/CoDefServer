@@ -15,7 +15,6 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
@@ -24,7 +23,7 @@
     int contentId=rdata.getId();
     String url = "/ctrl/filter/setCompanyFilter/"+contentId;
     ViewFilter filter= ViewFilter.getFilter(rdata);
-    List<CompanyData> companies = new ArrayList<>();
+    List<CompanyData> companies = CompanyCache.getInstance().getAllCompanies();
     ProjectData project=ContentCache.getContent(filter.getProjectId(), ProjectData.class);
     if (project!=null){
         for (int id : project.getCompanyIds()){

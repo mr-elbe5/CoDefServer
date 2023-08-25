@@ -77,6 +77,7 @@ public class ProjectBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i=1;
+            pst.setInt(i++, data.getGroupId());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

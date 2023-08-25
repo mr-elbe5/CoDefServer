@@ -22,6 +22,9 @@
 %>
         <li class="images">
             <span>[<%=$SH("_images")%>]</span>
+            <div class="icons">
+                <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/image/openCreateFile?parentId=<%=contentData.getId()%>&type=de.elbe5.file.ImageData');" title="<%=$SH("_newImage")%>"></a>
+            </div>
             <ul>
                 <%
                     List<ImageData> images = contentData.getFiles(ImageData.class);
@@ -36,7 +39,10 @@
                         </span>
                         <div class="icons">
                             <a class="icon fa fa-eye" href="/ctrl/image/show/<%=image.getId()%>" target="_blank" title="<%=$SH("_view")%>"> </a>
+                            <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
                             <a class="icon fa fa-download" href="/ctrl/image/download/<%=image.getId()%>" title="<%=$SH("_download")%>"> </a>
+                            <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/file/deleteFile/<%=image.getId()%>');" title="<%=$SH("_delete")%>"> </a>
+
                         </div>
                     </div>
                 </li>

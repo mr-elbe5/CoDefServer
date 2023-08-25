@@ -32,7 +32,7 @@
     <ul>
         <%if (contentData.hasChildren()) {
             for (ContentData childData : contentData.getChildren()) {
-                childData.displayTreeContent(pageContext, rdata);
+                childData.displayAdminTreeContent(pageContext, rdata);
             }
         }%>
     </ul>

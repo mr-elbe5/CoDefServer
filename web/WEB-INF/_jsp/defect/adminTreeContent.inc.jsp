@@ -23,12 +23,11 @@
     <%if (contentData.hasUserEditRight(rdata)) {%>
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
-        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditContentData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
+        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
     </div>
     <%}%>
     <ul>
-        <jsp:include page="/WEB-INF/_jsp/defect/treeContentDocuments.inc.jsp" flush="true" />
         <jsp:include page="/WEB-INF/_jsp/defect/treeContentImages.inc.jsp" flush="true" />
         <%if (contentData.hasChildren()) {
             for (ContentData childData : contentData.getChildren()) {

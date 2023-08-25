@@ -87,6 +87,11 @@ public class StatusChangeData extends ContentData {
         setDescription(rdata.getAttributes().getString("description"));
     }
 
+    @Override
+    public String getContentDataJsp() {
+        return "/WEB-INF/_jsp/defectstatus/editContentData.ajax.jsp";
+    }
+
     public String getAdminContentTreeJsp() {
         return "/WEB-INF/_jsp/defectstatus/adminTreeContent.inc.jsp";
     }
