@@ -217,7 +217,7 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<StatusChangeData> getStatuses() {
+    public List<StatusChangeData> getStatusChanges() {
         return new ArrayList<>(getChildren(StatusChangeData.class));
     }
 
@@ -393,7 +393,7 @@ public class DefectData extends ContentData {
     @Override
     public JsonObject getJsonRecursive(){
         JsonArray jsStatusChanges = new JsonArray();
-        for (StatusChangeData statusChange : getStatuses()) {
+        for (StatusChangeData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }

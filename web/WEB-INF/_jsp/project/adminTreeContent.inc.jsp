@@ -29,7 +29,7 @@
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditContentData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
-        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/content/openCreateData?parentId=<%=contentData.getId()%>&type=de.elbe5.codef.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
+        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/content/openCreateData?parentId=<%=contentData.getId()%>&type=de.elbe5.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
     </div>
     <%}%>
     <ul>

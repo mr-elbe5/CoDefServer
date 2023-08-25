@@ -88,7 +88,7 @@ public abstract class DefectFopBean extends PdfCreator {
             }
             if (includeComments) {
                 List<ImageData> files = new ArrayList<>();
-                for (StatusChangeData comment : defect.getStatuses()) {
+                for (StatusChangeData comment : defect.getStatusChanges()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
                             .append(LocalizedStrings.xml("_description"))

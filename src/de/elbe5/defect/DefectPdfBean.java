@@ -41,7 +41,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<root>");
         addDefectHeaderXml(sb,data);
         addDefectXml(sb,data,rdata.getSessionHost());
-        for (StatusChangeData commnet : data.getStatuses()){
+        for (StatusChangeData commnet : data.getStatusChanges()){
             addDefectCommentXml(sb, data, commnet, rdata.getSessionHost());
         }
         addDefectFooterXml(sb,data,now);

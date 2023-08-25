@@ -11,28 +11,31 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
-<%@ page import="de.elbe5.group.GroupData" %>
-<%@ page import="de.elbe5.group.GroupBean" %>
-<%@ page import="de.elbe5.user.UserData" %>
-<%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.application.ViewFilter" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     int contentId=rdata.getId();
-    String url = "/ctrl/project/setWatchFilter/"+contentId;
+    String url = "/ctrl/filter/setCompanyFilter/"+contentId;
     ViewFilter filter= ViewFilter.getFilter(rdata);
-    GroupData group=null;
+    List<CompanyData> companies = new ArrayList<>();
     ProjectData project=ContentCache.getContent(filter.getProjectId(), ProjectData.class);
-    if (project!=null)
-        group= GroupBean.getInstance().getGroup(project.getGroupId());
+    if (project!=null){
+        for (int id : project.getCompanyIds()){
+            companies.add(CompanyCache.getCompany(id));
+        }
+    }
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title"><%=$SH("_showUserDefects")%>
+            <h5 class="modal-title"><%=$SH("_companyFilter")%>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -42,29 +45,22 @@
             <div class="modal-body">
                 <form:formerror/>
                 <div class="form-check">
-                    <% if (group!=null){
-                    int groupCount = group.getUserIds().size();
-                    %>
-                    <input class="form-check-input" type="checkbox" id="checkall" <%=filter.getWatchedIds().size() == groupCount ? "checked" : ""%> onchange="checkAll()">
+                    <%int companyCount = companies.size();%>
+                    <input class="form-check-input" type="checkbox" id="checkall" <%=filter.getWatchedIds().size() == companyCount ? "checked" : ""%> onchange="checkAll()">
                     <label class="form-check-label" for="checkall">
                         <%=$SH("_all")%>
                     </label>
                 </div>
                 <hr/>
-                    <%for (int userId : group.getUserIds()){
-                        UserData user= UserCache.getUser(userId);
-                        if (user==null)
-                            continue;
+                    <%for (CompanyData company : companies){
                 %>
                 <div class="form-check">
-                    <input class="form-check-input usercheck" name="watchedIds" type="checkbox" value="<%=user.getId()%>" id="check<%=user.getId()%>" <%=filter.getWatchedIds().contains(user.getId()) ? "checked" : ""%>>
-                    <label class="form-check-label" for="check<%=user.getId()%>">
-                        <%=$H(user.getName())%>
+                    <input class="form-check-input companycheck" name="watchedIds" type="checkbox" value="<%=company.getId()%>" id="check<%=company.getId()%>" <%=filter.getWatchedIds().contains(company.getId()) ? "checked" : ""%>>
+                    <label class="form-check-label" for="check<%=company.getId()%>">
+                        <%=$H(company.getName())%>
                     </label>
                 </div>
-                <%}
-
-                }%>
+                <%}%>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
@@ -79,7 +75,7 @@
 <script type="text/javascript">
     function checkAll(){
         let checked = $('#checkall').prop("checked") === true;
-        $('.usercheck').prop("checked", checked);
+        $('.companycheck').prop("checked", checked);
     }
 
 </script>

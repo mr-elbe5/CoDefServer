@@ -12,10 +12,10 @@
 <ul class="nav filter justify-content-end">
   <% if (filter.isEditor()){%>
   <li>
-    <a class="fa fa-users" onclick="return openModalDialog('/ctrl/project/openWatchFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_showUserDefects")%>&nbsp;(<%=filter.getWatchedIds().size()%>)</a>
+    <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/filter/openCompanyFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_companies")%>&nbsp;(<%=filter.getWatchedIds().size()%>)</a>
   </li>
   <%}%>
   <li>
-    <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/project/openStateFilter/<%=rdata.getId()%>');"><%=$SH("_filter")%></a>
+    <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/filter/openStatusFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_status")%></a>
   </li>
 </ul>

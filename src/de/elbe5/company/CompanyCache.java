@@ -8,6 +8,7 @@
  */
 package de.elbe5.company;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +28,18 @@ public class CompanyCache {
     private static boolean dirty = true;
     private static final Object lockObj = new Object();
 
+    private static List<CompanyData> companyList = new ArrayList<>();
     private static Map<Integer, CompanyData> companyMap = new HashMap<>();
 
     public static synchronized void load() {
         CompanyBean bean = CompanyBean.getInstance();
-        List<CompanyData> companyList = bean.getAllCompanies();
-        Map<Integer, CompanyData> companies = new HashMap<>();
+        List<CompanyData> list = bean.getAllCompanies();
+        Map<Integer, CompanyData> map = new HashMap<>();
         for (CompanyData company : companyList) {
-            companies.put(company.getId(), company);
+            map.put(company.getId(), company);
         }
-        companyMap = companies;
+        companyList = list;
+        companyMap = map;
     }
 
     public static void setDirty() {
@@ -61,6 +64,11 @@ public class CompanyCache {
 
     public static int getVersion() {
         return version;
+    }
+
+    public List<CompanyData> getAllCompanies(){
+        checkDirty();
+        return companyList;
     }
 
     public static CompanyData getCompany(int id) {

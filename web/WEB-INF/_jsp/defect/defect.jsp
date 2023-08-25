@@ -106,7 +106,7 @@
                     <% if (file.isImage()){%>
                     <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
                     <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/../../BandikaWebBase/web/static-content/img/document.png" alt="" /></a>
+                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
                     <%}%></div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
@@ -114,20 +114,20 @@
         </div>
         <%}%>
     </div>
-    <% for (StatusChangeData status : defect.getStatuses()){%>
+    <% for (StatusChangeData statusChange : defect.getStatusChanges()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_status")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(status.getCreatorId()).getName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(status.getCreationDate())%> - <%=$SH("_state")%>:<%=$SH(status.getStatus())%>
+                <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(statusChange.getCreatorId()).getName())%>&nbsp;
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusChange.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusChange.getStatus())%>
                 </div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(status.getComment())%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(statusChange.getDescription())%></div>
             </div>
         </div>
         <%
-        if (!status.getFiles().isEmpty()){%>
+        if (!statusChange.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : status.getFiles()){
+            <% for (FileData file : statusChange.getFiles()){
             %>
             <div class="box">
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
@@ -135,7 +135,7 @@
                     <% if (file.isImage()){%>
                     <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
                     <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/../../BandikaWebBase/web/static-content/img/document.png" alt="" /></a>
+                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
                     <%}%></div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>

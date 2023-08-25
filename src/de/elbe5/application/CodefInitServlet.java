@@ -13,6 +13,7 @@ import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatus.StatusChangeController;
+import de.elbe5.filter.FilterController;
 import de.elbe5.project.ProjectController;
 import de.elbe5.root.RootController;
 import de.elbe5.unit.UnitController;
@@ -66,6 +67,7 @@ public class CodefInitServlet extends InitServlet {
         UnitController.register(new UnitController());
         DefectController.register(new DefectController());
         StatusChangeController.register(new StatusChangeController());
+        FilterController.register(new FilterController());
 
         CompanyCache.load();
         ContentCache.load();

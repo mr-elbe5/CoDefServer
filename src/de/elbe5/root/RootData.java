@@ -9,32 +9,54 @@
 package de.elbe5.root;
 
 import de.elbe5.base.*;
+import de.elbe5.company.CompanyCache;
+import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectData;
-import de.elbe5.company.CompanyBean;
 import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.request.RequestData;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootData implements IJsonData {
+public class RootData extends ContentData {
 
-    List<ProjectData> projects = new ArrayList<>();
-    List<CompanyData> companies = new ArrayList<>();
-
-    public void init(List<Integer> projectIds){
-        for (int projectId : projectIds) {
-            ProjectData project = ContentCache.getContent(projectId, ProjectData.class);
-            if (project != null && project.isActive())
-                projects.add(project);
-        }
-        companies = CompanyBean.getInstance().getAllCompanies();
+    public boolean hasUserReadRight(RequestData rdata) {
+        return rdata.isLoggedIn();
     }
 
-    public JsonObject getJson() {
+    // view
+
+    @Override
+    public String getContentDataJsp() {
+        return "/WEB-INF/_jsp/root/editContentData.ajax.jsp";
+    }
+
+    public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
+        Writer writer = context.getOut();
+        writer.write("<div id=\"pageContent\" class=\"viewArea\">");
+        context.include("/WEB-INF/_jsp/root/page.jsp");
+        writer.write("</div>");
+    }
+
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/root/adminTreeContent.inc.jsp";
+    }
+
+
+    public JsonObject getAllDataJson(RequestData rdata) {
+        List<ProjectData> projects = new ArrayList<>();
+        for (ProjectData project : ContentCache.getContents(ProjectData.class)){
+            if (project != null && project.isActive() && project.hasUserReadRight(rdata))
+                projects.add(project);
+        }
+        List<CompanyData> companies = CompanyCache.getInstance().getAllCompanies();
         JsonArray jsCompanies = new JsonArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
@@ -57,8 +79,9 @@ public class RootData implements IJsonData {
                 if (obj instanceof JSONObject jsObj){
                     ProjectData project = new ProjectData();
                     project.fromJsonRecursive(jsObj);
-                    if (project.hasValidData())
-                        projects.add(project);
+                    if (project.hasValidData()) {
+                        //todo
+                    }
                 }
             }
         }
@@ -68,8 +91,9 @@ public class RootData implements IJsonData {
                 if (obj instanceof JSONObject jsObj){
                     CompanyData company = new CompanyData();
                     company.fromJsonRecursive(jsObj);
-                    if (company.hasValidData())
-                        companies.add(company);
+                    if (company.hasValidData()) {
+                        //todo
+                    }
                 }
             }
         }

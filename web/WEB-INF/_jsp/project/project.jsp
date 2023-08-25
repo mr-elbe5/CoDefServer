@@ -92,10 +92,6 @@
     </table>
     <% if (project.hasUserEditRight(rdata)){%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getExcel/<%=project.getId()%>');"><%=$SH("_downloadExcel")%>
-        </button>
-    </div>
-    <div class=buttonLine>
         <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
         <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>?includeComments=true');"><%=$SH("_downloadPdfWithComments")%>

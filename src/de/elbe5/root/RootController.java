@@ -8,6 +8,8 @@
  */
 package de.elbe5.root;
 
+import de.elbe5.content.ContentCache;
+import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectBean;
 import de.elbe5.content.ContentController;
 import de.elbe5.request.RequestData;
@@ -40,7 +42,10 @@ public class RootController extends ContentController {
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        JSONObject json = getProjectsJson(user);
+        RootData data = ContentCache.getContent(ContentData.ID_ROOT, RootData.class);
+        if (data==null)
+            return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
+        JSONObject json = data.getAllDataJson(rdata);
         return new JsonResponse(json.toJSONString());
     }
 
@@ -52,12 +57,5 @@ public class RootController extends ContentController {
         data.readRequestData(rdata);
         return new JsonResponse(data.getJson().toJSONString());
     }
-
-    private JSONObject getProjectsJson(UserData user) {
-        RootData data = new RootData();
-        data.init(ProjectBean.getInstance().getUserProjectIds(user.getId(),user.hasContentEditRight()));
-        return data.getJson();
-    }
-
 
 }

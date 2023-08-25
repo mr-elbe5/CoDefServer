@@ -37,36 +37,6 @@ public class ProjectController extends ContentController {
         return KEY;
     }
 
-    public IResponse openWatchFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        int contentId=rdata.getId();
-        return new ForwardResponse("/WEB-INF/_jsp/project/watchFilter.ajax.jsp");
-    }
-
-    public IResponse setWatchFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setWatchedIds(rdata.getAttributes().getIntegerList("watchedIds"));
-        return new CloseDialogResponse("/ctrl/content/show/" + filter.getProjectId());
-    }
-
-    public IResponse updateWatchedUsers(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/project/projectUsers.ajax.jsp");
-    }
-
-    public IResponse openStateFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        return new ForwardResponse("/WEB-INF/_jsp/project/stateFilter.ajax.jsp");
-    }
-
-    public IResponse setStateFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
-        return new CloseDialogResponse("/ctrl/content/show/" + filter.getProjectId());
-    }
-
     public IResponse selectProject(RequestData rdata) {
         checkRights(rdata.isLoggedIn());
         int projectId=rdata.getId();

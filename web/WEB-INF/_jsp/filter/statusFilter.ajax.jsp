@@ -13,32 +13,46 @@
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupBean" %>
-<%@ page import="de.elbe5.user.UserData" %>
-<%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.application.ViewFilter" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    int projectId=rdata.getAttributes().getInt("projectId");
+
+    int contentId=rdata.getId();
+    String url = "/ctrl/filter/setStatusFilter/"+contentId;
     ViewFilter filter= ViewFilter.getFilter(rdata);
     GroupData group=null;
-    ProjectData project=ContentCache.getContent(projectId, ProjectData.class);
+    ProjectData project=ContentCache.getContent(filter.getProjectId(), ProjectData.class);
     if (project!=null)
         group= GroupBean.getInstance().getGroup(project.getGroupId());
 %>
-                    <% if (group!=null){
-                        for (int userId : group.getUserIds()){
-                            UserData user= UserCache.getUser(userId);
-                            if (user==null)
-                                continue;%>
-            <div class="form-check">
-                <input class="form-check-input" name="users" type="checkbox" value="<%=user.getId()%>" id="check<%=user.getId()%>" <%=filter.getWatchedIds().contains(user.getId()) ? "checked" : ""%>>
-                <label class="form-check-label" for="check<%=user.getId()%>">
-                    <%=$H(user.getName())%>
-                </label>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"><%=$SH("_setFilter")%>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form:form url="<%=url%>" name="filterform" ajax="true">
+            <div class="modal-body">
+                <form:formerror/>
+                <form:line label="_showClosedDefects" padded="true">
+                    <form:check name="showClosed" value="true" checked="<%=filter.isShowClosed()%>"> </form:check>
+                </form:line>
             </div>
-<%
-                        }
-                    }%>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
+                </button>
+                <button type="submit" class="btn btn-primary"><%=$SH("_save")%>
+                </button>
+            </div>
+        </form:form>
+    </div>
+</div>
+
+
+
 

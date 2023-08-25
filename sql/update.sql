@@ -158,3 +158,4 @@ UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type 
 UPDATE t_file set type = 'de.elbe5.unit.PlanImageData' where type = 'de.elbe5.codef.unit.PlanImageData';
 
 UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type = 'de.elbe5.defectstatus.DefectStatusData';
+UPDATE t_content set type = 'de.elbe5.root.RootData' where type = 'de.elbe5.root.RootPageData';
