@@ -31,14 +31,14 @@
                     for (ImageData image : images) {%>
                 <li class="<%=fileId==image.getId() ? "current" : ""%>">
                     <div class="treeline">
-                        <span class="treeImage" id="<%=image.getId()%>">
+                        <span class="fa <%=image.getIconStyle()%> hoverLine" id="<%=image.getId()%>">
                             <%=image.getDisplayName()%>
                             <span class="hoverImage">
                                 <img src="/ctrl/image/showPreview/<%=image.getId()%>" alt="<%=$H(image.getFileName())%>"/>
                             </span>
                         </span>
                         <div class="icons">
-                            <a class="icon fa fa-eye" href="/ctrl/image/show/<%=image.getId()%>" target="_blank" title="<%=$SH("_view")%>"> </a>
+                            <a class="icon fa fa-eye" href="<%=image.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"> </a>
                             <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
                             <a class="icon fa fa-download" href="/ctrl/image/download/<%=image.getId()%>" title="<%=$SH("_download")%>"> </a>
                             <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/file/deleteFile/<%=image.getId()%>');" title="<%=$SH("_delete")%>"> </a>

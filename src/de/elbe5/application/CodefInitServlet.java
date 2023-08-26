@@ -8,7 +8,7 @@
  */
 package de.elbe5.application;
 
-import de.elbe5.administration.ContentAdminController;
+import de.elbe5.administration.AdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.defect.DefectController;
@@ -54,7 +54,7 @@ public class CodefInitServlet extends InitServlet {
         Configuration.setLogContent(false);
         Configuration.setEmailMandatory(false);
 
-        AdminController.register(new ContentAdminController());
+        AdminController.register(new AdminController());
         ContentController.register(new ContentController());
         DocumentController.register(new DocumentController());
         ImageController.register(new ImageController());
@@ -72,6 +72,9 @@ public class CodefInitServlet extends InitServlet {
         CompanyCache.load();
         ContentCache.load();
         UserCache.load();
+        if (!FileBean.getInstance().assertFileDirectory()){
+            Log.error("could not create file directory");
+        }
         Timer.getInstance().registerTimerTask(new HeartbeatTaskData());
         Timer.getInstance().registerTimerTask(new CleanupTaskData());
         Log.log("load tasks");
