@@ -12,13 +12,24 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.unit.UnitData" %>
+<%@ page import="de.elbe5.content.ContentCache" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     DefectData contentData = ContentData.getCurrentContent(rdata, DefectData.class);
     assert (contentData != null);
-     String url = "/ctrl/defect/saveData/" + contentData.getId();%>
+    UnitData unit = ContentCache.getContent(contentData.getUnitId(), UnitData.class);
+    assert(unit !=null);
+    ProjectData project= ContentCache.getContent(contentData.getProjectId(),ProjectData.class);
+    assert(project!=null);
+    List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
+    String url = "/ctrl/defect/saveData/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -39,9 +50,23 @@
                 </form:line>
                 <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
-
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:select name="assignedId" label="_assigned" required="true">
+                    <option value="0" <%=contentData.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
+                    <% for (CompanyData company : companies){%>
+                    <option value="<%=company.getId()%>" <%=contentData.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
+                    <%}%>
+                </form:select>
+                <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=contentData.isNotified()%>"/></form:line>
+                <form:text name="lot" label="_lot" value="<%=$H(contentData.getLot())%>" />
+                <form:text name="costs" label="_costs" value="<%=contentData.getCostsString()%>" />
+                <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>
+                <form:date name="dueDate2" label="_dueDate2" value="<%=$D(contentData.getDueDate2())%>"/>
+                <% if (contentData.getPlanId()!=0){%>
+                <form:line label="_position"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></form:line>
+                <%}%>
+                <form:line label="_positionComment" padded="true"><%=$HML(contentData.getPositionComment())%></form:line>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>

@@ -1,23 +1,4 @@
 
-CREATE SEQUENCE IF NOT EXISTS s_company_id START 1000;
-
-CREATE TABLE IF NOT EXISTS t_company
-(
-    id            INTEGER       NOT NULL,
-    creation_date TIMESTAMP     NOT NULL DEFAULT now(),
-    change_date   TIMESTAMP     NOT NULL DEFAULT now(),
-    name          VARCHAR(255)  NOT NULL,
-    street        VARCHAR(255)  NOT NULL,
-    zipCode       VARCHAR(20)   NOT NULL,
-    city          VARCHAR(255)  NOT NULL,
-    country       VARCHAR(255)  NOT NULL DEFAULT '',
-    email         VARCHAR(255)  NOT NULL,
-    phone         VARCHAR(50)   NOT NULL DEFAULT '',
-    fax           VARCHAR(50)   NOT NULL DEFAULT '',
-    notes         VARCHAR(2000) NOT NULL DEFAULT '',
-    CONSTRAINT t_company_pk PRIMARY KEY (id)
-);
-
 CREATE SEQUENCE s_group_id START 1000;
 CREATE TABLE IF NOT EXISTS t_group
 (
@@ -33,7 +14,6 @@ CREATE TABLE IF NOT EXISTS t_user
 (
     id                 INTEGER      NOT NULL,
     change_date        TIMESTAMP    NOT NULL DEFAULT now(),
-    company_id         INTEGER      NULL,
     title              VARCHAR(30)  NOT NULL DEFAULT '',
     first_name         VARCHAR(100) NOT NULL DEFAULT '',
     last_name          VARCHAR(100) NOT NULL,
@@ -53,8 +33,7 @@ CREATE TABLE IF NOT EXISTS t_user
     token              VARCHAR(100) NOT NULL DEFAULT '',
     locked             BOOLEAN      NOT NULL DEFAULT FALSE,
     deleted            BOOLEAN      NOT NULL DEFAULT FALSE,
-    CONSTRAINT t_user_pk PRIMARY KEY (id),
-    CONSTRAINT t_user_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE SET NULL
+    CONSTRAINT t_user_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS t_user2group
@@ -168,6 +147,24 @@ CREATE TABLE IF NOT EXISTS t_content_right
     CONSTRAINT t_content_right_pk PRIMARY KEY (content_id, group_id),
     CONSTRAINT t_content_right_fk1 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE,
     CONSTRAINT t_content_right_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id) ON DELETE CASCADE
+);
+
+CREATE SEQUENCE IF NOT EXISTS s_company_id START 1000;
+
+CREATE TABLE IF NOT EXISTS t_company
+(
+    id            INTEGER       NOT NULL,
+    creation_date TIMESTAMP     NOT NULL DEFAULT now(),
+    change_date   TIMESTAMP     NOT NULL DEFAULT now(),
+    name          VARCHAR(255)  NOT NULL,
+    street        VARCHAR(255)  NOT NULL DEFAULT '',
+    zipCode       VARCHAR(20)   NOT NULL DEFAULT '',
+    city          VARCHAR(255)  NOT NULL DEFAULT '',
+    country       VARCHAR(255)  NOT NULL DEFAULT '',
+    email         VARCHAR(255)  NOT NULL DEFAULT '',
+    phone         VARCHAR(50)   NOT NULL DEFAULT '',
+    notes         VARCHAR(2000) NOT NULL DEFAULT '',
+    CONSTRAINT t_company_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS t_project

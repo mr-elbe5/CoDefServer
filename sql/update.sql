@@ -1,29 +1,10 @@
-CREATE TABLE IF NOT EXISTS t_content_log
-(
-    content_id INTEGER     NOT NULL,
-    day        DATE        NOT NULL,
-    count      INTEGER 	   NOT NULL,
-    CONSTRAINT t_content_log_pk PRIMARY KEY (content_id, day),
-    CONSTRAINT t_content_log_fk1 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE
-);
 
 alter table t_content drop column language;
-
-CREATE TABLE IF NOT EXISTS t_link
-(
-    id            INTEGER       NOT NULL,
-    link_url      VARCHAR(500)  NOT NULL DEFAULT '',
-    link_icon     VARCHAR(255)  NOT NULL DEFAULT '',
-    CONSTRAINT t_link_pk PRIMARY KEY (id),
-    CONSTRAINT t_link_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
-);
 
 ALTER TABLE t_content ALTER COLUMN type TYPE varchar(255);
 ALTER TABLE t_file ALTER COLUMN type TYPE varchar(255);
 
 UPDATE t_content set type = 'de.elbe5.content.ContentData' where type = 'ContentData';
-UPDATE t_content set type = 'de.elbe5.link.LinkData' where type = 'LinkData';
-
 UPDATE t_file set type = 'de.elbe5.file.FileData' where type = 'FileData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DocumentData';
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'ImageData';
@@ -37,16 +18,18 @@ CREATE TABLE IF NOT EXISTS t_company
     creation_date TIMESTAMP     NOT NULL DEFAULT now(),
     change_date   TIMESTAMP     NOT NULL DEFAULT now(),
     name          VARCHAR(255)  NOT NULL,
-    street        VARCHAR(255)  NOT NULL,
-    zipCode       VARCHAR(20)   NOT NULL,
-    city          VARCHAR(255)  NOT NULL,
+    street        VARCHAR(255)  NOT NULL DEFAULT '',
+    zipCode       VARCHAR(20)   NOT NULL DEFAULT '',
+    city          VARCHAR(255)  NOT NULL DEFAULT '',
     country       VARCHAR(255)  NOT NULL DEFAULT '',
-    email         VARCHAR(255)  NOT NULL,
+    email         VARCHAR(255)  NOT NULL DEFAULT '',
     phone         VARCHAR(50)   NOT NULL DEFAULT '',
-    fax           VARCHAR(50)   NOT NULL DEFAULT '',
     notes         VARCHAR(2000) NOT NULL DEFAULT '',
     CONSTRAINT t_company_pk PRIMARY KEY (id)
 );
+
+insert into t_company(id, name, street, zipCode, city, email, notes)
+select id, concat(first_name, ' ', last_name) as name, street, zipCode, city, email, notes from t_user where id > 999;
 
 alter table t_location rename to t_unit;
 alter table t_unit rename constraint t_location_pk to t_unit_pk;
@@ -99,7 +82,7 @@ insert into t_content (
     changer_id
 ) select
       content_id,
-      'de.elbe5.codef.defectstatus.DefectStatusData',
+      'de.elbe5.defectstatus.DefectStatusChangeData',
       creation_date,
       creation_date,
       defect_id,
@@ -125,15 +108,14 @@ drop table t_defect_comment_image;
 drop table t_defect_comment_document;
 drop table t_defect_comment;
 
-UPDATE t_content set type = 'de.elbe5.codef.root.RootPageData' where type = 'RootPageData';
-UPDATE t_content set type = 'de.elbe5.codef.project.ProjectData' where type = 'ProjectData';
-UPDATE t_content set type = 'de.elbe5.codef.unit.UnitData' where type = 'LocationData';
-UPDATE t_content set type = 'de.elbe5.codef.defect.DefectData' where type = 'DefectData';
-UPDATE t_content set type = 'de.elbe5.codef.defectstatus.DefectStatusData' where type = 'DefectStatusData';
+UPDATE t_content set type = 'de.elbe5.root.RootData' where type = 'RootPageData';
+UPDATE t_content set type = 'de.elbe5.project.ProjectData' where type = 'ProjectData';
+UPDATE t_content set type = 'de.elbe5.unit.UnitData' where type = 'LocationData';
+UPDATE t_content set type = 'de.elbe5.defect.DefectData' where type = 'DefectData';
 
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'ImageData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DocumentData';
-UPDATE t_file set type = 'de.elbe5.codef.unit.PlanImageData' where type = 'PlanImageData';
+UPDATE t_file set type = 'de.elbe5.unit.PlanImageData' where type = 'PlanImageData';
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectImageData';
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectCommentImageData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectDocumentData';
@@ -148,14 +130,8 @@ CREATE TABLE IF NOT EXISTS t_company2project
     CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
 
+insert into t_company2project(company_id, project_id) select t1.user_id, t2.id from t_user2group t1, t_project t2 where t1.group_id = t2.group_id;
+
 alter table t_defect rename column state to status;
 
-UPDATE t_content set type = 'de.elbe5.root.RootPageData' where type = 'de.elbe5.codef.root.RootPageData';
-UPDATE t_content set type = 'de.elbe5.project.ProjectData' where type = 'de.elbe5.codef.project.ProjectData';
-UPDATE t_content set type = 'de.elbe5.unit.UnitData' where type = 'de.elbe5.codef.unit.UnitData';
-UPDATE t_content set type = 'de.elbe5.defect.DefectData' where type = 'de.elbe5.codef.defect.DefectData';
-UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type = 'de.elbe5.codef.defectstatus.DefectStatusData';
-UPDATE t_file set type = 'de.elbe5.unit.PlanImageData' where type = 'de.elbe5.codef.unit.PlanImageData';
-
-UPDATE t_content set type = 'de.elbe5.defectstatus.StatusChangeData' where type = 'de.elbe5.defectstatus.DefectStatusData';
-UPDATE t_content set type = 'de.elbe5.root.RootData' where type = 'de.elbe5.root.RootPageData';
+update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;

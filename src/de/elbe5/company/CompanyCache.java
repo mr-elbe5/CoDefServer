@@ -8,10 +8,7 @@
  */
 package de.elbe5.company;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CompanyCache {
 
@@ -69,6 +66,17 @@ public class CompanyCache {
     public List<CompanyData> getAllCompanies(){
         checkDirty();
         return companyList;
+    }
+
+    public List<CompanyData> getCompanies(Set<Integer> ids){
+        checkDirty();
+        List<CompanyData> list = new ArrayList<>();
+        for (CompanyData company : companyList){
+            if (ids.contains(company.getId())){
+                list.add(company);
+            }
+        }
+        return list;
     }
 
     public static CompanyData getCompany(int id) {

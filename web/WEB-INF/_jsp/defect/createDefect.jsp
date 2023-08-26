@@ -62,7 +62,7 @@
         <div id="planContainer">
             <img id="plan" src="/ctrl/image/show/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
             <div id="planPositioner">
-                <img id="arrow" src="/../../CoDefServer/web/static-content/img/redarrow.png" alt=""/>
+                <img id="arrow" src="/web/static-content/img/redarrow.png" alt=""/>
                 <span><%=defect.getDisplayId()%></span>
             </div>
         </div>

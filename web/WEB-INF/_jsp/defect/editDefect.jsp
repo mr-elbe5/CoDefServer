@@ -19,6 +19,10 @@
 <%@ page import="de.elbe5.unit.UnitData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -29,7 +33,7 @@
     assert(unit !=null);
     ProjectData project= ContentCache.getContent(defect.getProjectId(),ProjectData.class);
     assert(project!=null);
-    GroupData group= GroupBean.getInstance().getGroup(project.getGroupId());
+    List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveContentFrontend/" + defect.getId();
     if (defect.hasUserEditRight(rdata)){
 %>
@@ -47,10 +51,8 @@
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$DT(defect.getChangeDate())%>)</form:line>
         <form:select name="assigned" label="_assigned" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
-            <% for (int userId : group.getUserIds()){
-                UserData user= UserCache.getUser(userId);
-            %>
-            <option value="<%=userId%>" <%=defect.getAssignedId()==user.getId() ? "selected" : ""%>><%=$H(user.getName())%></option>
+            <% for (CompanyData company : companies){%>
+            <option value="<%=company.getId()%>" <%=defect.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
             <%}%>
         </form:select>
         <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=defect.isNotified()%>"/></form:line>
