@@ -18,7 +18,9 @@
     List<Integer> openIds = rdata.getAttributes().get("openIds", List.class);
     ContentData contentData = ContentData.getCurrentContent(rdata);
     assert contentData != null;
-    String liClass = openIds.contains(contentData.getId()) ? "open" : "";
+    String liClass = openIds != null
+            ? openIds.contains(contentData.getId()) ? "open" : ""
+            : "";
 %>
 <li class="<%=liClass%>">
     <span class="<%=contentData.isActive() ? "" : "inactive"%>">
