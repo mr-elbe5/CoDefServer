@@ -96,13 +96,15 @@ public class StatusChangeData extends ContentData {
     }
 
     @Override
-    public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/defectstatus/editContentData.ajax.jsp";
-    }
-
     public String getAdminContentTreeJsp() {
         return "/WEB-INF/_jsp/defectstatus/adminTreeContent.inc.jsp";
     }
+
+    @Override
+    public String getAdminEditJsp() {
+        return "/WEB-INF/_jsp/defectstatus/adminEditContentData.ajax.jsp";
+    }
+
 
     @Override
     public JsonObject getJson(){

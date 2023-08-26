@@ -87,8 +87,13 @@ public class ProjectData extends ContentData {
     // view
 
     @Override
-    public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/project/editContentData.ajax.jsp";
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/project/adminTreeContent.inc.jsp";
+    }
+
+    @Override
+    public String getAdminEditJsp() {
+        return "/WEB-INF/_jsp/project/adminEditContentData.ajax.jsp";
     }
 
     @Override
@@ -97,10 +102,6 @@ public class ProjectData extends ContentData {
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
         context.include("/WEB-INF/_jsp/project/project.jsp");
         writer.write("</div>");
-    }
-
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/project/adminTreeContent.inc.jsp";
     }
 
     // multiple data

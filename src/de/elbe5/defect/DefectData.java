@@ -274,13 +274,13 @@ public class DefectData extends ContentData {
 
     // view
 
-    @Override
-    public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/defect/editContentData.ajax.jsp";
-    }
-
     public String getAdminContentTreeJsp() {
         return "/WEB-INF/_jsp/defect/adminTreeContent.inc.jsp";
+    }
+
+    @Override
+    public String getAdminEditJsp() {
+        return "/WEB-INF/_jsp/defect/adminEditContentData.ajax.jsp";
     }
 
     @Override

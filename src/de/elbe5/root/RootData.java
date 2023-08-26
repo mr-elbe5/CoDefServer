@@ -34,8 +34,13 @@ public class RootData extends ContentData {
     // view
 
     @Override
-    public String getContentDataJsp() {
-        return "/WEB-INF/_jsp/root/editContentData.ajax.jsp";
+    public String getAdminContentTreeJsp() {
+        return "/WEB-INF/_jsp/root/adminTreeContent.inc.jsp";
+    }
+
+    @Override
+    public String getAdminEditJsp() {
+        return "/WEB-INF/_jsp/root/adminEditContentData.ajax.jsp";
     }
 
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
@@ -44,11 +49,6 @@ public class RootData extends ContentData {
         context.include("/WEB-INF/_jsp/root/page.jsp");
         writer.write("</div>");
     }
-
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/root/adminTreeContent.inc.jsp";
-    }
-
 
     public JsonObject getAllDataJson(RequestData rdata) {
         List<ProjectData> projects = new ArrayList<>();
