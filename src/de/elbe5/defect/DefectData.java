@@ -82,9 +82,7 @@ public class DefectData extends ContentData {
 
     @Override
     public String getDisplayName(){
-        if (super.getDisplayName().isEmpty())
-            return "ID "+getDisplayId();
-        return super.getDisplayName();
+        return LocalizedStrings.string("_defect") + " " +getDisplayId();
     }
 
     public int getDisplayId() {
@@ -255,6 +253,7 @@ public class DefectData extends ContentData {
         return DefectData.childClasses;
     }
 
+
     public List<Class<? extends FileData>> getFileClasses(){
         return DefectData.fileClasses;
     }
@@ -364,7 +363,6 @@ public class DefectData extends ContentData {
     }
 
     public void readRequestData(RequestData rdata) {
-        setDisplayName(rdata.getAttributes().getString("displayName"));
         setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setLot(rdata.getAttributes().getString("lot"));

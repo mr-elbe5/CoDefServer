@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="war" build-on-make="true" name="Codef">
+  <artifact type="war" name="Codef">
     <output-path>$USER_HOME$/tomcat/develop/codef</output-path>
     <root id="archive" name="ROOT.war">
       <element id="directory" name="WEB-INF">
@@ -14,9 +14,9 @@
           <element id="library" level="project" name="poi" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="BandikaBase/web/Web" />
       <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
       <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
-      <element id="javaee-facet-resources" facet="BandikaBase/web/Web" />
     </root>
   </artifact>
 </component>

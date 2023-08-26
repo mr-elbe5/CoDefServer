@@ -12,6 +12,7 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defect.DefectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -39,9 +40,16 @@
                 </form:line>
                 <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
+                <form:line label="_name"><%=$H(contentData.getDisplayName())%>
+                </form:line>
 
-                <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:select name="status" label="_status">
+                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
+                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
+                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
+                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
+                </form:select>
+                <form:textarea name="description" label="_notes" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
                 <form:line label="_active" padded="true">
                     <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
                 </form:line>

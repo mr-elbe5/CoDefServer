@@ -39,6 +39,14 @@ public class StatusChangeData extends ContentData {
         return StatusChangeBean.getInstance();
     }
 
+    @Override
+    public String getDisplayName(){
+        if (parent instanceof DefectData defect){
+            return defect.getDisplayName() + "-" + LocalizedStrings.string("_statusChange") + " " + (parent.getChildIndex(this)+1);
+        }
+        return LocalizedStrings.string("_statusChange");
+    }
+
     public String getStatus() {
         return status;
     }
