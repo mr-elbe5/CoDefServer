@@ -82,7 +82,7 @@ insert into t_content (
     changer_id
 ) select
       content_id,
-      'de.elbe5.defectstatus.DefectStatusChangeData',
+      'de.elbe5.defectstatus.StatusChangeData',
       creation_date,
       creation_date,
       defect_id,
