@@ -10,31 +10,29 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="java.util.List" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    @SuppressWarnings("unchecked")
-    List<Integer> openIds = rdata.getAttributes().get("openIds", List.class);
     ContentData contentData = ContentData.getCurrentContent(rdata);
     assert contentData != null;
-    String liClass = openIds != null
-            ? openIds.contains(contentData.getId()) ? "open" : ""
-            : "";
 %>
-<li class="<%=liClass%>">
+<li class="open">
     <span class="<%=contentData.isActive() ? "" : "inactive"%>">
         <%=$H(contentData.getDisplayName())%>
     </span>
     <%if (contentData.hasUserEditRight(rdata)) {%>
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
-        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
-        <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
+        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
+        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/content/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.project.ProjectData');" title="<%=$SH("_newProject")%>"></a>
     </div>
     <%}%>
     <ul>
-        <jsp:include page="/WEB-INF/_jsp/defectstatus/treeContentImages.inc.jsp" flush="true" />
+        <%if (contentData.hasChildren()) {
+            for (ContentData childData : contentData.getChildren()) {
+                childData.displayBackendTreeContent(pageContext, rdata);
+            }
+        }%>
     </ul>
 </li>
 

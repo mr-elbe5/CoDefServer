@@ -92,13 +92,13 @@ public class UnitData extends ContentData {
     }
 
     @Override
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/unit/adminTreeContent.inc.jsp";
+    public String getBackendContentTreeJsp() {
+        return "/WEB-INF/_jsp/unit/backendTreeContent.inc.jsp";
     }
 
     @Override
-    public String getAdminEditJsp() {
-        return "/WEB-INF/_jsp/unit/adminEditContentData.ajax.jsp";
+    public String getBackendEditJsp() {
+        return "/WEB-INF/_jsp/unit/backendEditContent.ajax.jsp";
     }
 
     @Override
@@ -145,7 +145,7 @@ public class UnitData extends ContentData {
     }
 
     @Override
-    public void readCreateRequestData(RequestData rdata) {
+    public void readBackendCreateRequestData(RequestData rdata) {
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
@@ -165,7 +165,7 @@ public class UnitData extends ContentData {
     }
 
     @Override
-    public void readUpdateRequestData(RequestData rdata) {
+    public void readBackendUpdateRequestData(RequestData rdata) {
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));

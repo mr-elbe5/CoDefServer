@@ -29,7 +29,7 @@
     ProjectData project= ContentCache.getContent(contentData.getProjectId(),ProjectData.class);
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
-    String url = "/ctrl/defect/saveData/" + contentData.getId();%>
+    String url = "/ctrl/defect/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">

@@ -87,13 +87,13 @@ public class ProjectData extends ContentData {
     // view
 
     @Override
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/project/adminTreeContent.inc.jsp";
+    public String getBackendContentTreeJsp() {
+        return "/WEB-INF/_jsp/project/backendTreeContent.inc.jsp";
     }
 
     @Override
-    public String getAdminEditJsp() {
-        return "/WEB-INF/_jsp/project/adminEditContentData.ajax.jsp";
+    public String getBackendEditJsp() {
+        return "/WEB-INF/_jsp/project/backendEditContent.ajax.jsp";
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ProjectData extends ContentData {
     // multiple data
 
     @Override
-    public void readRequestData(RequestData rdata) {
+    public void readBackendRequestData(RequestData rdata) {
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));

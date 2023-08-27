@@ -34,7 +34,7 @@
     ProjectData project= ContentCache.getContent(defect.getProjectId(),ProjectData.class);
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
-    String url = "/ctrl/defect/saveContentFrontend/" + defect.getId();
+    String url = "/ctrl/defect/saveFrontendContent/" + defect.getId();
     if (defect.hasUserEditRight(rdata)){
 %>
 <form:message/>

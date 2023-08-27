@@ -274,13 +274,13 @@ public class DefectData extends ContentData {
 
     // view
 
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/defect/adminTreeContent.inc.jsp";
+    public String getBackendContentTreeJsp() {
+        return "/WEB-INF/_jsp/defect/backendTreeContent.inc.jsp";
     }
 
     @Override
-    public String getAdminEditJsp() {
-        return "/WEB-INF/_jsp/defect/adminEditContentData.ajax.jsp";
+    public String getBackendEditJsp() {
+        return "/WEB-INF/_jsp/defect/backendEditContent.ajax.jsp";
     }
 
     @Override
@@ -289,9 +289,9 @@ public class DefectData extends ContentData {
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
         if (ContentData.VIEW_TYPE_EDIT.equals(getViewType())) {
             if (isNew())
-                context.include("/WEB-INF/_jsp/defect/createDefect.jsp");
+                context.include("/WEB-INF/_jsp/defect/frontendCreateDefect.jsp");
             else
-                context.include("/WEB-INF/_jsp/defect/editDefect.jsp");
+                context.include("/WEB-INF/_jsp/defect/frontendEditDefect.jsp");
         } else {
             context.include("/WEB-INF/_jsp/defect/defect.jsp");
         }

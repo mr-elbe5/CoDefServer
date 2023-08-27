@@ -19,7 +19,7 @@
 %>
             <section class="treeSection">
                 <ul class="tree pagetree">
-                    <% rootContent.displayAdminTreeContent(pageContext,rdata);%>
+                    <% rootContent.displayBackendTreeContent(pageContext,rdata);%>
                 </ul>
             </section>
             <script type="text/javascript">

@@ -10,16 +10,15 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
+<%@ page import="de.elbe5.root.RootData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
-<%@ page import="de.elbe5.defect.DefectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    StatusChangeData contentData = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+    RootData contentData = ContentData.getCurrentContent(rdata, RootData.class);
     assert (contentData != null);
-    String url = "/ctrl/statuschange/saveData/" + contentData.getId();%>
+    String url = "/ctrl/root/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -29,7 +28,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form:form url="<%=url%>" name="pageform" ajax="true">
+        <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
@@ -40,19 +39,9 @@
                 </form:line>
                 <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
-                <form:line label="_name"><%=$H(contentData.getDisplayName())%>
-                </form:line>
 
-                <form:select name="status" label="_status">
-                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
-                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
-                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
-                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
-                </form:select>
-                <form:textarea name="description" label="_notes" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
-                <form:line label="_active" padded="true">
-                    <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
-                </form:line>
+                <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
+                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>

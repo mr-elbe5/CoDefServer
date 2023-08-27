@@ -9,20 +9,26 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
+<%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.root.RootData" %>
+<%@ page import="de.elbe5.defect.DefectData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    RootData contentData = ContentData.getCurrentContent(rdata, RootData.class);
-    assert (contentData != null);
-    String url = "/ctrl/root/saveData/" + contentData.getId();%>
+    DefectData defect = ContentCache.getContent(rdata.getId(),DefectData.class);
+    assert (defect != null);
+    StatusChangeData comment = ContentData.getSessionContent(rdata, StatusChangeData.class);
+    String url = "/ctrl/statuschange/saveFrontendContent/" + defect.getId();
+%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title"><%=$SH("_edit")%>
+            <h5 class="modal-title"><%=$SH("_editDefectComment")%>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -31,17 +37,16 @@
         <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
-                <h3><%=$SH("_settings")%>
-                </h3>
-                <form:line label="_idAndUrl"><%=$I(contentData.getId())%> - <%=$H(contentData.getUrl())%>
-                </form:line>
-                <form:line label="_creation"><%=$DT(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
-                </form:line>
-                <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
-                </form:line>
-
-                <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:line label="_defect" padded="true"><%=$H(defect.getDescription())%></form:line>
+                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(comment.getDescription())%></form:textarea>
+                <form:select name="status" label="_status">
+                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
+                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
+                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
+                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
+                </form:select>
+                <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
+                <form:line><%=$SH("_uploadHint")%></form:line>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
@@ -52,5 +57,8 @@
         </form:form>
     </div>
 </div>
+
+
+
 
 

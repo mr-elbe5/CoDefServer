@@ -10,16 +10,22 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.unit.UnitData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.group.GroupBean" %>
+<%@ page import="de.elbe5.group.GroupData" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.company.CompanyBean" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    UnitData contentData = ContentData.getCurrentContent(rdata, UnitData.class);
+    ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
-    String url = "/ctrl/unit/saveData/" + contentData.getId();
-%>
+    List<GroupData> groups = GroupBean.getInstance().getAllGroups();
+    List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
+    String url = "/ctrl/project/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -29,7 +35,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
+        <form:form url="<%=url%>" name="pageform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
@@ -43,11 +49,18 @@
 
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
-                <% if (contentData.getPlan() == null){%>
-                <form:file name="file" label="_plan" />
-                <form:line><%=$SH("_uploadHint")%></form:line>
-                <%}%>
-                <form:date name="approveDate" label="_approveDate" required="false" value="<%=$D(contentData.getApproveDate())%>"/>
+                <form:select name="groupId" label="_group" required="true">
+                    <option value="0"  <%=contentData.getGroupId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
+                    <% for (GroupData group : groups){%>
+                    <option value="<%=group.getId()%>" <%=contentData.getGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
+                    <%}%>
+                </form:select>
+                <form:line label="_companies" padded="true">
+                    <% for (CompanyData company : companies){%>
+                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
+                    </form:check><br/>
+                    <%}%>
+                </form:line>
                 <form:line label="_active" padded="true">
                     <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
                 </form:line>

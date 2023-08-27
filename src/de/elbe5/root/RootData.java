@@ -34,13 +34,13 @@ public class RootData extends ContentData {
     // view
 
     @Override
-    public String getAdminContentTreeJsp() {
-        return "/WEB-INF/_jsp/root/adminTreeContent.inc.jsp";
+    public String getBackendContentTreeJsp() {
+        return "/WEB-INF/_jsp/root/backendTreeContent.inc.jsp";
     }
 
     @Override
-    public String getAdminEditJsp() {
-        return "/WEB-INF/_jsp/root/adminEditContentData.ajax.jsp";
+    public String getBackendEditJsp() {
+        return "/WEB-INF/_jsp/root/backendEditContent.ajax.jsp";
     }
 
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
