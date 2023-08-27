@@ -52,7 +52,7 @@ public class DefectController extends ContentController {
         return KEY;
     }
 
-    public IResponse openCreateContentFrontend(RequestData rdata) {
+    public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         UnitData parent= ContentCache.getContent(parentId, UnitData.class);
         checkRights(parent != null && parent.hasUserEditRight(rdata));
@@ -63,7 +63,7 @@ public class DefectController extends ContentController {
         return new ContentResponse(data);
     }
 
-    public IResponse openEditContentFrontend(RequestData rdata) {
+    public IResponse openEditFrontendContent(RequestData rdata) {
         int defectId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(defectId,DefectData.class);
         checkRights(data.hasUserEditRight(rdata));
@@ -73,7 +73,7 @@ public class DefectController extends ContentController {
     }
 
     //frontend
-    public IResponse saveContentFrontend(RequestData rdata) {
+    public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
         DefectData data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DefectData.class);
         assert(data != null && data.getId() == contentId);
@@ -97,7 +97,7 @@ public class DefectController extends ContentController {
         return show(rdata);
     }
 
-    public IResponse closeDefect(RequestData rdata) {
+    public IResponse closeFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(contentId,DefectData.class);
         checkRights(data.hasUserEditRight(rdata));

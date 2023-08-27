@@ -9,21 +9,18 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
-<%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-
-    DefectData defect = ContentCache.getContent(rdata.getId(),DefectData.class);
-    assert (defect != null);
-    StatusChangeData comment = ContentData.getSessionContent(rdata, StatusChangeData.class);
-    String url = "/ctrl/statuschange/saveFrontendContent/" + defect.getId();
+    DefectStatusData contentData = ContentData.getSessionContent(rdata, DefectStatusData.class);
+    String url = "/ctrl/defectstatus/saveFrontendContent/" + contentData.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -37,13 +34,13 @@
         <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
-                <form:line label="_defect" padded="true"><%=$H(defect.getDescription())%></form:line>
-                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(comment.getDescription())%></form:textarea>
+                <form:line label="_defect" padded="true"><%=$H(contentData.getDescription())%></form:line>
+                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(contentData.getDescription())%></form:textarea>
                 <form:select name="status" label="_status">
-                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
-                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
-                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
-                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(defect.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
+                    <option value="<%=DefectData.STATUS_OPEN%>" <%=DefectData.STATUS_OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_OPEN)%></option>
+                    <option value="<%=DefectData.STATUS_DISPUTED%>" <%=DefectData.STATUS_DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DISPUTED)%></option>
+                    <option value="<%=DefectData.STATUS_REJECTED%>" <%=DefectData.STATUS_REJECTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_REJECTED)%></option>
+                    <option value="<%=DefectData.STATUS_DONE%>" <%=DefectData.STATUS_DONE.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectData.STATUS_DONE)%></option>
                 </form:select>
                 <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
                 <form:line><%=$SH("_uploadHint")%></form:line>

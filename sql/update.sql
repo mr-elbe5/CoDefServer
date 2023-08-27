@@ -82,7 +82,7 @@ insert into t_content (
     changer_id
 ) select
       content_id,
-      'de.elbe5.defectstatus.StatusChangeData',
+      'de.elbe5.defectstatus.DefectStatusData',
       creation_date,
       creation_date,
       defect_id,
@@ -112,6 +112,8 @@ UPDATE t_content set type = 'de.elbe5.root.RootData' where type = 'RootPageData'
 UPDATE t_content set type = 'de.elbe5.project.ProjectData' where type = 'ProjectData';
 UPDATE t_content set type = 'de.elbe5.unit.UnitData' where type = 'LocationData';
 UPDATE t_content set type = 'de.elbe5.defect.DefectData' where type = 'DefectData';
+
+UPDATE t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type = 'de.elbe5.defectstatus.StatusChangeData';
 
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'ImageData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DocumentData';

@@ -15,9 +15,9 @@
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.rights.SystemZone" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -114,7 +114,7 @@
         </div>
         <%}%>
     </div>
-    <% for (StatusChangeData statusChange : defect.getStatusChanges()){%>
+    <% for (DefectStatusData statusChange : defect.getStatusChanges()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">
@@ -148,15 +148,15 @@
     if (!defect.isClosed()){
         if (rdata.hasSystemRight(SystemZone.CONTENTADMINISTRATION)) {%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditContentFrontend/<%=defect.getId()%>',null);"><%=$SH("_edit")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_edit")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeDefect/<%=defect.getId()%>',null);"><%=$SH("_closeDefect")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_closeDefect")%>
         </button>
     </div>
         <%
         }%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openCreateDefectComment/<%=defect.getId()%>',null);"><%=$SH("_comment")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatus/openCreateFrontendContent?parentId=<%=defect.getId()%>',null);"><%=$SH("_statusChange")%>
         </button>
     </div>
     <%}%>

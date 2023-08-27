@@ -9,7 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.*;
-import de.elbe5.defectstatus.StatusChangeData;
+import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.application.ViewFilter;
@@ -45,7 +45,7 @@ public class DefectData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        childClasses.add(StatusChangeData.class);
+        childClasses.add(DefectStatusData.class);
         fileClasses.add(ImageData.class);
     }
 
@@ -217,8 +217,8 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<StatusChangeData> getStatusChanges() {
-        return new ArrayList<>(getChildren(StatusChangeData.class));
+    public List<DefectStatusData> getStatusChanges() {
+        return new ArrayList<>(getChildren(DefectStatusData.class));
     }
 
     public String getProjectName() {
@@ -280,7 +280,7 @@ public class DefectData extends ContentData {
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/defect/backendEditContent.ajax.jsp";
+        return "/WEB-INF/_jsp/defect/editBackendContent.ajax.jsp";
     }
 
     @Override
@@ -289,9 +289,9 @@ public class DefectData extends ContentData {
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
         if (ContentData.VIEW_TYPE_EDIT.equals(getViewType())) {
             if (isNew())
-                context.include("/WEB-INF/_jsp/defect/frontendCreateDefect.jsp");
+                context.include("/WEB-INF/_jsp/defect/createFrontendContent.jsp");
             else
-                context.include("/WEB-INF/_jsp/defect/frontendEditDefect.jsp");
+                context.include("/WEB-INF/_jsp/defect/editFrontendContent.jsp");
         } else {
             context.include("/WEB-INF/_jsp/defect/defect.jsp");
         }
@@ -393,7 +393,7 @@ public class DefectData extends ContentData {
     @Override
     public JsonObject getJsonRecursive(){
         JsonArray jsStatusChanges = new JsonArray();
-        for (StatusChangeData statusChange : getStatusChanges()) {
+        for (DefectStatusData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
@@ -445,7 +445,7 @@ public class DefectData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    StatusChangeData statusChange = new StatusChangeData();
+                    DefectStatusData statusChange = new DefectStatusData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

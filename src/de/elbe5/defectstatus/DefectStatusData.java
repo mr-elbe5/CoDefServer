@@ -18,13 +18,17 @@ import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatusChangeData extends ContentData {
+public class DefectStatusData extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -36,7 +40,7 @@ public class StatusChangeData extends ContentData {
     protected String status ="";
 
     public ContentBean getBean() {
-        return StatusChangeBean.getInstance();
+        return DefectStatusBean.getInstance();
     }
 
     @Override
@@ -65,11 +69,11 @@ public class StatusChangeData extends ContentData {
 
     @Override
     public List<Class<? extends ContentData>> getChildClasses(){
-        return StatusChangeData.childClasses;
+        return DefectStatusData.childClasses;
     }
 
     public List<Class<? extends FileData>> getFileClasses(){
-        return StatusChangeData.fileClasses;
+        return DefectStatusData.fileClasses;
     }
 
     @Override
@@ -102,9 +106,13 @@ public class StatusChangeData extends ContentData {
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/defectstatus/backendEditContent.ajax.jsp";
+        return "/WEB-INF/_jsp/defectstatus/editBackendContent.ajax.jsp";
     }
 
+    @Override
+    public String getFrontendEditJsp() {
+        return "/WEB-INF/_jsp/defectstatus/editFrontendContent.ajax.jsp";
+    }
 
     @Override
     public JsonObject getJson(){
@@ -140,7 +148,7 @@ public class StatusChangeData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    StatusChangeData statusChange = new StatusChangeData();
+                    DefectStatusData statusChange = new DefectStatusData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

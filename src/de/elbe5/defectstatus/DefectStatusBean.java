@@ -15,13 +15,13 @@ import de.elbe5.file.FileData;
 
 import java.sql.*;
 
-public class StatusChangeBean extends ContentBean {
+public class DefectStatusBean extends ContentBean {
 
-    private static StatusChangeBean instance = null;
+    private static DefectStatusBean instance = null;
 
-    public static StatusChangeBean getInstance() {
+    public static DefectStatusBean getInstance() {
         if (instance == null) {
-            instance = new StatusChangeBean();
+            instance = new DefectStatusBean();
         }
         return instance;
     }
@@ -31,7 +31,7 @@ public class StatusChangeBean extends ContentBean {
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof StatusChangeData data))
+        if (!(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -54,7 +54,7 @@ public class StatusChangeBean extends ContentBean {
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!contentData.isNew() || !(contentData instanceof StatusChangeData data))
+        if (!contentData.isNew() || !(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -77,7 +77,7 @@ public class StatusChangeBean extends ContentBean {
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof StatusChangeData data))
+        if (!(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {

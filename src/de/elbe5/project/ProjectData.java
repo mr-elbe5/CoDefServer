@@ -93,7 +93,7 @@ public class ProjectData extends ContentData {
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/project/backendEditContent.ajax.jsp";
+        return "/WEB-INF/_jsp/project/editBackendContent.ajax.jsp";
     }
 
     @Override

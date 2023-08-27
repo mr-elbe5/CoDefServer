@@ -98,7 +98,7 @@ public class UnitData extends ContentData {
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/unit/backendEditContent.ajax.jsp";
+        return "/WEB-INF/_jsp/unit/editBackendContent.ajax.jsp";
     }
 
     @Override

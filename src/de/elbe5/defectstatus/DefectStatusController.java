@@ -25,21 +25,21 @@ import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class StatusChangeController extends ContentController {
+public class DefectStatusController extends ContentController {
 
-    public static final String KEY = "statuschange";
+    public static final String KEY = "defectstatus";
 
-    private static StatusChangeController instance = null;
+    private static DefectStatusController instance = null;
 
-    public static void setInstance(StatusChangeController instance) {
-        StatusChangeController.instance = instance;
+    public static void setInstance(DefectStatusController instance) {
+        DefectStatusController.instance = instance;
     }
 
-    public static StatusChangeController getInstance() {
+    public static DefectStatusController getInstance() {
         return instance;
     }
 
-    public static void register(StatusChangeController controller){
+    public static void register(DefectStatusController controller){
         setInstance(controller);
         ControllerCache.addController(controller.getKey(),getInstance());
     }
@@ -49,30 +49,28 @@ public class StatusChangeController extends ContentController {
         return KEY;
     }
 
-    public IResponse openCreateContentFrontend(RequestData rdata) {
+    public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         checkRights(parent != null && parent.hasUserEditRight(rdata));
-        StatusChangeData data = new StatusChangeData();
+        DefectStatusData data = new DefectStatusData();
         data.setCreateValues(parent, rdata);
-        data.setViewType(ContentData.VIEW_TYPE_EDIT);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
-        return new ContentResponse(data);
+        return new ForwardResponse(data.getFrontendEditJsp());
     }
 
-    public IResponse openEditContentFrontend(RequestData rdata) {
+    public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
-        StatusChangeData data = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+        DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
         checkRights(data.hasUserEditRight(rdata));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
-        data.setViewType(ContentData.VIEW_TYPE_EDIT);
-        return new ContentResponse(data);
+        return new ForwardResponse(data.getFrontendEditJsp());
     }
 
     //frontend
-    public IResponse saveContentFrontend(RequestData rdata) {
+    public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
-        StatusChangeData data= ContentData.getCurrentContent(rdata, StatusChangeData.class);
+        DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assert(data != null && data.getId() == contentId);
         checkRights(data.hasUserEditRight(rdata));
         if (data.isNew())
@@ -106,10 +104,10 @@ public class StatusChangeController extends ContentController {
         if (defect == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !defect.hasUserRight(user, Right.READ)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        StatusChangeData data = new StatusChangeData();
+        DefectStatusData data = new DefectStatusData();
         data.setCreateValues(defect, rdata);
         data.readRequestData(rdata);
-        if (!StatusChangeBean.getInstance().saveContent(data)) {
+        if (!DefectStatusBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
@@ -123,7 +121,7 @@ public class StatusChangeController extends ContentController {
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int commentId = rdata.getId();
-        StatusChangeData comment= StatusChangeBean.getInstance().getContent(commentId, StatusChangeData.class);
+        DefectStatusData comment= DefectStatusBean.getInstance().getContent(commentId, DefectStatusData.class);
         assert(comment !=null);
         DefectData defect = ContentCache.getContent(comment.getParentId(),DefectData.class);
         assert(defect !=null);

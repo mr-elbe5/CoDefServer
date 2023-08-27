@@ -11,15 +11,15 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    StatusChangeData contentData = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+    DefectStatusData contentData = ContentData.getCurrentContent(rdata, DefectStatusData.class);
     assert (contentData != null);
-    String url = "/ctrl/statuschange/saveBackendContent/" + contentData.getId();%>
+    String url = "/ctrl/defectstatus/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">

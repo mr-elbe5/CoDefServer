@@ -40,7 +40,7 @@ public class RootData extends ContentData {
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/root/backendEditContent.ajax.jsp";
+        return "/WEB-INF/_jsp/root/editBackendContent.ajax.jsp";
     }
 
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
