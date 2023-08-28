@@ -48,7 +48,7 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("</root>");
         //System.out.println(sb.toString());
         String fileName="report-of-defect-" + data.getDisplayId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
-        return getPdf(sb.toString(), "pdf.xsl", fileName);
+        return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
     private void addDefectHeaderXml(StringBuilder sb, DefectData data) {

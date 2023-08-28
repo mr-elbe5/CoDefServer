@@ -57,7 +57,7 @@ public class UnitPdfBean extends DefectFopBean {
         sb.append("</root>");
         //System.out.println(sb.toString());
         String fileName="report-of-unit-defects-" + unit.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
-        return getPdf(sb.toString(), "pdf.xsl", fileName);
+        return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
     private void addUnitHeaderXml(StringBuilder sb, UnitData unit) {

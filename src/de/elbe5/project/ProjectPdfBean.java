@@ -48,7 +48,7 @@ public class ProjectPdfBean extends DefectFopBean {
             if (!defects.isEmpty()) {
                 sb.append("<unit>");
                 sb.append("<unitheader><title>");
-                sb.append(xml("_unit"));
+                sb.append(LocalizedStrings.xml("_unit"));
                 sb.append(": ");
                 sb.append(xml(unit.getDisplayName()));
                 sb.append("</title></unitheader>");
@@ -68,7 +68,7 @@ public class ProjectPdfBean extends DefectFopBean {
         sb.append("</root>");
         //System.out.println(sb.toString());
         String fileName="report-of-project-defects-" + project.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
-        return getPdf(sb.toString(), "pdf.xsl", fileName);
+        return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
     private void addProjectHeaderXml(StringBuilder sb, ProjectData project) {
