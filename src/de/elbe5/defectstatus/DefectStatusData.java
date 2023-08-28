@@ -11,6 +11,7 @@ package de.elbe5.defectstatus;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.base.Log;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -18,13 +19,9 @@ import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,14 +74,16 @@ public class DefectStatusData extends ContentData {
     }
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent, rdata);
+    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
+        Log.log("DefectStatusData.setBackendCreateValues");
+        super.setBackendCreateValues(parent, rdata);
         if (parent instanceof DefectData data) {
             setStatus(data.getStatus());
         }
     }
 
     public void readRequestData(RequestData rdata) {
+        Log.log("DefectStatusData.readRequestData");
         setDescription(rdata.getAttributes().getString("description"));
         setStatus(rdata.getAttributes().getString("status"));
         if (getDescription().isEmpty()) {
@@ -93,6 +92,7 @@ public class DefectStatusData extends ContentData {
     }
 
     public void readApiRequestData(RequestData rdata) {
+        Log.log("DefectStatusData.readApiRequestData");
         setCreatorId(rdata.getAttributes().getInt("creatorId"));
         setStatus(rdata.getAttributes().getString("status"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));

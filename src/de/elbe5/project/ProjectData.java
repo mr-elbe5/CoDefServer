@@ -10,6 +10,7 @@ package de.elbe5.project;
 
 import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
+import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.application.ViewFilter;
 import de.elbe5.unit.UnitData;
@@ -113,6 +114,7 @@ public class ProjectData extends ContentData {
 
     @Override
     public void readBackendRequestData(RequestData rdata) {
+        Log.log("ProjectData.readBackendRequestData");
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));

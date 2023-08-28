@@ -54,7 +54,7 @@ public class DefectStatusController extends ContentController {
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         checkRights(parent != null && parent.hasUserEditRight(rdata));
         DefectStatusData data = new DefectStatusData();
-        data.setCreateValues(parent, rdata);
+        data.setBackendCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
     }
@@ -106,7 +106,7 @@ public class DefectStatusController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectStatusData data = new DefectStatusData();
-        data.setCreateValues(defect, rdata);
+        data.setBackendCreateValues(defect, rdata);
         data.readRequestData(rdata);
         if (!DefectStatusBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);

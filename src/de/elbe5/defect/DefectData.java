@@ -306,8 +306,9 @@ public class DefectData extends ContentData {
     // multiple data
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent, rdata);
+    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
+        Log.log("DefectData.setBackendCreateValues");
+        super.setBackendCreateValues(parent, rdata);
         if (!(this.parent instanceof UnitData unit)) {
             Log.error("parent of defect page should be unit page");
             return;
@@ -321,9 +322,23 @@ public class DefectData extends ContentData {
         setPlanId(unit.getPlan() == null ? 0 : unit.getPlan().getId());
     }
 
+    public void readBackendRequestData(RequestData rdata) {
+        Log.log("DefectData.readBackendRequestData");
+        setDescription(rdata.getAttributes().getString("description"));
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
+        setLot(rdata.getAttributes().getString("lot"));
+        setPositionX(rdata.getAttributes().getInt("positionX"));
+        setPositionY(rdata.getAttributes().getInt("positionY"));
+        setPositionComment(rdata.getAttributes().getString("positionComment"));
+        setStatus(rdata.getAttributes().getString("state"));
+        setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
+        setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
+    }
+
     @Override
     public void readFrontendCreateRequestData(RequestData rdata) {
-        readCommonRequestData(rdata);
+        Log.log("DefectData.readFrontendCreateRequestData");
+        readFrontendRequestData(rdata);
         setDescription(rdata.getAttributes().getString("description").trim());
         setDueDate1(rdata.getAttributes().getDate("dueDate1"));
         setPositionX(rdata.getAttributes().getInt("positionX"));
@@ -342,14 +357,16 @@ public class DefectData extends ContentData {
 
     @Override
     public void readFrontendUpdateRequestData(RequestData rdata) {
-        readCommonRequestData(rdata);
+        Log.log("DefectData.readFrontendUpdateRequestData");
+        readFrontendRequestData(rdata);
         setDueDate2(rdata.getAttributes().getDate("dueDate2"));
         if (getAssignedId()==0) {
             rdata.addIncompleteField("assigned");
         }
     }
 
-    public void readCommonRequestData(RequestData rdata) {
+    public void readFrontendRequestData(RequestData rdata) {
+        Log.log("DefectData.readFrontendRequestData");
         setAssignedId(rdata.getAttributes().getInt("assigned"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
         setLot(rdata.getAttributes().getString("lot"));
@@ -367,18 +384,7 @@ public class DefectData extends ContentData {
         }
     }
 
-    public void readRequestData(RequestData rdata) {
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setLot(rdata.getAttributes().getString("lot"));
-        setPositionX(rdata.getAttributes().getInt("positionX"));
-        setPositionY(rdata.getAttributes().getInt("positionY"));
-        setPositionComment(rdata.getAttributes().getString("positionComment"));
-        setStatus(rdata.getAttributes().getString("state"));
-        setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
-        setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
-        setUnitId(rdata.getAttributes().getInt("unitId"));
-    }
+
 
     @Override
     public JsonObject getJson(){

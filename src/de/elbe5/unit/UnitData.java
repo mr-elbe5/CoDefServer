@@ -140,8 +140,9 @@ public class UnitData extends ContentData {
     // multiple data
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent,rdata);
+    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
+        Log.log("Unit.setBackendCreateValues");
+        super.setBackendCreateValues(parent,rdata);
         if (!(parent instanceof ProjectData)){
             Log.error("parent of unit page should be project page");
             return;
@@ -151,6 +152,7 @@ public class UnitData extends ContentData {
 
     @Override
     public void readBackendCreateRequestData(RequestData rdata) {
+        Log.log("Unit.readBackendCreateRequestData");
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
@@ -171,6 +173,7 @@ public class UnitData extends ContentData {
 
     @Override
     public void readBackendUpdateRequestData(RequestData rdata) {
+        Log.log("Unit.readBackendUpdateRequestData");
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
