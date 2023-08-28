@@ -18,8 +18,6 @@ import de.elbe5.response.*;
 
 public class ProjectController extends ContentController {
 
-    public static int COOKIE_EXPIRATION_DAYS = 90;
-
     public static final String KEY = "project";
 
     private static ProjectController instance = null;
@@ -35,16 +33,6 @@ public class ProjectController extends ContentController {
     @Override
     public String getKey() {
         return KEY;
-    }
-
-    public IResponse selectProject(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
-        int projectId=rdata.getId();
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setProjectId(projectId);
-        rdata.addLoginCookie("projectId", Integer.toString(filter.getProjectId()),COOKIE_EXPIRATION_DAYS);
-        ProjectData data= ContentCache.getContent(projectId,ProjectData.class);
-        return new ContentResponse(data);
     }
 
     public IResponse getReport(RequestData rdata) {

@@ -102,6 +102,11 @@ public class UnitData extends ContentData {
     }
 
     @Override
+    public String getFrontendContentTreeJsp() {
+        return "/WEB-INF/_jsp/unit/frontendTreeContent.inc.jsp";
+    }
+
+    @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");

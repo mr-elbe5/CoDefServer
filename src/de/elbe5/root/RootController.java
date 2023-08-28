@@ -8,10 +8,13 @@
  */
 package de.elbe5.root;
 
+import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentData;
+import de.elbe5.content.ContentResponse;
 import de.elbe5.project.ProjectBean;
 import de.elbe5.content.ContentController;
+import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.*;
 import de.elbe5.user.UserCache;
@@ -22,6 +25,8 @@ import org.json.simple.JSONObject;
 public class RootController extends ContentController {
 
     public static final String KEY = "root";
+
+    public static int COOKIE_EXPIRATION_DAYS = 90;
 
     private static RootController instance = null;
 
@@ -56,6 +61,32 @@ public class RootController extends ContentController {
         RootData data = new RootData();
         data.readRequestData(rdata);
         return new JsonResponse(data.getJson().toJSONString());
+    }
+
+    public IResponse setEntryPoint(RequestData rdata){
+        assertSessionCall(rdata);
+        //Log.log("setEntryPoint");
+        int contentId = rdata.getId();
+        ContentData data = ContentCache.getContent(contentId);
+        checkRights(data.hasUserReadRight(rdata));
+        ProjectData project = findProject(data);
+        if (project!=null){
+            ViewFilter filter = ViewFilter.getFilter(rdata);
+            filter.setProjectId(project.getId());
+            rdata.addLoginCookie("projectId", Integer.toString(filter.getProjectId()),COOKIE_EXPIRATION_DAYS);
+        }
+        return data.getDefaultView();
+    }
+
+    private ProjectData findProject(ContentData content){
+        ContentData data = content;
+        while (data!=null){
+            if (data instanceof ProjectData project){
+                return project;
+            }
+            data = data.getParent();
+        }
+        return null;
     }
 
 }

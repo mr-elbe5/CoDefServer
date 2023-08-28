@@ -43,6 +43,11 @@ public class RootData extends ContentData {
         return "/WEB-INF/_jsp/root/editBackendContent.ajax.jsp";
     }
 
+    @Override
+    public String getFrontendContentTreeJsp() {
+        return "/WEB-INF/_jsp/root/frontendTreeContent.inc.jsp";
+    }
+
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
