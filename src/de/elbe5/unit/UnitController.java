@@ -16,6 +16,7 @@ import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;
+import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.MemoryFileResponse;
@@ -59,10 +60,10 @@ public class UnitController extends ContentController {
         }
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
-        PlanImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,PlanImageData.class);
+        ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
         List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(data.getId());
-        BinaryFile file = plan.createUnitDefectPlan(arrowBytes,defects,1);
+        BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,1);
         assert(file!=null);
         return new MemoryFileResponse(file);
     }
@@ -104,10 +105,10 @@ public class UnitController extends ContentController {
         }
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
-        PlanImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,PlanImageData.class);
+        ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("red_arrow.png");
         List<DefectData> defects = filter.getUnitDefects(data.getId());
-        BinaryFile file = plan.createUnitDefectPlan(arrowBytes,defects,((float)scalePercent)/100);
+        BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,((float)scalePercent)/100);
         if (file==null) {
             Log.error("file is null");
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);

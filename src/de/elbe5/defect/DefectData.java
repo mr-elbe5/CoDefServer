@@ -28,6 +28,10 @@ import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
@@ -40,6 +44,9 @@ public class DefectData extends ContentData {
     public static final String STATUS_DISPUTED = "DISPUTED";
     public static final String STATUS_REJECTED = "REJECTED";
     public static final String STATUS_DONE = "DONE";
+
+    public static int PLAN_CROP_WIDTH = 600;
+    public static int PLAN_CROP_HEIGHT = 300;
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -463,6 +470,90 @@ public class DefectData extends ContentData {
                 }
             }
         }
+    }
+
+    public BinaryFile createCroppedDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, int positionX, int positionY) {
+        BinaryFile file = null;
+
+        try {
+            BufferedImage source = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
+            assert (source != null);
+            int srcWidth=source.getWidth();
+            int srcHeight=source.getHeight();
+            assert(srcWidth>=PLAN_CROP_WIDTH && srcHeight>=PLAN_CROP_HEIGHT);
+            int posX=srcWidth*positionX/100/100;
+            int posY=srcHeight*positionY/100/100;
+            int x = posX - PLAN_CROP_WIDTH / 2;
+            int y = posY - PLAN_CROP_HEIGHT / 2;
+            int dx = 0;
+            int dy = 0;
+            if (x < 0) {
+                dx = x;
+                x = 0;
+            }
+            else if (x+PLAN_CROP_WIDTH>srcWidth){
+                dx = x+PLAN_CROP_WIDTH-srcWidth;
+                x = srcWidth-PLAN_CROP_WIDTH;
+            }
+            if (y < 0) {
+                dy = y;
+                y = 0;
+            }
+            else if (y+PLAN_CROP_HEIGHT>srcHeight){
+                dy=y+PLAN_CROP_HEIGHT-srcHeight;
+                y= srcHeight-PLAN_CROP_HEIGHT;
+            }
+            BufferedImage bi = source.getSubimage(x, y, PLAN_CROP_WIDTH, PLAN_CROP_HEIGHT);
+            BufferedImage redbi = ImageHelper.createImage(primaryArrawBytes, "image/png");
+            assert (bi != null);
+            Graphics2D g = bi.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            g.setColor(Color.RED);
+            g.drawImage(redbi, null, PLAN_CROP_WIDTH / 2 - 9 + dx, PLAN_CROP_HEIGHT / 2 - 2 + dy);
+            g.drawString(Integer.toString(defectDisplayId), posX + 3, posY + 16);
+            file = new BinaryFile();
+            file.setFileName("defectCrop" + defectDisplayId + ".jpg");
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/jpeg");
+            file.setContentType("image/jpeg");
+            ImageWriter writer = writers.next();
+            file.setBytes(ImageHelper.writeImage(writer, bi));
+            file.setFileSize(file.getBytes().length);
+        } catch (IOException e) {
+            Log.error("could not create defect plan", e);
+        }
+        return file;
+    }
+
+    public BinaryFile createFullDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, int positionX, int positionY) {
+        BinaryFile file = null;
+        try {
+            BufferedImage bi = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
+            BufferedImage redbi = ImageHelper.createImage(primaryArrawBytes, "image/png");
+            assert (bi != null);
+            Graphics2D g = bi.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            g.setColor(Color.RED);
+            int posX=bi.getWidth()*positionX/100/100;
+            int posY=bi.getHeight()*positionY/100/100;
+            g.drawImage(redbi, null, posX -9 , posY- 2);
+            g.drawString(Integer.toString(defectDisplayId), posX + 3, posY + 16);
+            file = new BinaryFile();
+            file.setFileName("defectPlan" + defectDisplayId + ".jpg");
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/jpeg");
+            file.setContentType("image/jpeg");
+            ImageWriter writer = writers.next();
+            file.setBytes(ImageHelper.writeImage(writer, bi));
+            file.setFileSize(file.getBytes().length);
+        } catch (IOException e) {
+            Log.error("could not create defect plan", e);
+        }
+        return file;
     }
 
 }

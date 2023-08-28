@@ -13,7 +13,6 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.file.DefectFopBean;
-import de.elbe5.unit.PlanImageData;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
@@ -85,9 +84,9 @@ public class DefectPdfBean extends DefectFopBean {
         addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
         addLabeledContent(sb,LocalizedStrings.string("_dueDate2"),DateHelper.toHtmlDate(data.getDueDate2()));
         addLabeledContent(sb,LocalizedStrings.string("_closeDate"),DateHelper.toHtmlDate(data.getCloseDate()));
-        PlanImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,PlanImageData.class);
+        ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
-        BinaryFile file = plan.createCroppedDefectPlan(arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
+        BinaryFile file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
         addLabeledImage(sb,LocalizedStrings.string("_position"), file,"5.0cm");
         addLabeledContent(sb,LocalizedStrings.string("_positionComment"),data.getPositionComment());
         for (ImageData image : data.getFiles(ImageData.class)){

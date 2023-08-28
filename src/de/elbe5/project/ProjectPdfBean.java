@@ -11,13 +11,13 @@ package de.elbe5.project;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.file.ImageData;
 import de.elbe5.unit.UnitBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.DefectFopBean;
 import de.elbe5.application.ViewFilter;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
-import de.elbe5.unit.PlanImageData;
 import de.elbe5.file.ImageBean;
 import de.elbe5.request.RequestData;
 
@@ -53,12 +53,12 @@ public class ProjectPdfBean extends DefectFopBean {
                 sb.append(xml(unit.getDisplayName()));
                 sb.append("</title></unitheader>");
                 addUnitDefectsXml(sb, unit, defects, includeComments);
-                PlanImageData plan = unit.getPlan();
+                ImageData plan = unit.getPlan();
                 if (plan != null) {
-                    PlanImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, PlanImageData.class);
+                    ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
                     byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
                     defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
-                    BinaryFile file = fullplan.createUnitDefectPlan(arrowBytes, defects, 1);
+                    BinaryFile file = unit.createUnitDefectPlan(fullplan, arrowBytes, defects, 1);
                     addUnitPlanXml(sb, unit, plan, file);
                 }
                 sb.append("</unit>");

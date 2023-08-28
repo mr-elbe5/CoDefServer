@@ -11,6 +11,7 @@ package de.elbe5.unit;
 import de.elbe5.base.*;
 import de.elbe5.application.ViewFilter;
 import de.elbe5.defect.DefectData;
+import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -22,29 +23,37 @@ import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class UnitData extends ContentData {
+
+    public static int STD_PLAN_SIZE = 2190;
+
+    public static int MAX_PLAN_PREVIEW_WIDTH = 600;
+    public static int MAX_PLAN_PREVIEW_HEIGHT = 600;
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
         childClasses.add(DefectData.class);
-        fileClasses.add(PlanImageData.class);
+        fileClasses.add(ImageData.class);
     }
 
     protected int projectId=0;
 
     protected LocalDate approveDate = null;
-
-    PlanImageData plan = null;
 
     public UnitData() {
     }
@@ -77,18 +86,11 @@ public class UnitData extends ContentData {
         this.approveDate = approveDate.toLocalDate();
     }
 
-    // set plans
-
-    public void initializeChildren() {
-        super.initializeChildren();
-        plan=null;
-        List<PlanImageData> candidates = getFiles(PlanImageData.class);
-        if (candidates.size()==1)
-            plan=candidates.get(0);
-    }
-
-    public PlanImageData getPlan() {
-        return plan;
+    public ImageData getPlan() {
+        List<ImageData> images = getFiles(ImageData.class);
+        if (!images.isEmpty())
+            return images.get(0);
+        return null;
     }
 
     @Override
@@ -161,9 +163,9 @@ public class UnitData extends ContentData {
         setActive(rdata.getAttributes().getBoolean("active"));
         BinaryFile file = rdata.getAttributes().getFile("file");
         if (file != null){
-            plan = new PlanImageData();
+            ImageData plan = new ImageData();
             plan.setCreateValues(this,rdata);
-            plan.createFromBinaryFile(file, PlanImageData.STD_SIZE, PlanImageData.STD_SIZE, plan.getMaxPreviewWidth(), plan.getMaxPreviewHeight(), false);
+            plan.createFromBinaryFile(file, STD_PLAN_SIZE, STD_PLAN_SIZE, MAX_PLAN_PREVIEW_WIDTH, MAX_PLAN_PREVIEW_HEIGHT, false);
             plan.setDisplayName(LocalizedStrings.string("_plan"));
         }
         if (getDisplayName().isEmpty()) {
@@ -180,10 +182,10 @@ public class UnitData extends ContentData {
         setApproveDate(rdata.getAttributes().getDate("approveDate"));
         setNavType(ContentData.NAV_TYPE_HEADER);
         BinaryFile file = rdata.getAttributes().getFile("file");
-        if (file != null && plan == null){
-            plan = new PlanImageData();
+        if (file != null && getPlan() != null){
+            ImageData plan = new ImageData();
             plan.setCreateValues(this,rdata);
-            plan.createFromBinaryFile(file, PlanImageData.STD_SIZE, PlanImageData.STD_SIZE, plan.getMaxPreviewWidth(), plan.getMaxPreviewHeight(), false);
+            plan.createFromBinaryFile(file, UnitData.STD_PLAN_SIZE, UnitData.STD_PLAN_SIZE, plan.getMaxPreviewWidth(), plan.getMaxPreviewHeight(), false);
             plan.setDisplayName(LocalizedStrings.string("_plan"));
         }
         setActive(rdata.getAttributes().getBoolean("active"));
@@ -200,7 +202,7 @@ public class UnitData extends ContentData {
 
     @Override
     public JsonObject getJsonRecursive(){
-        PlanImageData plan = getPlan();
+        ImageData plan = getPlan();
         JsonArray jsDefects = new JsonArray();
         for (DefectData defect : getChildren(DefectData.class)) {
             if (!defect.isActive() || defect.isClosed())
@@ -239,6 +241,45 @@ public class UnitData extends ContentData {
                 }
             }
         }
+    }
+
+    public BinaryFile createUnitDefectPlan(ImageData plan, byte[] primaryArrowBytes, List<DefectData> defects, float scale){
+        BinaryFile file=null;
+        try {
+            BufferedImage bi = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
+            BufferedImage redbi = ImageHelper.createImage(primaryArrowBytes,"image/png");
+            assert(bi!=null);
+            if (scale!=1){
+                bi=ImageHelper.copyImage(bi,scale);
+            }
+            Graphics2D g = bi.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            int biWidth=bi.getWidth();
+            int biHeight=bi.getHeight();
+            for (DefectData defect : defects){
+                if (defect.getPositionX()>0 || defect.getPositionY()>0) {
+                    g.setColor(Color.RED);
+                    int posX=biWidth*defect.getPositionX()/100/100;
+                    int posY=biHeight*defect.getPositionY()/100/100;
+                    g.drawImage(redbi, null, posX - 9, posY - 2);
+                    g.drawString(Integer.toString(defect.getDisplayId()), posX + 3, posY + 16);
+                }
+            }
+            file=new BinaryFile();
+            file.setFileName("defectPlan"+getId()+".jpg");
+            Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/jpeg");
+            file.setContentType("image/jpeg");
+            ImageWriter writer = writers.next();
+            file.setBytes(ImageHelper.writeImage(writer, bi));
+            file.setFileSize(file.getBytes().length);
+        }
+        catch (IOException e){
+            Log.error("could not create defect plan", e);
+        }
+        return file;
     }
 
 }

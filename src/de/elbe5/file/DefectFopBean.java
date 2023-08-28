@@ -13,7 +13,6 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.defect.DefectData;
-import de.elbe5.unit.PlanImageData;
 import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
@@ -122,7 +121,7 @@ public abstract class DefectFopBean extends PdfCreator {
         }
     }
 
-    protected void addUnitPlanXml(StringBuilder sb, UnitData data, PlanImageData plan, BinaryFile file) {
+    protected void addUnitPlanXml(StringBuilder sb, UnitData data, ImageData plan, BinaryFile file) {
         sb.append("<unitplan>");
         sb.append("<name>").append(xml(plan.getDisplayName())).append("</name>");
         sb.append("<src>").append(getBase64SrcString(file)).append("</src>");

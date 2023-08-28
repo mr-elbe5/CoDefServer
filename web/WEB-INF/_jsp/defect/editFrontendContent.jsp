@@ -11,17 +11,12 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
-<%@ page import="de.elbe5.user.UserData" %>
-<%@ page import="de.elbe5.group.GroupData" %>
-<%@ page import="de.elbe5.group.GroupBean" %>
-<%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
