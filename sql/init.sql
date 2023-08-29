@@ -188,7 +188,6 @@ CREATE TABLE IF NOT EXISTS t_company2project
 CREATE TABLE IF NOT EXISTS t_unit
 (
     id                 INTEGER      NOT NULL,
-    project_id         INTEGER      NOT NULL,
     approve_date       TIMESTAMP    NULL,
     CONSTRAINT t_unit_pk PRIMARY KEY (id),
     CONSTRAINT t_unit_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
@@ -201,14 +200,11 @@ CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
     display_id       INTEGER       NOT NULL,
-    unit_id      INTEGER       NOT NULL,
-    project_id       INTEGER       NOT NULL,
     assigned_id      INTEGER       NOT NULL,
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     lot              VARCHAR(255)  NOT NULL DEFAULT '',
     status           VARCHAR(20)   NOT NULL,
     costs            INTEGER       NOT NULL DEFAULT 0,
-    plan_id          INTEGER       NOT NULL,
     position_x       INTEGER       NOT NULL DEFAULT 0,
     position_y       INTEGER       NOT NULL DEFAULT 0,
     position_comment VARCHAR(255)  NOT NULL DEFAULT '',
@@ -217,9 +213,6 @@ CREATE TABLE IF NOT EXISTS t_defect
     close_date       TIMESTAMP     NULL,
     CONSTRAINT t_defect_pk PRIMARY KEY (id),
     CONSTRAINT t_defect_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_defect_fk2 FOREIGN KEY (unit_id) REFERENCES t_unit (id) ON DELETE CASCADE,
-    CONSTRAINT t_defect_fk3 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE,
-    CONSTRAINT t_defect_fk4 FOREIGN KEY (plan_id) REFERENCES t_image (id) ON DELETE CASCADE,
     CONSTRAINT t_defect_fk5 FOREIGN KEY (assigned_id) REFERENCES t_user (id)
 );
 

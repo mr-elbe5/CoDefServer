@@ -10,7 +10,6 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
@@ -24,9 +23,9 @@
 
     DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
     assert(defect !=null);
-    UnitData unit = ContentCache.getContent(defect.getUnitId(), UnitData.class);
+    UnitData unit = defect.getUnit();
     assert(unit !=null);
-    ProjectData project= ContentCache.getContent(defect.getProjectId(),ProjectData.class);
+    ProjectData project= defect.getProject();
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveFrontendContent/" + defect.getId();

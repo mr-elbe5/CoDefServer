@@ -56,7 +56,7 @@ public class DefectController extends ContentController {
         UnitData parent= ContentCache.getContent(parentId, UnitData.class);
         checkRights(parent != null && parent.hasUserEditRight(rdata));
         DefectData data = new DefectData();
-        data.setBackendCreateValues(parent, rdata);
+        data.setCreateValues(parent, rdata);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ContentResponse(data);
@@ -66,6 +66,8 @@ public class DefectController extends ContentController {
         int defectId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(defectId,DefectData.class);
         checkRights(data.hasUserEditRight(rdata));
+        DefectData cachedData = ContentCache.getContent(data.getId(), DefectData.class);
+        data.setUpdateValues(cachedData, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         data.setViewType(ContentData.VIEW_TYPE_EDIT);
         return new ContentResponse(data);
@@ -109,7 +111,7 @@ public class DefectController extends ContentController {
         data.setViewType(ContentData.VIEW_TYPE_SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
-        UnitData unit = ContentCache.getContent(data.getUnitId(), UnitData.class);
+        UnitData unit = data.getUnit();
         return new ContentResponse(unit);
     }
 
@@ -175,7 +177,7 @@ public class DefectController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectData data = new DefectData();
-        data.setBackendCreateValues(unit, rdata);
+        data.setCreateValues(unit, rdata);
         data.readBackendRequestData(rdata);
         Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {

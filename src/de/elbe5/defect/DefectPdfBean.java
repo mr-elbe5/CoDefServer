@@ -54,9 +54,9 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<defectheader><title>");
         sb.append(LocalizedStrings.xml("_report"));
         sb.append(": ");
-        sb.append(LocalizedStrings.xml(data.getProjectName()));
+        sb.append(LocalizedStrings.xml(data.getProject().getName()));
         sb.append(", ");
-        sb.append(LocalizedStrings.xml(data.getUnitName()));
+        sb.append(LocalizedStrings.xml(data.getUnit().getName()));
         sb.append(", ");
         sb.append(LocalizedStrings.xml(data.getDisplayName()));
         sb.append("</title></defectheader>");
@@ -84,7 +84,7 @@ public class DefectPdfBean extends DefectFopBean {
         addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
         addLabeledContent(sb,LocalizedStrings.string("_dueDate2"),DateHelper.toHtmlDate(data.getDueDate2()));
         addLabeledContent(sb,LocalizedStrings.string("_closeDate"),DateHelper.toHtmlDate(data.getCloseDate()));
-        ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
+        ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
         BinaryFile file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
         addLabeledImage(sb,LocalizedStrings.string("_position"), file,"5.0cm");

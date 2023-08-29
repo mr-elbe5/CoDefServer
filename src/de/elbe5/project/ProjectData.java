@@ -165,7 +165,6 @@ public class ProjectData extends ContentData {
             for (Object obj : jsUnits){
                 if (obj instanceof JSONObject jsObj){
                     UnitData unit = new UnitData();
-                    unit.setProjectId(getId());
                     unit.fromJsonRecursive(jsObj);
                     if (unit.hasValidData())
                         getChildren().add(unit);

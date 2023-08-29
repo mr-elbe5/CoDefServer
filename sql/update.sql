@@ -137,3 +137,14 @@ insert into t_company2project(company_id, project_id) select t1.user_id, t2.id f
 alter table t_defect rename column state to status;
 
 update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
+
+alter table t_defect drop constraint t_defect_fk4;
+alter table t_defect drop constraint t_defect_fk3;
+alter table t_defect drop constraint t_defect_fk2;
+
+alter table t_defect drop column plan_id;
+alter table t_defect drop column unit_id;
+alter table t_defect drop column project_id;
+
+alter table t_unit drop constraint t_unit_fk2;
+alter table t_unit drop column project_id;

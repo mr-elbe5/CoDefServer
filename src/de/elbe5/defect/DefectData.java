@@ -11,7 +11,6 @@ package de.elbe5.defect;
 import de.elbe5.base.*;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
-import de.elbe5.content.ContentCache;
 import de.elbe5.application.ViewFilter;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
@@ -57,9 +56,6 @@ public class DefectData extends ContentData {
     }
 
     protected int displayId = 0;
-    protected int unitId = 0;
-    protected int projectId = 0;
-    protected int planId = 0;
     protected int assignedId = 0;
 
     protected boolean notified = false;
@@ -72,9 +68,6 @@ public class DefectData extends ContentData {
     protected LocalDate dueDate1 = null;
     protected LocalDate dueDate2 = null;
     protected LocalDate closeDate = null;
-
-    protected String projectName="";
-    protected String unitName ="";
 
     // base data
 
@@ -100,28 +93,20 @@ public class DefectData extends ContentData {
         this.displayId = displayId;
     }
 
-    public void setUnitId(int unitId) {
-        this.unitId = unitId;
+    public UnitData getUnit() {
+        return getParent(UnitData.class);
     }
 
-    public int getProjectId() {
-        return projectId;
+    public ProjectData getProject() {
+        return getUnit().getProject();
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public ImageData getPlan(){
+        return getUnit().getPlan();
     }
 
-    public int getUnitId() {
-        return parentId;
-    }
-
-    public int getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(int planId) {
-        this.planId = planId;
+    public int getPlanId(){
+        return (getPlan() == null ? 0 : getPlan().getId());
     }
 
     public int getAssignedId() {
@@ -228,24 +213,6 @@ public class DefectData extends ContentData {
         return new ArrayList<>(getChildren(DefectStatusData.class));
     }
 
-    public String getProjectName() {
-        if (projectName.isEmpty()){
-            ProjectData data= ContentCache.getContent(projectId,ProjectData.class);
-            if (data!=null)
-                projectName=data.getDisplayName();
-        }
-        return projectName;
-    }
-
-    public String getUnitName() {
-        if (unitName.isEmpty()){
-            UnitData data= ContentCache.getContent(unitId, UnitData.class);
-            if (data!=null)
-                unitName =data.getDisplayName();
-        }
-        return unitName;
-    }
-
     public String getAssignedName() {
         if (assignedId==0)
             return "";
@@ -267,11 +234,11 @@ public class DefectData extends ContentData {
 
     @Override
     public boolean hasUserReadRight(RequestData rdata) {
-        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProjectId()) && (rdata.hasContentEditRight() || rdata.getUserId()==getAssignedId());
+        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProject().getId()) && (rdata.hasContentEditRight() || rdata.getUserId()==getAssignedId());
     }
 
     public boolean hasUserReadRight(ViewFilter filter, UserData user) {
-        return filter.hasProjectReadRight(getProjectId()) && (user.hasSystemRight(SystemZone.CONTENTEDIT) || user.getId()==getAssignedId());
+        return filter.hasProjectReadRight(getProject().getId()) && (user.hasSystemRight(SystemZone.CONTENTEDIT) || user.getId()==getAssignedId());
     }
 
     @Override
@@ -313,20 +280,16 @@ public class DefectData extends ContentData {
     // multiple data
 
     @Override
-    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
-        Log.log("DefectData.setBackendCreateValues");
-        super.setBackendCreateValues(parent, rdata);
+    public void setCreateValues(ContentData parent, RequestData rdata) {
+        super.setCreateValues(parent, rdata);
         if (!(this.parent instanceof UnitData unit)) {
             Log.error("parent of defect page should be unit page");
             return;
         }
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
         ProjectData project = (ProjectData) unit.getParent();
-        setUnitId(unit.getId());
-        setProjectId(project.getId());
         setStatus(STATUS_OPEN);
         setNavType(NAV_TYPE_NONE);
-        setPlanId(unit.getPlan() == null ? 0 : unit.getPlan().getId());
     }
 
     public void readBackendRequestData(RequestData rdata) {
@@ -399,7 +362,6 @@ public class DefectData extends ContentData {
                 .add("displayId",getDisplayId())
                 .add("assignedId",getAssignedId())
                 .add("assignedName",getAssignedName())
-                .add("planId",getPlanId())
                 .add("positionX",getPositionX())
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())
@@ -430,9 +392,6 @@ public class DefectData extends ContentData {
         i = getInt(json, "assignedId");
         if (i!=0)
             setAssignedId(i);
-        i = getInt(json, "planId");
-        if (i!=0)
-            setPlanId(i);
         i = getInt(json, "positionX");
         if (i!=0)
             setPositionX(i);

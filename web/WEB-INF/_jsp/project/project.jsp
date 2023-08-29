@@ -24,7 +24,7 @@
 
     int id=project.getId();
     ViewFilter filter = ViewFilter.getFilter(rdata);
-    List<DefectData> defects = filter.getProjectDefects();
+    List<DefectData> defects = filter.getProjectDefects(project.getId());
 %>
 <% if (project.hasUserReadRight(rdata)){%>
 <form:message/>
@@ -73,7 +73,7 @@
         <tr>
             <td><%=defect.getDisplayId()%></td>
             <td><%=$H(defect.getDescription())%></td>
-            <td><%=$H(defect.getUnitName())%></td>
+            <td><%=$H(defect.getUnit().getName())%></td>
             <td><%=$DT(defect.getCreationDate())%></td>
             <td><%=$H(defect.getChangerName())%></td>
             <td><%=$DT(defect.getChangeDate())%></td>

@@ -9,7 +9,6 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.user.UserData" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupBean" %>
@@ -24,9 +23,9 @@
 
     DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
     assert (defect != null);
-    UnitData unit = ContentCache.getContent(defect.getUnitId(), UnitData.class);
+    UnitData unit = defect.getUnit();
     assert (unit != null);
-    ProjectData project = ContentCache.getContent(defect.getProjectId(), ProjectData.class);
+    ProjectData project = defect.getProject();
     assert (project != null);
     GroupData group = GroupBean.getInstance().getGroup(project.getGroupId());
     String url = "/ctrl/defect/saveFrontendContent/" + defect.getId();

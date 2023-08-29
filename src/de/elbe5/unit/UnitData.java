@@ -51,8 +51,6 @@ public class UnitData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
-    protected int projectId=0;
-
     protected LocalDate approveDate = null;
 
     public UnitData() {
@@ -62,12 +60,8 @@ public class UnitData extends ContentData {
         return UnitBean.getInstance();
     }
 
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public ProjectData getProject() {
+        return getParent(ProjectData.class);
     }
 
     public LocalDate getApproveDate() {
@@ -127,11 +121,11 @@ public class UnitData extends ContentData {
 
     @Override
     public boolean hasUserReadRight(RequestData rdata) {
-        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProjectId());
+        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProject().getId());
     }
 
     public boolean hasUserReadRight(ViewFilter filter) {
-        return filter.hasProjectReadRight(getProjectId());
+        return filter.hasProjectReadRight(getProject().getId());
     }
 
     @Override
@@ -140,17 +134,6 @@ public class UnitData extends ContentData {
     }
 
     // multiple data
-
-    @Override
-    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
-        Log.log("Unit.setBackendCreateValues");
-        super.setBackendCreateValues(parent,rdata);
-        if (!(parent instanceof ProjectData)){
-            Log.error("parent of unit page should be project page");
-            return;
-        }
-        setProjectId(parent.getId());
-    }
 
     @Override
     public void readBackendCreateRequestData(RequestData rdata) {

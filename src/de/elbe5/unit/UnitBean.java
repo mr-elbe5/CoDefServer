@@ -26,7 +26,7 @@ public class UnitBean extends ContentBean {
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT project_id, approve_date FROM t_unit WHERE id=?";
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT approve_date FROM t_unit WHERE id=?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -39,7 +39,6 @@ public class UnitBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     int i = 1;
-                    data.setProjectId(rs.getInt(i++));
                     Timestamp ts = rs.getTimestamp(i);
                     if (ts != null)
                         data.setApproveDateTime(ts.toLocalDateTime());
@@ -52,7 +51,7 @@ public class UnitBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_unit (project_id,approve_date,id) values(?,?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_unit (approve_date,id) values(?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -67,7 +66,6 @@ public class UnitBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setInt(i++, data.getProjectId());
             if (data.getApproveDate() != null)
                 pst.setTimestamp(i++, Timestamp.valueOf(data.getApproveDateTime()));
             else
@@ -88,7 +86,8 @@ public class UnitBean extends ContentBean {
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException{
         if (contentData.isNew() || !(contentData instanceof UnitData data))
             return;
-        if (data.getPlan()!=null)
+        // save only new bytes
+        if (data.isNew() && data.getPlan()!=null)
             ImageBean.getInstance().saveFile(con,data.getPlan(),true);
         PreparedStatement pst = null;
         try {

@@ -74,9 +74,9 @@ public class DefectStatusData extends ContentData {
     }
 
     @Override
-    public void setBackendCreateValues(ContentData parent, RequestData rdata) {
+    public void setCreateValues(ContentData parent, RequestData rdata) {
         Log.log("DefectStatusData.setBackendCreateValues");
-        super.setBackendCreateValues(parent, rdata);
+        super.setCreateValues(parent, rdata);
         if (parent instanceof DefectData data) {
             setStatus(data.getStatus());
         }

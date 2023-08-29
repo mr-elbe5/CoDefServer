@@ -17,8 +17,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DefectBean extends ContentBean {
 
@@ -35,7 +33,7 @@ public class DefectBean extends ContentBean {
         return getNextId("s_defect_id");
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT display_id,unit_id,project_id,plan_id, assigned_id, notified, lot, status, " +
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT display_id, assigned_id, notified, lot, status, " +
             "costs, position_x, position_y, position_comment, " +
             "due_date1, due_date2, close_date  " +
             "FROM t_defect  WHERE id=?";
@@ -52,9 +50,6 @@ public class DefectBean extends ContentBean {
                 if (rs.next()) {
                     int i=1;
                     data.setDisplayId(rs.getInt(i++));
-                    data.setUnitId(rs.getInt(i++));
-                    data.setProjectId(rs.getInt(i++));
-                    data.setPlanId(rs.getInt(i++));
                     data.setAssignedId(rs.getInt(i++));
                     data.setNotified(rs.getBoolean(i++));
                     data.setLot(rs.getString(i++));
@@ -77,10 +72,10 @@ public class DefectBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect (" +
-            "display_id,unit_id,project_id,plan_id, assigned_id, notified, lot, " +
+            "display_id,assigned_id, notified, lot, " +
             "due_date1, status, costs, " +
             "position_x, position_y,position_comment,id) " +
-            "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            "values(?,?,?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -91,9 +86,6 @@ public class DefectBean extends ContentBean {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
             pst.setInt(i++,data.getDisplayId());
-            pst.setInt(i++,data.getUnitId());
-            pst.setInt(i++,data.getProjectId());
-            pst.setInt(i++, data.getPlanId());
             pst.setInt(i++, data.getAssignedId());
             pst.setBoolean(i++, data.isNotified());
             pst.setString(i++, data.getLot());
@@ -181,54 +173,6 @@ public class DefectBean extends ContentBean {
             closeStatement(pst);
             closeConnection(con);
         }
-    }
-
-    // project Ids
-
-    private static final String GET_PROJECT_DEFECT_IDS_SQL = "SELECT id FROM t_defect  WHERE project_id=?";
-
-    public List<Integer> getProjectDefectIds(int projectId) {
-        Connection con = startTransaction();
-        PreparedStatement pst = null;
-        List<Integer> ids=new ArrayList<>();
-        try {
-            pst = con.prepareStatement(GET_PROJECT_DEFECT_IDS_SQL);
-            pst.setInt(1,projectId);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                ids.add(rs.getInt(1));
-            }
-            pst.close();
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            closeStatement(pst);
-            closeConnection(con);
-        }
-        return ids;
-    }
-
-    private static final String GET_UNIT_DEFECT_IDS_SQL = "SELECT id FROM t_defect  WHERE unit_id=?";
-
-    public List<Integer> getUnitDefectIds(int unitId) {
-        Connection con = startTransaction();
-        PreparedStatement pst = null;
-        List<Integer> ids=new ArrayList<>();
-        try {
-            pst = con.prepareStatement(GET_UNIT_DEFECT_IDS_SQL);
-            pst.setInt(1,unitId);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                ids.add(rs.getInt(1));
-            }
-            pst.close();
-        } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            closeStatement(pst);
-            closeConnection(con);
-        }
-        return ids;
     }
 
 }

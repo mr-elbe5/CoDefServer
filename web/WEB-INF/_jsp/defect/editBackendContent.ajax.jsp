@@ -14,7 +14,6 @@
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
-<%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
@@ -24,9 +23,9 @@
 
     DefectData contentData = ContentData.getCurrentContent(rdata, DefectData.class);
     assert (contentData != null);
-    UnitData unit = ContentCache.getContent(contentData.getUnitId(), UnitData.class);
+    UnitData unit = contentData.getUnit();
     assert(unit !=null);
-    ProjectData project= ContentCache.getContent(contentData.getProjectId(),ProjectData.class);
+    ProjectData project= contentData.getProject();
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveBackendContent/" + contentData.getId();%>

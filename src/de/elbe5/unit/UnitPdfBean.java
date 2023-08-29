@@ -62,7 +62,7 @@ public class UnitPdfBean extends DefectFopBean {
     }
 
     private void addUnitHeaderXml(StringBuilder sb, UnitData unit) {
-        ProjectData project=ContentCache.getContent(unit.getProjectId(),ProjectData.class);
+        ProjectData project=unit.getProject();
         assert(project!=null);
         sb.append("<unitheader><title>");
         sb.append(LocalizedStrings.xml("_reports"));
@@ -74,7 +74,7 @@ public class UnitPdfBean extends DefectFopBean {
     }
 
     private void addUnitFooterXml(StringBuilder sb, UnitData unit, LocalDateTime now) {
-        ProjectData project=ContentCache.getContent(unit.getProjectId(),ProjectData.class);
+        ProjectData project=unit.getProject();
         assert(project!=null);
         sb.append("<footer><docAndDate>");
         sb.append(LocalizedStrings.xml("_project"))
