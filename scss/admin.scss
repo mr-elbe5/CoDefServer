@@ -1,0 +1,13 @@
+@import "extras";
+@import "common";
+
+body.admin {
+  background: $background-admin-body;
+
+  div#pageContainer {
+    background: white;
+    min-height: 500px;
+  }
+}
+
+

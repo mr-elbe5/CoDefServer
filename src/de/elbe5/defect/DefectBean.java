@@ -111,7 +111,7 @@ public class DefectBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect " +
-            "set assigned_id=?, notified=?, lot=?, due_date2=?, status =?, costs=? where id=? ";
+            "set assigned_id=?, notified=?, lot=?, due_date1=?, due_date2=?, status =?, costs=?, position_x=?, position_y=?, position_comment=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -124,13 +124,21 @@ public class DefectBean extends ContentBean {
             pst.setInt(i++, data.getAssignedId());
             pst.setBoolean(i++, data.isNotified());
             pst.setString(i++, data.getLot());
-            LocalDate date=data.getDueDate2();
+            LocalDate date=data.getDueDate1();
+            if (date==null)
+                pst.setNull(i++,Types.TIMESTAMP);
+            else
+                pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
+            date=data.getDueDate2();
             if (date==null)
                 pst.setNull(i++,Types.TIMESTAMP);
             else
                 pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
             pst.setString(i++, data.getStatus());
             pst.setInt(i++, data.getCosts());
+            pst.setInt(i++, data.getPositionX());
+            pst.setInt(i++, data.getPositionY());
+            pst.setString(i++, data.getPositionComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

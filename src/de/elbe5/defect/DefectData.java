@@ -295,14 +295,25 @@ public class DefectData extends ContentData {
     public void readBackendRequestData(RequestData rdata) {
         Log.log("DefectData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
+        setStatus(rdata.getAttributes().getString("status"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
+        setNotified(rdata.getAttributes().getBoolean("notified"));
         setLot(rdata.getAttributes().getString("lot"));
+        setCosts(rdata.getAttributes().getInt("costs"));
+        setDueDate1(rdata.getAttributes().getDate("dueDate1"));
+        setDueDate2(rdata.getAttributes().getDate("dueDate2"));
         setPositionX(rdata.getAttributes().getInt("positionX"));
         setPositionY(rdata.getAttributes().getInt("positionY"));
         setPositionComment(rdata.getAttributes().getString("positionComment"));
-        setStatus(rdata.getAttributes().getString("state"));
-        setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
-        setDueDate1(DateHelper.asLocalDate(rdata.getAttributes().getLong("dueDate")));
+        if (getDescription().isEmpty()) {
+            rdata.addIncompleteField("description");
+        }
+        if (getAssignedId()==0) {
+            rdata.addIncompleteField("assigned");
+        }
+        if (getDueDate()==null) {
+            rdata.addIncompleteField("dueDate1");
+        }
     }
 
     @Override

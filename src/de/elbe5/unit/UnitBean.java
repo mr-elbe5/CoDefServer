@@ -51,7 +51,7 @@ public class UnitBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_unit (approve_date,id) values(?,?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_unit (approve_date,id) values(?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {

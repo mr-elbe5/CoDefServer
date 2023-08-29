@@ -85,15 +85,19 @@
     let posX = 0;
     let posY = 0;
     let $container = $('#planContainer');
+    console.log('posX,posY=' + posX + ',' + posY);
+    console.log('container=' + $container);
     let $positioner = $('#planPositioner');
+    console.log('positioner=' + $positioner);
     let $plan = $('#plan');
+    console.log('plan=' + $plan);
 
     $plan.on('click', function (event) {
         let offset = $container.offset();
-        //console.log('container offset=' + offset.left + ',' + offset.top);
+        console.log('container offset=' + offset.left + ',' + offset.top);
         posX = Math.round(event.pageX - offset.left );
         posY = Math.round(event.pageY - offset.top);
-        //console.log('posX,posY=' + posX + ',' + posY);
+        console.log('posX,posY=' + posX + ',' + posY);
         setPositioner();
     });
 

@@ -29,7 +29,7 @@
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveBackendContent/" + contentData.getId();%>
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title"><%=$SH("_edit")%>
@@ -69,10 +69,19 @@
                 <form:text name="costs" label="_costs" value="<%=contentData.getCostsString()%>" />
                 <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>
                 <form:date name="dueDate2" label="_dueDate2" value="<%=$D(contentData.getDueDate2())%>"/>
-                <% if (contentData.getPlanId()!=0){%>
-                <form:line label="_position"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></form:line>
+                <% if (unit.getPlan() != null) {%>
+                <form:line label="_position"> </form:line>
+                <div id="planContainer">
+                    <img id="plan" src="/files/<%=contentData.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
+                    <div id="planPositioner">
+                        <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
+                        <span><%=contentData.getDisplayId()%></span>
+                    </div>
+                </div>
+                <input type="hidden" name="positionX" id="positionX" value="<%=contentData.getPositionX()%>"/>
+                <input type="hidden" name="positionY" id="positionY" value="<%=contentData.getPositionY()%>"/>
                 <%}%>
-                <form:line label="_positionComment" padded="true"><%=$HML(contentData.getPositionComment())%></form:line>
+                <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(contentData.getPositionComment())%></form:textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
@@ -83,5 +92,49 @@
         </form:form>
     </div>
 </div>
+<% if (unit.getPlan() != null) {%>
+<script type="text/javascript">
+    let posX = 0;
+    let posY = 0;
+    let $container = $('#planContainer');
+    console.log('posX,posY=' + posX + ',' + posY);
+    console.log('container=' + $container);
+    let $positioner = $('#planPositioner');
+    console.log('positioner=' + $positioner);
+    let $plan = $('#plan');
+    console.log('plan=' + $plan);
 
+    $plan.on('click', function (event) {
+        let offset = $container.offset();
+        console.log('container offset=' + offset.left + ',' + offset.top);
+        posX = Math.round(event.pageX - offset.left );
+        posY = Math.round(event.pageY - offset.top);
+        console.log('posX,posY=' + posX + ',' + posY);
+        setPositioner();
+    });
 
+    function setPositioner() {
+        $positioner.css('left', posX - 11);
+        //relative, so go top
+        $positioner.css('top', posY - 5 - $plan.height());
+        // both percent * 100
+        let positionX=Math.round(posX*100*100/$plan.width());
+        let positionY=Math.round(posY*100*100/$plan.height());
+        //console.log('positionX,positionY=' + positionX + ',' + positionY);
+        $('#positionX').val(positionX);
+        $('#positionY').val(positionY);
+    }
+
+    $('#arrow').load(function () {
+        setPositioner($container.position());
+    });
+
+    $plan.load(function () {
+        posX = Math.floor((<%=contentData.getPositionX()%>)*$plan.width()/100/100);
+        posY = Math.floor((<%=contentData.getPositionY()%>)*$plan.height()/100/100);
+        //console.log('posX,posY=' + posX + ',' + posY);
+        setPositioner();
+    });
+
+</script>
+<%}%>

@@ -53,7 +53,7 @@
         <form:text name="lot" label="_lot" value="<%=$H(defect.getLot())%>" />
         <form:text name="costs" label="_costs" value="<%=defect.getCostsString()%>" />
         <form:date name="dueDate2" label="_dueDate2" value="<%=$D(defect.getDueDate2())%>" required="true"/>
-        <% if (defect.getPlanId()!=0){%>
+        <% if (defect.getPlan()!=null){%>
         <form:line label="_position"><img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" /></form:line>
         <%}%>
         <form:line label="_positionComment" padded="true"><%=$HML(defect.getPositionComment())%></form:line>

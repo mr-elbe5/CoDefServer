@@ -164,13 +164,6 @@ public class UnitData extends ContentData {
         setDescription(rdata.getAttributes().getString("description"));
         setApproveDate(rdata.getAttributes().getDate("approveDate"));
         setNavType(ContentData.NAV_TYPE_HEADER);
-        BinaryFile file = rdata.getAttributes().getFile("file");
-        if (file != null && getPlan() != null){
-            ImageData plan = new ImageData();
-            plan.setCreateValues(this,rdata);
-            plan.createFromBinaryFile(file, UnitData.STD_PLAN_SIZE, UnitData.STD_PLAN_SIZE, plan.getMaxPreviewWidth(), plan.getMaxPreviewHeight(), false);
-            plan.setDisplayName(LocalizedStrings.string("_plan"));
-        }
         setActive(rdata.getAttributes().getBoolean("active"));
         if (getDisplayName().isEmpty()) {
             rdata.addIncompleteField("displayName");

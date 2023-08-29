@@ -64,6 +64,12 @@
             <file name="${buildScss.dir}/layout.scss" />
             <mapper type="glob" from="*.scss" to="*.css"/>
         </apply>
+        <apply executable="sass" dest="web/static-content/css" verbose="true" force="true" failonerror="true">
+            <srcfile />
+            <targetfile />
+            <file name="${buildScss.dir}/admin.scss" />
+            <mapper type="glob" from="*.scss" to="*.css"/>
+        </apply>
     </target>
 
     <target name="collectFiles" depends="createCss">

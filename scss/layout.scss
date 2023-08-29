@@ -1,14 +1,7 @@
 @import "extras";
+@import "common";
 
-$body-color: $dark;
-$header-color: $light;
-$main-color: $dark;
-$footer-color: $light;
-$main-background: #ffffff;
-$gray-background: #f0f0f0;
-$background-body: $light url(img-path('bricks_light.png'));
-$background-admin-body: $light url(img-path('bricks_dark.png'));
-$zindex-fixed: 1030 !default;
+
 
 body {
   background: $background-body;
@@ -312,39 +305,6 @@ footer {
 
 .searchHighlight{
   //background: $yellow;
-}
-
-#planContainer{
-  margin: 0;
-  padding: 0;
-
-  #plan{
-    max-width:100%;
-  }
-
-  #planPositioner{
-    position: relative;
-    width: 60px;
-
-    span{
-      position: relative;
-      left:-8px;
-      top: 8px;
-      color: red;
-      font-size: 75%;
-    }
-  }
-}
-
-/* admin */
-
-body.admin {
-  background: $background-admin-body;
-
-  div#pageContainer {
-    background: white;
-    min-height: 500px;
-  }
 }
 
 /* login */

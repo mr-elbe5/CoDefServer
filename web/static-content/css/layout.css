@@ -1,3 +1,22 @@
+#planContainer {
+  margin: 0;
+  padding: 0;
+}
+#planContainer #plan {
+  max-width: 100%;
+}
+#planContainer #planPositioner {
+  position: relative;
+  width: 60px;
+}
+#planContainer #planPositioner span {
+  position: relative;
+  left: -8px;
+  top: 8px;
+  color: red;
+  font-size: 75%;
+}
+
 body {
   background: #f8f9fa url("../img/bricks_light.png");
   position: relative;
@@ -231,34 +250,6 @@ footer > .container {
 }
 footer a, footer a:active, footer a:hover, footer a:focus, footer a:visited {
   color: #343a40;
-}
-
-#planContainer {
-  margin: 0;
-  padding: 0;
-}
-#planContainer #plan {
-  max-width: 100%;
-}
-#planContainer #planPositioner {
-  position: relative;
-  width: 60px;
-}
-#planContainer #planPositioner span {
-  position: relative;
-  left: -8px;
-  top: 8px;
-  color: red;
-  font-size: 75%;
-}
-
-/* admin */
-body.admin {
-  background: #f8f9fa url("../img/bricks_dark.png");
-}
-body.admin div#pageContainer {
-  background: white;
-  min-height: 500px;
 }
 
 /* login */
