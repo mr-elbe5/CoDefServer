@@ -19,8 +19,6 @@ import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
 import de.elbe5.response.*;
-import de.elbe5.rights.Right;
-import de.elbe5.rights.SystemZone;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
@@ -52,7 +50,7 @@ public class DefectStatusController extends ContentController {
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
-        checkRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
+        assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
         DefectStatusData data = new DefectStatusData();
         data.setCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
@@ -62,7 +60,7 @@ public class DefectStatusController extends ContentController {
     public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
         DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
-        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
+        assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
     }
@@ -72,7 +70,7 @@ public class DefectStatusController extends ContentController {
         int contentId=rdata.getId();
         DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assert(data != null && data.getId() == contentId);
-        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
+        assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         if (data.isNew())
             data.readFrontendCreateRequestData(rdata);
         else

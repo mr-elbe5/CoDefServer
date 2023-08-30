@@ -9,7 +9,7 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
-<%@ page import="de.elbe5.rights.SystemZone" %>
+<%@ page import="de.elbe5.rights.GlobalRights" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
@@ -23,7 +23,7 @@
                 <a class="treeRoot"><%=$SH("_persons")%>
                 </a>
                 <ul>
-                    <%if (rdata.hasSystemRight(SystemZone.USER)) {%>
+                    <%if (GlobalRights.hasGlobalUserEditRight(rdata.getLoginUser())) {%>
                     <jsp:include page="../company/companyAdministration.inc.jsp" flush="true"/>
                     <jsp:include page="../group/groupAdministration.inc.jsp" flush="true"/>
                     <jsp:include page="../user/userAdministration.inc.jsp" flush="true"/>

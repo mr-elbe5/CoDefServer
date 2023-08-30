@@ -174,3 +174,5 @@ update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATI
 
 delete from t_system_right where name = 'CONTENTEDIT';
 update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATION';
+
+UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'de.elbe5.unit.PlanImageData';

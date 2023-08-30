@@ -12,7 +12,6 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
-<%@ page import="de.elbe5.group.GroupBean" %>
 <%@ page import="de.elbe5.application.ViewFilter" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>

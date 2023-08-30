@@ -41,25 +41,25 @@ public class FilterController extends Controller {
     }
 
     public IResponse openCompanyFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
+        assertRights(rdata.isLoggedIn());
         int contentId=rdata.getId();
         return new ForwardResponse("/WEB-INF/_jsp/filter/companyFilter.ajax.jsp");
     }
 
     public IResponse setCompanyFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
+        assertRights(rdata.isLoggedIn());
         ViewFilter filter = ViewFilter.getFilter(rdata);
         filter.setWatchedIds(rdata.getAttributes().getIntegerList("watchedIds"));
         return new CloseDialogResponse("/ctrl/content/show/" + filter.getProjectId());
     }
 
     public IResponse openStatusFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
+        assertRights(rdata.isLoggedIn());
         return new ForwardResponse("/WEB-INF/_jsp/filter/statusFilter.ajax.jsp");
     }
 
     public IResponse setStatusFilter(RequestData rdata) {
-        checkRights(rdata.isLoggedIn());
+        assertRights(rdata.isLoggedIn());
         ViewFilter filter = ViewFilter.getFilter(rdata);
         filter.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
         return new CloseDialogResponse("/ctrl/content/show/" + filter.getProjectId());

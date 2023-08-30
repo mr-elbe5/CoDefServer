@@ -11,8 +11,6 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="java.util.List" %>
-<%@ page import="de.elbe5.group.GroupBean" %>
-<%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.company.CompanyBean" %>

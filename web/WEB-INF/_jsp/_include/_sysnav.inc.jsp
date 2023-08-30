@@ -2,6 +2,7 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
+<%@ page import="de.elbe5.rights.GlobalRights" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
@@ -9,7 +10,7 @@
 %>
 <ul class="nav justify-content-end">
     <li class="nav-item"><a class="nav-link fa fa-home" href="/" title="<%=$SH("_home")%>"></a></li>
-    <%if (rdata.hasAnySystemRight()) {%>
+    <%if (GlobalRights.hasAnySystemRight(rdata.getLoginUser())) {%>
     <li class="nav-item"><a class="nav-link fa fa-cog" href="/ctrl/admin/openAdministration" title="<%=$SH("_administration")%>"></a></li>
     <%}%>
     <li class="nav-item">

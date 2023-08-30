@@ -21,6 +21,7 @@ import de.elbe5.request.RequestData;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
+import de.elbe5.rights.GlobalRights;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
@@ -56,7 +57,7 @@ public class UnitController extends ContentController {
         UnitData data= (UnitData) ContentCache.getContent(id);
         if (!data.hasUserReadRight(rdata.getLoginUser())) {
             String token = rdata.getAttributes().getString("token");
-            checkRights(Token.matchToken(id, token));
+            assertRights(Token.matchToken(id, token));
         }
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
@@ -93,7 +94,8 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         Log.info("loading unit defect plan");
         int scalePercent = rdata.getAttributes().getInt("scale", 100);
-        boolean isEditor = user.hasGlobalContentEditRight();
+        //todo
+        boolean isEditor = GlobalRights.hasGlobalContentEditRight(user);
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
         ViewFilter filter = new ViewFilter();

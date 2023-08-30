@@ -13,7 +13,7 @@
 <%@ page import="de.elbe5.user.UserData" %>
 <%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.file.FileData" %>
-<%@ page import="de.elbe5.rights.SystemZone" %>
+<%@ page import="de.elbe5.rights.GlobalRights" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
@@ -26,7 +26,7 @@
     assert(defect !=null);
     UserData assignedUser = UserCache.getUser(defect.getAssignedId());
     String assignedName = assignedUser == null ? "" : assignedUser.getName();
-    boolean isEditor=defect.hasUserEditRight(rdata);
+    boolean isEditor=defect.hasUserEditRight(rdata.getLoginUser());
     boolean isAssigned=rdata.getUserId()==defect.getAssignedId();
     if (isEditor || isAssigned){
 %>
@@ -146,7 +146,7 @@
     <%
     }
     if (!defect.isClosed()){
-        if (rdata.hasSystemRight(SystemZone.CONTENTADMINISTRATION)) {%>
+        if (rdata.hasSystemRight(GlobalRights.CONTENTADMINISTRATION)) {%>
     <div class=buttonLine>
         <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_edit")%>
         </button>

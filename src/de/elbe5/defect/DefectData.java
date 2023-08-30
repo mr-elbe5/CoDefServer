@@ -13,14 +13,12 @@ import de.elbe5.content.ContentNavType;
 import de.elbe5.content.ContentViewType;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
-import de.elbe5.application.ViewFilter;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
-import de.elbe5.rights.SystemZone;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 

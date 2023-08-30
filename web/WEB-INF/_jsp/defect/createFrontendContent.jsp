@@ -9,10 +9,6 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.user.UserData" %>
-<%@ page import="de.elbe5.group.GroupData" %>
-<%@ page import="de.elbe5.group.GroupBean" %>
-<%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
