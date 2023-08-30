@@ -84,7 +84,7 @@
                 <td><%=DateHelper.toHtmlDate(defect.getChangeDate())%></td>
                 <td><%=DateHelper.toHtmlDate(defect.getDueDate())%></td>
                 <td><%=DateHelper.toHtmlDate(defect.getCloseDate())%></td>
-                <td><%=$SH(defect.getStatus())%></td>
+                <td><%=$SH(defect.getStatus().toString())%></td>
                 <td><%=$H(defect.getAssignedName())%></td>
                 <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
                 <td>

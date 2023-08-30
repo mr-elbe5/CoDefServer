@@ -13,6 +13,7 @@ import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.application.ViewFilter;
+import de.elbe5.content.ContentNavType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -121,7 +122,7 @@ public class ProjectData extends ContentData {
         setGroupId(rdata.getAttributes().getInt("groupId"));
         setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         setActive(rdata.getAttributes().getBoolean("active"));
-        setNavType(ContentData.NAV_TYPE_HEADER);
+        setNavType(ContentNavType.HEADER);
         if (getDisplayName().isEmpty()) {
             rdata.addIncompleteField("displayName");
         }

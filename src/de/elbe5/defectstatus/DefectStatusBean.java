@@ -60,7 +60,7 @@ public class DefectStatusBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setString(i++, data.getStatus());
+            pst.setString(i++, data.getStatusString());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -83,7 +83,7 @@ public class DefectStatusBean extends ContentBean {
         try {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setString(i++, data.getStatus());
+            pst.setString(i++, data.getStatusString());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

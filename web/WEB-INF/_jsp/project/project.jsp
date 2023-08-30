@@ -79,7 +79,7 @@
             <td><%=$DT(defect.getChangeDate())%></td>
             <td><%=$D(defect.getDueDate())%></td>
             <td><%=$D(defect.getCloseDate())%></td>
-            <td><%=$SH(defect.getStatus())%></td>
+            <td><%=$SH(defect.getStatus().toString())%></td>
             <td><%=$H(defect.getAssignedName())%></td>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
             <td>

@@ -9,6 +9,8 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.*;
+import de.elbe5.content.ContentNavType;
+import de.elbe5.content.ContentViewType;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.application.ViewFilter;
@@ -39,11 +41,6 @@ import java.util.List;
 
 public class DefectData extends ContentData {
 
-    public static final String STATUS_OPEN = "OPEN";
-    public static final String STATUS_DISPUTED = "DISPUTED";
-    public static final String STATUS_REJECTED = "REJECTED";
-    public static final String STATUS_DONE = "DONE";
-
     public static int PLAN_CROP_WIDTH = 600;
     public static int PLAN_CROP_HEIGHT = 300;
 
@@ -60,7 +57,6 @@ public class DefectData extends ContentData {
 
     protected boolean notified = false;
     protected String lot = "";
-    protected String status = STATUS_OPEN;
     protected int costs = 0;
     protected int positionX = 0; // Percent * 100
     protected int positionY = 0; // Percent * 100
@@ -133,12 +129,13 @@ public class DefectData extends ContentData {
         this.lot = lot;
     }
 
-    public String getStatus() {
-        return status;
+    public DefectStatus getStatus() {
+        DefectStatusData statusData = getLastStatusChange();
+        return statusData == null ? DefectStatus.OPEN : statusData.getStatus();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getDefectStatusString(){
+        return getStatus().toString();
     }
 
     public boolean isClosed(){
@@ -213,6 +210,14 @@ public class DefectData extends ContentData {
         return new ArrayList<>(getChildren(DefectStatusData.class));
     }
 
+    public DefectStatusData getLastStatusChange(){
+        List<DefectStatusData> statusChanges = getStatusChanges();
+        if (statusChanges.isEmpty()){
+            return null;
+        }
+        return statusChanges.get(statusChanges.size()-1);
+    }
+
     public String getAssignedName() {
         if (assignedId==0)
             return "";
@@ -266,7 +271,7 @@ public class DefectData extends ContentData {
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        if (ContentData.VIEW_TYPE_EDIT.equals(getViewType())) {
+        if (ContentViewType.EDIT.equals(getViewType())) {
             if (isNew())
                 context.include("/WEB-INF/_jsp/defect/createFrontendContent.jsp");
             else
@@ -288,14 +293,12 @@ public class DefectData extends ContentData {
         }
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
         ProjectData project = (ProjectData) unit.getParent();
-        setStatus(STATUS_OPEN);
-        setNavType(NAV_TYPE_NONE);
+        setNavType(ContentNavType.NONE);
     }
 
     public void readBackendRequestData(RequestData rdata) {
         Log.log("DefectData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
-        setStatus(rdata.getAttributes().getString("status"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
         setLot(rdata.getAttributes().getString("lot"));
@@ -376,7 +379,7 @@ public class DefectData extends ContentData {
                 .add("positionX",getPositionX())
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())
-                .add("state", getStatus())
+                .add("state", getStatus().toString())
                 .add("dueDate", getDueDate())
                 .add("phase", "DEFAULT");
     }
@@ -412,9 +415,6 @@ public class DefectData extends ContentData {
         String s = getString(json, "positionComment");
         if (s != null)
             setPositionComment(s);
-        s = getString(json, "state");
-        if (s != null)
-            setStatus(s);
         LocalDate date = getLocalDate(json, "dueDate");
         if (date != null)
             setDueDate1(date);

@@ -57,7 +57,7 @@ public class DefectController extends ContentController {
         checkRights(parent != null && parent.hasUserEditRight(rdata));
         DefectData data = new DefectData();
         data.setCreateValues(parent, rdata);
-        data.setViewType(ContentData.VIEW_TYPE_EDIT);
+        data.setViewType(ContentViewType.EDIT);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ContentResponse(data);
     }
@@ -69,7 +69,7 @@ public class DefectController extends ContentController {
         DefectData cachedData = ContentCache.getContent(data.getId(), DefectData.class);
         data.setUpdateValues(cachedData, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
-        data.setViewType(ContentData.VIEW_TYPE_EDIT);
+        data.setViewType(ContentViewType.EDIT);
         return new ContentResponse(data);
     }
 
@@ -92,7 +92,7 @@ public class DefectController extends ContentController {
             return new ContentResponse(data);
         }
         data.setNew(false);
-        data.setViewType(ContentData.VIEW_TYPE_SHOW);
+        data.setViewType(ContentViewType.SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return show(rdata);
@@ -108,7 +108,7 @@ public class DefectController extends ContentController {
             setSaveError(rdata);
             return new ContentResponse(data);
         }
-        data.setViewType(ContentData.VIEW_TYPE_SHOW);
+        data.setViewType(ContentViewType.SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         UnitData unit = data.getUnit();
@@ -184,7 +184,7 @@ public class DefectController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
-        data.setViewType(ContentData.VIEW_TYPE_SHOW);
+        data.setViewType(ContentViewType.SHOW);
         ContentCache.setDirty();
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }

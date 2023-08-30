@@ -53,9 +53,11 @@
             </option>
             <%}%>
         </form:select>
+        <input type="hidden" name="notified" value="false" />
         <form:text name="lot" label="_lot" value="<%=$H(defect.getLot())%>"/>
         <form:text name="costs" label="_costs" value="<%=defect.getCostsString()%>"/>
         <form:date name="dueDate1" label="_dueDate" value="<%=DateHelper.toHtmlDate(defect.getDueDate1())%>" required="true"/>
+        <input type="hidden" name="dueDate2" value="" />
         <% if (unit.getPlan() != null) {%>
         <form:line label="_position"> </form:line>
         <div id="planContainer">

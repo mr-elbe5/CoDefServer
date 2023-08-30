@@ -10,6 +10,7 @@ package de.elbe5.unit;
 
 import de.elbe5.base.*;
 import de.elbe5.application.ViewFilter;
+import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
@@ -142,7 +143,7 @@ public class UnitData extends ContentData {
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
         setApproveDate(rdata.getAttributes().getDate("approveDate"));
-        setNavType(ContentData.NAV_TYPE_HEADER);
+        setNavType(ContentNavType.HEADER);
         setActive(rdata.getAttributes().getBoolean("active"));
         BinaryFile file = rdata.getAttributes().getFile("file");
         if (file != null){
@@ -163,7 +164,7 @@ public class UnitData extends ContentData {
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
         setApproveDate(rdata.getAttributes().getDate("approveDate"));
-        setNavType(ContentData.NAV_TYPE_HEADER);
+        setNavType(ContentNavType.HEADER);
         setActive(rdata.getAttributes().getBoolean("active"));
         if (getDisplayName().isEmpty()) {
             rdata.addIncompleteField("displayName");

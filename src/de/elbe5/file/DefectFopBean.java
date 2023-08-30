@@ -73,7 +73,7 @@ public abstract class DefectFopBean extends PdfCreator {
             sb.append("<label2>").append(LocalizedStrings.xml("_dueDate2")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(LocalizedStrings.xml("_state")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus())).append("</content1>");
+            sb.append("<label1>").append(LocalizedStrings.xml("_state")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus().toString())).append("</content1>");
             sb.append("<label2>").append(LocalizedStrings.xml("_closeDate")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
             if (!defect.getPositionComment().isEmpty()) {

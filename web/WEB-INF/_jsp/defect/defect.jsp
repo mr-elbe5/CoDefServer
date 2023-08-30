@@ -69,7 +69,7 @@
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(defect.getStatus())%></div>
+                <div class="boxText"><%=$SH(defect.getStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate1")%></div>
@@ -119,7 +119,7 @@
         <div class="boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(statusChange.getCreatorId()).getName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusChange.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusChange.getStatus())%>
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusChange.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusChange.getStatus().toString())%>
                 </div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(statusChange.getDescription())%></div>
             </div>

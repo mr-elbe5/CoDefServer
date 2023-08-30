@@ -86,7 +86,7 @@ public class DefectStatusController extends ContentController {
             return new ContentResponse(data);
         }
         data.setNew(false);
-        data.setViewType(ContentData.VIEW_TYPE_SHOW);
+        data.setViewType(ContentViewType.SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         rdata.setId(data.getParentId());
@@ -107,7 +107,7 @@ public class DefectStatusController extends ContentController {
         }
         DefectStatusData data = new DefectStatusData();
         data.setCreateValues(defect, rdata);
-        data.readRequestData(rdata);
+        data.readApiRequestData(rdata);
         if (!DefectStatusBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }

@@ -148,3 +148,4 @@ alter table t_defect drop column project_id;
 
 alter table t_unit drop constraint t_unit_fk2;
 alter table t_unit drop column project_id;
+alter table t_defect drop column status;

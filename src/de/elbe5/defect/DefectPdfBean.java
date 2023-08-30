@@ -78,7 +78,7 @@ public class DefectPdfBean extends DefectFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_creator"),user.getName());
         addLabeledContent(sb,LocalizedStrings.string("_creationDate"),DateHelper.toHtmlDateTime(data.getCreationDate()));
-        addLabeledContent(sb,LocalizedStrings.string("_state"),LocalizedStrings.string(data.getStatus()));
+        addLabeledContent(sb,LocalizedStrings.string("_state"),LocalizedStrings.string(data.getStatus().toString()));
         addLabeledContent(sb,LocalizedStrings.string("_assigned"),data.getAssignedName());
         addLabeledContent(sb,LocalizedStrings.string("_lot"),data.getLot());
         addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
