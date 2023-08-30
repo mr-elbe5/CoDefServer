@@ -52,7 +52,7 @@ public class DefectStatusController extends ContentController {
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
-        checkRights(parent != null && parent.hasUserEditRight(rdata));
+        checkRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
         DefectStatusData data = new DefectStatusData();
         data.setCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
@@ -62,7 +62,7 @@ public class DefectStatusController extends ContentController {
     public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
         DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
-        checkRights(data.hasUserEditRight(rdata));
+        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
     }
@@ -72,7 +72,7 @@ public class DefectStatusController extends ContentController {
         int contentId=rdata.getId();
         DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assert(data != null && data.getId() == contentId);
-        checkRights(data.hasUserEditRight(rdata));
+        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
         if (data.isNew())
             data.readFrontendCreateRequestData(rdata);
         else
@@ -102,7 +102,7 @@ public class DefectStatusController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int defectId = rdata.getId();
         DefectData defect = ContentCache.getContent(defectId, DefectData.class);
-        if (defect == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !defect.hasUserRight(user, Right.READ)) {
+        if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectStatusData data = new DefectStatusData();

@@ -54,7 +54,7 @@ public class DefectController extends ContentController {
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         UnitData parent= ContentCache.getContent(parentId, UnitData.class);
-        checkRights(parent != null && parent.hasUserEditRight(rdata));
+        checkRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
         DefectData data = new DefectData();
         data.setCreateValues(parent, rdata);
         data.setViewType(ContentViewType.EDIT);
@@ -65,7 +65,7 @@ public class DefectController extends ContentController {
     public IResponse openEditFrontendContent(RequestData rdata) {
         int defectId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(defectId,DefectData.class);
-        checkRights(data.hasUserEditRight(rdata));
+        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
         DefectData cachedData = ContentCache.getContent(data.getId(), DefectData.class);
         data.setUpdateValues(cachedData, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
@@ -78,7 +78,7 @@ public class DefectController extends ContentController {
         int contentId=rdata.getId();
         DefectData data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DefectData.class);
         assert(data != null && data.getId() == contentId);
-        checkRights(data.hasUserEditRight(rdata));
+        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
         if (data.isNew())
             data.readFrontendCreateRequestData(rdata);
         else
@@ -101,7 +101,7 @@ public class DefectController extends ContentController {
     public IResponse closeFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(contentId,DefectData.class);
-        checkRights(data.hasUserEditRight(rdata));
+        checkRights(data.hasUserEditRight(rdata.getLoginUser()));
         data.setCloseDate(DefectBean.getInstance().getServerTime().toLocalDate());
         data.setChangerId(rdata.getUserId());
         if (!DefectBean.getInstance().closeDefect(data)) {
@@ -119,7 +119,7 @@ public class DefectController extends ContentController {
         int id = rdata.getId();
         DefectData data=ContentCache.getContent(id,DefectData.class);
         assert(data!=null);
-        if (!data.hasUserReadRight(rdata)) {
+        if (!data.hasUserReadRight(rdata.getLoginUser())) {
             String token = rdata.getAttributes().getString("token");
             checkRights(Token.matchToken(id, token));
         }
@@ -140,7 +140,7 @@ public class DefectController extends ContentController {
         int id = rdata.getId();
         DefectData data=ContentCache.getContent(id,DefectData.class);
         assert(data!=null);
-        if (!data.hasUserReadRight(rdata)) {
+        if (!data.hasUserReadRight(rdata.getLoginUser())) {
             String token = rdata.getAttributes().getString("token");
             checkRights(Token.matchToken(id, token));
         }
@@ -173,7 +173,7 @@ public class DefectController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int unitId=rdata.getId();
         UnitData unit=ContentCache.getContent(unitId, UnitData.class);
-        if (unit == null || !user.hasSystemRight(SystemZone.CONTENTREAD) && !unit.hasUserRight(user, Right.READ)) {
+        if (unit == null || !unit.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectData data = new DefectData();

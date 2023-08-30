@@ -23,7 +23,6 @@
 
     ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
-    List<GroupData> groups = GroupBean.getInstance().getAllGroups();
     List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
     String url = "/ctrl/project/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
@@ -49,12 +48,6 @@
 
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
-                <form:select name="groupId" label="_group" required="true">
-                    <option value="0"  <%=contentData.getGroupId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
-                    <% for (GroupData group : groups){%>
-                    <option value="<%=group.getId()%>" <%=contentData.getGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
-                    <%}%>
-                </form:select>
                 <form:line label="_companies" padded="true">
                     <% for (CompanyData company : companies){%>
                     <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>

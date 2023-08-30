@@ -237,20 +237,6 @@ public class DefectData extends ContentData {
         return DefectData.fileClasses;
     }
 
-    @Override
-    public boolean hasUserReadRight(RequestData rdata) {
-        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProject().getId()) && (rdata.hasContentEditRight() || rdata.getUserId()==getAssignedId());
-    }
-
-    public boolean hasUserReadRight(ViewFilter filter, UserData user) {
-        return filter.hasProjectReadRight(getProject().getId()) && (user.hasSystemRight(SystemZone.CONTENTEDIT) || user.getId()==getAssignedId());
-    }
-
-    @Override
-    public boolean hasUserEditRight(RequestData rdata) {
-        return rdata.hasContentEditRight();
-    }
-
     // view
 
     public String getBackendContentTreeJsp() {

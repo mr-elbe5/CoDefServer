@@ -24,8 +24,6 @@
     ViewFilter filter= ViewFilter.getFilter(rdata);
     GroupData group=null;
     ProjectData project=ContentCache.getContent(filter.getProjectId(), ProjectData.class);
-    if (project!=null)
-        group= GroupBean.getInstance().getGroup(project.getGroupId());
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

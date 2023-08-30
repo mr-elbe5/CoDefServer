@@ -23,10 +23,11 @@
     <span class="<%=!contentData.isActive() ? "inactive" : ""%>">
         <%=$H(contentData.getDisplayName())%>
     </span>
-    <%if (contentData.hasUserEditRight(rdata)) {%>
+    <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/project/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
+        <a class="icon fa fa-key" href="" onclick="return openModalDialog('/ctrl/project/openEditRights/<%=contentData.getId()%>');" title="<%=$SH("_rights")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
         <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/unit/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
     </div>

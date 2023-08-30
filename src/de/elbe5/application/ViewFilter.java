@@ -12,8 +12,6 @@ import de.elbe5.defect.DefectComparator;
 import de.elbe5.content.ContentCache;
 import de.elbe5.defect.DefectData;
 import de.elbe5.project.ProjectData;
-import de.elbe5.group.GroupBean;
-import de.elbe5.group.GroupData;
 import de.elbe5.request.RequestData;
 import de.elbe5.unit.UnitData;
 
@@ -94,19 +92,13 @@ public class ViewFilter {
         this.watchedIds = watchedIds;
     }
 
-    public void initWatchedUsers(){
+    public void initWatchedCompanies(){
         watchedIds.clear();
         if (isEditor){
             ProjectData project=ContentCache.getContent(getProjectId(), ProjectData.class);
             if (project!=null) {
-                GroupData group = GroupBean.getInstance().getGroup(project.getGroupId());
-                if (group != null)
-                    watchedIds.addAll(group.getUserIds());
+                watchedIds.addAll(project.getCompanyIds());
             }
-
-        }
-        if (watchedIds.isEmpty()){
-            watchedIds.add(currentUserId);
         }
     }
 

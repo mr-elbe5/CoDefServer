@@ -17,6 +17,8 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -27,10 +29,9 @@
     assert (unit != null);
     ProjectData project = defect.getProject();
     assert (project != null);
-    GroupData group = GroupBean.getInstance().getGroup(project.getGroupId());
     String url = "/ctrl/defect/saveFrontendContent/" + defect.getId();
 
-    if (defect.hasUserEditRight(rdata)) {%>
+    if (defect.hasUserEditRight(rdata.getLoginUser())) {%>
 <form:message/>
 <section class="contentTop">
     <h1>
@@ -47,9 +48,9 @@
         <form:select name="assigned" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
             </option>
-            <% for (int userId : group.getUserIds()) {
-                UserData user = UserCache.getUser(userId);%>
-            <option value="<%=userId%>" <%=defect.getAssignedId() == user.getId() ? "selected" : ""%>><%=$H(user.getName())%>
+            <% for (int companyId : project.getCompanyIds()) {
+                CompanyData company = CompanyCache.getCompany(companyId);%>
+            <option value="<%=companyId%>" <%=defect.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
             </option>
             <%}%>
         </form:select>

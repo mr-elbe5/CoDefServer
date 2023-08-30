@@ -41,23 +41,13 @@ public class ProjectData extends ContentData {
         childClasses.add(UnitData.class);
     }
 
-    protected int groupId=0;
-
     protected Set<Integer> companyIds = new HashSet<>();
 
     public ProjectData() {
     }
 
     public ContentBean getBean() {
-        return ProjectBean.getInstance();
-    }
-
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
+        return null;
     }
 
     public Set<Integer> getCompanyIds() {
@@ -76,17 +66,6 @@ public class ProjectData extends ContentData {
     public List<Class<? extends FileData>> getFileClasses(){
         return ProjectData.fileClasses;
     }
-
-    @Override
-    public boolean hasUserReadRight(RequestData rdata) {
-        return ViewFilter.getFilter(rdata).hasProjectReadRight(getId());
-    }
-
-    @Override
-    public boolean hasUserEditRight(RequestData rdata) {
-        return rdata.hasContentEditRight();
-    }
-    // view
 
     @Override
     public String getBackendContentTreeJsp() {
@@ -119,15 +98,11 @@ public class ProjectData extends ContentData {
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
-        setGroupId(rdata.getAttributes().getInt("groupId"));
         setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         setActive(rdata.getAttributes().getBoolean("active"));
         setNavType(ContentNavType.HEADER);
         if (getDisplayName().isEmpty()) {
             rdata.addIncompleteField("displayName");
-        }
-        if (getGroupId()==0) {
-            rdata.addIncompleteField("groupId");
         }
     }
 

@@ -176,13 +176,13 @@ CREATE TABLE IF NOT EXISTS t_project
     CONSTRAINT t_project_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id)
 );
 
-CREATE TABLE IF NOT EXISTS t_company2project
+CREATE TABLE IF NOT EXISTS t_company2content
 (
     company_id INTEGER     NOT NULL,
-    project_id   INTEGER     NOT NULL,
-    CONSTRAINT t_company2project_pk PRIMARY KEY (company_id, project_id),
-    CONSTRAINT t_company2project_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
-    CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
+    content_id  INTEGER     NOT NULL,
+    CONSTRAINT t_company2content_pk PRIMARY KEY (company_id, content_id),
+    CONSTRAINT t_company2content_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2content_fk2 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_unit

@@ -11,7 +11,7 @@
     ViewFilter filter= ViewFilter.getFilter(rdata);
     if (filter.getProjectId()!=0){
         ProjectData project = ContentCache.getContent(filter.getProjectId(),ProjectData.class);
-        if (project!=null && project.hasUserReadRight(rdata)){%>
+        if (project!=null && project.hasUserReadRight(rdata.getLoginUser())){%>
 <li class="nav-item">
     <a class="nav-link" href="<%=project.getUrl()%>"><%=$H(project.getDisplayName())%>
     </a>

@@ -68,7 +68,7 @@ public class RootController extends ContentController {
         //Log.log("setEntryPoint");
         int contentId = rdata.getId();
         ContentData data = ContentCache.getContent(contentId);
-        checkRights(data.hasUserReadRight(rdata));
+        checkRights(data.hasUserReadRight(rdata.getLoginUser()));
         ProjectData project = findProject(data);
         if (project!=null){
             ViewFilter filter = ViewFilter.getFilter(rdata);

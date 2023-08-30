@@ -26,7 +26,7 @@
     <span class="<%=contentData.isActive() ? "" : "inactive"%>">
         <%=$H(contentData.getDisplayName())%>
     </span>
-    <%if (contentData.hasUserEditRight(rdata)) {%>
+    <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
     <div class="icons">
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/defect/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>

@@ -9,11 +9,13 @@
 package de.elbe5.user;
 
 import de.elbe5.application.ViewFilter;
-import de.elbe5.project.ProjectBean;
+import de.elbe5.content.ContentCache;
+import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.ForwardResponse;
 import de.elbe5.response.IResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +24,19 @@ public class CodefUserController extends UserController {
     @Override
     protected void initWebUser(UserData data, RequestData rdata){
         ViewFilter filter = ViewFilter.getFilter(rdata);
-        boolean isEditor = data.hasContentEditRight();
+        boolean isEditor = data.hasGlobalContentEditRight();
         filter.setEditor(isEditor);
         filter.setCurrentUserId(data.getId());
         Map<String,String> cookieValues = rdata.readLoginCookies();
         if (cookieValues.containsKey("showClosed"))
             filter.setShowClosed(Boolean.parseBoolean(cookieValues.get("showClosed")));
-        List<Integer> projectIds= ProjectBean.getInstance().getUserProjectIds(data.getId(),isEditor);
+        List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
+        List<Integer> projectIds = new ArrayList<>();
+        for (ProjectData project : projects){
+            if (project.hasUserEditRight(data)){
+                projectIds.add(project.getId());
+            }
+        }
         filter.getOwnProjectIds().clear();
         filter.getOwnProjectIds().addAll(projectIds);
         switch (projectIds.size()){
@@ -47,7 +55,7 @@ public class CodefUserController extends UserController {
                 break;
 
         }
-        filter.initWatchedUsers();
+        filter.initWatchedCompanies();
     }
 
     @Override

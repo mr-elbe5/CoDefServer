@@ -54,7 +54,7 @@ public class UnitController extends ContentController {
     public IResponse showDefectPlan(RequestData rdata) {
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
-        if (!data.hasUserReadRight(rdata)) {
+        if (!data.hasUserReadRight(rdata.getLoginUser())) {
             String token = rdata.getAttributes().getString("token");
             checkRights(Token.matchToken(id, token));
         }
@@ -93,13 +93,13 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         Log.info("loading unit defect plan");
         int scalePercent = rdata.getAttributes().getInt("scale", 100);
-        boolean isEditor = user.hasContentEditRight();
+        boolean isEditor = user.hasGlobalContentEditRight();
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
         ViewFilter filter = new ViewFilter();
         filter.setEditor(isEditor);
         filter.setCurrentUserId(user.getId());
-        if (!data.hasUserReadRight(filter)) {
+        if (!data.hasUserReadRight(rdata.getLoginUser())) {
             Log.error("plan is null");
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         }

@@ -10,6 +10,7 @@ package de.elbe5.company;
 
 import de.elbe5.base.Log;
 import de.elbe5.database.DbBean;
+import de.elbe5.project.ProjectData;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -151,6 +152,29 @@ public class CompanyBean extends DbBean {
         } finally {
             closeStatement(pst);
             closeConnection(con);
+        }
+    }
+
+    private static final String DELETE_PROJECTCOMPANIES_SQL = "DELETE FROM t_company2content WHERE content_id=?";
+    private static final String INSERT_PROJECTCOMPANIES_SQL = "INSERT INTO t_company2content (content_id,company_id) VALUES(?,?)";
+
+    protected void writeProjectCompanies(Connection con, ProjectData data) throws SQLException {
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(DELETE_PROJECTCOMPANIES_SQL);
+            pst.setInt(1, data.getId());
+            pst.execute();
+            if (data.getCompanyIds() != null) {
+                pst.close();
+                pst = con.prepareStatement(INSERT_PROJECTCOMPANIES_SQL);
+                pst.setInt(1, data.getId());
+                for (int companyId : data.getCompanyIds()) {
+                    pst.setInt(2, companyId);
+                    pst.executeUpdate();
+                }
+            }
+        } finally {
+            closeStatement(pst);
         }
     }
 

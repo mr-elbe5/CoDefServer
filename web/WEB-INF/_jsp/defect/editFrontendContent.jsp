@@ -29,7 +29,7 @@
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveFrontendContent/" + defect.getId();
-    if (defect.hasUserEditRight(rdata)){
+    if (defect.hasUserEditRight(rdata.getLoginUser())){
 %>
 <form:message/>
 <section class="contentTop">

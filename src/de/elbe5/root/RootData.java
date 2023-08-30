@@ -58,7 +58,7 @@ public class RootData extends ContentData {
     public JsonObject getAllDataJson(RequestData rdata) {
         List<ProjectData> projects = new ArrayList<>();
         for (ProjectData project : ContentCache.getContents(ProjectData.class)){
-            if (project != null && project.isActive() && project.hasUserReadRight(rdata))
+            if (project != null && project.isActive() && project.hasUserReadRight(rdata.getLoginUser()))
                 projects.add(project);
         }
         List<CompanyData> companies = CompanyCache.getInstance().getAllCompanies();

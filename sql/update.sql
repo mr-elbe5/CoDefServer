@@ -149,3 +149,28 @@ alter table t_defect drop column project_id;
 alter table t_unit drop constraint t_unit_fk2;
 alter table t_unit drop column project_id;
 alter table t_defect drop column status;
+
+insert into t_content_right (content_id,group_id,value) select id, group_id, 'EDIT' from t_project;
+update t_content set access_type = 'INDIVIDUAL' where type = 'de.elbe5.project.ProjectData';
+update t_content set access_type = 'INHERIT' where type = 'de.elbe5.unit.UnitData';
+update t_content set access_type = 'INHERIT' where type = 'de.elbe5.defect.DefectData';
+update t_content set access_type = 'INHERIT' where type = 'de.elbe5.defectstatus.DefectStatusData';
+
+update t_content set nav_type = 'NONE' where nav_type = '';
+
+alter table t_company2project drop constraint t_company2project_fk2;
+alter table t_company2project drop constraint t_company2project_fk1;
+alter table t_company2project drop constraint t_company2project_pk;
+alter table t_company2project rename to t_company2content;
+alter table t_company2content rename column project_id to content_id;
+alter table t_company2content add CONSTRAINT t_company2content_pk PRIMARY KEY (company_id, content_id);
+alter table t_company2content add CONSTRAINT t_company2content_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE;
+alter table t_company2content add CONSTRAINT t_company2content_fk2 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE;
+
+drop table t_project;
+
+delete from t_system_right where name = 'CONTENTEDIT';
+update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATION';
+
+delete from t_system_right where name = 'CONTENTEDIT';
+update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATION';

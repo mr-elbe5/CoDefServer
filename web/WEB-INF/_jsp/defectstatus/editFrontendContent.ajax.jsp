@@ -16,10 +16,18 @@
 <%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.defect.DefectStatus" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="de.elbe5.defect.DefectData" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
     DefectStatusData contentData = ContentData.getSessionContent(rdata, DefectStatusData.class);
+    DefectData defect = contentData.getParent(DefectData.class);
+    assert (defect != null);
+    ProjectData project = defect.getProject();
+    assert (project != null);
     String url = "/ctrl/defectstatus/saveFrontendContent/" + contentData.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
@@ -36,6 +44,15 @@
                 <form:formerror/>
                 <form:line label="_defect" padded="true"><%=$H(contentData.getDescription())%></form:line>
                 <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:select name="assigned" label="_assignTo" required="true">
+                    <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
+                    </option>
+                    <% for (int companyId : project.getCompanyIds()) {
+                        CompanyData company = CompanyCache.getCompany(companyId);%>
+                    <option value="<%=companyId%>" <%=defect.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
+                    </option>
+                    <%}%>
+                </form:select>
                 <form:select name="status" label="_status">
                     <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
                     <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>

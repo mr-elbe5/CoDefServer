@@ -26,7 +26,7 @@
     ViewFilter filter = ViewFilter.getFilter(rdata);
     List<DefectData> defects = filter.getProjectDefects(project.getId());
 %>
-<% if (project.hasUserReadRight(rdata)){%>
+<% if (project.hasUserReadRight(rdata.getLoginUser())){%>
 <form:message/>
 <section class="contentSection tableContent" id="content">
     <h3><%=$SH("_defects")%></h3>
@@ -90,7 +90,7 @@
             }%>
         </tbody>
     </table>
-    <% if (project.hasUserEditRight(rdata)){%>
+    <% if (project.hasUserEditRight(rdata.getLoginUser())){%>
     <div class=buttonLine>
         <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>

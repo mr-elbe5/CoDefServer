@@ -19,6 +19,7 @@ import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.RequestData;
 
+import de.elbe5.user.UserData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
@@ -118,20 +119,6 @@ public class UnitData extends ContentData {
 
     public List<Class<? extends FileData>> getFileClasses(){
         return UnitData.fileClasses;
-    }
-
-    @Override
-    public boolean hasUserReadRight(RequestData rdata) {
-        return ViewFilter.getFilter(rdata).hasProjectReadRight(getProject().getId());
-    }
-
-    public boolean hasUserReadRight(ViewFilter filter) {
-        return filter.hasProjectReadRight(getProject().getId());
-    }
-
-    @Override
-    public boolean hasUserEditRight(RequestData rdata) {
-        return rdata.hasContentEditRight();
     }
 
     // multiple data

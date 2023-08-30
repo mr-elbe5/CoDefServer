@@ -33,7 +33,7 @@
     </h1>
 </section>
 <section class="contentSection tableContent" id="content">
-    <% if (unit.hasUserEditRight(rdata)){%>
+    <% if (unit.hasUserEditRight(rdata.getLoginUser())){%>
     <div class = contentTop>
         <a class="btn btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>"><%=$SH("_createDefect")%>
         </a>
