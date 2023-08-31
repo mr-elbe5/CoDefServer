@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS t_user
 (
     id                 INTEGER      NOT NULL,
     change_date        TIMESTAMP    NOT NULL DEFAULT now(),
-    title              VARCHAR(30)  NOT NULL DEFAULT '',
     first_name         VARCHAR(100) NOT NULL DEFAULT '',
     last_name          VARCHAR(100) NOT NULL,
     street             VARCHAR(100) NOT NULL DEFAULT '',
@@ -23,11 +22,8 @@ CREATE TABLE IF NOT EXISTS t_user
     country            VARCHAR(50)  NOT NULL DEFAULT '',
     email              VARCHAR(100) NOT NULL DEFAULT '',
     phone              VARCHAR(50)  NOT NULL DEFAULT '',
-    fax                VARCHAR(50)  NOT NULL DEFAULT '',
     mobile             VARCHAR(50)  NOT NULL DEFAULT '',
     notes              VARCHAR(500) NOT NULL DEFAULT '',
-    portrait_name      VARCHAR(255) NOT NULL DEFAULT '',
-    portrait           BYTEA        NULL,
     login              VARCHAR(30)  NOT NULL,
     pwd                VARCHAR(100) NOT NULL,
     token              VARCHAR(100) NOT NULL DEFAULT '',
@@ -84,23 +80,18 @@ CREATE TABLE IF NOT EXISTS t_content
     description   VARCHAR(2000) NOT NULL DEFAULT '',
     creator_id    INTEGER       NOT NULL DEFAULT 1,
     changer_id    INTEGER       NOT NULL DEFAULT 1,
-    access_type   VARCHAR(10)   NOT NULL DEFAULT 'OPEN',
+    open_access   BOOLEAN       NOT NULL DEFAULT true,
+    reader_group_id INTEGER     NULL,
+    editor_group_id INTEGER     NULL,
     nav_type      VARCHAR(10)   NOT NULL DEFAULT 'NONE',
     active        BOOLEAN       NOT NULL DEFAULT TRUE,
     CONSTRAINT t_content_pk PRIMARY KEY (id),
     CONSTRAINT t_content_fk1 FOREIGN KEY (parent_id) REFERENCES t_content (id) ON DELETE CASCADE,
     CONSTRAINT t_content_fk2 FOREIGN KEY (creator_id) REFERENCES t_user (id) ON DELETE SET DEFAULT,
     CONSTRAINT t_content_fk3 FOREIGN KEY (changer_id) REFERENCES t_user (id) ON DELETE SET DEFAULT,
+    CONSTRAINT t_content_fk4 FOREIGN KEY (reader_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT,
+    CONSTRAINT t_content_fk5 FOREIGN KEY (editor_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT,
     CONSTRAINT t_content_un1 UNIQUE (id, parent_id, name)
-);
-
-CREATE TABLE IF NOT EXISTS t_link
-(
-    id            INTEGER       NOT NULL,
-    link_url      VARCHAR(500)  NOT NULL DEFAULT '',
-    link_icon     VARCHAR(255)  NOT NULL DEFAULT '',
-    CONSTRAINT t_link_pk PRIMARY KEY (id),
-    CONSTRAINT t_link_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE IF NOT EXISTS s_file_id START 1000;
@@ -139,16 +130,6 @@ CREATE OR REPLACE VIEW v_preview_file as (
                                          where t_file.id=t_image.id
                                              );
 
-CREATE TABLE IF NOT EXISTS t_content_right
-(
-    content_id INTEGER     NOT NULL,
-    group_id   INTEGER     NOT NULL,
-    value      VARCHAR(20) NOT NULL,
-    CONSTRAINT t_content_right_pk PRIMARY KEY (content_id, group_id),
-    CONSTRAINT t_content_right_fk1 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_content_right_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id) ON DELETE CASCADE
-);
-
 CREATE SEQUENCE IF NOT EXISTS s_company_id START 1000;
 
 CREATE TABLE IF NOT EXISTS t_company
@@ -170,10 +151,8 @@ CREATE TABLE IF NOT EXISTS t_company
 CREATE TABLE IF NOT EXISTS t_project
 (
     id INTEGER NOT NULL,
-    group_id   INTEGER NOT NULL,
     CONSTRAINT t_project_pk PRIMARY KEY (id),
-    CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_project_fk2 FOREIGN KEY (group_id) REFERENCES t_group (id)
+    CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_company2content
@@ -232,6 +211,9 @@ INSERT INTO t_timer_task (name,display_name,execution_interval,minute,active)
 VALUES ('heartbeat','Heartbeat Task','CONTINOUS',5,FALSE);
 INSERT INTO t_timer_task (name,display_name,execution_interval,minute,active)
 VALUES ('cleanup','Cleanup Task','CONTINOUS',5,FALSE);
+
+INSERT INTO t_content (id,type,parent_id,ranking,name,display_name,description,creator_id,changer_id,open_access,nav_type)
+VALUES (1,'de.elbe5.root.RootData',null,0,'home','dashboard','Übersicht',1,1,true,'NONE');
 
 --- set pwd 'pass' dependent on salt V3xfgDrxdl8=
 -- root user

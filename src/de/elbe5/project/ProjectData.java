@@ -99,6 +99,9 @@ public class ProjectData extends ContentData {
         setDisplayName(rdata.getAttributes().getString("displayName").trim());
         setName(StringHelper.toSafeWebName(getDisplayName()));
         setDescription(rdata.getAttributes().getString("description"));
+        setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
+        setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
+        setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
         setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         setActive(rdata.getAttributes().getBoolean("active"));
         setNavType(ContentNavType.HEADER);

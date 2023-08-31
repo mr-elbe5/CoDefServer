@@ -9,15 +9,21 @@
 package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
 import de.elbe5.application.ViewFilter;
+import de.elbe5.content.ContentBean;
+import de.elbe5.content.ContentData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;
 import de.elbe5.file.ImageData;
+import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestKeys;
+import de.elbe5.response.CloseDialogResponse;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
@@ -50,6 +56,35 @@ public class UnitController extends ContentController {
     @Override
     public String getKey() {
         return KEY;
+    }
+
+    @Override
+    public IResponse saveBackendContent(RequestData rdata) {
+        assertLoggedInSessionCall(rdata);
+        assertRights(GlobalRight.hasGlobalContentEditRight(rdata.getLoginUser()));
+        int contentId = rdata.getId();
+        UnitData data = ContentData.getSessionContent(rdata, UnitData.class);
+        if (data.isNew())
+            data.readBackendCreateRequestData(rdata);
+        else
+            data.readBackendUpdateRequestData(rdata);
+        if (!rdata.checkFormErrors()) {
+            return showEditBackendContent(data);
+        }
+        data.setChangerId(rdata.getUserId());
+        if (!ContentBean.getInstance().saveContent(data)) {
+            setSaveError(rdata);
+            return showEditBackendContent(data);
+        }
+        ImageData plan = data.readPlanFile(rdata);
+        if (plan != null){
+            ImageBean.getInstance().saveFile(plan, true);
+        }
+        data.setNew(false);
+        rdata.removeSessionObject(ContentRequestKeys.KEY_CONTENT);
+        ContentCache.setDirty();
+        rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        return new CloseDialogResponse("/ctrl/admin/openContentAdministration?contentId=" + data.getId());
     }
 
     public IResponse showDefectPlan(RequestData rdata) {

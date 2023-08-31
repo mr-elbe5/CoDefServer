@@ -132,16 +132,21 @@ public class UnitData extends ContentData {
         setApproveDate(rdata.getAttributes().getDate("approveDate"));
         setNavType(ContentNavType.HEADER);
         setActive(rdata.getAttributes().getBoolean("active"));
+        if (getDisplayName().isEmpty()) {
+            rdata.addIncompleteField("displayName");
+        }
+    }
+
+    public ImageData readPlanFile(RequestData rdata){
         BinaryFile file = rdata.getAttributes().getFile("file");
         if (file != null){
             ImageData plan = new ImageData();
             plan.setCreateValues(this,rdata);
             plan.createFromBinaryFile(file, STD_PLAN_SIZE, STD_PLAN_SIZE, MAX_PLAN_PREVIEW_WIDTH, MAX_PLAN_PREVIEW_HEIGHT, false);
             plan.setDisplayName(LocalizedStrings.string("_plan"));
+            return plan;
         }
-        if (getDisplayName().isEmpty()) {
-            rdata.addIncompleteField("displayName");
-        }
+        return null;
     }
 
     @Override
