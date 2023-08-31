@@ -43,7 +43,7 @@
         <form:line label="_id" padded="true"><%=Integer.toString(defect.getDisplayId())%></form:line>
         <form:line label="_description" padded="true"><%=$HML(defect.getDescription())%></form:line>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$DT(defect.getChangeDate())%>)</form:line>
-        <form:select name="assigned" label="_assigned" required="true">
+        <form:select name="assignedId" label="_assigned" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>
             <option value="<%=company.getId()%>" <%=defect.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>

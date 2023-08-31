@@ -31,6 +31,25 @@ CREATE TABLE IF NOT EXISTS t_company
 insert into t_company(id, name, street, zipCode, city, email, notes)
 select id, concat(first_name, ' ', last_name) as name, street, zipCode, city, email, notes from t_user where id > 999;
 
+ALTER TABLE t_content add open_access BOOLEAN NOT NULL DEFAULT true;
+UPDATE t_content set open_access = true;
+
+ALTER TABLE t_content add reader_group_id INTEGER NULL;
+ALTER TABLE t_content add editor_group_id INTEGER NULL;
+ALTER TABLE t_content add  CONSTRAINT t_content_fk4 FOREIGN KEY (reader_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT;
+ALTER TABLE t_content add  CONSTRAINT t_content_fk5 FOREIGN KEY (editor_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT;
+
+UPDATE t_content t1 set reader_group_id = (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'READ')
+where exists (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'READ');
+
+UPDATE t_content t1 set editor_group_id = (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'EDIT')
+where exists (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'EDIT');
+
+UPDATE t_content t1 set editor_group_id = (select group_id from t_project t2 where t1.id = t2.id and t2.group_id <> 0 )
+where exists (select group_id from t_project t2 where t1.id = t2.id and t2.group_id <> 0);
+
+alter table t_project drop column group_id;
+
 alter table t_location rename to t_unit;
 alter table t_unit rename constraint t_location_pk to t_unit_pk;
 alter table t_unit rename constraint t_location_fk1 to t_unit_fk1;
@@ -43,10 +62,11 @@ drop sequence s_defect_comment_id;
 CREATE TABLE IF NOT EXISTS t_defect_status
 (
     id            INTEGER       NOT NULL,
-    comment       VARCHAR(2000) NOT NULL DEFAULT '',
-    status         VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
+    assigned_id   INTEGER       NULL,
+    status        VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
     CONSTRAINT t_defect_status_pk PRIMARY KEY (id),
-    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
+    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_status_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id) ON DELETE SET DEFAULT
 );
 
 alter table t_defect_comment add content_id INTEGER;
@@ -79,7 +99,8 @@ insert into t_content (
     display_name,
     description,
     creator_id,
-    changer_id
+    changer_id,
+    open_access
 ) select
       content_id,
       'de.elbe5.defectstatus.DefectStatusData',
@@ -90,10 +111,13 @@ insert into t_content (
       'status' || content_id,
       comment,
       creator_id,
-      creator_id from t_defect_comment;
+      creator_id,
+      true from t_defect_comment;
 
-insert into t_defect_status (id,comment,status)
-select content_id, comment, state from t_defect_comment;
+insert into t_defect_status (id,assigned_id,status)
+select t1.content_id, t2.assigned_id, t1.state from t_defect_comment t1, t_defect t2 where t1.defect_id = t2.id;
+
+ALTER TABLE t_defect_status alter column assigned_id set not null;
 
 alter table t_defect_comment_document add content_id INTEGER;
 alter table t_defect_comment_image add content_id INTEGER;
@@ -113,11 +137,7 @@ UPDATE t_content set type = 'de.elbe5.project.ProjectData' where type = 'Project
 UPDATE t_content set type = 'de.elbe5.unit.UnitData' where type = 'LocationData';
 UPDATE t_content set type = 'de.elbe5.defect.DefectData' where type = 'DefectData';
 
-UPDATE t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type = 'de.elbe5.defectstatus.StatusChangeData';
-
-UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'ImageData';
-UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DocumentData';
-UPDATE t_file set type = 'de.elbe5.unit.PlanImageData' where type = 'PlanImageData';
+UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'PlanImageData';
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectImageData';
 UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'DefectCommentImageData';
 UPDATE t_file set type = 'de.elbe5.file.DocumentData' where type = 'DefectDocumentData';
@@ -132,12 +152,11 @@ CREATE TABLE IF NOT EXISTS t_company2project
     CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
 
-insert into t_company2project(company_id, project_id) select t1.user_id, t2.id from t_user2group t1, t_project t2 where t1.group_id = t2.group_id;
+insert into t_company2project(company_id, project_id) select t1.user_id, t2.id from t_user2group t1, t_project t2 where t1.group_id = t2.id;
 
 alter table t_defect rename column state to status;
 
-update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
-
+alter table t_defect drop constraint t_defect_fk5;
 alter table t_defect drop constraint t_defect_fk4;
 alter table t_defect drop constraint t_defect_fk3;
 alter table t_defect drop constraint t_defect_fk2;
@@ -146,51 +165,19 @@ alter table t_defect drop column plan_id;
 alter table t_defect drop column unit_id;
 alter table t_defect drop column project_id;
 
+ALTER table t_defect add CONSTRAINT t_defect_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id);
+
 alter table t_unit drop constraint t_unit_fk2;
 alter table t_unit drop column project_id;
 alter table t_defect drop column status;
 
-insert into t_content_right (content_id,group_id,value) select id, group_id, 'EDIT' from t_project;
-update t_content set access_type = 'INDIVIDUAL' where type = 'de.elbe5.project.ProjectData';
-update t_content set access_type = 'INHERIT' where type = 'de.elbe5.unit.UnitData';
-update t_content set access_type = 'INHERIT' where type = 'de.elbe5.defect.DefectData';
-update t_content set access_type = 'INHERIT' where type = 'de.elbe5.defectstatus.DefectStatusData';
-
 update t_content set nav_type = 'NONE' where nav_type = '';
 
-alter table t_company2project drop constraint t_company2project_fk2;
-alter table t_company2project drop constraint t_company2project_fk1;
-alter table t_company2project drop constraint t_company2project_pk;
-alter table t_company2project rename to t_company2content;
-alter table t_company2content rename column project_id to content_id;
-alter table t_company2content add CONSTRAINT t_company2content_pk PRIMARY KEY (company_id, content_id);
-alter table t_company2content add CONSTRAINT t_company2content_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE;
-alter table t_company2content add CONSTRAINT t_company2content_fk2 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE;
-
-drop table t_project;
-
 delete from t_system_right where name = 'CONTENTEDIT';
 update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATION';
-
-delete from t_system_right where name = 'CONTENTEDIT';
-update t_system_right set name = 'CONTENTEDIT' where name = 'CONTENTADMINISTRATION';
-
-UPDATE t_file set type = 'de.elbe5.file.ImageData' where type = 'de.elbe5.unit.PlanImageData';
-
-ALTER TABLE t_content add open_access BOOLEAN NOT NULL DEFAULT true;
-UPDATE t_content set open_access = false where access_type <> 'OPEN';
-
-ALTER TABLE t_content add reader_group_id INTEGER NULL;
-ALTER TABLE t_content add editor_group_id INTEGER NULL;
-ALTER TABLE t_content add  CONSTRAINT t_content_fk4 FOREIGN KEY (reader_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT;
-ALTER TABLE t_content add  CONSTRAINT t_content_fk5 FOREIGN KEY (editor_group_id) REFERENCES t_group (id) ON DELETE SET DEFAULT;
-
-UPDATE t_content t1 set reader_group_id = (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'READ')
-where exists (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'READ');
-UPDATE t_content t1 set editor_group_id = (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'EDIT')
-where exists (select group_id from t_content_right t2 where t1.id = t2.content_id and t2.value = 'EDIT');
 
 drop table t_content_right;
 ALTER TABLE t_content DROP COLUMN access_type;
-
 delete from t_system_right where name = 'CONTENTAPPROVE';
+
+update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;

@@ -190,8 +190,7 @@ CREATE TABLE IF NOT EXISTS t_unit
     id                 INTEGER      NOT NULL,
     approve_date       TIMESTAMP    NULL,
     CONSTRAINT t_unit_pk PRIMARY KEY (id),
-    CONSTRAINT t_unit_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_unit_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
+    CONSTRAINT t_unit_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE IF NOT EXISTS s_defect_id START 1000;
@@ -200,7 +199,6 @@ CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
     display_id       INTEGER       NOT NULL,
-    assigned_id      INTEGER       NOT NULL,
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     lot              VARCHAR(255)  NOT NULL DEFAULT '',
     status           VARCHAR(20)   NOT NULL,
@@ -212,17 +210,17 @@ CREATE TABLE IF NOT EXISTS t_defect
     due_date2        TIMESTAMP     NULL,
     close_date       TIMESTAMP     NULL,
     CONSTRAINT t_defect_pk PRIMARY KEY (id),
-    CONSTRAINT t_defect_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_defect_fk5 FOREIGN KEY (assigned_id) REFERENCES t_user (id)
+    CONSTRAINT t_defect_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_defect_status
 (
     id            INTEGER       NOT NULL,
-    comment       VARCHAR(2000) NOT NULL DEFAULT '',
+    assigned_id   INTEGER       NOT NULL,
     status        VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
     CONSTRAINT t_defect_status_pk PRIMARY KEY (id),
-    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
+    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_status_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id)
 );
 
 -- root user

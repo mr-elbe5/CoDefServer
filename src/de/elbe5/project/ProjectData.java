@@ -14,6 +14,7 @@ import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentNavType;
+import de.elbe5.unit.UnitBean;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -47,7 +48,7 @@ public class ProjectData extends ContentData {
     }
 
     public ContentBean getBean() {
-        return null;
+        return ProjectBean.getInstance();
     }
 
     public Set<Integer> getCompanyIds() {

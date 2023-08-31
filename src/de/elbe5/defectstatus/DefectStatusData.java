@@ -21,6 +21,7 @@ import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
+import de.elbe5.user.UserData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -36,6 +37,7 @@ public class DefectStatusData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
+    protected int assignedId = 0;
     protected DefectStatus status = DefectStatus.OPEN;
 
     public ContentBean getBean() {
@@ -49,6 +51,23 @@ public class DefectStatusData extends ContentData {
             return defect.getDisplayName() + "-" + LocalizedStrings.string("_statusChange") + idx;
         }
         return LocalizedStrings.string("_statusChange");
+    }
+
+    public int getAssignedId() {
+        return assignedId;
+    }
+
+    public void setAssignedId(int assignedId) {
+        this.assignedId = assignedId;
+    }
+
+    public String getAssignedName() {
+        if (assignedId==0)
+            return "";
+        UserData data= UserCache.getUser(assignedId);
+        if (data!=null)
+            return data.getName();
+        return "";
     }
 
     public DefectStatus getStatus() {
@@ -105,15 +124,20 @@ public class DefectStatusData extends ContentData {
         setNavType(ContentNavType.NONE);
         setActive(rdata.getAttributes().getBoolean("active"));
         setDescription(rdata.getAttributes().getString("description"));
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setStatus(rdata.getAttributes().getString("status"));
         if (getDescription().isEmpty()) {
             rdata.addIncompleteField("description");
+        }
+        if (getAssignedId()==0) {
+            rdata.addIncompleteField("assigned");
         }
     }
 
     public void readFrontendRequestData(RequestData rdata) {
         Log.log("DefectStatusData.readFrontendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setOpenAccess(true);
         setNavType(ContentNavType.NONE);
         setActive(true);
@@ -129,6 +153,7 @@ public class DefectStatusData extends ContentData {
         setStatus(rdata.getAttributes().getString("status"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
         setDescription(rdata.getAttributes().getString("description"));
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
     }
 
     @Override

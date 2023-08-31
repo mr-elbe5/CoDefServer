@@ -50,7 +50,7 @@
                 </form:line>
                 <form:line label="_name"><%=$H(contentData.getDisplayName())%>
                 </form:line>
-                <form:select name="assigned" label="_assignTo" required="true">
+                <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
                     </option>
                     <% for (int companyId : project.getCompanyIds()) {

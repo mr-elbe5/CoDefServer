@@ -316,7 +316,7 @@ public class DefectData extends ContentData {
             rdata.addIncompleteField("description");
         }
         if (getAssignedId()==0) {
-            rdata.addIncompleteField("assigned");
+            rdata.addIncompleteField("assignedId");
         }
         if (getDueDate()==null) {
             rdata.addIncompleteField("dueDate1");
@@ -335,7 +335,7 @@ public class DefectData extends ContentData {
 
     public void readFrontendRequestData(RequestData rdata) {
         Log.log("DefectData.readFrontendRequestData");
-        setAssignedId(rdata.getAttributes().getInt("assigned"));
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
         setLot(rdata.getAttributes().getString("lot"));
         setCosts(rdata.getAttributes().getInt("costs"));

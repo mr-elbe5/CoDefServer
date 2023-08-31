@@ -26,8 +26,7 @@ public class DefectStatusBean extends ContentBean {
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status " +
-            "FROM t_defect_status  WHERE id=?";
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status, assigned_id FROM t_defect_status  WHERE id=?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -40,7 +39,8 @@ public class DefectStatusBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     int i=1;
-                    data.setStatus(rs.getString(i));
+                    data.setStatus(rs.getString(i++));
+                    data.setAssignedId(rs.getInt(i));
                 }
             }
         } finally {
@@ -48,9 +48,7 @@ public class DefectStatusBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (" +
-            "status,id) " +
-            "values(?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (status,assigned_id,id) values(?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -61,6 +59,7 @@ public class DefectStatusBean extends ContentBean {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
             pst.setString(i++, data.getStatusString());
+            pst.setInt(i++, data.getAssignedId());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -73,7 +72,7 @@ public class DefectStatusBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status " +
-            "set status=? where id=? ";
+            "set status=?,assigned_id=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -84,6 +83,7 @@ public class DefectStatusBean extends ContentBean {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
             pst.setString(i++, data.getStatusString());
+            pst.setInt(i++, data.getAssignedId());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

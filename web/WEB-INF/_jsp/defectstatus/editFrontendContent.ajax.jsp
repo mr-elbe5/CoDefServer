@@ -44,7 +44,7 @@
                 <form:formerror/>
                 <form:line label="_defect" padded="true"><%=$H(contentData.getDescription())%></form:line>
                 <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(contentData.getDescription())%></form:textarea>
-                <form:select name="assigned" label="_assignTo" required="true">
+                <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
                     </option>
                     <% for (int companyId : project.getCompanyIds()) {
