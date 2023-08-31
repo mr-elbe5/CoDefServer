@@ -21,7 +21,7 @@ import de.elbe5.request.RequestData;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
-import de.elbe5.rights.GlobalRights;
+import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
@@ -95,7 +95,7 @@ public class UnitController extends ContentController {
         Log.info("loading unit defect plan");
         int scalePercent = rdata.getAttributes().getInt("scale", 100);
         //todo
-        boolean isEditor = GlobalRights.hasGlobalContentEditRight(user);
+        boolean isEditor = GlobalRight.hasGlobalContentEditRight(user);
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
         ViewFilter filter = new ViewFilter();

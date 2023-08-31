@@ -14,7 +14,7 @@ import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.ForwardResponse;
 import de.elbe5.response.IResponse;
-import de.elbe5.rights.GlobalRights;
+import de.elbe5.rights.GlobalRight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class CodefUserController extends UserController {
     protected void initWebUser(UserData data, RequestData rdata){
         ViewFilter filter = ViewFilter.getFilter(rdata);
         //todo
-        boolean isEditor = GlobalRights.hasGlobalContentEditRight(data);
+        boolean isEditor = GlobalRight.hasGlobalContentEditRight(data);
         filter.setEditor(isEditor);
         filter.setCurrentUserId(data.getId());
         Map<String,String> cookieValues = rdata.readLoginCookies();

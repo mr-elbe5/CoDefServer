@@ -12,7 +12,6 @@ import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
-import de.elbe5.content.ContentAccessType;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentBean;
@@ -102,7 +101,7 @@ public class DefectStatusData extends ContentData {
     public void readBackendRequestData(RequestData rdata) {
         Log.log("DefectStatusData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
-        setAccessType(ContentAccessType.OPEN);
+        setOpenAccess(true);
         setNavType(ContentNavType.NONE);
         setActive(rdata.getAttributes().getBoolean("active"));
         setDescription(rdata.getAttributes().getString("description"));
@@ -115,7 +114,7 @@ public class DefectStatusData extends ContentData {
     public void readFrontendRequestData(RequestData rdata) {
         Log.log("DefectStatusData.readFrontendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
-        setAccessType(ContentAccessType.OPEN);
+        setOpenAccess(true);
         setNavType(ContentNavType.NONE);
         setActive(true);
         setStatus(rdata.getAttributes().getString("status"));

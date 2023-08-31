@@ -12,7 +12,7 @@ import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.BaseData;
 import de.elbe5.request.*;
 import de.elbe5.response.StatusResponse;
-import de.elbe5.rights.GlobalRights;
+import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.Controller;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.response.CloseDialogResponse;
@@ -47,7 +47,7 @@ public class CompanyController extends Controller {
 
     public IResponse openEditCompany(RequestData rdata) {
         assertSessionCall(rdata);
-        assertRights(GlobalRights.hasGlobalUserEditRight(rdata.getLoginUser()));
+        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         int companyId = rdata.getId();
         CompanyData data = CompanyBean.getInstance().getCompany(companyId);
         rdata.setSessionObject("companyData", data);
@@ -56,7 +56,7 @@ public class CompanyController extends Controller {
 
     public IResponse openCreateCompany(RequestData rdata) {
         assertSessionCall(rdata);
-        assertRights(GlobalRights.hasGlobalUserEditRight(rdata.getLoginUser()));
+        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         CompanyData data = new CompanyData();
         data.setNew(true);
         data.setId(CompanyBean.getInstance().getNextId());
@@ -66,7 +66,7 @@ public class CompanyController extends Controller {
 
     public IResponse saveCompany(RequestData rdata) {
         assertSessionCall(rdata);
-        assertRights(GlobalRights.hasGlobalUserEditRight(rdata.getLoginUser()));
+        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         CompanyData data = (CompanyData) rdata.getSessionObject("companyData");
         if (data==null){
             return new StatusResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -83,7 +83,7 @@ public class CompanyController extends Controller {
 
     public IResponse deleteCompany(RequestData rdata) {
         assertSessionCall(rdata);
-        assertRights(GlobalRights.hasGlobalUserEditRight(rdata.getLoginUser()));
+        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         int id = rdata.getId();
         if (id < BaseData.ID_MIN) {
             rdata.setMessage(LocalizedStrings.string("_notDeletable"), RequestKeys.MESSAGE_TYPE_ERROR);

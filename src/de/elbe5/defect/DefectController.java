@@ -21,8 +21,6 @@ import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
 import de.elbe5.response.*;
-import de.elbe5.rights.Right;
-import de.elbe5.rights.GlobalRights;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;

@@ -13,11 +13,12 @@
 <%@ page import="de.elbe5.user.UserData" %>
 <%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.file.FileData" %>
-<%@ page import="de.elbe5.rights.GlobalRights" %>
+<%@ page import="de.elbe5.rights.GlobalRight" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.rights.GlobalRight" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -146,7 +147,7 @@
     <%
     }
     if (!defect.isClosed()){
-        if (rdata.hasSystemRight(GlobalRights.CONTENTADMINISTRATION)) {%>
+        if (defect.hasUserEditRight(rdata.getLoginUser())) {%>
     <div class=buttonLine>
         <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_edit")%>
         </button>

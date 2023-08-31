@@ -14,6 +14,7 @@ import de.elbe5.base.Log;
 import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatus.DefectStatusController;
 import de.elbe5.filter.FilterController;
+import de.elbe5.group.GroupCache;
 import de.elbe5.project.ProjectController;
 import de.elbe5.root.RootController;
 import de.elbe5.unit.UnitController;
@@ -72,6 +73,7 @@ public class CodefInitServlet extends InitServlet {
         CompanyCache.load();
         ContentCache.load();
         UserCache.load();
+        GroupCache.load();
         if (!FileBean.getInstance().assertFileDirectory()){
             Log.error("could not create file directory");
         }

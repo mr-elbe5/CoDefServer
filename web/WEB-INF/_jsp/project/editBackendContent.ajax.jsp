@@ -15,14 +15,17 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.company.CompanyBean" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.group.GroupData" %>
+<%@ page import="de.elbe5.group.GroupCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-
     ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
     List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
-    String url = "/ctrl/project/saveBackendContent/" + contentData.getId();%>
+    String url = "/ctrl/project/saveBackendContent/" + contentData.getId();
+    List<GroupData> groups = GroupCache.getAllGroups();
+%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -43,9 +46,23 @@
                 </form:line>
                 <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
-
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:line label="_openAccess" padded="true">
+                    <form:check name="openAccess" value="true" checked="<%=contentData.isOpenAccess()%>"/>
+                </form:line>
+                <form:select name="readerGroupId" label="_readerGroup">
+                    <option value="0"  <%=contentData.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
+                    <% for (GroupData group : groups){%>
+                    <option value="<%=group.getId()%>" <%=contentData.getReaderGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
+                    <%}%>
+                </form:select>
+                <form:select name="editorGroupId" label="_editorGroup">
+                    <option value="0"  <%=contentData.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
+                    <% for (GroupData group : groups){%>
+                    <option value="<%=group.getId()%>" <%=contentData.getEditorGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
+                    <%}%>
+                </form:select>
                 <form:line label="_companies" padded="true">
                     <% for (CompanyData company : companies){%>
                     <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
