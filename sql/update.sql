@@ -184,3 +184,8 @@ ALTER TABLE t_content DROP COLUMN access_type;
 delete from t_system_right where name = 'CONTENTAPPROVE';
 
 update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
+
+alter table t_defect alter column position_x type real;
+alter table t_defect alter column position_y type real;
+update t_defect set position_x = position_x/10000.0;
+update t_defect set position_y = position_y/10000.0;
