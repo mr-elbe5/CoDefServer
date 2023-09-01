@@ -12,15 +12,6 @@ import java.util.*;
 
 public class CompanyCache {
 
-    private static CompanyCache instance = null;
-
-    public static CompanyCache getInstance() {
-        if (instance == null) {
-            instance = new CompanyCache();
-        }
-        return instance;
-    }
-
     private static int version = 1;
     private static boolean dirty = true;
     private static final Object lockObj = new Object();
@@ -63,12 +54,12 @@ public class CompanyCache {
         return version;
     }
 
-    public List<CompanyData> getAllCompanies(){
+    public static List<CompanyData> getAllCompanies(){
         checkDirty();
         return companyList;
     }
 
-    public List<CompanyData> getCompanies(Set<Integer> ids){
+    public static List<CompanyData> getCompanies(Set<Integer> ids){
         checkDirty();
         List<CompanyData> list = new ArrayList<>();
         for (CompanyData company : companyList){

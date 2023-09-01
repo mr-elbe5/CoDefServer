@@ -27,7 +27,7 @@
     assert(unit !=null);
     ProjectData project= contentData.getProject();
     assert(project!=null);
-    List<CompanyData> companies = CompanyCache.getInstance().getCompanies(project.getCompanyIds());
+    List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
     String url = "/ctrl/defect/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -52,7 +52,7 @@
                 <form:line label="_name"><%=$H(contentData.getDisplayName())%>
                 </form:line>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
-                <form:select name="assignedId" label="_assigned" required="true">
+                <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=contentData.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
                     <% for (CompanyData company : companies){%>
                     <option value="<%=company.getId()%>" <%=contentData.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>

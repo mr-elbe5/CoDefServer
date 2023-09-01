@@ -11,7 +11,7 @@ package de.elbe5.file;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.defectstatus.DefectStatusData;
+import de.elbe5.defectstatuschange.DefectStatusChangeData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserCache;
@@ -87,7 +87,7 @@ public abstract class DefectFopBean extends PdfCreator {
             }
             if (includeComments) {
                 List<ImageData> files = new ArrayList<>();
-                for (DefectStatusData comment : defect.getStatusChanges()) {
+                for (DefectStatusChangeData comment : defect.getStatusChanges()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
                             .append(LocalizedStrings.xml("_description"))

@@ -1,8 +1,10 @@
 
 alter table t_content drop column language;
-
+drop view v_preview_file;
 ALTER TABLE t_content ALTER COLUMN type TYPE varchar(255);
 ALTER TABLE t_file ALTER COLUMN type TYPE varchar(255);
+ALTER TABLE t_file ALTER COLUMN file_name TYPE varchar(100);
+ALTER TABLE t_content ALTER COLUMN name TYPE varchar(100);
 
 UPDATE t_content set type = 'de.elbe5.content.ContentData' where type = 'ContentData';
 UPDATE t_file set type = 'de.elbe5.file.FileData' where type = 'FileData';
@@ -59,7 +61,7 @@ alter table t_defect rename location_id to unit_id;
 
 drop sequence s_defect_comment_id;
 
-CREATE TABLE IF NOT EXISTS t_defect_status
+CREATE TABLE IF NOT EXISTS t_defect_status_change
 (
     id            INTEGER       NOT NULL,
     assigned_id   INTEGER       NULL,
@@ -103,7 +105,7 @@ insert into t_content (
     open_access
 ) select
       content_id,
-      'de.elbe5.defectstatus.DefectStatusData',
+      'de.elbe5.defectstatuschange.DefectStatusChangeData',
       creation_date,
       creation_date,
       defect_id,
@@ -114,10 +116,10 @@ insert into t_content (
       creator_id,
       true from t_defect_comment;
 
-insert into t_defect_status (id,assigned_id,status)
+insert into t_defect_status_change (id,assigned_id,status)
 select t1.content_id, t2.assigned_id, t1.state from t_defect_comment t1, t_defect t2 where t1.defect_id = t2.id;
 
-ALTER TABLE t_defect_status alter column assigned_id set not null;
+ALTER TABLE t_defect_status_change alter column assigned_id set not null;
 
 alter table t_defect_comment_document add content_id INTEGER;
 alter table t_defect_comment_image add content_id INTEGER;
@@ -164,6 +166,7 @@ alter table t_defect drop constraint t_defect_fk2;
 alter table t_defect drop column plan_id;
 alter table t_defect drop column unit_id;
 alter table t_defect drop column project_id;
+alter table t_defect drop column status;
 
 ALTER table t_defect add CONSTRAINT t_defect_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id);
 

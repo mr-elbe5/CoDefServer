@@ -12,7 +12,7 @@ import de.elbe5.administration.AdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.defect.DefectController;
-import de.elbe5.defectstatus.DefectStatusController;
+import de.elbe5.defectstatuschange.DefectStatusChangeController;
 import de.elbe5.filter.FilterController;
 import de.elbe5.group.GroupCache;
 import de.elbe5.project.ProjectController;
@@ -51,12 +51,14 @@ public class CodefInitServlet extends InitServlet {
         Log.initLog(ApplicationPath.getAppName());
         if (!DbConnector.getInstance().initialize("jdbc/codef"))
             return;
-        Configuration.setAppTitle("CoDef");
+        Configuration.setAppTitle("CoDefTrack");
         Configuration.setLogContent(false);
         Configuration.setEmailMandatory(false);
 
         AdminController.register(new AdminController());
         ContentController.register(new ContentController());
+        DocumentController.register(new DocumentController());
+        FileController.register(new FileController());
         DocumentController.register(new DocumentController());
         ImageController.register(new ImageController());
         GroupController.register(new GroupController());
@@ -67,7 +69,7 @@ public class CodefInitServlet extends InitServlet {
         ProjectController.register(new ProjectController());
         UnitController.register(new UnitController());
         DefectController.register(new DefectController());
-        DefectStatusController.register(new DefectStatusController());
+        DefectStatusChangeController.register(new DefectStatusChangeController());
         FilterController.register(new FilterController());
 
         CompanyCache.load();
@@ -82,7 +84,7 @@ public class CodefInitServlet extends InitServlet {
         Log.log("load tasks");
         Timer.getInstance().loadTasks();
         Timer.getInstance().startThread();
-        Log.log("Codef initialized");
+        Log.log("CoDefTrack initialized");
         //generatePassword();
     }
 

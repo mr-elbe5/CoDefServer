@@ -6,7 +6,7 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.defectstatus;
+package de.elbe5.defectstatuschange;
 
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.JsonObject;
@@ -28,7 +28,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefectStatusData extends ContentData {
+public class DefectStatusChangeData extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -41,7 +41,7 @@ public class DefectStatusData extends ContentData {
     protected DefectStatus status = DefectStatus.OPEN;
 
     public ContentBean getBean() {
-        return DefectStatusBean.getInstance();
+        return DefectStatusChangeBean.getInstance();
     }
 
     @Override
@@ -101,16 +101,16 @@ public class DefectStatusData extends ContentData {
 
     @Override
     public List<Class<? extends ContentData>> getChildClasses(){
-        return DefectStatusData.childClasses;
+        return DefectStatusChangeData.childClasses;
     }
 
     public List<Class<? extends FileData>> getFileClasses(){
-        return DefectStatusData.fileClasses;
+        return DefectStatusChangeData.fileClasses;
     }
 
     @Override
     public void setCreateValues(ContentData parent, RequestData rdata) {
-        Log.log("DefectStatusData.setBackendCreateValues");
+        Log.log("DefectStatusChangeData.setBackendCreateValues");
         super.setCreateValues(parent, rdata);
         if (parent instanceof DefectData data) {
             setStatus(data.getStatus());
@@ -118,7 +118,7 @@ public class DefectStatusData extends ContentData {
     }
 
     public void readBackendRequestData(RequestData rdata) {
-        Log.log("DefectStatusData.readBackendRequestData");
+        Log.log("DefectStatusChangeData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
         setOpenAccess(true);
         setNavType(ContentNavType.NONE);
@@ -135,7 +135,7 @@ public class DefectStatusData extends ContentData {
     }
 
     public void readFrontendRequestData(RequestData rdata) {
-        Log.log("DefectStatusData.readFrontendRequestData");
+        Log.log("DefectStatusChangeData.readFrontendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setOpenAccess(true);
@@ -148,7 +148,7 @@ public class DefectStatusData extends ContentData {
     }
 
     public void readApiRequestData(RequestData rdata) {
-        Log.log("DefectStatusData.readApiRequestData");
+        Log.log("DefectStatusChangeData.readApiRequestData");
         setCreatorId(rdata.getAttributes().getInt("creatorId"));
         setStatus(rdata.getAttributes().getString("status"));
         setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
@@ -158,17 +158,17 @@ public class DefectStatusData extends ContentData {
 
     @Override
     public String getBackendContentTreeJsp() {
-        return "/WEB-INF/_jsp/defectstatus/backendTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/defectstatuschange/backendTreeContent.inc.jsp";
     }
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/defectstatus/editBackendContent.ajax.jsp";
+        return "/WEB-INF/_jsp/defectstatuschange/editBackendContent.ajax.jsp";
     }
 
     @Override
     public String getFrontendEditJsp() {
-        return "/WEB-INF/_jsp/defectstatus/editFrontendContent.ajax.jsp";
+        return "/WEB-INF/_jsp/defectstatuschange/editFrontendContent.ajax.jsp";
     }
 
     @Override
@@ -205,10 +205,10 @@ public class DefectStatusData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    DefectStatusData statusChange = new DefectStatusData();
-                    statusChange.fromJsonRecursive(jsObj);
-                    if (statusChange.hasValidData())
-                        getChildren().add(statusChange);
+                    DefectStatusChangeData statusData = new DefectStatusChangeData();
+                    statusData.fromJsonRecursive(jsObj);
+                    if (statusData.hasValidData())
+                        getChildren().add(statusData);
                 }
             }
         }

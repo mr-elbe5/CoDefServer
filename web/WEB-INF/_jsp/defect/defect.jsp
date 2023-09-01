@@ -10,97 +10,88 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.user.UserData" %>
-<%@ page import="de.elbe5.user.UserCache" %>
 <%@ page import="de.elbe5.file.FileData" %>
-<%@ page import="de.elbe5.rights.GlobalRight" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatuschange.DefectStatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
-<%@ page import="de.elbe5.rights.GlobalRight" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
-    assert(defect !=null);
-    UserData assignedUser = UserCache.getUser(defect.getAssignedId());
-    String assignedName = assignedUser == null ? "" : assignedUser.getName();
-    boolean isEditor=defect.hasUserEditRight(rdata.getLoginUser());
-    boolean isAssigned=rdata.getUserId()==defect.getAssignedId();
-    if (isEditor || isAssigned){
+    DefectData contentData = ContentData.getCurrentContent(rdata, DefectData.class);
+    assert(contentData !=null);
+    if (contentData.hasUserReadRight(rdata.getLoginUser())){
 %>
 <form:message/>
 <section class="contentSection" id="content">
     <div class="paragraph">
-        <h3><%=$H(defect.getDescription())%></h3>
+        <h3><%=$H(contentData.getDescription())%></h3>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_id")%></div>
-                <div class="boxText"><%=$I(defect.getDisplayId())%></div>
+                <div class="boxText"><%=$I(contentData.getDisplayId())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_creator")%></div>
-                <div class="boxText"><%=$H(UserCache.getUser(defect.getCreatorId()).getName())%></div>
+                <div class="boxText"><%=$H(contentData.getCreatorName())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_creationDate")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDateTime(defect.getCreationDate())%></div>
+                <div class="boxText"><%=DateHelper.toHtmlDateTime(contentData.getCreationDate())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
-                <div class="boxText"><%=$H(defect.getChangerName())%></div>
+                <div class="boxText"><%=$H(contentData.getChangerName())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_changeDate")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDateTime(defect.getChangeDate())%></div>
+                <div class="boxText"><%=DateHelper.toHtmlDateTime(contentData.getChangeDate())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
-                <div class="boxText"><%=$H(assignedName)%></div>
+                <div class="boxText"><%=$H(contentData.getAssignedName())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_notified")%></div>
-                <div class="boxText"><%=$SH(defect.isNotified() ? "_yes" : "_no")%></div>
+                <div class="boxText"><%=$SH(contentData.isNotified() ? "_yes" : "_no")%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_lot")%></div>
-                <div class="boxText"><%=$H(defect.getLot())%></div>
+                <div class="boxText"><%=$H(contentData.getLot())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(defect.getStatus().toString())%></div>
+                <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate1")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDate(defect.getDueDate1())%></div>
+                <div class="boxText"><%=DateHelper.toHtmlDate(contentData.getDueDate1())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate2")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDate(defect.getDueDate2())%></div>
+                <div class="boxText"><%=DateHelper.toHtmlDate(contentData.getDueDate2())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_closeDate")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDate(defect.getCloseDate())%></div>
+                <div class="boxText"><%=DateHelper.toHtmlDate(contentData.getCloseDate())%></div>
             </div>
         </div>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_position")%></div>
-                <% if (defect.getPlanId()!=0){%>
-                <div class="boxImage"><a href="#" onclick="return openModalDialog('/ctrl/defect/openFullDefectPlan/<%=defect.getId()%>');"><img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" /></a></div>
+                <% if (contentData.getPlanId()!=0){%>
+                <div class="boxImage"><a href="#" onclick="return openModalDialog('/ctrl/defect/openFullDefectPlan/<%=contentData.getId()%>');"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></a></div>
                 <%}%>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_positionComment")%></div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(defect.getPositionComment())%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getPositionComment())%></div>
             </div>
         </div>
 
-        <% if (!defect.getFiles().isEmpty()){%>
+        <% if (!contentData.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : defect.getFiles()){%>
+            <% for (FileData file : contentData.getFiles()){%>
             <div class="box">
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
                 <div class="boxImage">
@@ -115,20 +106,20 @@
         </div>
         <%}%>
     </div>
-    <% for (DefectStatusData statusChange : defect.getStatusChanges()){%>
+    <% for (DefectStatusChangeData statusData : contentData.getStatusChanges()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(UserCache.getUser(statusChange.getCreatorId()).getName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusChange.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusChange.getStatus().toString())%>
+                <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(statusData.getCreatorName())%>&nbsp;
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusData.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusData.getStatus().toString())%>
                 </div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(statusChange.getDescription())%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(statusData.getDescription())%></div>
             </div>
         </div>
         <%
-        if (!statusChange.getFiles().isEmpty()){%>
+        if (!statusData.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : statusChange.getFiles()){
+            <% for (FileData file : statusData.getFiles()){
             %>
             <div class="box">
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
@@ -146,24 +137,19 @@
     </div>
     <%
     }
-    if (!defect.isClosed()){
-        if (defect.hasUserEditRight(rdata.getLoginUser())) {%>
+    if (!contentData.isClosed()){%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_edit")%>
+        <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=contentData.getId()%>',null);"><%=$SH("_edit")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeFrontendContent/<%=defect.getId()%>',null);"><%=$SH("_closeDefect")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatuschange/openCreateFrontendContent?parentId=<%=contentData.getId()%>',null);"><%=$SH("_statusChange")%>
         </button>
-    </div>
-        <%
-        }%>
-    <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatus/openCreateFrontendContent?parentId=<%=defect.getId()%>',null);"><%=$SH("_statusChange")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeDefect/<%=contentData.getId()%>',null);"><%=$SH("_closeDefect")%>
+        </button>
+        <%}%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/defect/getPdfFile/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
     </div>
     <%}%>
-    <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/defect/getPdfFile/<%=defect.getId()%>');"><%=$SH("_downloadPdf")%>
-        </button>
-    </div>
 </section>
 <%}%>

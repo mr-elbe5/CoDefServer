@@ -107,7 +107,7 @@
     </fo:block>
   </xsl:template>
 
-  <xsl:template match="comment">
+  <xsl:template match="statuschange">
     <fo:block page-break-inside="avoid">
       <fo:block font-size="12pt" margin-top="0.5cm" padding-top="0.1cm" padding-bottom="0.1cm"
               border-color="#333333" border-top-style="solid" border-bottom-style="solid">

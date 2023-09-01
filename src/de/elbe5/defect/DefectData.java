@@ -9,9 +9,11 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.*;
+import de.elbe5.company.CompanyCache;
+import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.content.ContentViewType;
-import de.elbe5.defectstatus.DefectStatusData;
+import de.elbe5.defectstatuschange.DefectStatusChangeData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
@@ -19,8 +21,6 @@ import de.elbe5.project.ProjectData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
-import de.elbe5.user.UserCache;
-import de.elbe5.user.UserData;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
@@ -46,7 +46,7 @@ public class DefectData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        childClasses.add(DefectStatusData.class);
+        childClasses.add(DefectStatusChangeData.class);
         fileClasses.add(ImageData.class);
     }
 
@@ -128,8 +128,8 @@ public class DefectData extends ContentData {
     }
 
     public DefectStatus getStatus() {
-        DefectStatusData statusData = getLastStatusChange();
-        return statusData == null ? DefectStatus.OPEN : statusData.getStatus();
+        DefectStatusChangeData statusChange = getLastStatusChange();
+        return statusChange == null ? DefectStatus.OPEN : statusChange.getStatus();
     }
 
     public String getDefectStatusString(){
@@ -204,12 +204,12 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<DefectStatusData> getStatusChanges() {
-        return new ArrayList<>(getChildren(DefectStatusData.class));
+    public List<DefectStatusChangeData> getStatusChanges() {
+        return new ArrayList<>(getChildren(DefectStatusChangeData.class));
     }
 
-    public DefectStatusData getLastStatusChange(){
-        List<DefectStatusData> statusChanges = getStatusChanges();
+    public DefectStatusChangeData getLastStatusChange(){
+        List<DefectStatusChangeData> statusChanges = getStatusChanges();
         if (statusChanges.isEmpty()){
             return null;
         }
@@ -219,7 +219,7 @@ public class DefectData extends ContentData {
     public String getAssignedName() {
         if (assignedId==0)
             return "";
-        UserData data= UserCache.getUser(assignedId);
+        CompanyData data= CompanyCache.getCompany(assignedId);
         if (data!=null)
             return data.getName();
         return "";
@@ -371,7 +371,7 @@ public class DefectData extends ContentData {
     @Override
     public JsonObject getJsonRecursive(){
         JsonArray jsStatusChanges = new JsonArray();
-        for (DefectStatusData statusChange : getStatusChanges()) {
+        for (DefectStatusChangeData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
@@ -417,7 +417,7 @@ public class DefectData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    DefectStatusData statusChange = new DefectStatusData();
+                    DefectStatusChangeData statusChange = new DefectStatusChangeData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

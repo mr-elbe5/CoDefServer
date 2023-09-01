@@ -70,12 +70,12 @@ CREATE SEQUENCE IF NOT EXISTS s_content_id START 1000;
 CREATE TABLE IF NOT EXISTS t_content
 (
     id            INTEGER       NOT NULL,
-    type          VARCHAR(30)   NOT NULL,
+    type          VARCHAR(255)   NOT NULL,
     creation_date TIMESTAMP     NOT NULL DEFAULT now(),
     change_date   TIMESTAMP     NOT NULL DEFAULT now(),
     parent_id     INTEGER       NULL,
     ranking       INTEGER       NOT NULL DEFAULT 0,
-    name          VARCHAR(60)   NOT NULL,
+    name          VARCHAR(100)  NOT NULL,
     display_name  VARCHAR(100)  NOT NULL,
     description   VARCHAR(2000) NOT NULL DEFAULT '',
     creator_id    INTEGER       NOT NULL DEFAULT 1,
@@ -99,11 +99,11 @@ CREATE SEQUENCE IF NOT EXISTS s_file_id START 1000;
 CREATE TABLE IF NOT EXISTS t_file
 (
     id            INTEGER       NOT NULL,
-    type          VARCHAR(30)   NOT NULL,
+    type          VARCHAR(255)   NOT NULL,
     creation_date TIMESTAMP     NOT NULL DEFAULT now(),
     change_date   TIMESTAMP     NOT NULL DEFAULT now(),
     parent_id     INTEGER       NULL,
-    file_name     VARCHAR(60)   NOT NULL,
+    file_name     VARCHAR(100)  NOT NULL,
     display_name  VARCHAR(100)  NOT NULL,
     description   VARCHAR(2000) NOT NULL DEFAULT '',
     creator_id    INTEGER       NOT NULL DEFAULT 1,
@@ -123,12 +123,6 @@ CREATE TABLE IF NOT EXISTS t_image
     CONSTRAINT t_image_pk PRIMARY KEY (id),
     CONSTRAINT t_image_fk1 FOREIGN KEY (id) REFERENCES t_file (id) ON DELETE CASCADE
 );
-
-CREATE OR REPLACE VIEW v_preview_file as (
-                                         select t_file.id,file_name,content_type,preview_bytes
-                                         from t_file, t_image
-                                         where t_file.id=t_image.id
-                                             );
 
 CREATE SEQUENCE IF NOT EXISTS s_company_id START 1000;
 
@@ -155,13 +149,13 @@ CREATE TABLE IF NOT EXISTS t_project
     CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS t_company2content
+CREATE TABLE IF NOT EXISTS t_company2project
 (
     company_id INTEGER     NOT NULL,
-    content_id  INTEGER     NOT NULL,
-    CONSTRAINT t_company2content_pk PRIMARY KEY (company_id, content_id),
-    CONSTRAINT t_company2content_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
-    CONSTRAINT t_company2content_fk2 FOREIGN KEY (content_id) REFERENCES t_content (id) ON DELETE CASCADE
+    project_id  INTEGER     NOT NULL,
+    CONSTRAINT t_company2project_pk PRIMARY KEY (company_id, project_id),
+    CONSTRAINT t_company2project_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_unit
@@ -180,7 +174,7 @@ CREATE TABLE IF NOT EXISTS t_defect
     display_id       INTEGER       NOT NULL,
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     lot              VARCHAR(255)  NOT NULL DEFAULT '',
-    status           VARCHAR(20)   NOT NULL,
+    assigned_id      INTEGER       NOT NULL,
     costs            INTEGER       NOT NULL DEFAULT 0,
     position_x       INTEGER       NOT NULL DEFAULT 0,
     position_y       INTEGER       NOT NULL DEFAULT 0,
@@ -192,14 +186,14 @@ CREATE TABLE IF NOT EXISTS t_defect
     CONSTRAINT t_defect_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS t_defect_status
+CREATE TABLE IF NOT EXISTS t_defect_status_change
 (
     id            INTEGER       NOT NULL,
     assigned_id   INTEGER       NOT NULL,
     status        VARCHAR(20)   NOT NULL DEFAULT 'OPEN',
-    CONSTRAINT t_defect_status_pk PRIMARY KEY (id),
-    CONSTRAINT t_defect_status_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_defect_status_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id)
+    CONSTRAINT t_defect_status_change_pk PRIMARY KEY (id),
+    CONSTRAINT t_defect_status_change_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_defect_status_change_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id)
 );
 
 -- root user
@@ -213,7 +207,7 @@ INSERT INTO t_timer_task (name,display_name,execution_interval,minute,active)
 VALUES ('cleanup','Cleanup Task','CONTINOUS',5,FALSE);
 
 INSERT INTO t_content (id,type,parent_id,ranking,name,display_name,description,creator_id,changer_id,open_access,nav_type)
-VALUES (1,'de.elbe5.root.RootData',null,0,'home','dashboard','Übersicht',1,1,true,'NONE');
+VALUES (1,'de.elbe5.root.RootData',null,0,'home','Übersicht','Einstiegsseite',1,1,true,'NONE');
 
 --- set pwd 'pass' dependent on salt V3xfgDrxdl8=
 -- root user

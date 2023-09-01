@@ -61,7 +61,7 @@ public class RootData extends ContentData {
             if (project != null && project.isActive() && project.hasUserReadRight(rdata.getLoginUser()))
                 projects.add(project);
         }
-        List<CompanyData> companies = CompanyCache.getInstance().getAllCompanies();
+        List<CompanyData> companies = CompanyCache.getAllCompanies();
         JsonArray jsCompanies = new JsonArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();

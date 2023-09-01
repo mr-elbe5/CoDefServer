@@ -13,8 +13,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.company.CompanyBean" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
@@ -22,7 +22,7 @@
     RequestData rdata = RequestData.getRequestData(request);
     ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (contentData != null);
-    List<CompanyData> companies = CompanyBean.getInstance().getAllCompanies();
+    List<CompanyData> companies = CompanyCache.getAllCompanies();
     String url = "/ctrl/project/saveBackendContent/" + contentData.getId();
     List<GroupData> groups = GroupCache.getAllGroups();
 %>

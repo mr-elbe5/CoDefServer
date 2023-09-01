@@ -11,7 +11,7 @@ package de.elbe5.defect;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.defectstatus.DefectStatusData;
+import de.elbe5.defectstatuschange.DefectStatusChangeData;
 import de.elbe5.file.DefectFopBean;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
@@ -40,8 +40,8 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<root>");
         addDefectHeaderXml(sb,data);
         addDefectXml(sb,data,rdata.getSessionHost());
-        for (DefectStatusData commnet : data.getStatusChanges()){
-            addDefectCommentXml(sb, data, commnet, rdata.getSessionHost());
+        for (DefectStatusChangeData statusChange : data.getStatusChanges()){
+            addDefectStatusChangeXml(sb, data, statusChange, rdata.getSessionHost());
         }
         addDefectFooterXml(sb,data,now);
         sb.append("</root>");
@@ -96,16 +96,16 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("</defect>");
     }
 
-    private void addDefectCommentXml(StringBuilder sb, DefectData defect, DefectStatusData data, String host) {
-        sb.append("<comment>");
+    private void addDefectStatusChangeXml(StringBuilder sb, DefectData defect, DefectStatusChangeData data, String host) {
+        sb.append("<statuschange>");
         sb.append("<title>").append(LocalizedStrings.xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_description"),data.getDescription());
         for (ImageData image : data.getFiles(ImageData.class)){
-            BinaryFile file = FileBean.getInstance().getBinaryFile(data.getId());
+            BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
             addLabeledImage(sb, LocalizedStrings.string("_image"), file, "5.0cm");
         }
-        sb.append("</comment>");
+        sb.append("</statuschange>");
     }
 
 }

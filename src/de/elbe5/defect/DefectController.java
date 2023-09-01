@@ -96,7 +96,7 @@ public class DefectController extends ContentController {
         return show(rdata);
     }
 
-    public IResponse closeFrontendContent(RequestData rdata) {
+    public IResponse closeDefect(RequestData rdata) {
         int contentId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(contentId,DefectData.class);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
@@ -106,11 +106,9 @@ public class DefectController extends ContentController {
             setSaveError(rdata);
             return new ContentResponse(data);
         }
-        data.setViewType(ContentViewType.SHOW);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
-        UnitData unit = data.getUnit();
-        return new ContentResponse(unit);
+        return new ForwardResponse("/ctrl/content/show/" + data.getParentId());
     }
 
     public IResponse showCroppedDefectPlan(RequestData rdata) {

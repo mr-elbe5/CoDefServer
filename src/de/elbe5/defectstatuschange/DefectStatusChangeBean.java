@@ -6,7 +6,7 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.defectstatus;
+package de.elbe5.defectstatuschange;
 
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -15,22 +15,22 @@ import de.elbe5.file.FileData;
 
 import java.sql.*;
 
-public class DefectStatusBean extends ContentBean {
+public class DefectStatusChangeBean extends ContentBean {
 
-    private static DefectStatusBean instance = null;
+    private static DefectStatusChangeBean instance = null;
 
-    public static DefectStatusBean getInstance() {
+    public static DefectStatusChangeBean getInstance() {
         if (instance == null) {
-            instance = new DefectStatusBean();
+            instance = new DefectStatusChangeBean();
         }
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status, assigned_id FROM t_defect_status  WHERE id=?";
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status, assigned_id FROM t_defect_status_change  WHERE id=?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof DefectStatusData data))
+        if (!(contentData instanceof DefectStatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -48,11 +48,11 @@ public class DefectStatusBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (status,assigned_id,id) values(?,?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status_change (status,assigned_id,id) values(?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!contentData.isNew() || !(contentData instanceof DefectStatusData data))
+        if (!contentData.isNew() || !(contentData instanceof DefectStatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -71,12 +71,11 @@ public class DefectStatusBean extends ContentBean {
         }
     }
 
-    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status " +
-            "set status=?,assigned_id=? where id=? ";
+    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status_change set status=?,assigned_id=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof DefectStatusData data))
+        if (!(contentData instanceof DefectStatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {

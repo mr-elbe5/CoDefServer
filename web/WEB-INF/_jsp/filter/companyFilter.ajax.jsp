@@ -25,7 +25,7 @@
     String url = "/ctrl/filter/setCompanyFilter/"+contentId;
     ViewFilter filter= ViewFilter.getFilter(rdata);
     ProjectData project=ContentCache.getContent(filter.getProjectId(), ProjectData.class);
-    List<CompanyData> companies = project!= null ? CompanyCache.getInstance().getCompanies(project.getCompanyIds()) : new ArrayList<>();
+    List<CompanyData> companies = project!= null ? CompanyCache.getCompanies(project.getCompanyIds()) : new ArrayList<>();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">

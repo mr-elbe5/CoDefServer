@@ -6,7 +6,7 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.defectstatus;
+package de.elbe5.defectstatuschange;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
@@ -23,21 +23,21 @@ import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class DefectStatusController extends ContentController {
+public class DefectStatusChangeController extends ContentController {
 
-    public static final String KEY = "defectstatus";
+    public static final String KEY = "defectstatuschange";
 
-    private static DefectStatusController instance = null;
+    private static DefectStatusChangeController instance = null;
 
-    public static void setInstance(DefectStatusController instance) {
-        DefectStatusController.instance = instance;
+    public static void setInstance(DefectStatusChangeController instance) {
+        DefectStatusChangeController.instance = instance;
     }
 
-    public static DefectStatusController getInstance() {
+    public static DefectStatusChangeController getInstance() {
         return instance;
     }
 
-    public static void register(DefectStatusController controller){
+    public static void register(DefectStatusChangeController controller){
         setInstance(controller);
         ControllerCache.addController(controller.getKey(),getInstance());
     }
@@ -51,7 +51,7 @@ public class DefectStatusController extends ContentController {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
-        DefectStatusData data = new DefectStatusData();
+        DefectStatusChangeData data = new DefectStatusChangeData();
         data.setCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -59,7 +59,7 @@ public class DefectStatusController extends ContentController {
 
     public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
-        DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
+        DefectStatusChangeData data = ContentData.getCurrentContent(rdata, DefectStatusChangeData.class);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -68,7 +68,7 @@ public class DefectStatusController extends ContentController {
     //frontend
     public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
-        DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
+        DefectStatusChangeData data= ContentData.getCurrentContent(rdata, DefectStatusChangeData.class);
         assert(data != null && data.getId() == contentId);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         if (data.isNew())
@@ -103,10 +103,10 @@ public class DefectStatusController extends ContentController {
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        DefectStatusData data = new DefectStatusData();
+        DefectStatusChangeData data = new DefectStatusChangeData();
         data.setCreateValues(defect, rdata);
         data.readApiRequestData(rdata);
-        if (!DefectStatusBean.getInstance().saveContent(data)) {
+        if (!DefectStatusChangeBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
@@ -120,7 +120,7 @@ public class DefectStatusController extends ContentController {
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int commentId = rdata.getId();
-        DefectStatusData comment= DefectStatusBean.getInstance().getContent(commentId, DefectStatusData.class);
+        DefectStatusChangeData comment= DefectStatusChangeBean.getInstance().getContent(commentId, DefectStatusChangeData.class);
         assert(comment !=null);
         DefectData defect = ContentCache.getContent(comment.getParentId(),DefectData.class);
         assert(defect !=null);
