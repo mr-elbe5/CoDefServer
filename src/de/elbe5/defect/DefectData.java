@@ -289,8 +289,8 @@ public class DefectData extends ContentData {
         setCosts(rdata.getAttributes().getInt("costs"));
         setDueDate1(rdata.getAttributes().getDate("dueDate1"));
         setDueDate2(rdata.getAttributes().getDate("dueDate2"));
-        setPositionX(rdata.getAttributes().getInt("positionX"));
-        setPositionY(rdata.getAttributes().getInt("positionY"));
+        setPositionX(rdata.getAttributes().getDouble("positionX"));
+        setPositionY(rdata.getAttributes().getDouble("positionY"));
         setPositionComment(rdata.getAttributes().getString("positionComment"));
         if (getDescription().isEmpty()) {
             rdata.addIncompleteField("description");
@@ -309,8 +309,8 @@ public class DefectData extends ContentData {
         readFrontendRequestData(rdata);
         setDescription(rdata.getAttributes().getString("description").trim());
         setDueDate1(rdata.getAttributes().getDate("dueDate1"));
-        setPositionX(rdata.getAttributes().getInt("positionX"));
-        setPositionY(rdata.getAttributes().getInt("positionY"));
+        setPositionX(rdata.getAttributes().getDouble("positionX"));
+        setPositionY(rdata.getAttributes().getDouble("positionY"));
         setPositionComment(rdata.getAttributes().getString("positionComment"));
         if (getDescription().isEmpty()) {
             rdata.addIncompleteField("description");
@@ -466,8 +466,10 @@ public class DefectData extends ContentData {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setFont(new Font("Monospaced", Font.PLAIN, 12));
             g.setColor(Color.RED);
-            g.drawImage(redbi, null, PLAN_CROP_WIDTH / 2 - 9 + dx, PLAN_CROP_HEIGHT / 2 - 2 + dy);
-            g.drawString(Integer.toString(defectDisplayId), posX + 3, posY + 16);
+            posX = PLAN_CROP_WIDTH/2 + dx;
+            posY = PLAN_CROP_HEIGHT/2 + dy;
+            g.drawImage(redbi, null, posX - 9, posY - 2);
+            g.drawString(Integer.toString(defectDisplayId), posX + 5, posY + 16);
             file = new BinaryFile();
             file.setFileName("defectCrop" + defectDisplayId + ".jpg");
             Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/jpeg");
@@ -496,7 +498,7 @@ public class DefectData extends ContentData {
             int posX=(int)(bi.getWidth()*positionX);
             int posY=(int)(bi.getHeight()*positionY);
             g.drawImage(redbi, null, posX -9 , posY- 2);
-            g.drawString(Integer.toString(defectDisplayId), posX + 3, posY + 16);
+            g.drawString(Integer.toString(defectDisplayId), posX + 5, posY + 16);
             file = new BinaryFile();
             file.setFileName("defectPlan" + defectDisplayId + ".jpg");
             Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/jpeg");

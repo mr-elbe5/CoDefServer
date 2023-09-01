@@ -234,7 +234,7 @@ public class UnitData extends ContentData {
                     int posX=(int)(biWidth*defect.getPositionX());
                     int posY=(int)(biHeight*defect.getPositionY());
                     g.drawImage(redbi, null, posX - 9, posY - 2);
-                    g.drawString(Integer.toString(defect.getDisplayId()), posX + 3, posY + 16);
+                    g.drawString(Integer.toString(defect.getDisplayId()), posX + 5, posY + 16);
                 }
             }
             file=new BinaryFile();

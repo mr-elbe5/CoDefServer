@@ -54,8 +54,8 @@ public class DefectBean extends ContentBean {
                     data.setNotified(rs.getBoolean(i++));
                     data.setLot(rs.getString(i++));
                     data.setCosts(rs.getInt(i++));
-                    data.setPositionX(rs.getInt(i++));
-                    data.setPositionY(rs.getInt(i++));
+                    data.setPositionX(rs.getDouble(i++));
+                    data.setPositionY(rs.getDouble(i++));
                     data.setPositionComment(rs.getString(i++));
                     Timestamp ts = rs.getTimestamp(i++);
                     data.setDueDate1(ts == null ? null : ts.toLocalDateTime().toLocalDate());

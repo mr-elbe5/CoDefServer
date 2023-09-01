@@ -103,7 +103,7 @@
         console.log('container offset=' + offset.left + ',' + offset.top);
         posX = Math.round(event.pageX - offset.left );
         posY = Math.round(event.pageY - offset.top);
-        console.log('posX,posY=' + posX + ',' + posY);
+        //console.log('posX,posY=' + posX + ',' + posY);
         setPositioner();
     });
 
@@ -111,8 +111,8 @@
         $positioner.css('left', posX - 11);
         //relative, so go top
         $positioner.css('top', posY - 5 - $plan.height());
-        let positionX=Math.round(posX/$plan.width());
-        let positionY=Math.round(posY/$plan.height());
+        let positionX=posX/$plan.width();
+        let positionY=posY/$plan.height();
         //console.log('positionX,positionY=' + positionX + ',' + positionY);
         $('#positionX').val(positionX);
         $('#positionY').val(positionY);
