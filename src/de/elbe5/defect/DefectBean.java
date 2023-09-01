@@ -94,8 +94,8 @@ public class DefectBean extends ContentBean {
             else
                 pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
             pst.setInt(i++, data.getCosts());
-            pst.setInt(i++, data.getPositionX());
-            pst.setInt(i++, data.getPositionY());
+            pst.setDouble(i++, data.getPositionX());
+            pst.setDouble(i++, data.getPositionY());
             pst.setString(i++, data.getPositionComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
@@ -133,8 +133,8 @@ public class DefectBean extends ContentBean {
             else
                 pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
             pst.setInt(i++, data.getCosts());
-            pst.setInt(i++, data.getPositionX());
-            pst.setInt(i++, data.getPositionY());
+            pst.setDouble(i++, data.getPositionX());
+            pst.setDouble(i++, data.getPositionY());
             pst.setString(i++, data.getPositionComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();

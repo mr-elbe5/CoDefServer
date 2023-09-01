@@ -105,8 +105,8 @@
         //relative, so go top
         $positioner.css('top', posY - 5 - $plan.height());
         // both percent * 100
-        let positionX=Math.round(posX*100*100/$plan.width());
-        let positionY=Math.round(posY*100*100/$plan.height());
+        let positionX=Math.round(posX/$plan.width());
+        let positionY=Math.round(posY/$plan.height());
         //console.log('positionX,positionY=' + positionX + ',' + positionY);
         $('#positionX').val(positionX);
         $('#positionY').val(positionY);
@@ -117,8 +117,8 @@
     });
 
     $plan.load(function () {
-        posX = Math.floor((<%=defect.getPositionX()%>)*$plan.width()/100/100);
-        posY = Math.floor((<%=defect.getPositionY()%>)*$plan.height()/100/100);
+        posX = (<%=defect.getPositionX()%>)*$plan.width();
+        posY = (<%=defect.getPositionY()%>)*$plan.height();
         //console.log('posX,posY=' + posX + ',' + posY);
         setPositioner();
     });

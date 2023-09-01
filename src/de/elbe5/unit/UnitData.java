@@ -231,8 +231,8 @@ public class UnitData extends ContentData {
             for (DefectData defect : defects){
                 if (defect.getPositionX()>0 || defect.getPositionY()>0) {
                     g.setColor(Color.RED);
-                    int posX=biWidth*defect.getPositionX()/100/100;
-                    int posY=biHeight*defect.getPositionY()/100/100;
+                    int posX=(int)(biWidth*defect.getPositionX());
+                    int posY=(int)(biHeight*defect.getPositionY());
                     g.drawImage(redbi, null, posX - 9, posY - 2);
                     g.drawString(Integer.toString(defect.getDisplayId()), posX + 3, posY + 16);
                 }

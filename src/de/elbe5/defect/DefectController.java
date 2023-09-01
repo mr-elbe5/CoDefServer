@@ -119,8 +119,8 @@ public class DefectController extends ContentController {
             String token = rdata.getAttributes().getString("token");
             assertRights(Token.matchToken(id, token));
         }
-        int x=rdata.getAttributes().getInt("x",data.getPositionX());
-        int y=rdata.getAttributes().getInt("y",data.getPositionY());
+        double x=rdata.getAttributes().getDouble("x",data.getPositionX());
+        double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
         BinaryFile file = data.createCroppedDefectPlan(plan,arrowBytes,data.getDisplayId(),x,y);
@@ -140,8 +140,8 @@ public class DefectController extends ContentController {
             String token = rdata.getAttributes().getString("token");
             assertRights(Token.matchToken(id, token));
         }
-        int x=rdata.getAttributes().getInt("x",data.getPositionX());
-        int y=rdata.getAttributes().getInt("y",data.getPositionY());
+        double x=rdata.getAttributes().getDouble("x",data.getPositionX());
+        double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
         BinaryFile file = data.createFullDefectPlan(plan,arrowBytes,data.getDisplayId(),x,y);

@@ -56,8 +56,8 @@ public class DefectData extends ContentData {
     protected boolean notified = false;
     protected String lot = "";
     protected int costs = 0;
-    protected int positionX = 0; // Percent * 100
-    protected int positionY = 0; // Percent * 100
+    protected double positionX = 0; // Percent * 100
+    protected double positionY = 0; // Percent * 100
     protected String positionComment = "";
     protected LocalDate dueDate1 = null;
     protected LocalDate dueDate2 = null;
@@ -152,19 +152,19 @@ public class DefectData extends ContentData {
         this.costs = costs;
     }
 
-    public int getPositionX() {
+    public double getPositionX() {
         return positionX;
     }
 
-    public void setPositionX(int positionX) {
+    public void setPositionX(double positionX) {
         this.positionX = positionX;
     }
 
-    public int getPositionY() {
+    public double getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
+    public void setPositionY(double positionY) {
         this.positionY = positionY;
     }
 
@@ -426,7 +426,7 @@ public class DefectData extends ContentData {
         }
     }
 
-    public BinaryFile createCroppedDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, int positionX, int positionY) {
+    public BinaryFile createCroppedDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, double positionX, double positionY) {
         BinaryFile file = null;
 
         try {
@@ -435,8 +435,8 @@ public class DefectData extends ContentData {
             int srcWidth=source.getWidth();
             int srcHeight=source.getHeight();
             assert(srcWidth>=PLAN_CROP_WIDTH && srcHeight>=PLAN_CROP_HEIGHT);
-            int posX=srcWidth*positionX/100/100;
-            int posY=srcHeight*positionY/100/100;
+            int posX=(int)(srcWidth*positionX);
+            int posY=(int)(srcHeight*positionY);
             int x = posX - PLAN_CROP_WIDTH / 2;
             int y = posY - PLAN_CROP_HEIGHT / 2;
             int dx = 0;
@@ -481,7 +481,7 @@ public class DefectData extends ContentData {
         return file;
     }
 
-    public BinaryFile createFullDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, int positionX, int positionY) {
+    public BinaryFile createFullDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, double positionX, double positionY) {
         BinaryFile file = null;
         try {
             BufferedImage bi = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
@@ -493,8 +493,8 @@ public class DefectData extends ContentData {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setFont(new Font("Monospaced", Font.PLAIN, 12));
             g.setColor(Color.RED);
-            int posX=bi.getWidth()*positionX/100/100;
-            int posY=bi.getHeight()*positionY/100/100;
+            int posX=(int)(bi.getWidth()*positionX);
+            int posY=(int)(bi.getHeight()*positionY);
             g.drawImage(redbi, null, posX -9 , posY- 2);
             g.drawString(Integer.toString(defectDisplayId), posX + 3, posY + 16);
             file = new BinaryFile();
