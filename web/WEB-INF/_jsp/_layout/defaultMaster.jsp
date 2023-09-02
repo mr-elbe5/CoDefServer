@@ -55,7 +55,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
-                            <jsp:include page="/WEB-INF/_jsp/_include/_defectnav.inc.jsp" flush="true"/>
+                            <jsp:include page="/WEB-INF/_jsp/_include/_mainnav.inc.jsp" flush="true"/>
                         </ul>
                     </div>
                 </nav>

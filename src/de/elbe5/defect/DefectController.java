@@ -55,7 +55,7 @@ public class DefectController extends ContentController {
         assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
         DefectData data = new DefectData();
         data.setCreateValues(parent, rdata);
-        data.setViewType(ContentViewType.EDIT);
+        data.setEditMode(true);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ContentResponse(data);
     }
@@ -67,7 +67,7 @@ public class DefectController extends ContentController {
         DefectData cachedData = ContentCache.getContent(data.getId(), DefectData.class);
         data.setUpdateValues(cachedData, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
-        data.setViewType(ContentViewType.EDIT);
+        data.setEditMode(true);
         return new ContentResponse(data);
     }
 
@@ -90,7 +90,7 @@ public class DefectController extends ContentController {
             return new ContentResponse(data);
         }
         data.setNew(false);
-        data.setViewType(ContentViewType.SHOW);
+        data.setEditMode(false);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return show(rdata);
@@ -180,7 +180,7 @@ public class DefectController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
-        data.setViewType(ContentViewType.SHOW);
+        data.setEditMode(false);
         ContentCache.setDirty();
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }

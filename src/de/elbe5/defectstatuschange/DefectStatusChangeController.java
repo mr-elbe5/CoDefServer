@@ -84,7 +84,7 @@ public class DefectStatusChangeController extends ContentController {
             return new ContentResponse(data);
         }
         data.setNew(false);
-        data.setViewType(ContentViewType.SHOW);
+        data.setEditMode(false);
         ContentCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         rdata.setId(data.getParentId());

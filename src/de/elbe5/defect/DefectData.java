@@ -12,7 +12,6 @@ import de.elbe5.base.*;
 import de.elbe5.company.CompanyCache;
 import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentNavType;
-import de.elbe5.content.ContentViewType;
 import de.elbe5.defectstatuschange.DefectStatusChangeData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.unit.UnitData;
@@ -255,7 +254,7 @@ public class DefectData extends ContentData {
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        if (ContentViewType.EDIT.equals(getViewType())) {
+        if (isEditMode()) {
             if (isNew())
                 context.include("/WEB-INF/_jsp/defect/createFrontendContent.jsp");
             else
