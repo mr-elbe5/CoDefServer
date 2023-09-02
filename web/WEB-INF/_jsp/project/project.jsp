@@ -62,6 +62,9 @@
             <th style="width:8%"><%=$SH("_assigned")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_ASSIGNED%>");>&nbsp;</a>
             </th>
+            <th style="width:8%"><%=$SH("_defectType")%>
+                <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
+            </th>
             <th style="width:8%"><%=$SH("_notified")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_NOTIFIED%>");>&nbsp;</a>
             </th>
@@ -81,6 +84,7 @@
             <td><%=$D(defect.getCloseDate())%></td>
             <td><%=$SH(defect.getStatus().toString())%></td>
             <td><%=$H(defect.getAssignedName())%></td>
+            <td><%=$SH(defect.getDefectTypeString())%></td>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
             <td>
                 <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>

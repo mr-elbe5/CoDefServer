@@ -17,6 +17,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
+<%@ page import="de.elbe5.defect.DefectType" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -58,9 +59,11 @@
                     <option value="<%=company.getId()%>" <%=contentData.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
                     <%}%>
                 </form:select>
+                <form:select name="defectType" label="_defectType">
+                    <option value="<%=DefectType.PREAPPROVE.toString()%>" <%=DefectType.PREAPPROVE.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(DefectType.PREAPPROVE.name())%></option>
+                    <option value="<%=DefectType.LIABILITY.toString()%>" <%=DefectType.LIABILITY.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(DefectType.LIABILITY.name())%></option>
+                </form:select>
                 <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=contentData.isNotified()%>"/></form:line>
-                <form:text name="lot" label="_lot" value="<%=$H(contentData.getLot())%>" />
-                <form:text name="costs" label="_costs" value="<%=contentData.getCostsString()%>" />
                 <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>
                 <form:date name="dueDate2" label="_dueDate2" value="<%=$D(contentData.getDueDate2())%>"/>
                 <% if (unit.getPlan() != null) {%>

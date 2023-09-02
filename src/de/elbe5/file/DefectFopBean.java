@@ -66,7 +66,7 @@ public abstract class DefectFopBean extends PdfCreator {
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(LocalizedStrings.xml("_assigned")).append("</label1><content1>").append(xml(defect.getAssignedName())).append("</content1>");
-            sb.append("<label2>").append(LocalizedStrings.xml("_lot")).append("</label2><content2>").append(xml(defect.getLot())).append("</content2>");
+            sb.append("<label2>").append(LocalizedStrings.xml("_defectType")).append("</label2><content2>").append(LocalizedStrings.xml(defect.getDefectTypeString())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(LocalizedStrings.xml("_dueDate1")).append("</label1><content1>").append(DateHelper.toHtmlDate(defect.getDueDate1())).append("</content1>");

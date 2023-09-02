@@ -9,7 +9,6 @@
 package de.elbe5.unit;
 
 import de.elbe5.base.*;
-import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
@@ -19,7 +18,6 @@ import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.RequestData;
 
-import de.elbe5.user.UserData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
@@ -80,6 +78,14 @@ public class UnitData extends ContentData {
 
     public void setApproveDateTime(LocalDateTime approveDate) {
         this.approveDate = approveDate.toLocalDate();
+    }
+
+    public boolean isAfterApproveDate(LocalDate date){
+        return getApproveDate().isBefore(date);
+    }
+
+    public boolean isAfterApproveDate(){
+        return isAfterApproveDate(LocalDate.now());
     }
 
     public ImageData getPlan() {

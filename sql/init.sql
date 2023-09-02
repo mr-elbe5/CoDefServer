@@ -172,10 +172,9 @@ CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
     display_id       INTEGER       NOT NULL,
+    defect_type      VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
-    lot              VARCHAR(255)  NOT NULL DEFAULT '',
     assigned_id      INTEGER       NOT NULL,
-    costs            INTEGER       NOT NULL DEFAULT 0,
     position_x       REAL          NOT NULL DEFAULT 0.0,
     position_y       REAL          NOT NULL DEFAULT 0.0,
     position_comment VARCHAR(255)  NOT NULL DEFAULT '',

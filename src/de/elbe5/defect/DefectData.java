@@ -52,11 +52,10 @@ public class DefectData extends ContentData {
     protected int displayId = 0;
     protected int assignedId = 0;
 
+    protected DefectType defectType = DefectType.PREAPPROVE;
     protected boolean notified = false;
-    protected String lot = "";
-    protected int costs = 0;
-    protected double positionX = 0; // Percent * 100
-    protected double positionY = 0; // Percent * 100
+    protected double positionX = 0; //width fraction
+    protected double positionY = 0; //height fraction
     protected String positionComment = "";
     protected LocalDate dueDate1 = null;
     protected LocalDate dueDate2 = null;
@@ -110,20 +109,42 @@ public class DefectData extends ContentData {
         this.assignedId = assignedId;
     }
 
+    public DefectType getDefectType() {
+        return defectType;
+    }
+
+    public String getDefectTypeString() {
+        return defectType.name();
+    }
+
+    public void setDefectType(DefectType defectType) {
+        this.defectType = defectType;
+    }
+
+    public void setDefectType(String name) {
+        try{
+            defectType = DefectType.valueOf(name);
+        }
+        catch(IllegalArgumentException e){
+            defectType = DefectType.PREAPPROVE;
+        }
+    }
+
+    public void setDefectTypeFromApproveDate(UnitData unit){
+        if (unit.isAfterApproveDate(getCreationDate().toLocalDate())){
+            setDefectType(DefectType.LIABILITY);
+        }
+        else{
+            setDefectType(DefectType.PREAPPROVE);
+        }
+    }
+
     public boolean isNotified() {
         return notified;
     }
 
     public void setNotified(boolean notified) {
         this.notified = notified;
-    }
-
-    public String getLot() {
-        return lot;
-    }
-
-    public void setLot(String lot) {
-        this.lot = lot;
     }
 
     public DefectStatus getStatus() {
@@ -137,18 +158,6 @@ public class DefectData extends ContentData {
 
     public boolean isClosed(){
         return getCloseDate()!=null;
-    }
-
-    public int getCosts() {
-        return costs;
-    }
-
-    public String getCostsString() {
-        return costs==0 ? "" : Integer.toString(costs);
-    }
-
-    public void setCosts(int costs) {
-        this.costs = costs;
     }
 
     public double getPositionX() {
@@ -283,9 +292,8 @@ public class DefectData extends ContentData {
         Log.log("DefectData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
+        setDefectType(rdata.getAttributes().getString("defectType"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
-        setLot(rdata.getAttributes().getString("lot"));
-        setCosts(rdata.getAttributes().getInt("costs"));
         setDueDate1(rdata.getAttributes().getDate("dueDate1"));
         setDueDate2(rdata.getAttributes().getDate("dueDate2"));
         setPositionX(rdata.getAttributes().getDouble("positionX"));
@@ -335,9 +343,8 @@ public class DefectData extends ContentData {
     public void readFrontendRequestData(RequestData rdata) {
         Log.log("DefectData.readFrontendRequestData");
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
+        setDefectType(rdata.getAttributes().getString("defectType"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
-        setLot(rdata.getAttributes().getString("lot"));
-        setCosts(rdata.getAttributes().getInt("costs"));
         List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
         for (BinaryFile f : newFiles) {
             if (f.isImage()){
@@ -357,6 +364,7 @@ public class DefectData extends ContentData {
     public JsonObject getJson(){
         return super.getJson()
                 .add("displayId",getDisplayId())
+                .add("defectType", getDefectTypeString())
                 .add("assignedId",getAssignedId())
                 .add("assignedName",getAssignedName())
                 .add("positionX",getPositionX())
@@ -384,6 +392,9 @@ public class DefectData extends ContentData {
     public void fromJson(JSONObject json) {
         super.fromJson(json);
         int i = getInt(json, "displayId");
+        String s = getString(json, "defectType");
+        if (s != null)
+            setDefectType(s);
         if (i!=0)
             setDisplayId(i);
         i = getInt(json, "assignedId");
@@ -395,7 +406,7 @@ public class DefectData extends ContentData {
         i = getInt(json, "positionY");
         if (i!=0)
             setPositionY(i);
-        String s = getString(json, "positionComment");
+        s = getString(json, "positionComment");
         if (s != null)
             setPositionComment(s);
         LocalDate date = getLocalDate(json, "dueDate");

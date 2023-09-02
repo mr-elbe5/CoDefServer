@@ -24,6 +24,7 @@ public class DefectComparator implements Comparator<DefectData> {
     public static final int TYPE_ASSIGNED = 8;
     public static final int TYPE_DESCRIPTION = 9;
     public static final int TYPE_NOTIFIED = 10;
+    public static final int TYPE_DEFECTTYPE = 11;
 
     public static DefectComparator instance = new DefectComparator();
 
@@ -69,6 +70,7 @@ public class DefectComparator implements Comparator<DefectData> {
             }
             case TYPE_DESCRIPTION ->
                     result = o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase());
+            case TYPE_DEFECTTYPE -> result = o1.getDefectType().compareTo(o2.getDefectType());
         }
         return ascending ? result : -result;
     }

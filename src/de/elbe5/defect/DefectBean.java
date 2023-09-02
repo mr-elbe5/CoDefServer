@@ -33,8 +33,8 @@ public class DefectBean extends ContentBean {
         return getNextId("s_defect_id");
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT display_id, assigned_id, notified, lot, " +
-            "costs, position_x, position_y, position_comment, " +
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT display_id, assigned_id, defect_type, notified, " +
+            "position_x, position_y, position_comment, " +
             "due_date1, due_date2, close_date  " +
             "FROM t_defect  WHERE id=?";
 
@@ -51,9 +51,8 @@ public class DefectBean extends ContentBean {
                     int i=1;
                     data.setDisplayId(rs.getInt(i++));
                     data.setAssignedId(rs.getInt(i++));
+                    data.setDefectType(rs.getString(i++));
                     data.setNotified(rs.getBoolean(i++));
-                    data.setLot(rs.getString(i++));
-                    data.setCosts(rs.getInt(i++));
                     data.setPositionX(rs.getDouble(i++));
                     data.setPositionY(rs.getDouble(i++));
                     data.setPositionComment(rs.getString(i++));
@@ -71,10 +70,10 @@ public class DefectBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect (" +
-            "display_id,assigned_id, notified, lot, " +
-            "due_date1, costs, " +
+            "display_id,assigned_id, defect_type, notified, " +
+            "due_date1, " +
             "position_x, position_y,position_comment,id) " +
-            "values(?,?,?,?,?,?,?,?,?,?)";
+            "values(?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -86,14 +85,13 @@ public class DefectBean extends ContentBean {
             int i = 1;
             pst.setInt(i++,data.getDisplayId());
             pst.setInt(i++, data.getAssignedId());
+            pst.setString(i++, data.getDefectTypeString());
             pst.setBoolean(i++, data.isNotified());
-            pst.setString(i++, data.getLot());
             LocalDate date=data.getDueDate1();
             if (date==null)
                 pst.setNull(i++,Types.TIMESTAMP);
             else
                 pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
-            pst.setInt(i++, data.getCosts());
             pst.setDouble(i++, data.getPositionX());
             pst.setDouble(i++, data.getPositionY());
             pst.setString(i++, data.getPositionComment());
@@ -109,7 +107,7 @@ public class DefectBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect " +
-            "set assigned_id=?, notified=?, lot=?, due_date1=?, due_date2=?, costs=?, position_x=?, position_y=?, position_comment=? where id=? ";
+            "set assigned_id=?, defect_type=?, notified=?, due_date1=?, due_date2=?, position_x=?, position_y=?, position_comment=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -120,8 +118,8 @@ public class DefectBean extends ContentBean {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
             pst.setInt(i++, data.getAssignedId());
+            pst.setString(i++, data.getDefectTypeString());
             pst.setBoolean(i++, data.isNotified());
-            pst.setString(i++, data.getLot());
             LocalDate date=data.getDueDate1();
             if (date==null)
                 pst.setNull(i++,Types.TIMESTAMP);
@@ -132,7 +130,6 @@ public class DefectBean extends ContentBean {
                 pst.setNull(i++,Types.TIMESTAMP);
             else
                 pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
-            pst.setInt(i++, data.getCosts());
             pst.setDouble(i++, data.getPositionX());
             pst.setDouble(i++, data.getPositionY());
             pst.setString(i++, data.getPositionComment());

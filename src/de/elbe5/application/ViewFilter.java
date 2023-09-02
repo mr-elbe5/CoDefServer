@@ -128,7 +128,8 @@ public class ViewFilter {
                 list.remove(i);
             }
         }
-        DefectComparator.instance.sort(list, sortType, ascending);
+        DefectComparator.instance.
+                sort(list, sortType, ascending);
         return list;
     }
 
