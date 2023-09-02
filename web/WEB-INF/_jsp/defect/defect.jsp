@@ -56,10 +56,6 @@
                 <div class="boxText"><%=$SH(contentData.isNotified() ? "_yes" : "_no")%></div>
             </div>
             <div class="box">
-                <div class="boxTitle"><%=$SH("_lot")%></div>
-                <div class="boxText"><%=$H(contentData.getLot())%></div>
-            </div>
-            <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
                 <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>
             </div>
