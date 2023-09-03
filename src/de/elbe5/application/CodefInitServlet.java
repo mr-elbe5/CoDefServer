@@ -52,8 +52,6 @@ public class CodefInitServlet extends InitServlet {
         if (!DbConnector.getInstance().initialize("jdbc/codef"))
             return;
         Configuration.setAppTitle("CoDefTrack");
-        Configuration.setLogContent(false);
-        Configuration.setEmailMandatory(false);
 
         AdminController.register(new AdminController());
         ContentController.register(new ContentController());

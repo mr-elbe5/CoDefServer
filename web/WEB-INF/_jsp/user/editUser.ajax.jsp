@@ -40,11 +40,8 @@
                 </form:line>
                 <form:text name="login" label="_login" required="true" value="<%=$H(user.getLogin())%>"/>
                 <form:password name="password" label="_password"/>
-                <form:text name="firstName" label="_firstName" value="<%=$H(user.getFirstName())%>"/>
-                <form:text name="lastName" label="_lastName" required="true" value="<%=$H(user.getLastName())%>"/>
+                <form:text name="name" label="_name" value="<%=$H(user.getName())%>"/>
                 <form:text name="email" label="_email" required="true" value="<%=$H(user.getEmail())%>"/>
-                <form:textarea name="notes" label="_notes" height="5rem"><%=$H(user.getNotes())%>
-                </form:textarea>
                 <h3><%=$SH("_groups")%>
                 </h3>
                 <form:line label="_group"><%=$SH("_inGroup")%>

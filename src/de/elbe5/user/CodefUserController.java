@@ -22,6 +22,10 @@ import java.util.Map;
 
 public class CodefUserController extends UserController {
 
+    protected UserData getNewUserData(){
+        return new CodefUserData();
+    }
+
     @Override
     protected void initWebUser(UserData data, RequestData rdata){
         ViewFilter filter = ViewFilter.getFilter(rdata);
