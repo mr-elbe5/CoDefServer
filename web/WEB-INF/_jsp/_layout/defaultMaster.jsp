@@ -75,7 +75,7 @@
                 </ol>
             </section>
             <section class="col-6 filter">
-                <jsp:include page="/WEB-INF/_jsp/_include/_filterMenu.inc.jsp" flush="true"/>
+                <jsp:include page="/WEB-INF/_jsp/user/filterMenu.inc.jsp" flush="true"/>
             </section>
         </div>
     </div>

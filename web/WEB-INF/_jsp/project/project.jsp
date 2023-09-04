@@ -11,20 +11,19 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
-<%@ page import="de.elbe5.application.ViewFilter" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defect.DefectComparator" %>
+<%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
+    CodefUserData user = rdata.getLoginUser(CodefUserData.class);
     ProjectData project = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert (project != null);
-
     int id=project.getId();
-    ViewFilter filter = ViewFilter.getFilter(rdata);
-    List<DefectData> defects = filter.getProjectDefects(project.getId());
+    List<DefectData> defects = user.getProjectDefects(project.getId());
 %>
 <% if (project.hasUserReadRight(rdata.getLoginUser())){%>
 <form:message/>

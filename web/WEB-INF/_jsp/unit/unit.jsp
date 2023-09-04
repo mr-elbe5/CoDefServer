@@ -11,20 +11,19 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
-<%@ page import="de.elbe5.application.ViewFilter" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defect.DefectComparator" %>
+<%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-
+    CodefUserData user = rdata.getLoginUser(CodefUserData.class);
     UnitData unit = ContentData.getCurrentContent(rdata, UnitData.class);
     assert (unit != null);
     int id= unit.getId();
-    ViewFilter filter = ViewFilter.getFilter(rdata);
-    List<DefectData> defects = filter.getUnitDefects(id);
+    List<DefectData> defects = user.getUnitDefects(id);
 %>
 <form:message/>
 <section class="contentTop">

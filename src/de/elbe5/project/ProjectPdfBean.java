@@ -15,11 +15,11 @@ import de.elbe5.file.ImageData;
 import de.elbe5.unit.UnitBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.DefectFopBean;
-import de.elbe5.application.ViewFilter;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
 import de.elbe5.file.ImageBean;
 import de.elbe5.request.RequestData;
+import de.elbe5.user.CodefUserData;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +36,9 @@ public class ProjectPdfBean extends DefectFopBean {
     }
 
     public BinaryFile getProjectReport(int projectId, RequestData rdata, boolean includeComments){
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user==null)
+            return null;
         LocalDateTime now = LocalDateTime.now();
         ProjectData project= ContentCache.getContent(projectId,ProjectData.class);
         if (project==null)
@@ -44,7 +47,7 @@ public class ProjectPdfBean extends DefectFopBean {
         sb.append("<root>");
         addProjectHeaderXml(sb,project);
         for (UnitData unit : project.getChildren(UnitData.class)) {
-            List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
+            List<DefectData> defects = user.getUnitDefects(unit.getId());
             if (!defects.isEmpty()) {
                 sb.append("<unit>");
                 sb.append("<unitheader><title>");
@@ -57,7 +60,7 @@ public class ProjectPdfBean extends DefectFopBean {
                 if (plan != null) {
                     ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
                     byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
-                    defects = ViewFilter.getFilter(rdata).getUnitDefects(unit.getId());
+                    defects = user.getUnitDefects(unit.getId());
                     BinaryFile file = unit.createUnitDefectPlan(fullplan, arrowBytes, defects, 1);
                     addUnitPlanXml(sb, unit, plan, file);
                 }

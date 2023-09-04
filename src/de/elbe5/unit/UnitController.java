@@ -12,7 +12,6 @@ import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
-import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.defect.DefectData;
@@ -29,7 +28,7 @@ import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
 import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.ControllerCache;
-import de.elbe5.user.UserData;
+import de.elbe5.user.CodefUserData;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
@@ -88,6 +87,9 @@ public class UnitController extends ContentController {
     }
 
     public IResponse showDefectPlan(RequestData rdata) {
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
         if (!data.hasUserReadRight(rdata.getLoginUser())) {
@@ -98,7 +100,7 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
-        List<DefectData> defects = ViewFilter.getFilter(rdata).getUnitDefects(data.getId());
+        List<DefectData> defects = user.getUnitDefects(data.getId());
         BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,1);
         assert(file!=null);
         return new MemoryFileResponse(file);
@@ -115,16 +117,18 @@ public class UnitController extends ContentController {
     }
 
     public IResponse sort(RequestData rdata) {
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int sortType = rdata.getAttributes().getInt("sortType");
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setSortType(sortType);
+        user.setSortType(sortType);
         return show(rdata);
     }
 
     // api
 
     public IResponse downloadUnitDefectPlan(RequestData rdata) {
-        UserData user = rdata.getLoginUser();
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         Log.info("loading unit defect plan");
@@ -133,10 +137,7 @@ public class UnitController extends ContentController {
         boolean isEditor = GlobalRight.hasGlobalContentEditRight(user);
         int id = rdata.getId();
         UnitData data= (UnitData) ContentCache.getContent(id);
-        ViewFilter filter = new ViewFilter();
-        filter.setEditor(isEditor);
-        filter.setCurrentUserId(user.getId());
-        if (!data.hasUserReadRight(rdata.getLoginUser())) {
+        if (!data.hasUserReadRight(user)) {
             Log.error("plan is null");
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -144,7 +145,7 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
         byte[] arrowBytes = UnitBean.getInstance().getImageBytes("red_arrow.png");
-        List<DefectData> defects = filter.getUnitDefects(data.getId());
+        List<DefectData> defects = user.getUnitDefects(data.getId());
         BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,((float)scalePercent)/100);
         if (file==null) {
             Log.error("file is null");

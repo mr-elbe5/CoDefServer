@@ -8,7 +8,13 @@
  */
 package de.elbe5.user;
 
+import de.elbe5.base.StringHelper;
+import de.elbe5.content.ContentCache;
 import de.elbe5.defect.DefectComparator;
+import de.elbe5.defect.DefectData;
+import de.elbe5.project.ProjectData;
+import de.elbe5.rights.GlobalRight;
+import de.elbe5.unit.UnitData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +49,7 @@ public class CodefUserData extends UserData{
     }
 
     public String getCompanyIdsString() {
-        //todo
-        return "";
+        return StringHelper.getIntString(companyIds);
     }
 
     public List<Integer> getCompanyIds() {
@@ -52,7 +57,11 @@ public class CodefUserData extends UserData{
     }
 
     public void setCompanyIds(String companyIdsString) {
-        //todo
+        companyIds = StringHelper.toIntList(companyIdsString);
+    }
+
+    public void setCompanyIds(List<Integer> ids) {
+        companyIds = ids;
     }
 
     public boolean isShowClosed() {
@@ -99,4 +108,51 @@ public class CodefUserData extends UserData{
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
     }
+
+    public List<Integer> getOwnProjectIds() {
+        return ownProjectIds;
+    }
+
+    public List<DefectData> getUnitDefects(int unitId){
+        UnitData unit = ContentCache.getContent(unitId, UnitData.class);
+        assert unit != null;
+        List<DefectData> list = unit.getChildren(DefectData.class);
+        for (int i=list.size()-1;i>=0;i--){
+            DefectData data=list.get(i);
+            if (!showClosed && data.isClosed()){
+                list.remove(i);
+                continue;
+            }
+            if (!getCompanyIds().contains(data.getAssignedId())){
+                list.remove(i);
+            }
+        }
+        DefectComparator.instance.
+                sort(list, sortType, ascending);
+        return list;
+    }
+
+    public List<DefectData> getProjectDefects(int projectId){
+        ProjectData project = ContentCache.getContent(projectId, ProjectData.class);
+        assert project != null;
+        List<DefectData> defects = new ArrayList<>();
+        List<UnitData> units = project.getChildren(UnitData.class);
+        for (UnitData unit : units){
+            List<DefectData> list = unit.getChildren(DefectData.class);
+            for (int i=list.size()-1;i>=0;i--){
+                DefectData data=list.get(i);
+                if (!showClosed && data.isClosed()){
+                    list.remove(i);
+                    continue;
+                }
+                if (!getCompanyIds().contains(data.getAssignedId())){
+                    list.remove(i);
+                }
+            }
+            defects.addAll(list);
+        }
+        DefectComparator.instance.sort(defects, sortType, ascending);
+        return defects;
+    }
+
 }

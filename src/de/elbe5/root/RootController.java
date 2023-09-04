@@ -8,13 +8,14 @@
  */
 package de.elbe5.root;
 
-import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentData;
 import de.elbe5.content.ContentController;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.*;
+import de.elbe5.user.CodefUserBean;
+import de.elbe5.user.CodefUserData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
@@ -62,15 +63,17 @@ public class RootController extends ContentController {
 
     public IResponse setEntryPoint(RequestData rdata){
         assertSessionCall(rdata);
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         //Log.log("setEntryPoint");
         int contentId = rdata.getId();
         ContentData data = ContentCache.getContent(contentId);
         assertRights(data.hasUserReadRight(rdata.getLoginUser()));
         ProjectData project = findProject(data);
         if (project!=null){
-            ViewFilter filter = ViewFilter.getFilter(rdata);
-            filter.setProjectId(project.getId());
-            rdata.addLoginCookie("projectId", Integer.toString(filter.getProjectId()),COOKIE_EXPIRATION_DAYS);
+            user.setProjectId(project.getId());
+            CodefUserBean.getInstance().updateViewSettings(user);
         }
         return data.getDefaultView();
     }

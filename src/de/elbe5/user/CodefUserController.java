@@ -8,17 +8,16 @@
  */
 package de.elbe5.user;
 
-import de.elbe5.application.ViewFilter;
 import de.elbe5.content.ContentCache;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
+import de.elbe5.response.CloseDialogResponse;
 import de.elbe5.response.ForwardResponse;
 import de.elbe5.response.IResponse;
-import de.elbe5.rights.GlobalRight;
+import de.elbe5.servlet.ResponseException;
+import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CodefUserController extends UserController {
 
@@ -28,44 +27,58 @@ public class CodefUserController extends UserController {
 
     @Override
     protected void initWebUser(UserData data, RequestData rdata){
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        //todo
-        boolean isEditor = GlobalRight.hasGlobalContentEditRight(data);
-        filter.setEditor(isEditor);
-        filter.setCurrentUserId(data.getId());
-        Map<String,String> cookieValues = rdata.readLoginCookies();
-        if (cookieValues.containsKey("showClosed"))
-            filter.setShowClosed(Boolean.parseBoolean(cookieValues.get("showClosed")));
+        if (!(data instanceof CodefUserData user)){
+            throw new ResponseException(HttpServletResponse.SC_BAD_REQUEST);
+        }
         List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
-        List<Integer> projectIds = new ArrayList<>();
+        user.getOwnProjectIds().clear();
         for (ProjectData project : projects){
             if (project.hasUserEditRight(data)){
-                projectIds.add(project.getId());
+                user.getOwnProjectIds().add(project.getId());
             }
         }
-        filter.getOwnProjectIds().clear();
-        filter.getOwnProjectIds().addAll(projectIds);
-        switch (projectIds.size()){
-            case 0:
-                break;
-            case 1:
-                filter.setProjectId(projectIds.get(0));
-                break;
-            default:
-                String s =  cookieValues.get("projectId");
-                if (s!=null) {
-                    int id = Integer.parseInt(s);
-                    if (projectIds.contains(id))
-                        filter.setProjectId(id);
-                }
-                break;
-
+        if (user.getProjectId()!=0 && !user.getOwnProjectIds().contains(user.getProjectId())) {
+            user.setProjectId(0);
+            user.getCompanyIds().clear();
+            CodefUserBean.getInstance().updateViewSettings(user);
         }
-        filter.initWatchedCompanies();
+    }
+
+    public IResponse openCompanyFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        int contentId=rdata.getId();
+        return new ForwardResponse("/WEB-INF/_jsp/user/companyFilter.ajax.jsp");
+    }
+
+    public IResponse setCompanyFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        user.setCompanyIds(rdata.getAttributes().getIntegerList("companyIds"));
+        CodefUserBean.getInstance().updateViewSettings(user);
+        return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
+    }
+
+    public IResponse openViewFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        return new ForwardResponse("/WEB-INF/_jsp/user/viewFilter.ajax.jsp");
+    }
+
+    public IResponse setViewFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
+        user.setShowPreapprove(rdata.getAttributes().getBoolean("showPreapprove"));
+        user.setShowLiability(rdata.getAttributes().getBoolean("showLiability"));
+        CodefUserBean.getInstance().updateViewSettings(user);
+        return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
     }
 
     @Override
-    protected IResponse showLoginHome() {
+    protected IResponse showLoginHome(RequestData rdata) {
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user.getProjectId()!=0){
+            return new ForwardResponse("/ctrl/content/show/" + user.getProjectId());
+        }
         return new ForwardResponse("/home.html");
     }
 

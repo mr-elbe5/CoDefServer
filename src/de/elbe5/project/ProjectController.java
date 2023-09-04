@@ -9,12 +9,11 @@
 package de.elbe5.project;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.application.ViewFilter;
-import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
-import de.elbe5.content.ContentResponse;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.*;
+import de.elbe5.user.CodefUserData;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class ProjectController extends ContentController {
 
@@ -46,9 +45,11 @@ public class ProjectController extends ContentController {
     }
 
     public IResponse sort(RequestData rdata) {
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int sortType = rdata.getAttributes().getInt("sortType");
-        ViewFilter filter = ViewFilter.getFilter(rdata);
-        filter.setSortType(sortType);
+        user.setSortType(sortType);
         return show(rdata);
     }
 

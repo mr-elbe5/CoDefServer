@@ -5,12 +5,13 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
-<%@ page import="de.elbe5.application.ViewFilter" %>
+<%@ page import="de.elbe5.user.CodefUserData" %>
+<%@ page import="de.elbe5.response.StatusResponse" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    ViewFilter filter= ViewFilter.getFilter(rdata);
-    if (filter.getProjectId()!=0){
-        ProjectData project = ContentCache.getContent(filter.getProjectId(),ProjectData.class);
+    CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+    if (user.getProjectId()!=0){
+        ProjectData project = ContentCache.getContent(user.getProjectId(),ProjectData.class);
         if (project!=null && project.hasUserReadRight(rdata.getLoginUser())){%>
 <li class="nav-item">
     <a class="nav-link" href="<%=project.getUrl()%>"><%=$H(project.getDisplayName())%>
