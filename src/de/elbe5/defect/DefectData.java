@@ -14,6 +14,7 @@ import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defectstatuschange.DefectStatusChangeData;
 import de.elbe5.content.ContentBean;
+import de.elbe5.project.ProjectPhase;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectData;
@@ -52,7 +53,7 @@ public class DefectData extends ContentData {
     protected int displayId = 0;
     protected int assignedId = 0;
 
-    protected DefectType defectType = DefectType.PREAPPROVE;
+    protected ProjectPhase projectPhase = ProjectPhase.PREAPPROVE;
     protected boolean notified = false;
     protected double positionX = 0; //width fraction
     protected double positionY = 0; //height fraction
@@ -109,33 +110,33 @@ public class DefectData extends ContentData {
         this.assignedId = assignedId;
     }
 
-    public DefectType getDefectType() {
-        return defectType;
+    public ProjectPhase getProjectPhase() {
+        return projectPhase;
     }
 
-    public String getDefectTypeString() {
-        return defectType.name();
+    public String getProjectPhaseString() {
+        return projectPhase.name();
     }
 
-    public void setDefectType(DefectType defectType) {
-        this.defectType = defectType;
+    public void setProjectPhase(ProjectPhase projectPhase) {
+        this.projectPhase = projectPhase;
     }
 
-    public void setDefectType(String name) {
+    public void setProjectPhase(String name) {
         try{
-            defectType = DefectType.valueOf(name);
+            projectPhase = ProjectPhase.valueOf(name);
         }
         catch(IllegalArgumentException e){
-            defectType = DefectType.PREAPPROVE;
+            projectPhase = ProjectPhase.PREAPPROVE;
         }
     }
 
-    public void setDefectTypeFromApproveDate(UnitData unit){
+    public void setProjectPhaseFromApproveDate(UnitData unit){
         if (unit.isAfterApproveDate(getCreationDate().toLocalDate())){
-            setDefectType(DefectType.LIABILITY);
+            setProjectPhase(ProjectPhase.LIABILITY);
         }
         else{
-            setDefectType(DefectType.PREAPPROVE);
+            setProjectPhase(ProjectPhase.PREAPPROVE);
         }
     }
 
@@ -292,7 +293,7 @@ public class DefectData extends ContentData {
         Log.log("DefectData.readBackendRequestData");
         setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setDefectType(rdata.getAttributes().getString("defectType"));
+        setProjectPhase(rdata.getAttributes().getString("projectPhase"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
         setDueDate1(rdata.getAttributes().getDate("dueDate1"));
         setDueDate2(rdata.getAttributes().getDate("dueDate2"));
@@ -343,7 +344,7 @@ public class DefectData extends ContentData {
     public void readFrontendRequestData(RequestData rdata) {
         Log.log("DefectData.readFrontendRequestData");
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setDefectType(rdata.getAttributes().getString("defectType"));
+        setProjectPhase(rdata.getAttributes().getString("projectPhase"));
         setNotified(rdata.getAttributes().getBoolean("notified"));
         List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
         for (BinaryFile f : newFiles) {
@@ -364,7 +365,7 @@ public class DefectData extends ContentData {
     public JsonObject getJson(){
         return super.getJson()
                 .add("displayId",getDisplayId())
-                .add("defectType", getDefectTypeString())
+                .add("projectPhase", getProjectPhaseString())
                 .add("assignedId",getAssignedId())
                 .add("assignedName",getAssignedName())
                 .add("positionX",getPositionX())
@@ -392,9 +393,9 @@ public class DefectData extends ContentData {
     public void fromJson(JSONObject json) {
         super.fromJson(json);
         int i = getInt(json, "displayId");
-        String s = getString(json, "defectType");
+        String s = getString(json, "projectPhase");
         if (s != null)
-            setDefectType(s);
+            setProjectPhase(s);
         if (i!=0)
             setDisplayId(i);
         i = getInt(json, "assignedId");

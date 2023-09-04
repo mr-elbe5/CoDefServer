@@ -12,8 +12,8 @@ import de.elbe5.base.StringHelper;
 import de.elbe5.content.ContentCache;
 import de.elbe5.defect.DefectComparator;
 import de.elbe5.defect.DefectData;
+import de.elbe5.project.ProjectPhase;
 import de.elbe5.project.ProjectData;
-import de.elbe5.rights.GlobalRight;
 import de.elbe5.unit.UnitData;
 
 import java.util.ArrayList;
@@ -24,8 +24,7 @@ public class CodefUserData extends UserData{
     private int projectId = 0;
     private List<Integer> companyIds = new ArrayList<>();
     private boolean showClosed = true;
-    private boolean showPreapprove = true;
-    private boolean showLiability = true;
+    private ProjectPhase viewRestriction = null;
 
     //runtime
 
@@ -72,20 +71,29 @@ public class CodefUserData extends UserData{
         this.showClosed = showClosed;
     }
 
-    public boolean isShowPreapprove() {
-        return showPreapprove;
+    public ProjectPhase getViewRestriction() {
+        return viewRestriction;
     }
 
-    public void setShowPreapprove(boolean showPreapprove) {
-        this.showPreapprove = showPreapprove;
+    public String getViewRestrictionString() {
+        return viewRestriction == null ? "" : viewRestriction.name();
     }
 
-    public boolean isShowLiability() {
-        return showLiability;
+    public void setViewRestriction(ProjectPhase viewRestriction) {
+        this.viewRestriction = viewRestriction;
     }
 
-    public void setShowLiability(boolean showLiability) {
-        this.showLiability = showLiability;
+    public void setViewRestriction(String viewRestrictionString) {
+        if (viewRestrictionString.isEmpty()){
+            viewRestriction = null;
+            return;
+        }
+        try{
+            viewRestriction = ProjectPhase.valueOf(viewRestrictionString);
+        }
+        catch (IllegalArgumentException e){
+            viewRestriction = null;
+        }
     }
 
     public int getSortType() {
@@ -120,6 +128,10 @@ public class CodefUserData extends UserData{
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);
             if (!showClosed && data.isClosed()){
+                list.remove(i);
+                continue;
+            }
+            if (getViewRestriction() != null && getViewRestriction() != data.getProjectPhase()) {
                 list.remove(i);
                 continue;
             }

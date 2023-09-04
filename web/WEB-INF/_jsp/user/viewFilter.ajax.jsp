@@ -14,6 +14,7 @@
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
+<%@ page import="de.elbe5.project.ProjectPhase" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -39,12 +40,11 @@
                 <form:line label="_showClosedDefects" padded="true">
                     <form:check name="showClosed" value="true" checked="<%=user.isShowClosed()%>"> </form:check>
                 </form:line>
-                <form:line label="_showPreapprove" padded="true">
-                    <form:check name="showPreapprove" value="true" checked="<%=user.isShowPreapprove()%>"> </form:check>
-                </form:line>
-                <form:line label="_showLiability" padded="true">
-                    <form:check name="showLiability" value="true" checked="<%=user.isShowLiability()%>"> </form:check>
-                </form:line>
+                <form:select name="viewRestriction" label="_restrictToProjectPhase">
+                    <option value="" <%=(user.getViewRestriction() == null) ? "selected" : ""%>><%=$SH("_noRestriction")%></option>
+                    <option value="<%=ProjectPhase.PREAPPROVE.toString()%>" <%=ProjectPhase.PREAPPROVE.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVE.toString())%></option>
+                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.toString())%></option>
+                </form:select>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>

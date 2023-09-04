@@ -17,7 +17,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
-<%@ page import="de.elbe5.defect.DefectType" %>
+<%@ page import="de.elbe5.project.ProjectPhase" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -60,8 +60,8 @@
                     <%}%>
                 </form:select>
                 <form:select name="defectType" label="_defectType">
-                    <option value="<%=DefectType.PREAPPROVE.toString()%>" <%=DefectType.PREAPPROVE.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(DefectType.PREAPPROVE.name())%></option>
-                    <option value="<%=DefectType.LIABILITY.toString()%>" <%=DefectType.LIABILITY.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(DefectType.LIABILITY.name())%></option>
+                    <option value="<%=ProjectPhase.PREAPPROVE.toString()%>" <%=ProjectPhase.PREAPPROVE.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVE.name())%></option>
+                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
                 </form:select>
                 <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=contentData.isNotified()%>"/></form:line>
                 <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>

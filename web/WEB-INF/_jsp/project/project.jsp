@@ -83,7 +83,7 @@
             <td><%=$D(defect.getCloseDate())%></td>
             <td><%=$SH(defect.getStatus().toString())%></td>
             <td><%=$H(defect.getAssignedName())%></td>
-            <td><%=$SH(defect.getDefectTypeString())%></td>
+            <td><%=$SH(defect.getProjectPhaseString())%></td>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
             <td>
                 <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>

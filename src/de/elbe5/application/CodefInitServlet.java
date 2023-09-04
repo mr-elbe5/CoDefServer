@@ -11,6 +11,7 @@ package de.elbe5.application;
 import de.elbe5.administration.AdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
+import de.elbe5.base.PBKDF2Encryption;
 import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatuschange.DefectStatusChangeController;
 import de.elbe5.group.GroupCache;
@@ -81,6 +82,14 @@ public class CodefInitServlet extends InitServlet {
         Timer.getInstance().loadTasks();
         Timer.getInstance().startThread();
         Log.log("CoDefTrack initialized");
+        /*try {
+            String salt = PBKDF2Encryption.generateSaltBase64();
+            Log.info(salt);
+            String pwd = PBKDF2Encryption.getEncryptedPasswordBase64("pass", salt);
+            Log.info(pwd);
+        }
+        catch (Exception ignore){
+        }*/
     }
 
 }

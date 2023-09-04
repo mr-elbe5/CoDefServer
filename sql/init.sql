@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
     display_id       INTEGER       NOT NULL,
-    defect_type      VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
+    project_phase    VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     assigned_id      INTEGER       NOT NULL,
     position_x       REAL          NOT NULL DEFAULT 0.0,
@@ -193,6 +193,17 @@ CREATE TABLE IF NOT EXISTS t_defect_status_change
     CONSTRAINT t_defect_status_change_pk PRIMARY KEY (id),
     CONSTRAINT t_defect_status_change_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
     CONSTRAINT t_defect_status_change_fk2 FOREIGN KEY (assigned_id) REFERENCES t_company (id)
+);
+
+CREATE TABLE IF NOT EXISTS t_codef_user
+(
+    id                 INTEGER      NOT NULL,
+    project_id         INTEGER      NULL,
+    company_ids        VARCHAR(60)  NOT NULL DEFAULT '',
+    show_closed        BOOLEAN      NOT NULL DEFAULT true,
+    view_restriction   VARCHAR(30)  NOT NULL DEFAULT '',
+    CONSTRAINT t_codef_user_pk PRIMARY KEY (id),
+    CONSTRAINT t_codef_user_fk1 FOREIGN KEY (id) REFERENCES t_user(id) ON DELETE CASCADE
 );
 
 -- root user

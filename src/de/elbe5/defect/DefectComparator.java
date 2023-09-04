@@ -70,7 +70,7 @@ public class DefectComparator implements Comparator<DefectData> {
             }
             case TYPE_DESCRIPTION ->
                     result = o1.getDescription().toLowerCase().compareTo(o2.getDescription().toLowerCase());
-            case TYPE_DEFECTTYPE -> result = o1.getDefectType().compareTo(o2.getDefectType());
+            case TYPE_DEFECTTYPE -> result = o1.getProjectPhase().compareTo(o2.getProjectPhase());
         }
         return ascending ? result : -result;
     }

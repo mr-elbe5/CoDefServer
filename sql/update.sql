@@ -13,11 +13,12 @@ CREATE TABLE IF NOT EXISTS t_codef_user
     project_id         INTEGER      NULL,
     company_ids        VARCHAR(60)  NOT NULL DEFAULT '',
     show_closed        BOOLEAN      NOT NULL DEFAULT true,
-    show_preapprove    BOOLEAN      NOT NULL DEFAULT true,
-    show_liability     BOOLEAN      NOT NULL DEFAULT true,
+    view_restriction   VARCHAR(30)  NOT NULL DEFAULT '',
     CONSTRAINT t_codef_user_pk PRIMARY KEY (id),
     CONSTRAINT t_codef_user_fk1 FOREIGN KEY (id) REFERENCES t_user(id) ON DELETE CASCADE
 );
+
+insert into t_codef_user select id from t_user;
 
 alter table t_user drop column first_name;
 alter table t_user drop column last_name;

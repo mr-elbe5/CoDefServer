@@ -67,8 +67,7 @@ public class CodefUserController extends UserController {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
-        user.setShowPreapprove(rdata.getAttributes().getBoolean("showPreapprove"));
-        user.setShowLiability(rdata.getAttributes().getBoolean("showLiability"));
+        user.setViewRestriction(rdata.getAttributes().getString("viewRestriction"));
         CodefUserBean.getInstance().updateViewSettings(user);
         return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
     }
