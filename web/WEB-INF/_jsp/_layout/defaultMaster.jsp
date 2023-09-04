@@ -14,10 +14,13 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.response.IMasterInclude" %>
+<%@ page import="de.elbe5.request.RequestKeys" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     ContentData contentData = ContentData.getCurrentContent(rdata);
+    IMasterInclude masterInclude = rdata.getRequestObject(RequestKeys.KEY_MASTERINCLUDE, IMasterInclude.class);
     List<Integer> parentIds = ContentCache.getParentContentIds(contentData);
     String title = Configuration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
 %>
@@ -82,9 +85,9 @@
 </header>
 <main id="main" role="main">
     <div id="pageContainer" class="container">
-        <% if (contentData!=null) {
+        <% if (masterInclude != null) {
             try {
-                contentData.displayContent(pageContext, rdata);
+                masterInclude.displayContent(pageContext, rdata);
             } catch (Exception ignore) {
             }
         }%>
