@@ -52,7 +52,7 @@ public abstract class DefectFopBean extends PdfCreator {
         sb.append("</image>");
     }
 
-    protected void addUnitDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeComments) {
+    protected void addUnitDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
             sb.append("<unitdefect>");
             sb.append("<description>").append(LocalizedStrings.xml("_defect")).append(": ").append(xml(defect.getDescription())).append("</description>");
@@ -73,47 +73,78 @@ public abstract class DefectFopBean extends PdfCreator {
             sb.append("<label2>").append(LocalizedStrings.xml("_dueDate2")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(LocalizedStrings.xml("_state")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus().toString())).append("</content1>");
+            sb.append("<label1>").append(LocalizedStrings.xml("_status")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus().toString())).append("</content1>");
             sb.append("<label2>").append(LocalizedStrings.xml("_closeDate")).append("</label2><content2>").append(DateHelper.toHtmlDate(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
+            BinaryFile file;
+            if (defect.getPositionX()>0 || defect.getPositionY()>0) {
+                ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
+                byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
+                file = defect.createCroppedDefectPlan(plan, arrowBytes, data.getId(), defect.getPositionX(), defect.getPositionY());
+                addLabeledImage(sb, LocalizedStrings.string("_position"), file, "5.0cm");
+            }
             if (!defect.getPositionComment().isEmpty()) {
                 sb.append("<defectrow>");
                 sb.append("<label1>").append(LocalizedStrings.xml("_positionComment")).append("</label1><content1>").append(xml(defect.getPositionComment())).append("</content1>");
                 sb.append("</defectrow>");
             }
-            for (ImageData image : defect.getFiles(ImageData.class)){
-                BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
-                addIndentedImage(sb, file, "8.0cm");
+            List<ImageData> files = defect.getFiles(ImageData.class);
+            if (!files.isEmpty()) {
+                sb.append("<defectrow>");
+                sb.append("<label1>")
+                        .append(LocalizedStrings.xml("_images"))
+                        .append("</label1>");
+                sb.append("</defectrow>");
+                for (ImageData image : files) {
+                    file = FileBean.getInstance().getBinaryFile(image.getId());
+                    addIndentedImage(sb, file, "8.0cm");
+                }
             }
-            if (includeComments) {
-                List<ImageData> files = new ArrayList<>();
-                for (DefectStatusChangeData comment : defect.getStatusChanges()) {
+            if (includeStatusChanges) {
+                for (DefectStatusChangeData changeData : defect.getStatusChanges()) {
+                    sb.append("<defectrow>");
+                    sb.append("<label1>")
+                            .append(LocalizedStrings.xml("_statusChange"))
+                            .append("</label1>");
+                    sb.append("</defectrow>");
+                    sb.append("<defectrow>");
+                    sb.append("<label1>")
+                            .append(LocalizedStrings.xml("_by"))
+                            .append("</label1><content1>")
+                            .append(xml(changeData.getCreatorName()))
+                            .append("</content1>");
+                    sb.append("<label2>")
+                            .append(LocalizedStrings.xml("_on"))
+                            .append("</label2><content2>")
+                            .append(DateHelper.toHtmlDateTime(changeData.getCreationDate()))
+                            .append("</content2>");
+                    sb.append("</defectrow>");
+                    sb.append("<defectrow>");
+                    sb.append("<label1>")
+                            .append(LocalizedStrings.xml("_status"))
+                            .append("</label1><content1>")
+                            .append(LocalizedStrings.xml(changeData.getStatusString()))
+                            .append("</content1>");
+                    sb.append("</defectrow>");
                     sb.append("<defectrow>");
                     sb.append("<label1>")
                             .append(LocalizedStrings.xml("_description"))
                             .append("</label1><content1>")
-                            .append(xml(comment.getDescription()))
+                            .append(xml(changeData.getDescription()))
                             .append("</content1>");
-                    sb.append("<label2>")
-                            .append(LocalizedStrings.xml("_by"))
-                            .append("</label2><content2>")
-                            .append(xml(comment.getCreatorName()))
-                            .append("</content2>");
                     sb.append("</defectrow>");
-                    sb.append("<defectrow>");
-                    sb.append("<label2>")
-                            .append(LocalizedStrings.xml("_on"))
-                            .append("</label2><content2>")
-                            .append(DateHelper.toHtmlDateTime(comment.getCreationDate()))
-                            .append("</content2>");
-                    sb.append("</defectrow>");
-                    List<ImageData> defectCommentImages=defect.getFiles(ImageData.class);
-                    files.clear();
-                    //todo
-                    files.addAll(defectCommentImages);
-                    for (ImageData image : files){
-                        BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
-                        addIndentedImage(sb, file, "8.0cm");
+                    files = changeData.getFiles(ImageData.class);
+                    if (!files.isEmpty()) {
+                        sb.append("<defectrow>");
+                        sb.append("<label1>")
+                                .append(LocalizedStrings.xml("_images"))
+                                .append("</label1>");
+                        sb.append("</defectrow>");
+                        List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
+                        for (ImageData image : statusChangeImages) {
+                            file = FileBean.getInstance().getBinaryFile(image.getId());
+                            addIndentedImage(sb, file, "8.0cm");
+                        }
                     }
                 }
             }

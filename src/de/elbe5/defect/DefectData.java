@@ -53,7 +53,7 @@ public class DefectData extends ContentData {
     protected int displayId = 0;
     protected int assignedId = 0;
 
-    protected ProjectPhase projectPhase = ProjectPhase.PREAPPROVE;
+    protected ProjectPhase projectPhase = ProjectPhase.PREAPPROVAL;
     protected boolean notified = false;
     protected double positionX = 0; //width fraction
     protected double positionY = 0; //height fraction
@@ -127,7 +127,7 @@ public class DefectData extends ContentData {
             projectPhase = ProjectPhase.valueOf(name);
         }
         catch(IllegalArgumentException e){
-            projectPhase = ProjectPhase.PREAPPROVE;
+            projectPhase = ProjectPhase.PREAPPROVAL;
         }
     }
 
@@ -136,7 +136,7 @@ public class DefectData extends ContentData {
             setProjectPhase(ProjectPhase.LIABILITY);
         }
         else{
-            setProjectPhase(ProjectPhase.PREAPPROVE);
+            setProjectPhase(ProjectPhase.PREAPPROVAL);
         }
     }
 

@@ -107,9 +107,9 @@ public class UnitController extends ContentController {
     }
 
     public IResponse getReport(RequestData rdata) {
-        boolean includeComments = rdata.getAttributes().getBoolean("includeComments");
+        boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = UnitPdfBean.getInstance().getUnitReport(contentId, rdata, includeComments);
+        BinaryFile file = UnitPdfBean.getInstance().getUnitReport(contentId, rdata, includeStatusChanges);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);

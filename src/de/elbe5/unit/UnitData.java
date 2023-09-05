@@ -235,6 +235,7 @@ public class UnitData extends ContentData {
             int biWidth=bi.getWidth();
             int biHeight=bi.getHeight();
             for (DefectData defect : defects){
+                //Log.log("posx " + defect.getPositionX() +" posy " +defect.getPositionY());
                 if (defect.getPositionX()>0 || defect.getPositionY()>0) {
                     g.setColor(Color.RED);
                     int posX=(int)(biWidth*defect.getPositionX());

@@ -9,6 +9,7 @@
 package de.elbe5.project;
 
 public enum ProjectPhase {
-    PREAPPROVE,
+    PREAPPROVAL,
+    APPROVAL,
     LIABILITY
 }

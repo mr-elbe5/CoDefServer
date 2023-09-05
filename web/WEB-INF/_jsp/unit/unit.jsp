@@ -106,7 +106,7 @@
     <div class=buttonLine>
         <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeComments=true');"><%=$SH("_downloadPdfWithComments")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
     </div>
 </section>

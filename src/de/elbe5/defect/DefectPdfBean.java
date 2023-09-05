@@ -20,6 +20,7 @@ import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class DefectPdfBean extends DefectFopBean {
 
@@ -78,19 +79,26 @@ public class DefectPdfBean extends DefectFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_creator"),user.getName());
         addLabeledContent(sb,LocalizedStrings.string("_creationDate"),DateHelper.toHtmlDateTime(data.getCreationDate()));
-        addLabeledContent(sb,LocalizedStrings.string("_state"),LocalizedStrings.string(data.getStatus().toString()));
+        addLabeledContent(sb,LocalizedStrings.string("_status"),LocalizedStrings.string(data.getStatus().toString()));
         addLabeledContent(sb,LocalizedStrings.string("_assigned"),data.getAssignedName());
         addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
         addLabeledContent(sb,LocalizedStrings.string("_dueDate2"),DateHelper.toHtmlDate(data.getDueDate2()));
         addLabeledContent(sb,LocalizedStrings.string("_closeDate"),DateHelper.toHtmlDate(data.getCloseDate()));
-        ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
-        byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
-        BinaryFile file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
-        addLabeledImage(sb,LocalizedStrings.string("_position"), file,"5.0cm");
+        BinaryFile file;
+        if (data.getPositionX()>0 || data.getPositionY()>0) {
+            ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
+            byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
+            file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
+            addLabeledImage(sb, LocalizedStrings.string("_position"), file, "5.0cm");
+        }
         addLabeledContent(sb,LocalizedStrings.string("_positionComment"),data.getPositionComment());
-        for (ImageData image : data.getFiles(ImageData.class)){
-            file = FileBean.getInstance().getBinaryFile(image.getId());
-            addLabeledImage(sb,LocalizedStrings.string("_image"),file,"5.0cm");
+        List<ImageData> files = data.getFiles(ImageData.class);
+        if (!files.isEmpty()) {
+            addLabeledContent(sb,LocalizedStrings.string("_images"),"");
+            for (ImageData image : files) {
+                file = FileBean.getInstance().getBinaryFile(image.getId());
+                addLabeledImage(sb, image.getDisplayName(), file,"5.0cm");
+            }
         }
         sb.append("</defect>");
     }

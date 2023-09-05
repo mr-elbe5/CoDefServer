@@ -35,7 +35,7 @@ public class ProjectPdfBean extends DefectFopBean {
         return instance;
     }
 
-    public BinaryFile getProjectReport(int projectId, RequestData rdata, boolean includeComments){
+    public BinaryFile getProjectReport(int projectId, RequestData rdata, boolean includeStatusChanges){
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         if (user==null)
             return null;
@@ -55,7 +55,7 @@ public class ProjectPdfBean extends DefectFopBean {
                 sb.append(": ");
                 sb.append(xml(unit.getDisplayName()));
                 sb.append("</title></unitheader>");
-                addUnitDefectsXml(sb, unit, defects, includeComments);
+                addLabeledContent(sb,LocalizedStrings.string("_approveDate"),DateHelper.toHtmlDate(unit.getApproveDate()));
                 ImageData plan = unit.getPlan();
                 if (plan != null) {
                     ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
@@ -64,6 +64,8 @@ public class ProjectPdfBean extends DefectFopBean {
                     BinaryFile file = unit.createUnitDefectPlan(fullplan, arrowBytes, defects, 1);
                     addUnitPlanXml(sb, unit, plan, file);
                 }
+
+                addUnitDefectsXml(sb, unit, defects, includeStatusChanges);
                 sb.append("</unit>");
             }
         }

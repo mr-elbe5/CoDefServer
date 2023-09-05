@@ -96,7 +96,7 @@
   </xsl:template>
 
   <xsl:template match="defect">
-    <fo:block>
+    <fo:block page-break-inside="auto">
       <fo:table table-layout="fixed" width="100%" font-size="10pt">
         <fo:table-column column-width="30%"/>
         <fo:table-column column-width="70%"/>
@@ -108,7 +108,7 @@
   </xsl:template>
 
   <xsl:template match="statuschange">
-    <fo:block page-break-inside="avoid">
+    <fo:block page-break-inside="auto">
       <fo:block font-size="12pt" margin-top="0.5cm" padding-top="0.1cm" padding-bottom="0.1cm"
               border-color="#333333" border-top-style="solid" border-bottom-style="solid">
         <xsl:value-of select="title" />
@@ -157,7 +157,7 @@
   </xsl:template>
 
   <xsl:template match="unitdefect">
-    <fo:block page-break-inside="avoid" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
+    <fo:block page-break-inside="auto" page-break-after="always" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
       <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
         <xsl:value-of select="description" />
       </fo:block>
@@ -174,7 +174,7 @@
   </xsl:template>
 
   <xsl:template match="unitplan">
-    <fo:block page-break-inside="avoid" margin-bottom="5mm">
+    <fo:block page-break-inside="avoid" page-break-after="always" margin-bottom="5mm">
       <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="1mm">
         <xsl:value-of select="name" />
       </fo:block>
@@ -190,7 +190,15 @@
 
   <xsl:template match="unit">
     <fo:block>
-      <xsl:apply-templates select="unitheader | unitdefect | unitplan"/>
+      <xsl:apply-templates select="unitheader"/>
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="30%"/>
+        <fo:table-column column-width="70%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="labeledcontent | labeledimage"/>
+        </fo:table-body>
+      </fo:table>
+      <xsl:apply-templates select="unitdefect | unitplan"/>
     </fo:block>
   </xsl:template>
 

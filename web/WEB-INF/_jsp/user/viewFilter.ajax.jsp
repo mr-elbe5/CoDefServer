@@ -42,8 +42,9 @@
                 </form:line>
                 <form:select name="viewRestriction" label="_restrictToProjectPhase">
                     <option value="" <%=(user.getViewRestriction() == null) ? "selected" : ""%>><%=$SH("_noRestriction")%></option>
-                    <option value="<%=ProjectPhase.PREAPPROVE.toString()%>" <%=ProjectPhase.PREAPPROVE.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVE.toString())%></option>
-                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.toString())%></option>
+                    <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showPreapproval")%></option>
+                    <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showApproval")%></option>
+                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showLiability")%></option>
                 </form:select>
             </div>
             <div class="modal-footer">
