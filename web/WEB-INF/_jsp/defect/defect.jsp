@@ -14,6 +14,7 @@
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.defectstatuschange.DefectStatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.application.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -51,10 +52,12 @@
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
                 <div class="boxText"><%=$H(contentData.getAssignedName())%></div>
             </div>
+            <% if (CodefConfiguration.showNotified()){%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_notified")%></div>
                 <div class="boxText"><%=$SH(contentData.isNotified() ? "_yes" : "_no")%></div>
             </div>
+            <%}%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
                 <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>

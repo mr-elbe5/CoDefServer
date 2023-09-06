@@ -8,9 +8,13 @@
  */
 package de.elbe5.application;
 
+import jakarta.servlet.ServletContext;
+
 public class CodefConfiguration {
 
     private static boolean showInactiveContent = false;
+
+    private static boolean showNotified = false;
 
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
@@ -18,6 +22,19 @@ public class CodefConfiguration {
 
     public static void setShowInactiveContent(boolean showInactiveContent) {
         CodefConfiguration.showInactiveContent = showInactiveContent;
+    }
+
+    public static boolean showNotified() {
+        return showNotified;
+    }
+
+    public static String getSafeInitParameter(ServletContext servletContext, String key){
+        String s=servletContext.getInitParameter(key);
+        return s==null ? "" : s;
+    }
+
+    public static void setConfigs(ServletContext servletContext) {
+        showNotified = "true".equals(getSafeInitParameter(servletContext,"showNotified"));
     }
 
 }

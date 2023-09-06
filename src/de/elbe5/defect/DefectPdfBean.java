@@ -55,20 +55,20 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<defectheader><title>");
         sb.append(LocalizedStrings.xml("_report"));
         sb.append(": ");
-        sb.append(LocalizedStrings.xml(data.getProject().getName()));
+        sb.append(xml(data.getProject().getName()));
         sb.append(", ");
-        sb.append(LocalizedStrings.xml(data.getUnit().getName()));
+        sb.append(xml(data.getUnit().getName()));
         sb.append(", ");
-        sb.append(LocalizedStrings.xml(data.getDisplayName()));
+        sb.append(xml(data.getDisplayName()));
         sb.append("</title></defectheader>");
     }
 
     private void addDefectFooterXml(StringBuilder sb, DefectData data, LocalDateTime now) {
         sb.append("<footer><docAndDate>")
                 .append(LocalizedStrings.xml("_defect"))
-                .append(" ").append(LocalizedStrings.xml(data.getDisplayName()))
+                .append(" ").append(xml(data.getDisplayName()))
                 .append(" - ");
-        sb.append(LocalizedStrings.xml(DateHelper.toHtmlDateTime(now)));
+        sb.append(xml(DateHelper.toHtmlDateTime(now)));
         sb.append("</docAndDate></footer>");
     }
 
@@ -105,7 +105,7 @@ public class DefectPdfBean extends DefectFopBean {
 
     private void addDefectStatusChangeXml(StringBuilder sb, DefectData defect, DefectStatusChangeData data, String host) {
         sb.append("<statuschange>");
-        sb.append("<title>").append(LocalizedStrings.xml(data.geTitle())).append("</title>");
+        sb.append("<title>").append(xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,LocalizedStrings.string("_description"),data.getDescription());
         for (ImageData image : data.getFiles(ImageData.class)){

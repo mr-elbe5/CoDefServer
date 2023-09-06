@@ -18,6 +18,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.project.ProjectPhase" %>
+<%@ page import="de.elbe5.application.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -64,7 +65,9 @@
                     <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
                     <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getDefectType()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
                 </form:select>
+                <% if (CodefConfiguration.showNotified()){%>
                 <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=contentData.isNotified()%>"/></form:line>
+                <%}%>
                 <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>
                 <form:date name="dueDate2" label="_dueDate2" value="<%=$D(contentData.getDueDate2())%>"/>
                 <% if (unit.getPlan() != null) {%>
