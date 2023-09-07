@@ -8,7 +8,6 @@
  */
 package de.elbe5.project;
 
-import de.elbe5.base.JsonArray;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
@@ -109,14 +108,18 @@ public class ProjectData extends ContentData {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JsonObject getJson(){
+        JSONArray jsCompanyIds = new JSONArray();
+        jsCompanyIds.addAll(getCompanyIds());
         return super.getJson()
-                .add("phase", "DEFAULT");
+                .add("companyIds", jsCompanyIds);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonArray jsUnits = new JsonArray();
+        JSONArray jsUnits = new JSONArray();
         for (UnitData unit : getChildren(UnitData.class)) {
             if (!unit.isActive())
                 continue;

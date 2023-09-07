@@ -377,8 +377,9 @@ public class DefectData extends ContentData {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
-        JsonArray jsStatusChanges = new JsonArray();
+        JSONArray jsStatusChanges = new JSONArray();
         for (DefectStatusChangeData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);

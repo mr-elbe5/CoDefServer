@@ -176,9 +176,10 @@ public class UnitData extends ContentData {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
         ImageData plan = getPlan();
-        JsonArray jsDefects = new JsonArray();
+        JSONArray jsDefects = new JSONArray();
         for (DefectData defect : getChildren(DefectData.class)) {
             if (!defect.isActive() || defect.isClosed())
                 continue;

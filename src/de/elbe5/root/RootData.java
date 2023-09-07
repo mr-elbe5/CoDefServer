@@ -55,6 +55,7 @@ public class RootData extends ContentData {
         writer.write("</div>");
     }
 
+    @SuppressWarnings("unchecked")
     public JsonObject getAllDataJson(RequestData rdata) {
         List<ProjectData> projects = new ArrayList<>();
         for (ProjectData project : ContentCache.getContents(ProjectData.class)){
@@ -62,12 +63,12 @@ public class RootData extends ContentData {
                 projects.add(project);
         }
         List<CompanyData> companies = CompanyCache.getAllCompanies();
-        JsonArray jsCompanies = new JsonArray();
+        JSONArray jsCompanies = new JSONArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
             jsCompanies.add(jsCompany);
         }
-        JsonArray jsProjects = new JsonArray();
+        JSONArray jsProjects = new JSONArray();
         for (ProjectData project : projects) {
             JsonObject jsProject = project.getJsonRecursive();
             jsProjects.add(jsProject);
