@@ -10,11 +10,10 @@ package de.elbe5.project;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.file.ImageData;
 import de.elbe5.unit.UnitBean;
 import de.elbe5.content.ContentCache;
-import de.elbe5.file.DefectFopBean;
+import de.elbe5.file.CodefFopBean;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
 import de.elbe5.file.ImageBean;
@@ -24,7 +23,7 @@ import de.elbe5.user.CodefUserData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ProjectPdfBean extends DefectFopBean {
+public class ProjectPdfBean extends CodefFopBean {
 
     private static ProjectPdfBean instance = null;
 
@@ -51,11 +50,11 @@ public class ProjectPdfBean extends DefectFopBean {
             if (!defects.isEmpty()) {
                 sb.append("<unit>");
                 sb.append("<unitheader><title>");
-                sb.append(LocalizedStrings.xml("_unit"));
+                sb.append(sxml("_unit"));
                 sb.append(": ");
                 sb.append(xml(unit.getDisplayName()));
                 sb.append("</title></unitheader>");
-                addLabeledContent(sb,LocalizedStrings.string("_approveDate"),DateHelper.toHtmlDate(unit.getApproveDate()));
+                addLabeledContent(sb,sxml("_approveDate"),html(unit.getApproveDate()));
                 ImageData plan = unit.getPlan();
                 if (plan != null) {
                     ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
@@ -72,13 +71,13 @@ public class ProjectPdfBean extends DefectFopBean {
         addProjectFooterXml(sb,project,now);
         sb.append("</root>");
         //System.out.println(sb.toString());
-        String fileName="report-of-project-defects-" + project.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
+        String fileName="report-of-project-defects-" + project.getId() + "-" + DateHelper.toHtml(now).replace(' ','-')+".pdf";
         return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
     private void addProjectHeaderXml(StringBuilder sb, ProjectData project) {
         sb.append("<projectheader><title>");
-        sb.append(LocalizedStrings.xml("_reports"));
+        sb.append(sxml("_reports"));
         sb.append(": ");
         sb.append(xml(project.getDisplayName()));
         sb.append("</title></projectheader>");
@@ -86,7 +85,7 @@ public class ProjectPdfBean extends DefectFopBean {
 
     private void addProjectFooterXml(StringBuilder sb, ProjectData project, LocalDateTime now) {
         sb.append("<footer><docAndDate>");
-        sb.append(LocalizedStrings.xml("_project")).append(" ").append(xml(project.getDisplayName())).append(" - ").append(DateHelper.toHtmlDateTime(now));
+        sb.append(sxml("_project")).append(" ").append(xml(project.getDisplayName())).append(" - ").append(DateHelper.toHtml(now));
         sb.append("</docAndDate></footer>");
     }
 

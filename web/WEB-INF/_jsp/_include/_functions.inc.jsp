@@ -25,6 +25,10 @@
         return DateHelper.toHtmlDateTime(dateTime);
     }
 
+    public String $H(LocalDateTime dateTime){
+        return DateHelper.toHtml(dateTime);
+    }
+
     public String $H(String src){
         return StringHelper.toHtml(src);
     }

@@ -37,7 +37,7 @@
                 <form:text name="street" label="_street" value="<%=$H(company.getStreet())%>"/>
                 <form:text name="zipCode" label="_zipCode" value="<%=$H(company.getZipCode())%>"/>
                 <form:text name="city" label="_city" value="<%=$H(company.getCity())%>"/>
-                <form:text name="email" label="_email" required="true" value="<%=$H(company.getEmail())%>"/>
+                <form:text name="email" label="_email" value="<%=$H(company.getEmail())%>"/>
                 <form:text name="phone" label="_phone" value="<%=$H(company.getPhone())%>"/>
                 <form:textarea name="notes" label="_notes" height="5rem"><%=$H(company.getNotes())%>
                 </form:textarea>

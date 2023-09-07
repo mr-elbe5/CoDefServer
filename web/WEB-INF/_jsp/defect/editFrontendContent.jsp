@@ -44,7 +44,7 @@
         <form:formerror/>
         <form:line label="_id" padded="true"><%=Integer.toString(defect.getDisplayId())%></form:line>
         <form:line label="_description" padded="true"><%=$HML(defect.getDescription())%></form:line>
-        <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$DT(defect.getChangeDate())%>)</form:line>
+        <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>

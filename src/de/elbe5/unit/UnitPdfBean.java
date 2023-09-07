@@ -10,8 +10,7 @@ package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
-import de.elbe5.base.LocalizedStrings;
-import de.elbe5.file.DefectFopBean;
+import de.elbe5.file.CodefFopBean;
 import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
@@ -23,7 +22,7 @@ import de.elbe5.user.CodefUserData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UnitPdfBean extends DefectFopBean {
+public class UnitPdfBean extends CodefFopBean {
 
     private static UnitPdfBean instance = null;
 
@@ -46,7 +45,7 @@ public class UnitPdfBean extends DefectFopBean {
         sb.append("<root>");
         addUnitHeaderXml(sb,unit);
         sb.append("<unit>");
-        addLabeledContent(sb,LocalizedStrings.string("_approveDate"),DateHelper.toHtmlDate(unit.getApproveDate()));
+        addLabeledContent(sb,sxml("_approveDate"),html(unit.getApproveDate()));
         List<DefectData> defects = user.getUnitDefects(unit.getId());
         ImageData plan = unit.getPlan();
         if (plan!=null) {
@@ -61,7 +60,7 @@ public class UnitPdfBean extends DefectFopBean {
         addUnitFooterXml(sb,unit,now);
         sb.append("</root>");
         //System.out.println(sb.toString());
-        String fileName="report-of-unit-defects-" + unit.getId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
+        String fileName="report-of-unit-defects-" + unit.getId() + "-" + html(now).replace(' ','-')+".pdf";
         return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
@@ -69,7 +68,7 @@ public class UnitPdfBean extends DefectFopBean {
         ProjectData project=unit.getProject();
         assert(project!=null);
         sb.append("<unitheader><title>");
-        sb.append(LocalizedStrings.xml("_reports"));
+        sb.append(sxml("_reports"));
         sb.append(": ");
         sb.append(xml(project.getDisplayName()));
         sb.append(", ");
@@ -81,13 +80,13 @@ public class UnitPdfBean extends DefectFopBean {
         ProjectData project=unit.getProject();
         assert(project!=null);
         sb.append("<footer><docAndDate>");
-        sb.append(LocalizedStrings.xml("_project"))
+        sb.append(sxml("_project"))
                 .append(" ")
                 .append(xml(project.getDisplayName()))
-                .append(", ").append(LocalizedStrings.xml("_unit"))
+                .append(", ").append(sxml("_unit"))
                 .append(" ").append(xml(unit.getDisplayName()))
                 .append(" - ")
-                .append(DateHelper.toHtmlDateTime(now));
+                .append(DateHelper.toHtml(now));
         sb.append("</docAndDate></footer>");
     }
 

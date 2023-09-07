@@ -24,6 +24,7 @@ import de.elbe5.response.*;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 
 public class DefectController extends ContentController {
 
@@ -100,8 +101,8 @@ public class DefectController extends ContentController {
         int contentId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(contentId,DefectData.class);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
-        data.setCloseDate(DefectBean.getInstance().getServerTime().toLocalDate());
-        data.setChangerId(rdata.getUserId());
+        data.setCloseDate(LocalDate.now());
+        data.setUpdateValues(rdata);
         if (!DefectBean.getInstance().closeDefect(data)) {
             setSaveError(rdata);
             return new ContentResponse(data);

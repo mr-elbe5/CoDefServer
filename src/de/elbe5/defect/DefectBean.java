@@ -153,18 +153,15 @@ public class DefectBean extends ContentBean {
         Connection con = startTransaction();
         PreparedStatement pst = null;
         try {
-            data.setChangeDate(getServerTime(con));
             pst = con.prepareStatement(UPDATE_CHANGE_SQL);
-            Timestamp now=getTimestamp(con);
-            pst.setTimestamp(1,now);
+            pst.setTimestamp(1,Timestamp.valueOf(data.getChangeDate()));
             pst.setInt(2, data.getChangerId());
             pst.setInt(3,data.getId());
             pst.executeUpdate();
             pst.close();
             pst = con.prepareStatement(CLOSE_DEFECT_SQL);
             int i = 1;
-            LocalDate date=data.getCloseDate();
-            pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(date,LocalTime.MIDNIGHT)));
+            pst.setTimestamp(i++, Timestamp.valueOf(LocalDateTime.of(data.getCloseDate(),LocalTime.MIDNIGHT)));
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

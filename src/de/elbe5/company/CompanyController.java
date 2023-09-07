@@ -45,21 +45,22 @@ public class CompanyController extends Controller {
         return KEY;
     }
 
+    public IResponse openCreateCompany(RequestData rdata) {
+        assertSessionCall(rdata);
+        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
+        CompanyData data = new CompanyData();
+        data.setCreateValues(rdata);
+        data.setId(CompanyBean.getInstance().getNextId());
+        rdata.setSessionObject("companyData", data);
+        return showEditCompany();
+    }
+
     public IResponse openEditCompany(RequestData rdata) {
         assertSessionCall(rdata);
         assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         int companyId = rdata.getId();
         CompanyData data = CompanyBean.getInstance().getCompany(companyId);
-        rdata.setSessionObject("companyData", data);
-        return showEditCompany();
-    }
-
-    public IResponse openCreateCompany(RequestData rdata) {
-        assertSessionCall(rdata);
-        assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
-        CompanyData data = new CompanyData();
-        data.setNew(true);
-        data.setId(CompanyBean.getInstance().getNextId());
+        data.setUpdateValues(rdata);
         rdata.setSessionObject("companyData", data);
         return showEditCompany();
     }

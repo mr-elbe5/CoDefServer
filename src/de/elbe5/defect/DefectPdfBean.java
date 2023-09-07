@@ -9,10 +9,8 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.DateHelper;
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.defectstatuschange.DefectStatusChangeData;
-import de.elbe5.file.DefectFopBean;
+import de.elbe5.file.CodefFopBean;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
@@ -22,7 +20,7 @@ import de.elbe5.user.UserData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class DefectPdfBean extends DefectFopBean {
+public class DefectPdfBean extends CodefFopBean {
 
     private static DefectPdfBean instance = null;
 
@@ -47,13 +45,13 @@ public class DefectPdfBean extends DefectFopBean {
         addDefectFooterXml(sb,data,now);
         sb.append("</root>");
         //System.out.println(sb.toString());
-        String fileName="report-of-defect-" + data.getDisplayId() + "-" + DateHelper.toHtmlDateTime(now).replace(' ','-')+".pdf";
+        String fileName="report-of-defect-" + data.getDisplayId() + "-" + html(now).replace(' ','-')+".pdf";
         return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
     private void addDefectHeaderXml(StringBuilder sb, DefectData data) {
         sb.append("<defectheader><title>");
-        sb.append(LocalizedStrings.xml("_report"));
+        sb.append(sxml("_report"));
         sb.append(": ");
         sb.append(xml(data.getProject().getName()));
         sb.append(", ");
@@ -65,36 +63,36 @@ public class DefectPdfBean extends DefectFopBean {
 
     private void addDefectFooterXml(StringBuilder sb, DefectData data, LocalDateTime now) {
         sb.append("<footer><docAndDate>")
-                .append(LocalizedStrings.xml("_defect"))
+                .append(sxml("_defect"))
                 .append(" ").append(xml(data.getDisplayName()))
                 .append(" - ");
-        sb.append(xml(DateHelper.toHtmlDateTime(now)));
+        sb.append(html(now));
         sb.append("</docAndDate></footer>");
     }
 
     private void addDefectXml(StringBuilder sb, DefectData data, String host) {
         sb.append("<defect>");
-        addLabeledContent(sb,LocalizedStrings.string("_description"),data.getDescription());
-        addLabeledContent(sb,LocalizedStrings.string("_id"),Integer.toString(data.getDisplayId()));
+        addLabeledContent(sb,sxml("_description"),data.getDescription());
+        addLabeledContent(sb,sxml("_id"),Integer.toString(data.getDisplayId()));
         UserData user= UserCache.getUser(data.getCreatorId());
-        addLabeledContent(sb,LocalizedStrings.string("_creator"),user.getName());
-        addLabeledContent(sb,LocalizedStrings.string("_creationDate"),DateHelper.toHtmlDateTime(data.getCreationDate()));
-        addLabeledContent(sb,LocalizedStrings.string("_status"),LocalizedStrings.string(data.getStatus().toString()));
-        addLabeledContent(sb,LocalizedStrings.string("_assigned"),data.getAssignedName());
-        addLabeledContent(sb,LocalizedStrings.string("_dueDate1"),DateHelper.toHtmlDate(data.getDueDate1()));
-        addLabeledContent(sb,LocalizedStrings.string("_dueDate2"),DateHelper.toHtmlDate(data.getDueDate2()));
-        addLabeledContent(sb,LocalizedStrings.string("_closeDate"),DateHelper.toHtmlDate(data.getCloseDate()));
+        addLabeledContent(sb,sxml("_creator"),user.getName());
+        addLabeledContent(sb,sxml("_creationDate"),html(data.getCreationDate()));
+        addLabeledContent(sb,sxml("_status"),sxml(data.getStatus().toString()));
+        addLabeledContent(sb,sxml("_assigned"),data.getAssignedName());
+        addLabeledContent(sb,sxml("_dueDate1"),html(data.getDueDate1()));
+        addLabeledContent(sb,sxml("_dueDate2"),html(data.getDueDate2()));
+        addLabeledContent(sb,sxml("_closeDate"),html(data.getCloseDate()));
         BinaryFile file;
         if (data.getPositionX()>0 || data.getPositionY()>0) {
             ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
             byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
             file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
-            addLabeledImage(sb, LocalizedStrings.string("_position"), file, "5.0cm");
+            addLabeledImage(sb, sxml("_position"), file, "5.0cm");
         }
-        addLabeledContent(sb,LocalizedStrings.string("_positionComment"),data.getPositionComment());
+        addLabeledContent(sb,sxml("_positionComment"),data.getPositionComment());
         List<ImageData> files = data.getFiles(ImageData.class);
         if (!files.isEmpty()) {
-            addLabeledContent(sb,LocalizedStrings.string("_images"),"");
+            addLabeledContent(sb,sxml("_images"),"");
             for (ImageData image : files) {
                 file = FileBean.getInstance().getBinaryFile(image.getId());
                 addLabeledImage(sb, image.getDisplayName(), file,"5.0cm");
@@ -107,10 +105,10 @@ public class DefectPdfBean extends DefectFopBean {
         sb.append("<statuschange>");
         sb.append("<title>").append(xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
-        addLabeledContent(sb,LocalizedStrings.string("_description"),data.getDescription());
+        addLabeledContent(sb,sxml("_description"),data.getDescription());
         for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
-            addLabeledImage(sb, LocalizedStrings.string("_image"), file, "5.0cm");
+            addLabeledImage(sb, sxml("_image"), file, "5.0cm");
         }
         sb.append("</statuschange>");
     }

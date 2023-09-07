@@ -42,9 +42,9 @@
                 </h3>
                 <form:line label="_idAndUrl"><%=$I(contentData.getId())%> - <%=$H(contentData.getUrl())%>
                 </form:line>
-                <form:line label="_creation"><%=$DT(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>

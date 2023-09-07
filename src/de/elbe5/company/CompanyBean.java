@@ -31,12 +31,6 @@ public class CompanyBean extends DbBean {
         return getNextId("s_company_id");
     }
 
-    private static final String CHANGED_SQL = "SELECT change_date FROM t_company WHERE id=?";
-
-    protected boolean changedCompany(Connection con, CompanyData data) {
-        return changedItem(con, CHANGED_SQL, data);
-    }
-
     private static final String SELECT_COMPANY_SQL = "SELECT id,change_date,name,street,zipcode,city,email,phone,notes FROM t_company";
 
     private static final String GET_ALL_COMPANIES_SQL = SELECT_COMPANY_SQL + " ORDER BY name";
@@ -103,10 +97,6 @@ public class CompanyBean extends DbBean {
     public boolean saveCompany(CompanyData data) {
         Connection con = startTransaction();
         try {
-            if (!data.isNew() && changedCompany(con, data)) {
-                return rollbackTransaction(con);
-            }
-            data.setChangeDate(getServerTime(con));
             writeCompany(con, data);
             return commitTransaction(con);
         } catch (Exception se) {

@@ -83,12 +83,12 @@
         <% for (DefectData defect : defects){%>
             <tr class="tableRow">
                 <td><%=defect.getDisplayId()%></td>
-                <td><%=StringHelper.toHtml(defect.getDescription())%></td>
-                <td><%=DateHelper.toHtmlDate(defect.getCreationDate())%></td>
-                <td><%=StringHelper.toHtml(defect.getChangerName())%></td>
-                <td><%=DateHelper.toHtmlDate(defect.getChangeDate())%></td>
-                <td><%=DateHelper.toHtmlDate(defect.getDueDate())%></td>
-                <td><%=DateHelper.toHtmlDate(defect.getCloseDate())%></td>
+                <td><%=$H(defect.getDescription())%></td>
+                <td><%=$H(defect.getCreationDate())%></td>
+                <td><%=$H(defect.getChangerName())%></td>
+                <td><%=$H(defect.getChangeDate())%></td>
+                <td><%=$D(defect.getDueDate())%></td>
+                <td><%=$D(defect.getCloseDate())%></td>
                 <td><%=$SH(defect.getStatus().toString())%></td>
                 <td><%=$H(defect.getAssignedName())%></td>
                 <td><%=$SH(defect.getProjectPhaseString())%></td>

@@ -11,12 +11,11 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="baselibs" />
           <element id="library" level="project" name="fop" />
-          <element id="library" level="project" name="poi" />
         </element>
       </element>
-      <element id="javaee-facet-resources" facet="BandikaBase/web/Web" />
-      <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
       <element id="javaee-facet-resources" facet="BandikaDocuments/web/Web" />
+      <element id="javaee-facet-resources" facet="CoDefServer/web/Web" />
+      <element id="javaee-facet-resources" facet="BandikaBase/web/Web" />
     </root>
   </artifact>
 </component>

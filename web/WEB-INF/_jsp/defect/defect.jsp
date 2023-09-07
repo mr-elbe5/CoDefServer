@@ -38,7 +38,7 @@
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_creationDate")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDateTime(contentData.getCreationDate())%></div>
+                <div class="boxText"><%=$H(contentData.getCreationDate())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
@@ -46,7 +46,7 @@
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_changeDate")%></div>
-                <div class="boxText"><%=DateHelper.toHtmlDateTime(contentData.getChangeDate())%></div>
+                <div class="boxText"><%=$H(contentData.getChangeDate())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
@@ -95,10 +95,9 @@
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
                 <div class="boxImage">
                     <% if (file.isImage()){%>
-                    <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
-                    <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
-                    <%}%></div>
+                    <a href="<%=file.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
+                    <%}%>
+                </div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
             <%}%>
@@ -110,7 +109,7 @@
         <div class="boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(statusData.getCreatorName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtmlDateTime(statusData.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusData.getStatus().toString())%>
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtml(statusData.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusData.getStatus().toString())%>
                 </div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(statusData.getDescription())%></div>
             </div>
@@ -124,10 +123,9 @@
                 <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
                 <div class="boxImage">
                     <% if (file.isImage()){%>
-                    <a href="/ctrl/image/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
-                    <%} else{%>
-                    <a href="/ctrl/document/show/<%=file.getId()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/static-content/img/document.png" alt="" /></a>
-                    <%}%></div>
+                    <a href="<%=file.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
+                    <%}%>
+                </div>
                 <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
             <%}%>

@@ -44,9 +44,9 @@
                 </h3>
                 <form:line label="_id"><%=$I(contentData.getId())%>
                 </form:line>
-                <form:line label="_creation"><%=$DT(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$DT(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
                 </form:line>
                 <form:line label="_name"><%=$H(contentData.getDisplayName())%>
                 </form:line>

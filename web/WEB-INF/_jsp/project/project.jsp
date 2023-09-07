@@ -79,9 +79,9 @@
             <td><%=defect.getDisplayId()%></td>
             <td><%=$H(defect.getDescription())%></td>
             <td><%=$H(defect.getUnit().getName())%></td>
-            <td><%=$DT(defect.getCreationDate())%></td>
+            <td><%=$H(defect.getCreationDate())%></td>
             <td><%=$H(defect.getChangerName())%></td>
-            <td><%=$DT(defect.getChangeDate())%></td>
+            <td><%=$H(defect.getChangeDate())%></td>
             <td><%=$D(defect.getDueDate())%></td>
             <td><%=$D(defect.getCloseDate())%></td>
             <td><%=$SH(defect.getStatus().toString())%></td>

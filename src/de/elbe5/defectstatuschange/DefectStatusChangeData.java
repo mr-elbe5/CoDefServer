@@ -8,10 +8,7 @@
  */
 package de.elbe5.defectstatuschange;
 
-import de.elbe5.base.DateHelper;
-import de.elbe5.base.JsonObject;
-import de.elbe5.base.LocalizedStrings;
-import de.elbe5.base.Log;
+import de.elbe5.base.*;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentBean;
@@ -96,7 +93,7 @@ public class DefectStatusChangeData extends ContentData {
                 +" "+ LocalizedStrings.string("_by")
                 +" "+ UserCache.getUser(getCreatorId()).getName()
                 +" "+ LocalizedStrings.string("_ofDate")
-                +" "+ DateHelper.toHtmlDateTime(getCreationDate());
+                +" "+ DateHelper.toHtml(getCreationDate());
     }
 
     @Override
@@ -142,6 +139,17 @@ public class DefectStatusChangeData extends ContentData {
         setNavType(ContentNavType.NONE);
         setActive(true);
         setStatus(rdata.getAttributes().getString("status"));
+        List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
+        for (BinaryFile f : newFiles) {
+            if (f.isImage()){
+                ImageData image = new ImageData();
+                image.setCreateValues(this, rdata);
+                if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
+                    continue;
+                image.setChangerId(rdata.getUserId());
+                getFiles().add(image);
+            }
+        }
         if (getDescription().isEmpty()) {
             rdata.addIncompleteField("description");
         }

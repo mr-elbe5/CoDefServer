@@ -109,9 +109,6 @@ public class CodefUserBean extends UserBean {
     public boolean updateViewSettings(UserData data){
         Connection con = startTransaction();
         try {
-            if (!data.isNew() && changedUser(con, data)) {
-                return rollbackTransaction(con);
-            }
             updateUserExtras(con, data);
             return commitTransaction(con);
         } catch (Exception se) {
