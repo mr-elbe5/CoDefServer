@@ -105,6 +105,12 @@ public class ProjectData extends ContentData {
         if (getDisplayName().isEmpty()) {
             rdata.addIncompleteField("displayName");
         }
+        if (getEditorGroupId() == 0){
+            rdata.addIncompleteField("editorGroupId");
+        }
+        if (getCompanyIds().isEmpty()){
+            rdata.addIncompleteField("companyIds");
+        }
     }
 
     @Override

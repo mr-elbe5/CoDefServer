@@ -8,6 +8,8 @@
  */
 package de.elbe5.company;
 
+import de.elbe5.base.Log;
+
 import java.util.*;
 
 public class CompanyCache {
@@ -28,6 +30,7 @@ public class CompanyCache {
         }
         companyList = list;
         companyMap = map;
+        Log.info("company cache reloaded");
     }
 
     public static void setDirty() {

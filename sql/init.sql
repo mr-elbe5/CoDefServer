@@ -13,22 +13,14 @@ CREATE SEQUENCE s_user_id START 1000;
 CREATE TABLE IF NOT EXISTS t_user
 (
     id                 INTEGER      NOT NULL,
+    type               VARCHAR(60)  NOT NULL,
     change_date        TIMESTAMP    NOT NULL DEFAULT now(),
-    first_name         VARCHAR(100) NOT NULL DEFAULT '',
-    last_name          VARCHAR(100) NOT NULL,
-    street             VARCHAR(100) NOT NULL DEFAULT '',
-    zipCode            VARCHAR(16)  NOT NULL DEFAULT '',
-    city               VARCHAR(50)  NOT NULL DEFAULT '',
-    country            VARCHAR(50)  NOT NULL DEFAULT '',
+    name               VARCHAR(100) NOT NULL DEFAULT '',
     email              VARCHAR(100) NOT NULL DEFAULT '',
-    phone              VARCHAR(50)  NOT NULL DEFAULT '',
-    mobile             VARCHAR(50)  NOT NULL DEFAULT '',
-    notes              VARCHAR(500) NOT NULL DEFAULT '',
     login              VARCHAR(30)  NOT NULL,
     pwd                VARCHAR(100) NOT NULL,
     token              VARCHAR(100) NOT NULL DEFAULT '',
-    locked             BOOLEAN      NOT NULL DEFAULT FALSE,
-    deleted            BOOLEAN      NOT NULL DEFAULT FALSE,
+    active             BOOLEAN      NOT NULL DEFAULT TRUE,
     CONSTRAINT t_user_pk PRIMARY KEY (id)
 );
 
@@ -207,8 +199,16 @@ CREATE TABLE IF NOT EXISTS t_codef_user
 );
 
 -- root user
-INSERT INTO t_user (id,first_name,last_name,email,login,pwd)
-VALUES (1,'System','Administrator','root@localhost','root','');
+INSERT INTO t_user (id,type,name,login,pwd)
+VALUES (1,'de.elbe5.user.CodefUserData','Root','root','');
+-- admin user
+INSERT INTO t_user (id,type,name,login,pwd)
+VALUES (2,'de.elbe5.user.CodefUserData','Administrator','admin','');
+INSERT into t_group (id, name) values(1,'Administrators');
+insert into t_user2group (user_id, group_id) values(2,1);
+insert into t_system_right (name, group_id) values('APPLICATION', 1);
+insert into t_system_right (name, group_id) values('USER', 1);
+insert into t_system_right (name, group_id) values('CONTENTEDIT', 1);
 
 -- timer
 INSERT INTO t_timer_task (name,display_name,execution_interval,minute,active)
@@ -222,5 +222,7 @@ VALUES (1,'de.elbe5.root.RootData',null,0,'home','Übersicht','Einstiegsseite',1
 --- set pwd 'pass' dependent on salt V3xfgDrxdl8=
 -- root user
 update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
+--admin user
+update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=2;
 
 

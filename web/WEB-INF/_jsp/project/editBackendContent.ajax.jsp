@@ -57,13 +57,13 @@
                     <option value="<%=group.getId()%>" <%=contentData.getReaderGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
-                <form:select name="editorGroupId" label="_editorGroup">
+                <form:select name="editorGroupId" label="_editorGroup" required="true">
                     <option value="0"  <%=contentData.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
                     <option value="<%=group.getId()%>" <%=contentData.getEditorGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
-                <form:line label="_companies" padded="true">
+                <form:line label="_companies" padded="true" required="true">
                     <% for (CompanyData company : companies){%>
                     <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
                     </form:check><br/>
