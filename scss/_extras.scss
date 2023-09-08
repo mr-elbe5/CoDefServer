@@ -47,6 +47,11 @@ $enable-prefers-reduced-motion-media-query:   false;
 $dropdown-link-active-bg:         rgba(255,255,255,0.8) !default;
 
 $zindex-fixed:                1030 !default;
+// for ckeditor
+$zindex-modal-backdrop: 11040;
+$zindex-modal: 11050;
+$zindex-popover: 11060;
+$zindex-tooltip: 11070;
 
 $modal-dialog-margin-wide: 3rem !default;
 
