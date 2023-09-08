@@ -39,7 +39,7 @@
                         </span>
                         <div class="icons">
                             <a class="icon fa fa-eye" href="<%=image.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"> </a>
-                            <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/content/openEditData/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
+                            <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/image/openEditFile/<%=image.getId()%>');" title="<%=$SH("_edit")%>"> </a>
                             <a class="icon fa fa-download" href="/ctrl/image/download/<%=image.getId()%>" title="<%=$SH("_download")%>"> </a>
                             <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/file/deleteFile/<%=image.getId()%>');" title="<%=$SH("_delete")%>"> </a>
 
