@@ -34,3 +34,6 @@ alter table t_user add active BOOLEAN NOT NULL DEFAULT TRUE;
 --
 alter table t_user drop column locked;
 alter table t_user drop column deleted;
+
+update t_content set type = 'de.elbe5.defectstatus.StatusChangeData'
+                 where type = 'de.elbe5.defectstatuschange.DefectStatusChangeData';

@@ -9,7 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.defectstatuschange.DefectStatusChangeData;
+import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.file.CodefFopBean;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
@@ -39,7 +39,7 @@ public class DefectPdfBean extends CodefFopBean {
         sb.append("<root>");
         addDefectHeaderXml(sb,data);
         addDefectXml(sb,data,rdata.getSessionHost());
-        for (DefectStatusChangeData statusChange : data.getStatusChanges()){
+        for (StatusChangeData statusChange : data.getStatusChanges()){
             addDefectStatusChangeXml(sb, data, statusChange, rdata.getSessionHost());
         }
         addDefectFooterXml(sb,data,now);
@@ -101,7 +101,7 @@ public class DefectPdfBean extends CodefFopBean {
         sb.append("</defect>");
     }
 
-    private void addDefectStatusChangeXml(StringBuilder sb, DefectData defect, DefectStatusChangeData data, String host) {
+    private void addDefectStatusChangeXml(StringBuilder sb, DefectData defect, StatusChangeData data, String host) {
         sb.append("<statuschange>");
         sb.append("<title>").append(xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());

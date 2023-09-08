@@ -12,7 +12,7 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatuschange.DefectStatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.application.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
@@ -104,7 +104,7 @@
         </div>
         <%}%>
     </div>
-    <% for (DefectStatusChangeData statusData : contentData.getStatusChanges()){%>
+    <% for (StatusChangeData statusData : contentData.getStatusChanges()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">
@@ -139,7 +139,7 @@
         <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
         <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=contentData.getId()%>',null);"><%=$SH("_edit")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatuschange/openCreateFrontendContent?parentId=<%=contentData.getId()%>',null);"><%=$SH("_statusChange")%>
+        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatus/openCreateFrontendContent?parentId=<%=contentData.getId()%>',null);"><%=$SH("_statusChange")%>
         </button>
         <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeDefect/<%=contentData.getId()%>',null);"><%=$SH("_closeDefect")%>
         </button>

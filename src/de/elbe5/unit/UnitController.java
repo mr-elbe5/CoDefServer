@@ -19,16 +19,15 @@ import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;
 import de.elbe5.file.ImageData;
+import de.elbe5.project.ProjectData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
-import de.elbe5.response.CloseDialogResponse;
-import de.elbe5.response.IResponse;
-import de.elbe5.response.MemoryFileResponse;
-import de.elbe5.response.StatusResponse;
+import de.elbe5.response.*;
 import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.CodefUserData;
+import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
@@ -152,6 +151,30 @@ public class UnitController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         }
         return new MemoryFileResponse(file);
+    }
+
+    public IResponse uploadUnit(RequestData rdata){
+        Log.log("uploadUnit");
+        assertApiCall(rdata);
+        UserData user = rdata.getLoginUser();
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        int projectId=rdata.getId();
+        ProjectData project=ContentCache.getContent(projectId, ProjectData.class);
+        if (project == null || !project.hasUserReadRight(user)) {
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+        UnitData data = new UnitData();
+        data.setCreateValues(project, rdata);
+        data.readBackendRequestData(rdata);
+        Log.log(data.getJson().toJSONString());
+        if (!ContentBean.getInstance().saveContent(data)) {
+            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        data.setNew(false);
+        data.setEditMode(false);
+        ContentCache.setDirty();
+        return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }
 
 }

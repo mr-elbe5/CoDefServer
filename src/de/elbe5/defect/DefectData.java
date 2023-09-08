@@ -12,7 +12,7 @@ import de.elbe5.base.*;
 import de.elbe5.company.CompanyCache;
 import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentNavType;
-import de.elbe5.defectstatuschange.DefectStatusChangeData;
+import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.project.ProjectPhase;
 import de.elbe5.unit.UnitData;
@@ -46,7 +46,7 @@ public class DefectData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        childClasses.add(DefectStatusChangeData.class);
+        childClasses.add(StatusChangeData.class);
         fileClasses.add(ImageData.class);
     }
 
@@ -149,7 +149,7 @@ public class DefectData extends ContentData {
     }
 
     public DefectStatus getStatus() {
-        DefectStatusChangeData statusChange = getLastStatusChange();
+        StatusChangeData statusChange = getLastStatusChange();
         return statusChange == null ? DefectStatus.OPEN : statusChange.getStatus();
     }
 
@@ -213,12 +213,12 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<DefectStatusChangeData> getStatusChanges() {
-        return new ArrayList<>(getChildren(DefectStatusChangeData.class));
+    public List<StatusChangeData> getStatusChanges() {
+        return new ArrayList<>(getChildren(StatusChangeData.class));
     }
 
-    public DefectStatusChangeData getLastStatusChange(){
-        List<DefectStatusChangeData> statusChanges = getStatusChanges();
+    public StatusChangeData getLastStatusChange(){
+        List<StatusChangeData> statusChanges = getStatusChanges();
         if (statusChanges.isEmpty()){
             return null;
         }
@@ -380,7 +380,7 @@ public class DefectData extends ContentData {
     @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
         JSONArray jsStatusChanges = new JSONArray();
-        for (DefectStatusChangeData statusChange : getStatusChanges()) {
+        for (StatusChangeData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
@@ -429,7 +429,7 @@ public class DefectData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    DefectStatusChangeData statusChange = new DefectStatusChangeData();
+                    StatusChangeData statusChange = new StatusChangeData();
                     statusChange.fromJsonRecursive(jsObj);
                     if (statusChange.hasValidData())
                         getChildren().add(statusChange);

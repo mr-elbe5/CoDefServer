@@ -11,7 +11,7 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatuschange.DefectStatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.defect.DefectStatus" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
@@ -21,13 +21,13 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectStatusChangeData contentData = ContentData.getCurrentContent(rdata, DefectStatusChangeData.class);
+    StatusChangeData contentData = ContentData.getCurrentContent(rdata, StatusChangeData.class);
     assert (contentData != null);
     DefectData defect = contentData.getParent(DefectData.class);
     assert (defect != null);
     ProjectData project = defect.getProject();
     assert (project != null);
-    String url = "/ctrl/defectstatuschange/saveBackendContent/" + contentData.getId();%>
+    String url = "/ctrl/defectstatus/saveBackendContent/" + contentData.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">

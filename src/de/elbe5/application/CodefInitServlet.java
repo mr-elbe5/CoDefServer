@@ -11,9 +11,8 @@ package de.elbe5.application;
 import de.elbe5.administration.AdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
-import de.elbe5.base.PBKDF2Encryption;
 import de.elbe5.defect.DefectController;
-import de.elbe5.defectstatuschange.DefectStatusChangeController;
+import de.elbe5.defectstatus.StatusChangeController;
 import de.elbe5.group.GroupCache;
 import de.elbe5.project.ProjectController;
 import de.elbe5.root.RootController;
@@ -68,7 +67,7 @@ public class CodefInitServlet extends InitServlet {
         ProjectController.register(new ProjectController());
         UnitController.register(new UnitController());
         DefectController.register(new DefectController());
-        DefectStatusChangeController.register(new DefectStatusChangeController());
+        StatusChangeController.register(new StatusChangeController());
 
         CompanyCache.load();
         ContentCache.load();

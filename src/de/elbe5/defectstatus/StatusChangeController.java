@@ -6,15 +6,12 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.defectstatuschange;
+package de.elbe5.defectstatus;
 
-import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.*;
-import de.elbe5.file.ImageBean;
-import de.elbe5.file.ImageData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
@@ -23,21 +20,21 @@ import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class DefectStatusChangeController extends ContentController {
+public class StatusChangeController extends ContentController {
 
-    public static final String KEY = "defectstatuschange";
+    public static final String KEY = "defectstatus";
 
-    private static DefectStatusChangeController instance = null;
+    private static StatusChangeController instance = null;
 
-    public static void setInstance(DefectStatusChangeController instance) {
-        DefectStatusChangeController.instance = instance;
+    public static void setInstance(StatusChangeController instance) {
+        StatusChangeController.instance = instance;
     }
 
-    public static DefectStatusChangeController getInstance() {
+    public static StatusChangeController getInstance() {
         return instance;
     }
 
-    public static void register(DefectStatusChangeController controller){
+    public static void register(StatusChangeController controller){
         setInstance(controller);
         ControllerCache.addController(controller.getKey(),getInstance());
     }
@@ -51,7 +48,7 @@ public class DefectStatusChangeController extends ContentController {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
-        DefectStatusChangeData data = new DefectStatusChangeData();
+        StatusChangeData data = new StatusChangeData();
         data.setCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -59,7 +56,7 @@ public class DefectStatusChangeController extends ContentController {
 
     public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
-        DefectStatusChangeData data = ContentData.getCurrentContent(rdata, DefectStatusChangeData.class);
+        StatusChangeData data = ContentData.getCurrentContent(rdata, StatusChangeData.class);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -68,7 +65,7 @@ public class DefectStatusChangeController extends ContentController {
     //frontend
     public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
-        DefectStatusChangeData data= ContentData.getCurrentContent(rdata, DefectStatusChangeData.class);
+        StatusChangeData data= ContentData.getCurrentContent(rdata, StatusChangeData.class);
         assert(data != null && data.getId() == contentId);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         if (data.isNew())
@@ -103,41 +100,15 @@ public class DefectStatusChangeController extends ContentController {
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        DefectStatusChangeData data = new DefectStatusChangeData();
+        StatusChangeData data = new StatusChangeData();
         data.setCreateValues(defect, rdata);
         data.readApiRequestData(rdata);
-        if (!DefectStatusChangeBean.getInstance().saveContent(data)) {
+        if (!StatusChangeBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
         ContentCache.setDirty();
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
-    }
-
-    public IResponse uploadStatusChangeImage(RequestData rdata) {
-        Log.log("uploadStatusChangeImage");
-        UserData user = rdata.getLoginUser();
-        if (user == null)
-            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int commentId = rdata.getId();
-        DefectStatusChangeData comment= DefectStatusChangeBean.getInstance().getContent(commentId, DefectStatusChangeData.class);
-        assert(comment !=null);
-        DefectData defect = ContentCache.getContent(comment.getParentId(),DefectData.class);
-        assert(defect !=null);
-        BinaryFile file = rdata.getAttributes().getFile("file");
-        assert(file!=null);
-        ImageData image = new ImageData();
-        image.setCreateValues(defect, rdata);
-        if (!image.createFromBinaryFile(file, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false)) {
-            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        image.setChangerId(rdata.getUserId());
-        if (!ImageBean.getInstance().saveFile(image,true)) {
-            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        image.setNew(false);
-        ContentCache.setDirty();
-        return new JsonResponse(getIdJson(image.getId()).toJSONString());
     }
 
 }

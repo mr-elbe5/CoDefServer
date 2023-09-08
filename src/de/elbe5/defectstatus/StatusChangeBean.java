@@ -6,7 +6,7 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.defectstatuschange;
+package de.elbe5.defectstatus;
 
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -15,13 +15,13 @@ import de.elbe5.file.FileData;
 
 import java.sql.*;
 
-public class DefectStatusChangeBean extends ContentBean {
+public class StatusChangeBean extends ContentBean {
 
-    private static DefectStatusChangeBean instance = null;
+    private static StatusChangeBean instance = null;
 
-    public static DefectStatusChangeBean getInstance() {
+    public static StatusChangeBean getInstance() {
         if (instance == null) {
-            instance = new DefectStatusChangeBean();
+            instance = new StatusChangeBean();
         }
         return instance;
     }
@@ -30,7 +30,7 @@ public class DefectStatusChangeBean extends ContentBean {
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof DefectStatusChangeData data))
+        if (!(contentData instanceof StatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -52,7 +52,7 @@ public class DefectStatusChangeBean extends ContentBean {
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!contentData.isNew() || !(contentData instanceof DefectStatusChangeData data))
+        if (!contentData.isNew() || !(contentData instanceof StatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -75,7 +75,7 @@ public class DefectStatusChangeBean extends ContentBean {
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof DefectStatusChangeData data))
+        if (!(contentData instanceof StatusChangeData data))
             return;
         PreparedStatement pst = null;
         try {

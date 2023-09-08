@@ -186,28 +186,4 @@ public class DefectController extends ContentController {
         return new JsonResponse(getIdJson(data.getId()).toJSONString());
     }
 
-    public IResponse uploadDefectImage(RequestData rdata) {
-        Log.log("uploadDefectImage");
-        UserData user = rdata.getLoginUser();
-        if (user == null)
-            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int defectId = rdata.getId();
-        DefectData defect=ContentCache.getContent(defectId, DefectData.class);
-        assert(defect != null);
-        BinaryFile file = rdata.getAttributes().getFile("file");
-        assert(file!=null);
-        ImageData image = new ImageData();
-        image.setCreateValues(defect, rdata);
-        if (!image.createFromBinaryFile(file, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false)) {
-            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        image.setChangerId(rdata.getUserId());
-        if (!ImageBean.getInstance().saveFile(image,true)) {
-            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        image.setNew(false);
-        ContentCache.setDirty();
-        return new JsonResponse(getIdJson(image.getId()).toJSONString());
-    }
-
 }

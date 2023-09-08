@@ -10,7 +10,7 @@ package de.elbe5.file;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
-import de.elbe5.defectstatuschange.DefectStatusChangeData;
+import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserCache;
@@ -99,7 +99,7 @@ public abstract class CodefFopBean extends PdfCreator {
                 }
             }
             if (includeStatusChanges) {
-                for (DefectStatusChangeData changeData : defect.getStatusChanges()) {
+                for (StatusChangeData changeData : defect.getStatusChanges()) {
                     sb.append("<defectrow>");
                     sb.append("<label1>")
                             .append(sxml("_statusChange"))
