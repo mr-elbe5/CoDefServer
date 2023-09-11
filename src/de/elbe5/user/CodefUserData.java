@@ -22,13 +22,13 @@ import java.util.List;
 public class CodefUserData extends UserData{
 
     private int projectId = 0;
+    private List<Integer> projectIds = new ArrayList<>();
     private List<Integer> companyIds = new ArrayList<>();
     private boolean showClosed = true;
-    private ProjectPhase viewRestriction = null;
+    private ProjectPhase projectPhase = null;
 
     //runtime
 
-    private final List<Integer> ownProjectIds=new ArrayList<>();
     private int sortType= DefectComparator.TYPE_CREATION;
     private boolean ascending = false;
 
@@ -45,6 +45,22 @@ public class CodefUserData extends UserData{
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public String getProjectIdsString() {
+        return StringHelper.getIntString(projectIds);
+    }
+
+    public List<Integer> getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(String projectIdsString) {
+        projectIds = StringHelper.toIntList(projectIdsString);
+    }
+
+    public void setProjectIds(List<Integer> ids) {
+        projectIds = ids;
     }
 
     public String getCompanyIdsString() {
@@ -71,28 +87,28 @@ public class CodefUserData extends UserData{
         this.showClosed = showClosed;
     }
 
-    public ProjectPhase getViewRestriction() {
-        return viewRestriction;
+    public ProjectPhase getProjectPhase() {
+        return projectPhase;
     }
 
-    public String getViewRestrictionString() {
-        return viewRestriction == null ? "" : viewRestriction.name();
+    public String getProjectPhaseString() {
+        return projectPhase == null ? "" : projectPhase.name();
     }
 
-    public void setViewRestriction(ProjectPhase viewRestriction) {
-        this.viewRestriction = viewRestriction;
+    public void setProjectPhase(ProjectPhase projectPhase) {
+        this.projectPhase = projectPhase;
     }
 
-    public void setViewRestriction(String viewRestrictionString) {
-        if (viewRestrictionString.isEmpty()){
-            viewRestriction = null;
+    public void setProjectPhase(String projectPhaseString) {
+        if (projectPhaseString.isEmpty()){
+            projectPhase = null;
             return;
         }
         try{
-            viewRestriction = ProjectPhase.valueOf(viewRestrictionString);
+            projectPhase = ProjectPhase.valueOf(projectPhaseString);
         }
         catch (IllegalArgumentException e){
-            viewRestriction = null;
+            projectPhase = null;
         }
     }
 
@@ -117,8 +133,14 @@ public class CodefUserData extends UserData{
         this.ascending = ascending;
     }
 
-    public List<Integer> getOwnProjectIds() {
-        return ownProjectIds;
+    public List<Integer> getAllowedProjectIds(){
+        List<Integer> ids = new ArrayList<>();
+        for (ProjectData project : ContentCache.getContents(ProjectData.class)){
+            if (project.hasUserEditRight(this)){
+                ids.add(project.getId());
+            }
+        }
+        return ids;
     }
 
     public List<DefectData> getUnitDefects(int unitId){
@@ -131,7 +153,7 @@ public class CodefUserData extends UserData{
                 list.remove(i);
                 continue;
             }
-            if (getViewRestriction() != null && getViewRestriction() != data.getProjectPhase()) {
+            if (getProjectPhase() != null && getProjectPhase() != data.getProjectPhase()) {
                 list.remove(i);
                 continue;
             }

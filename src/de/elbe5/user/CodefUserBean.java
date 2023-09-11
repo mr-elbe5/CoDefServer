@@ -23,7 +23,7 @@ public class CodefUserBean extends UserBean {
         return instance;
     }
 
-    private static final String GET_USER_EXTRAS_SQL = "SELECT project_id,company_ids,show_closed,view_restriction FROM t_codef_user WHERE id=?";
+    private static final String GET_USER_EXTRAS_SQL = "SELECT project_id,project_ids,company_ids,show_closed,project_phase FROM t_codef_user WHERE id=?";
 
     @Override
     public void readUserExtras(Connection con, UserData userData) throws SQLException{
@@ -38,9 +38,10 @@ public class CodefUserBean extends UserBean {
                 if (rs.next()) {
                     int i = 1;
                     data.setProjectId(rs.getInt(i++));
+                    data.setProjectIds(rs.getString(i++));
                     data.setCompanyIds(rs.getString(i++));
                     data.setShowClosed(rs.getBoolean(i++));
-                    data.setViewRestriction(rs.getString(i));
+                    data.setProjectPhase(rs.getString(i));
                 }
             }
         } catch (SQLException se) {
@@ -50,7 +51,7 @@ public class CodefUserBean extends UserBean {
         }
     }
 
-    private static final String INSERT_EXTENDED_SQL = "insert into t_codef_user (project_id,company_ids,show_closed,view_restriction,id) values(?,?,?,?,?)";
+    private static final String INSERT_EXTENDED_SQL = "insert into t_codef_user (project_id,project_ids,company_ids,show_closed,project_phase,id) values(?,?,?,?,?,?)";
 
     @Override
     public void createUserExtras(Connection con, UserData userData) throws SQLException{
@@ -66,9 +67,10 @@ public class CodefUserBean extends UserBean {
             else{
                 pst.setInt(i++, data.getProjectId());
             }
+            pst.setString(i++, data.getProjectIdsString());
             pst.setString(i++, data.getCompanyIdsString());
             pst.setBoolean(i++, data.isShowClosed());
-            pst.setString(i++, data.getViewRestrictionString());
+            pst.setString(i++, data.getProjectPhaseString());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -78,7 +80,7 @@ public class CodefUserBean extends UserBean {
         }
     }
 
-    private static final String UPDATE_EXTENDED_SQL = "update t_codef_user set project_id=?,company_ids=?,show_closed=?,view_restriction=? where id=?";
+    private static final String UPDATE_EXTENDED_SQL = "update t_codef_user set project_id=?,project_ids=?,company_ids=?,show_closed=?,project_phase=? where id=?";
 
     @Override
     public void updateUserExtras(Connection con, UserData userData) throws SQLException{
@@ -94,9 +96,10 @@ public class CodefUserBean extends UserBean {
             else{
                 pst.setInt(i++, data.getProjectId());
             }
+            pst.setString(i++, data.getProjectIdsString());
             pst.setString(i++, data.getCompanyIdsString());
             pst.setBoolean(i++, data.isShowClosed());
-            pst.setString(i++, data.getViewRestrictionString());
+            pst.setString(i++, data.getProjectPhaseString());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -106,13 +109,13 @@ public class CodefUserBean extends UserBean {
         }
     }
 
-    public boolean updateViewSettings(UserData data){
+    public void updateUserSettings(UserData data){
         Connection con = startTransaction();
         try {
             updateUserExtras(con, data);
-            return commitTransaction(con);
+            commitTransaction(con);
         } catch (Exception se) {
-            return rollbackTransaction(con, se);
+            rollbackTransaction(con, se);
         }
     }
 

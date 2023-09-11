@@ -8,8 +8,6 @@
  */
 package de.elbe5.user;
 
-import de.elbe5.content.ContentCache;
-import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.response.CloseDialogResponse;
 import de.elbe5.response.ForwardResponse;
@@ -30,17 +28,11 @@ public class CodefUserController extends UserController {
         if (!(data instanceof CodefUserData user)){
             throw new ResponseException(HttpServletResponse.SC_BAD_REQUEST);
         }
-        List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
-        user.getOwnProjectIds().clear();
-        for (ProjectData project : projects){
-            if (project.hasUserEditRight(data)){
-                user.getOwnProjectIds().add(project.getId());
-            }
-        }
-        if (user.getProjectId()!=0 && !user.getOwnProjectIds().contains(user.getProjectId())) {
+        List<Integer> projectIds = ((CodefUserData) data).getAllowedProjectIds();
+        if (user.getProjectId()!=0 && !projectIds.contains(user.getProjectId())) {
             user.setProjectId(0);
             user.getCompanyIds().clear();
-            CodefUserBean.getInstance().updateViewSettings(user);
+            CodefUserBean.getInstance().updateUserSettings(user);
         }
     }
 
@@ -54,7 +46,7 @@ public class CodefUserController extends UserController {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         user.setCompanyIds(rdata.getAttributes().getIntegerList("companyIds"));
-        CodefUserBean.getInstance().updateViewSettings(user);
+        CodefUserBean.getInstance().updateUserSettings(user);
         return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
     }
 
@@ -66,9 +58,12 @@ public class CodefUserController extends UserController {
     public IResponse setViewFilter(RequestData rdata) {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        user.setProjectIds(rdata.getAttributes().getIntegerList("projectIds"));
+        if (user.getProjectId() == 0 && !user.getProjectIds().isEmpty())
+            user.setProjectId(user.getProjectIds().get(0));
         user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
-        user.setViewRestriction(rdata.getAttributes().getString("viewRestriction"));
-        CodefUserBean.getInstance().updateViewSettings(user);
+        user.setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+        CodefUserBean.getInstance().updateUserSettings(user);
         return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
     }
 

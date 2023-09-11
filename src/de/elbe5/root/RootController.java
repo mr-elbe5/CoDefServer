@@ -73,7 +73,7 @@ public class RootController extends ContentController {
         ProjectData project = findProject(data);
         if (project!=null){
             user.setProjectId(project.getId());
-            CodefUserBean.getInstance().updateViewSettings(user);
+            CodefUserBean.getInstance().updateUserSettings(user);
         }
         return data.getDefaultView();
     }

@@ -15,6 +15,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ page import="de.elbe5.project.ProjectPhase" %>
+<%@ page import="java.util.List" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -24,6 +25,9 @@
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
     GroupData group=null;
     ProjectData project=ContentCache.getContent(user.getProjectId(), ProjectData.class);
+    List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
+    List<Integer> allowedProjectIds = user.getAllowedProjectIds();
+    projects.removeIf(data -> !allowedProjectIds.contains(data.getId()));
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -37,14 +41,25 @@
         <form:form url="<%=url%>" name="filterform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
+                <form:line label="_projects" padded="true">
+                    <%for (ProjectData data : projects){
+                    %>
+                    <div class="form-check">
+                        <input class="form-check-input projectcheck" name="projectIds" type="checkbox" value="<%=data.getId()%>" id="check<%=data.getId()%>" <%=user.getProjectIds().contains(data.getId()) ? "checked" : ""%>>
+                        <label class="form-check-label" for="check<%=data.getId()%>">
+                            <%=$H(data.getName())%>
+                        </label>
+                    </div>
+                    <%}%>
+                </form:line>
                 <form:line label="_showClosedDefects" padded="true">
                     <form:check name="showClosed" value="true" checked="<%=user.isShowClosed()%>"> </form:check>
                 </form:line>
-                <form:select name="viewRestriction" label="_restrictToProjectPhase">
-                    <option value="" <%=(user.getViewRestriction() == null) ? "selected" : ""%>><%=$SH("_noRestriction")%></option>
-                    <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showPreapproval")%></option>
-                    <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showApproval")%></option>
-                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(user.getViewRestriction()) ? "selected" : ""%>><%=$SH("_showLiability")%></option>
+                <form:select name="projectPhase" label="_restrictToProjectPhase">
+                    <option value="" <%=(user.getProjectPhase() == null) ? "selected" : ""%>><%=$SH("_noRestriction")%></option>
+                    <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(user.getProjectPhase()) ? "selected" : ""%>><%=$SH("_showPreapproval")%></option>
+                    <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(user.getProjectPhase()) ? "selected" : ""%>><%=$SH("_showApproval")%></option>
+                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(user.getProjectPhase()) ? "selected" : ""%>><%=$SH("_showLiability")%></option>
                 </form:select>
             </div>
             <div class="modal-footer">

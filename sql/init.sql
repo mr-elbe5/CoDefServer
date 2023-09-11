@@ -191,9 +191,10 @@ CREATE TABLE IF NOT EXISTS t_codef_user
 (
     id                 INTEGER      NOT NULL,
     project_id         INTEGER      NULL,
+    project_ids        VARCHAR(60)  NOT NULL DEFAULT '',
     company_ids        VARCHAR(60)  NOT NULL DEFAULT '',
     show_closed        BOOLEAN      NOT NULL DEFAULT true,
-    view_restriction   VARCHAR(30)  NOT NULL DEFAULT '',
+    project_phase      VARCHAR(30)  NOT NULL DEFAULT '',
     CONSTRAINT t_codef_user_pk PRIMARY KEY (id),
     CONSTRAINT t_codef_user_fk1 FOREIGN KEY (id) REFERENCES t_user(id) ON DELETE CASCADE
 );
@@ -202,11 +203,8 @@ CREATE TABLE IF NOT EXISTS t_codef_user
 INSERT INTO t_user (id,type,name,login,pwd)
 VALUES (1,'de.elbe5.user.CodefUserData','Root','root','');
 -- admin user
-INSERT INTO t_user (id,type,name,login,pwd)
-VALUES (2,'de.elbe5.user.CodefUserData','Administrator','admin','');
-INSERT into t_group (id, name) values(1,'Administrators');
-insert into t_user2group (user_id, group_id) values(2,1);
-insert into t_system_right (name, group_id) values('APPLICATION', 1);
+
+INSERT into t_group (id, name) values(1,'Editors');
 insert into t_system_right (name, group_id) values('USER', 1);
 insert into t_system_right (name, group_id) values('CONTENTEDIT', 1);
 
@@ -222,7 +220,6 @@ VALUES (1,'de.elbe5.root.RootData',null,0,'home','Übersicht','Einstiegsseite',1
 --- set pwd 'pass' dependent on salt V3xfgDrxdl8=
 -- root user
 update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
---admin user
-update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=2;
+
 
 
