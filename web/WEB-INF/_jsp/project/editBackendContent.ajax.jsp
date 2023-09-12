@@ -17,6 +17,7 @@
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupCache" %>
+<%@ page import="de.elbe5.application.Configuration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -48,21 +49,27 @@
                 </form:line>
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <% if (Configuration.useReadRights()){%>
                 <form:line label="_openAccess" padded="true">
                     <form:check name="openAccess" value="true" checked="<%=contentData.isOpenAccess()%>"/>
                 </form:line>
+                <%}%>
+                <% if (Configuration.useReadRights() && Configuration.useReadGroup()){%>
                 <form:select name="readerGroupId" label="_readerGroup">
                     <option value="0"  <%=contentData.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
                     <option value="<%=group.getId()%>" <%=contentData.getReaderGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
-                <form:select name="editorGroupId" label="_editorGroup" required="true">
+                <%}%>
+                <% if (Configuration.useEditorGroup()){%>
+                <form:select name="editorGroupId" label="_editorGroup">
                     <option value="0"  <%=contentData.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
                     <option value="<%=group.getId()%>" <%=contentData.getEditorGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
+                <%}%>
                 <form:line label="_companies" padded="true" required="true">
                     <% for (CompanyData company : companies){%>
                     <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>

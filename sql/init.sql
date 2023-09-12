@@ -202,6 +202,8 @@ CREATE TABLE IF NOT EXISTS t_codef_user
 -- root user
 INSERT INTO t_user (id,type,name,login,pwd)
 VALUES (1,'de.elbe5.user.CodefUserData','Root','root','');
+INSERT INTO t_codef_user (id)
+VALUES (1);
 -- admin user
 
 INSERT into t_group (id, name) values(1,'Editors');

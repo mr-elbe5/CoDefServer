@@ -24,9 +24,9 @@
                 </a>
                 <ul>
                     <%if (GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser())) {%>
+                    <jsp:include page="../user/userAdministration.inc.jsp" flush="true"/>
                     <jsp:include page="../company/companyAdministration.inc.jsp" flush="true"/>
                     <jsp:include page="../group/groupAdministration.inc.jsp" flush="true"/>
-                    <jsp:include page="../user/userAdministration.inc.jsp" flush="true"/>
                     <%}%>
                 </ul>
             </li>

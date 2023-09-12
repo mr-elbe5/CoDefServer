@@ -25,14 +25,11 @@
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
     GroupData group=null;
     ProjectData project=ContentCache.getContent(user.getProjectId(), ProjectData.class);
-    List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
-    List<Integer> allowedProjectIds = user.getAllowedProjectIds();
-    projects.removeIf(data -> !allowedProjectIds.contains(data.getId()));
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title"><%=$SH("_setFilter")%>
+            <h5 class="modal-title"><%=$SH("_setViewFilter")%>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -41,17 +38,6 @@
         <form:form url="<%=url%>" name="filterform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
-                <form:line label="_projects" padded="true">
-                    <%for (ProjectData data : projects){
-                    %>
-                    <div class="form-check">
-                        <input class="form-check-input projectcheck" name="projectIds" type="checkbox" value="<%=data.getId()%>" id="check<%=data.getId()%>" <%=user.getProjectIds().contains(data.getId()) ? "checked" : ""%>>
-                        <label class="form-check-label" for="check<%=data.getId()%>">
-                            <%=$H(data.getName())%>
-                        </label>
-                    </div>
-                    <%}%>
-                </form:line>
                 <form:line label="_showClosedDefects" padded="true">
                     <form:check name="showClosed" value="true" checked="<%=user.isShowClosed()%>"> </form:check>
                 </form:line>

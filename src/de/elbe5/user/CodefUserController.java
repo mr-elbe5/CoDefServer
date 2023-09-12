@@ -36,9 +36,23 @@ public class CodefUserController extends UserController {
         }
     }
 
+    public IResponse openSyncFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        return new ForwardResponse("/WEB-INF/_jsp/user/syncFilter.ajax.jsp");
+    }
+
+    public IResponse setSyncFilter(RequestData rdata) {
+        assertRights(rdata.isLoggedIn());
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        user.setProjectIds(rdata.getAttributes().getIntegerList("projectIds"));
+        if (user.getProjectId() == 0 && !user.getProjectIds().isEmpty())
+            user.setProjectId(user.getProjectIds().get(0));
+        CodefUserBean.getInstance().updateUserSettings(user);
+        return new CloseDialogResponse("/ctrl/content/show/" + rdata.getSafeId());
+    }
+
     public IResponse openCompanyFilter(RequestData rdata) {
         assertRights(rdata.isLoggedIn());
-        int contentId=rdata.getId();
         return new ForwardResponse("/WEB-INF/_jsp/user/companyFilter.ajax.jsp");
     }
 
@@ -47,7 +61,7 @@ public class CodefUserController extends UserController {
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         user.setCompanyIds(rdata.getAttributes().getIntegerList("companyIds"));
         CodefUserBean.getInstance().updateUserSettings(user);
-        return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
+        return new CloseDialogResponse("/ctrl/content/show/" + rdata.getSafeId());
     }
 
     public IResponse openViewFilter(RequestData rdata) {
@@ -58,13 +72,10 @@ public class CodefUserController extends UserController {
     public IResponse setViewFilter(RequestData rdata) {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
-        user.setProjectIds(rdata.getAttributes().getIntegerList("projectIds"));
-        if (user.getProjectId() == 0 && !user.getProjectIds().isEmpty())
-            user.setProjectId(user.getProjectIds().get(0));
         user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
         user.setProjectPhase(rdata.getAttributes().getString("projectPhase"));
         CodefUserBean.getInstance().updateUserSettings(user);
-        return new CloseDialogResponse("/ctrl/content/show/" + user.getProjectId());
+        return new CloseDialogResponse("/ctrl/content/show/" + rdata.getSafeId());
     }
 
     @Override

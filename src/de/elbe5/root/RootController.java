@@ -67,7 +67,7 @@ public class RootController extends ContentController {
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         //Log.log("setEntryPoint");
-        int contentId = rdata.getId();
+        int contentId = rdata.getSafeId();
         ContentData data = ContentCache.getContent(contentId);
         assertRights(data.hasUserReadRight(rdata.getLoginUser()));
         ProjectData project = findProject(data);

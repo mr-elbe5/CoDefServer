@@ -12,25 +12,23 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
-<%@ page import="de.elbe5.company.CompanyData" %>
-<%@ page import="java.util.List" %>
-<%@ page import="de.elbe5.company.CompanyCache" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
+<%@ page import="java.util.List" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     int contentId=rdata.getId();
-    String url = "/ctrl/user/setCompanyFilter/"+contentId;
+    String url = "/ctrl/user/setSyncFilter/"+contentId;
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
-    ProjectData project=ContentCache.getContent(user.getProjectId(), ProjectData.class);
-    List<CompanyData> companies = project!= null ? CompanyCache.getCompanies(project.getCompanyIds()) : new ArrayList<>();
+    List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
+    List<Integer> allowedProjectIds = user.getAllowedProjectIds();
+    projects.removeIf(data -> !allowedProjectIds.contains(data.getId()));
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title"><%=$SH("_setCompanyFilter")%>
+            <h5 class="modal-title"><%=$SH("_setSyncFilter")%>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -39,23 +37,18 @@
         <form:form url="<%=url%>" name="filterform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
-                <div class="form-check">
-                    <%int companyCount = companies.size();%>
-                    <input class="form-check-input" type="checkbox" id="checkall" <%=user.getCompanyIds().size() == companyCount ? "checked" : ""%> onchange="checkAll()">
-                    <label class="form-check-label" for="checkall">
-                        <%=$SH("_all")%>
-                    </label>
-                </div>
-                <hr/>
-                    <%for (CompanyData company : companies){
-                %>
-                <div class="form-check">
-                    <input class="form-check-input companycheck" name="companyIds" type="checkbox" value="<%=company.getId()%>" id="check<%=company.getId()%>" <%=user.getCompanyIds().contains(company.getId()) ? "checked" : ""%>>
-                    <label class="form-check-label" for="check<%=company.getId()%>">
-                        <%=$H(company.getName())%>
-                    </label>
-                </div>
-                <%}%>
+                <form:line padded="true"><%=$SH("_synchronizationText")%></form:line>
+                <form:line label="_projects" padded="true">
+                    <%for (ProjectData data : projects){
+                    %>
+                    <div class="form-check">
+                        <input class="form-check-input projectcheck" name="projectIds" type="checkbox" value="<%=data.getId()%>" id="check<%=data.getId()%>" <%=user.getProjectIds().contains(data.getId()) ? "checked" : ""%>>
+                        <label class="form-check-label" for="check<%=data.getId()%>">
+                            <%=$H(data.getName())%>
+                        </label>
+                    </div>
+                    <%}%>
+                </form:line>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
@@ -67,13 +60,6 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    function checkAll(){
-        let checked = $('#checkall').prop("checked") === true;
-        $('.companycheck').prop("checked", checked);
-    }
-
-</script>
 
 
 
