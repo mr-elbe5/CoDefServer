@@ -17,7 +17,7 @@
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupCache" %>
-<%@ page import="de.elbe5.application.Configuration" %>
+<%@ page import="de.elbe5.configuration.Configuration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);

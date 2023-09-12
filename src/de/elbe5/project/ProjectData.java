@@ -8,7 +8,7 @@
  */
 package de.elbe5.project;
 
-import de.elbe5.application.Configuration;
+import de.elbe5.configuration.Configuration;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;

@@ -16,7 +16,7 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.defect.DefectComparator" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
-<%@ page import="de.elbe5.application.CodefConfiguration" %>
+<%@ page import="de.elbe5.configuration.CodefConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);

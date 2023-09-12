@@ -10,7 +10,7 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.application.CodefConfiguration" %>
+<%@ page import="de.elbe5.configuration.CodefConfiguration" %>
 <%@ page import="java.util.List" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%

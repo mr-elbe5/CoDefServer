@@ -6,15 +6,13 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.application;
-
-import jakarta.servlet.ServletContext;
+package de.elbe5.configuration;
 
 public class CodefConfiguration {
 
     private static boolean showInactiveContent = false;
 
-    private static boolean showNotified = false;
+    private static boolean useNotified = false;
 
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
@@ -24,17 +22,12 @@ public class CodefConfiguration {
         CodefConfiguration.showInactiveContent = showInactiveContent;
     }
 
+    public static void setUseNotified(boolean useNotified) {
+        CodefConfiguration.useNotified = useNotified;
+    }
+
     public static boolean showNotified() {
-        return showNotified;
-    }
-
-    public static String getSafeInitParameter(ServletContext servletContext, String key){
-        String s=servletContext.getInitParameter(key);
-        return s==null ? "" : s;
-    }
-
-    public static void setConfigs(ServletContext servletContext) {
-        showNotified = "true".equals(getSafeInitParameter(servletContext,"showNotified"));
+        return useNotified;
     }
 
 }
