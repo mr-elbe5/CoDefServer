@@ -28,7 +28,7 @@ public class CodefConfigurationBean extends DbBean {
         return instance;
     }
 
-    private static final String GET_CONFIGURATION_SQL = "SELECT show_inactive_content,use_notified FROM t_codef_configuration";
+    private static final String GET_CONFIGURATION_SQL = "SELECT show_inactive_content,use_notified FROM t_configuration";
 
     public void readConfiguration() {
         Connection con = getConnection();

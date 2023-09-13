@@ -37,3 +37,17 @@ alter table t_user drop column deleted;
 
 update t_content set type = 'de.elbe5.defectstatus.StatusChangeData'
                  where type = 'de.elbe5.defectstatuschange.DefectStatusChangeData';
+
+CREATE TABLE IF NOT EXISTS t_configuration
+(
+    title            VARCHAR(100) NOT NULL DEFAULT '',
+    salt             VARCHAR(100) NOT NULL DEFAULT '',
+    locale           VARCHAR(30) NOT NULL DEFAULT 'GERMAN',
+    show_date_time   BOOLEAN NOT NULL DEFAULT false,
+    use_read_rights  BOOLEAN NOT NULL DEFAULT false,
+    use_read_group   BOOLEAN NOT NULL DEFAULT false,
+    use_editor_group BOOLEAN NOT NULL DEFAULT false,
+    show_inactive_content BOOLEAN NOT NULL DEFAULT false,
+    use_notified BOOLEAN NOT NULL DEFAULT false
+);
+insert into t_configuration (title, salt) values ('Codef', '4FGOXcMTbG0=');

@@ -25,7 +25,7 @@ public class CompanyCache {
         CompanyBean bean = CompanyBean.getInstance();
         List<CompanyData> list = bean.getAllCompanies();
         Map<Integer, CompanyData> map = new HashMap<>();
-        for (CompanyData company : companyList) {
+        for (CompanyData company : list) {
             map.put(company.getId(), company);
         }
         companyList = list;

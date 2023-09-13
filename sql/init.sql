@@ -1,12 +1,14 @@
 CREATE TABLE IF NOT EXISTS t_configuration
 (
-    title            VARCHAR(100) NOT NULL DEFAULT 'CoDef',
-    salt             VARCHAR(100) NOT NULL DEFAULT 'V3xfgDrxdl8=',
+    title            VARCHAR(100) NOT NULL DEFAULT '',
+    salt             VARCHAR(100) NOT NULL DEFAULT '',
     locale           VARCHAR(30) NOT NULL DEFAULT 'GERMAN',
     show_date_time   BOOLEAN NOT NULL DEFAULT false,
     use_read_rights  BOOLEAN NOT NULL DEFAULT false,
     use_read_group   BOOLEAN NOT NULL DEFAULT false,
-    use_editor_group BOOLEAN NOT NULL DEFAULT false
+    use_editor_group BOOLEAN NOT NULL DEFAULT false,
+    show_inactive_content BOOLEAN NOT NULL DEFAULT false,
+    use_notified BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE SEQUENCE s_group_id START 1000;
@@ -126,12 +128,6 @@ CREATE TABLE IF NOT EXISTS t_image
     CONSTRAINT t_image_fk1 FOREIGN KEY (id) REFERENCES t_file (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS t_codef_configuration
-(
-    show_inactive_content BOOLEAN NOT NULL DEFAULT false,
-    use_notified BOOLEAN NOT NULL DEFAULT false
-);
-
 CREATE SEQUENCE IF NOT EXISTS s_company_id START 1000;
 
 CREATE TABLE IF NOT EXISTS t_company
@@ -237,8 +233,6 @@ VALUES (1,'de.elbe5.root.RootData',null,0,'home','Übersicht','Einstiegsseite',1
 
 insert into t_configuration (title, salt)
 values ('Codef', 'V3xfgDrxdl8=');
-insert into t_codef_configuration (show_inactive_content, use_notified)
-values (false, false);
 --- set pwd 'pass' dependent on salt V3xfgDrxdl8=
 -- root user
 update t_user set pwd='A0y3+ZmqpMhWA21VFQMkyY6v74Y=' where id=1;
