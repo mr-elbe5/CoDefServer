@@ -17,6 +17,7 @@ import de.elbe5.defect.DefectStatus;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestType;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 import org.json.simple.JSONArray;
@@ -114,54 +115,39 @@ public class StatusChangeData extends ContentData {
         }
     }
 
-    public void readBackendRequestData(RequestData rdata) {
-        Log.log("StatusChangeData.readBackendRequestData");
+    @Override
+    public void readRequestData(RequestData rdata, RequestType type) {
+        Log.log("StatusChangeData.readRequestData");
         setDescription(rdata.getAttributes().getString("description"));
-        setOpenAccess(true);
-        setNavType(ContentNavType.NONE);
-        setActive(rdata.getAttributes().getBoolean("active"));
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setStatus(rdata.getAttributes().getString("status"));
-        if (getDescription().isEmpty()) {
-            rdata.addIncompleteField("description");
-        }
-        if (getAssignedId()==0) {
-            rdata.addIncompleteField("assigned");
-        }
-    }
-
-    public void readFrontendRequestData(RequestData rdata) {
-        Log.log("StatusChangeData.readFrontendRequestData");
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setOpenAccess(true);
         setNavType(ContentNavType.NONE);
         setActive(true);
+        setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setStatus(rdata.getAttributes().getString("status"));
-        List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
-        for (BinaryFile f : newFiles) {
-            if (f.isImage()){
-                ImageData image = new ImageData();
-                image.setCreateValues(this, rdata);
-                if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
-                    continue;
-                image.setChangerId(rdata.getUserId());
-                getFiles().add(image);
+        switch (type) {
+            case backend -> {
+                setActive(rdata.getAttributes().getBoolean("active"));
+            }
+            case frontend -> {
+                List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
+                for (BinaryFile f : newFiles) {
+                    if (f.isImage()){
+                        ImageData image = new ImageData();
+                        image.setCreateValues(this, rdata);
+                        if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
+                            continue;
+                        image.setChangerId(rdata.getUserId());
+                        getFiles().add(image);
+                    }
+                }
             }
         }
         if (getDescription().isEmpty()) {
             rdata.addIncompleteField("description");
         }
-    }
-
-    public void readApiRequestData(RequestData rdata) {
-        Log.log("StatusChangeData.readApiRequestData");
-        setCreatorId(rdata.getAttributes().getInt("creatorId"));
-        setStatus(rdata.getAttributes().getString("status"));
-        setCreationDate(DateHelper.asLocalDateTime(rdata.getAttributes().getLong("creationDate")));
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
+        if (getAssignedId() == 0) {
+            rdata.addIncompleteField("assigned");
+        }
     }
 
     @Override

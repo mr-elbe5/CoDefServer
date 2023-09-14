@@ -23,6 +23,7 @@ import de.elbe5.project.ProjectData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
+import de.elbe5.request.RequestType;
 import de.elbe5.response.*;
 import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.ControllerCache;
@@ -62,10 +63,7 @@ public class UnitController extends ContentController {
         assertRights(GlobalRight.hasGlobalContentEditRight(rdata.getLoginUser()));
         int contentId = rdata.getId();
         UnitData data = ContentData.getSessionContent(rdata, UnitData.class);
-        if (data.isNew())
-            data.readBackendCreateRequestData(rdata);
-        else
-            data.readBackendUpdateRequestData(rdata);
+        data.readRequestData(rdata, RequestType.backend);
         if (!rdata.checkFormErrors()) {
             return showEditBackendContent(data);
         }
@@ -153,20 +151,24 @@ public class UnitController extends ContentController {
         return new MemoryFileResponse(file);
     }
 
-    public IResponse uploadUnit(RequestData rdata){
-        Log.log("uploadUnit");
+    public IResponse createUnit(RequestData rdata){
+        Log.log("createUnit");
         assertApiCall(rdata);
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int projectId=rdata.getId();
+        int unitId=rdata.getId();
+        Log.log("remote unit id = " + unitId);
+        int projectId=rdata.getAttributes().getInt("projectId");
+        Log.log("project id = " + projectId);
         ProjectData project=ContentCache.getContent(projectId, ProjectData.class);
         if (project == null || !project.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         UnitData data = new UnitData();
         data.setCreateValues(project, rdata);
-        data.readBackendRequestData(rdata);
+        Log.log("new unit id = " + data.getId());
+        data.readRequestData(rdata, RequestType.api);
         Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
@@ -174,7 +176,27 @@ public class UnitController extends ContentController {
         data.setNew(false);
         data.setEditMode(false);
         ContentCache.setDirty();
-        return new JsonResponse(getIdJson(data.getId()).toJSONString());
+        return new JsonResponse(data.getIdJson().toJSONString());
+    }
+
+    public IResponse updateUnit(RequestData rdata){
+        Log.log("updateUnit");
+        assertApiCall(rdata);
+        UserData user = rdata.getLoginUser();
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        int unitId=rdata.getId();
+        UnitData unit=ContentCache.getContent(unitId, UnitData.class);
+        if (unit == null || !unit.hasUserReadRight(user)) {
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+        //unit.readJsonRequestData(rdata);
+        Log.log(unit.getJson().toJSONString());
+        if (!ContentBean.getInstance().saveContent(unit)) {
+            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        ContentCache.setDirty();
+        return new JsonResponse(unit.getIdJson().toJSONString());
     }
 
 }

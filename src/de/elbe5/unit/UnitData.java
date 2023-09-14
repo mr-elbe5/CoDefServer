@@ -18,6 +18,7 @@ import de.elbe5.content.ContentData;
 import de.elbe5.file.FileData;
 import de.elbe5.request.RequestData;
 
+import de.elbe5.request.RequestType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
@@ -130,16 +131,20 @@ public class UnitData extends ContentData {
     // multiple data
 
     @Override
-    public void readBackendCreateRequestData(RequestData rdata) {
-        Log.log("Unit.readBackendCreateRequestData");
-        setDisplayName(rdata.getAttributes().getString("displayName").trim());
-        setName(StringHelper.toSafeWebName(getDisplayName()));
-        setDescription(rdata.getAttributes().getString("description"));
-        setApproveDate(rdata.getAttributes().getDate("approveDate"));
-        setNavType(ContentNavType.HEADER);
-        setActive(rdata.getAttributes().getBoolean("active"));
-        if (getDisplayName().isEmpty()) {
-            rdata.addIncompleteField("displayName");
+    public void readRequestData(RequestData rdata, RequestType type) {
+        Log.log("Unit.readRequestData");
+        switch (type) {
+            case backend -> {
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
+                setApproveDate(rdata.getAttributes().getDate("approveDate"));
+                setNavType(ContentNavType.HEADER);
+                setActive(rdata.getAttributes().getBoolean("active"));
+                if (getDisplayName().isEmpty()) {
+                    rdata.addIncompleteField("displayName");
+                }
+            }
         }
     }
 
@@ -153,20 +158,6 @@ public class UnitData extends ContentData {
             return plan;
         }
         return null;
-    }
-
-    @Override
-    public void readBackendUpdateRequestData(RequestData rdata) {
-        Log.log("Unit.readBackendUpdateRequestData");
-        setDisplayName(rdata.getAttributes().getString("displayName").trim());
-        setName(StringHelper.toSafeWebName(getDisplayName()));
-        setDescription(rdata.getAttributes().getString("description"));
-        setApproveDate(rdata.getAttributes().getDate("approveDate"));
-        setNavType(ContentNavType.HEADER);
-        setActive(rdata.getAttributes().getBoolean("active"));
-        if (getDisplayName().isEmpty()) {
-            rdata.addIncompleteField("displayName");
-        }
     }
 
     @Override

@@ -11,6 +11,7 @@ package de.elbe5.company;
 import de.elbe5.base.BaseData;
 import de.elbe5.base.JsonObject;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestType;
 import org.json.simple.JSONObject;
 
 import java.time.LocalDate;
@@ -85,7 +86,8 @@ public class CompanyData extends BaseData {
 
     // multiple data
 
-    public void readSettingsRequestData(RequestData rdata) {
+    @Override
+    public void readRequestData(RequestData rdata, RequestType type) {
         setName(rdata.getAttributes().getString("name"));
         setStreet(rdata.getAttributes().getString("street"));
         setZipCode(rdata.getAttributes().getString("zipCode"));

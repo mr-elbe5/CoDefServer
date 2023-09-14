@@ -72,7 +72,7 @@ public class CompanyController extends Controller {
         if (data==null){
             return new StatusResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-        data.readSettingsRequestData(rdata);
+        data.readRequestData(rdata, RequestType.backend);
         if (!rdata.checkFormErrors()) {
             return showEditCompany();
         }

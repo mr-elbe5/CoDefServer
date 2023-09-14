@@ -12,10 +12,10 @@ import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
+import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.*;
 import de.elbe5.file.FileBean;
-import de.elbe5.file.ImageBean;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
@@ -78,10 +78,7 @@ public class DefectController extends ContentController {
         DefectData data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DefectData.class);
         assert(data != null && data.getId() == contentId);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
-        if (data.isNew())
-            data.readFrontendCreateRequestData(rdata);
-        else
-            data.readFrontendUpdateRequestData(rdata);
+        data.readRequestData(rdata, RequestType.frontend);
         if (!rdata.checkFormErrors()) {
             return new ContentResponse(data);
         }
@@ -183,7 +180,7 @@ public class DefectController extends ContentController {
         data.setNew(false);
         data.setEditMode(false);
         ContentCache.setDirty();
-        return new JsonResponse(getIdJson(data.getId()).toJSONString());
+        return new JsonResponse(data.getIdJson().toJSONString());
     }
 
 }

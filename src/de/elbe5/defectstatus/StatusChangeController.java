@@ -15,6 +15,7 @@ import de.elbe5.content.*;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestKeys;
+import de.elbe5.request.RequestType;
 import de.elbe5.response.*;
 import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
@@ -68,10 +69,7 @@ public class StatusChangeController extends ContentController {
         StatusChangeData data= ContentData.getCurrentContent(rdata, StatusChangeData.class);
         assert(data != null && data.getId() == contentId);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
-        if (data.isNew())
-            data.readFrontendCreateRequestData(rdata);
-        else
-            data.readFrontendUpdateRequestData(rdata);
+        data.readRequestData(rdata, RequestType.frontend);
         if (!rdata.checkFormErrors()) {
             return new ContentResponse(data);
         }
@@ -102,13 +100,13 @@ public class StatusChangeController extends ContentController {
         }
         StatusChangeData data = new StatusChangeData();
         data.setCreateValues(defect, rdata);
-        data.readApiRequestData(rdata);
+        data.readRequestData(rdata, RequestType.api);
         if (!StatusChangeBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);
         ContentCache.setDirty();
-        return new JsonResponse(getIdJson(data.getId()).toJSONString());
+        return new JsonResponse(data.getIdJson().toJSONString());
     }
 
 }

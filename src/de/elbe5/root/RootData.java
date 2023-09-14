@@ -18,7 +18,6 @@ import de.elbe5.request.RequestData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -76,33 +75,6 @@ public class RootData extends ContentData {
         return new JsonObject()
                 .add("companies", jsCompanies)
                 .add("projects", jsProjects);
-    }
-
-    public void readRequestData(RequestData rdata){
-        JSONArray jsProjects = rdata.getAttributes().get("projects", JSONArray.class);
-        if (jsProjects != null){
-            for (Object obj : jsProjects){
-                if (obj instanceof JSONObject jsObj){
-                    ProjectData project = new ProjectData();
-                    project.fromJsonRecursive(jsObj);
-                    if (project.hasValidData()) {
-                        //todo
-                    }
-                }
-            }
-        }
-        JSONArray jsCompanies = rdata.getAttributes().get("companies", JSONArray.class);
-        if (jsCompanies != null){
-            for (Object obj : jsCompanies){
-                if (obj instanceof JSONObject jsObj){
-                    CompanyData company = new CompanyData();
-                    company.fromJsonRecursive(jsObj);
-                    if (company.hasValidData()) {
-                        //todo
-                    }
-                }
-            }
-        }
     }
 
 }

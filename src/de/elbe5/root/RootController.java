@@ -13,6 +13,7 @@ import de.elbe5.content.ContentData;
 import de.elbe5.content.ContentController;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestType;
 import de.elbe5.response.*;
 import de.elbe5.user.CodefUserBean;
 import de.elbe5.user.CodefUserData;
@@ -50,15 +51,6 @@ public class RootController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         JSONObject json = data.getAllDataJson(rdata);
         return new JsonResponse(json.toJSONString());
-    }
-
-    public IResponse uploadData(RequestData rdata) {
-        UserData user = rdata.getLoginUser();
-        if (user==null)
-            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        RootData data = new RootData();
-        data.readRequestData(rdata);
-        return new JsonResponse(data.getJson().toJSONString());
     }
 
     public IResponse setEntryPoint(RequestData rdata){

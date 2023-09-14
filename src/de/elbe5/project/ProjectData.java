@@ -13,6 +13,7 @@ import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.content.ContentNavType;
+import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -92,26 +93,31 @@ public class ProjectData extends ContentData {
     // multiple data
 
     @Override
-    public void readBackendRequestData(RequestData rdata) {
-        Log.log("ProjectData.readBackendRequestData");
-        setDisplayName(rdata.getAttributes().getString("displayName").trim());
-        setName(StringHelper.toSafeWebName(getDisplayName()));
-        setDescription(rdata.getAttributes().getString("description"));
-        setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
-        setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
-        setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
+    public void readRequestData(RequestData rdata, RequestType type) {
+        Log.log("ProjectData.readRequestData");
         setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
-        setActive(rdata.getAttributes().getBoolean("active"));
-        setNavType(ContentNavType.HEADER);
-        if (getDisplayName().isEmpty()) {
-            rdata.addIncompleteField("displayName");
+        switch (type){
+            case backend -> {
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
+                setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
+                setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
+                setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
+                setActive(rdata.getAttributes().getBoolean("active"));
+                setNavType(ContentNavType.HEADER);
+                if (getDisplayName().isEmpty()) {
+                    rdata.addIncompleteField("displayName");
+                }
+                if (Configuration.useEditorGroup() && getEditorGroupId() == 0){
+                    rdata.addIncompleteField("editorGroupId");
+                }
+                if (getCompanyIds().isEmpty()){
+                    rdata.addIncompleteField("companyIds");
+                }
+            }
         }
-        if (Configuration.useEditorGroup() && getEditorGroupId() == 0){
-            rdata.addIncompleteField("editorGroupId");
-        }
-        if (getCompanyIds().isEmpty()){
-            rdata.addIncompleteField("companyIds");
-        }
+
     }
 
     @Override

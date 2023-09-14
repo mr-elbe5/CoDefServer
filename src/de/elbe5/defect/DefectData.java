@@ -15,6 +15,7 @@ import de.elbe5.content.ContentNavType;
 import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.project.ProjectPhase;
+import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectData;
@@ -312,54 +313,55 @@ public class DefectData extends ContentData {
     }
 
     @Override
-    public void readFrontendCreateRequestData(RequestData rdata) {
-        Log.log("DefectData.readFrontendCreateRequestData");
-        readFrontendRequestData(rdata);
-        setDescription(rdata.getAttributes().getString("description").trim());
-        setDueDate1(rdata.getAttributes().getDate("dueDate1"));
-        setPositionX(rdata.getAttributes().getDouble("positionX"));
-        setPositionY(rdata.getAttributes().getDouble("positionY"));
-        setPositionComment(rdata.getAttributes().getString("positionComment"));
-        if (getDescription().isEmpty()) {
-            rdata.addIncompleteField("description");
+    public void readRequestData(RequestData rdata, RequestType type) {
+        Log.log("DefectData.readRequestData");
+        switch (type) {
+            case frontend -> {
+                if (isNew()) {
+                    setDescription(rdata.getAttributes().getString("description").trim());
+                    setDueDate1(rdata.getAttributes().getDate("dueDate1"));
+                    setPositionX(rdata.getAttributes().getDouble("positionX"));
+                    setPositionY(rdata.getAttributes().getDouble("positionY"));
+                    setPositionComment(rdata.getAttributes().getString("positionComment"));
+                    if (getDescription().isEmpty()) {
+                        rdata.addIncompleteField("description");
+                    }
+                    if (getDueDate() == null) {
+                        rdata.addIncompleteField("dueDate1");
+                    }
+                }
+                else{
+                    setDueDate2(rdata.getAttributes().getDate("dueDate2"));
+                }
+                setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+                setNotified(rdata.getAttributes().getBoolean("notified"));
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                if (getAssignedId() == 0) {
+                    rdata.addIncompleteField("assignedId");
+                }
+                List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
+                for (BinaryFile f : newFiles) {
+                    if (f.isImage()) {
+                        ImageData image = new ImageData();
+                        image.setCreateValues(this, rdata);
+                        if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(), image.getMaxPreviewHeight(), false))
+                            continue;
+                        image.setChangerId(rdata.getUserId());
+                        getFiles().add(image);
+                    }
+                }
+            }
+            case backend ->{
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+                setNotified(rdata.getAttributes().getBoolean("notified"));
+                setDueDate2(rdata.getAttributes().getDate("dueDate2"));
+            }
         }
-        if (getAssignedId()==0) {
-            rdata.addIncompleteField("assignedId");
-        }
-        if (getDueDate()==null) {
-            rdata.addIncompleteField("dueDate1");
-        }
-    }
-
-    @Override
-    public void readFrontendUpdateRequestData(RequestData rdata) {
-        Log.log("DefectData.readFrontendUpdateRequestData");
-        readFrontendRequestData(rdata);
-        setDueDate2(rdata.getAttributes().getDate("dueDate2"));
-        if (getAssignedId()==0) {
+        if (getAssignedId() == 0) {
             rdata.addIncompleteField("assigned");
         }
     }
-
-    public void readFrontendRequestData(RequestData rdata) {
-        Log.log("DefectData.readFrontendRequestData");
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-        setNotified(rdata.getAttributes().getBoolean("notified"));
-        List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
-        for (BinaryFile f : newFiles) {
-            if (f.isImage()){
-                ImageData image = new ImageData();
-                image.setCreateValues(this, rdata);
-                if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
-                    continue;
-                image.setChangerId(rdata.getUserId());
-                getFiles().add(image);
-            }
-        }
-    }
-
-
 
     @Override
     public JsonObject getJson(){
@@ -374,6 +376,14 @@ public class DefectData extends ContentData {
                 .add("state", getStatus().toString())
                 .add("dueDate", getDueDate())
                 .add("phase", "DEFAULT");
+    }
+
+    @Override
+    public JsonObject getIdJson() {
+        JsonObject json = new JsonObject();
+        json.add("id",getId());
+        json.add("displayId",getDisplayId());
+        return json;
     }
 
     @Override

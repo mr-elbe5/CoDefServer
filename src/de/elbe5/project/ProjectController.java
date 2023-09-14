@@ -14,6 +14,7 @@ import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestType;
 import de.elbe5.response.*;
 import de.elbe5.unit.UnitData;
 import de.elbe5.user.CodefUserData;
@@ -58,15 +59,15 @@ public class ProjectController extends ContentController {
         return show(rdata);
     }
 
-    public IResponse uploadProject(RequestData rdata){
-        Log.log("uploadProject");
+    public IResponse createProject(RequestData rdata){
+        Log.log("createProject");
         assertApiCall(rdata);
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         ProjectData data = new ProjectData();
         data.setCreateValues(ContentCache.getContentRoot(), rdata);
-        data.readBackendRequestData(rdata);
+        data.readRequestData(rdata, RequestType.api);
         Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
@@ -74,7 +75,7 @@ public class ProjectController extends ContentController {
         data.setNew(false);
         data.setEditMode(false);
         ContentCache.setDirty();
-        return new JsonResponse(getIdJson(data.getId()).toJSONString());
+        return new JsonResponse(data.getIdJson().toJSONString());
     }
 
 }
