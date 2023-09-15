@@ -133,11 +133,13 @@ public class UnitData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("Unit.readRequestData");
+        super.readRequestData(rdata, type);
         switch (type) {
+            case api -> {
+                setNavType(ContentNavType.HEADER);
+                setActive(true);
+            }
             case backend -> {
-                setDisplayName(rdata.getAttributes().getString("displayName").trim());
-                setName(StringHelper.toSafeWebName(getDisplayName()));
-                setDescription(rdata.getAttributes().getString("description"));
                 setApproveDate(rdata.getAttributes().getDate("approveDate"));
                 setNavType(ContentNavType.HEADER);
                 setActive(rdata.getAttributes().getBoolean("active"));

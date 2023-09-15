@@ -95,12 +95,16 @@ public class ProjectData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("ProjectData.readRequestData");
+        super.readRequestData(rdata, type);
         setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         switch (type){
+            case api -> {
+                setOpenAccess(true);
+                setActive(true);
+                setNavType(ContentNavType.HEADER);
+            }
             case backend -> {
-                setDisplayName(rdata.getAttributes().getString("displayName").trim());
-                setName(StringHelper.toSafeWebName(getDisplayName()));
-                setDescription(rdata.getAttributes().getString("description"));
+                super.readRequestData(rdata, type);
                 setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
                 setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
                 setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));

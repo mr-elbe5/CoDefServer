@@ -315,10 +315,17 @@ public class DefectData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("DefectData.readRequestData");
+        super.readRequestData(rdata, type);
         switch (type) {
+            case api -> {
+                setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+                setDueDate1(rdata.getAttributes().getDate("dueDate1"));
+                setPositionX(rdata.getAttributes().getDouble("positionX"));
+                setPositionY(rdata.getAttributes().getDouble("positionY"));
+                setPositionComment(rdata.getAttributes().getString("positionComment"));
+            }
             case frontend -> {
                 if (isNew()) {
-                    setDescription(rdata.getAttributes().getString("description").trim());
                     setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                     setPositionX(rdata.getAttributes().getDouble("positionX"));
                     setPositionY(rdata.getAttributes().getDouble("positionY"));
@@ -376,14 +383,6 @@ public class DefectData extends ContentData {
                 .add("state", getStatus().toString())
                 .add("dueDate", getDueDate())
                 .add("phase", "DEFAULT");
-    }
-
-    @Override
-    public JsonObject getIdJson() {
-        JsonObject json = new JsonObject();
-        json.add("id",getId());
-        json.add("displayId",getDisplayId());
-        return json;
     }
 
     @Override

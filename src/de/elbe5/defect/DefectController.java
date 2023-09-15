@@ -160,19 +160,21 @@ public class DefectController extends ContentController {
 
     //api
 
-    public IResponse uploadDefect(RequestData rdata) {
-        Log.log("uploadDefect");
+    public IResponse createDefect(RequestData rdata) {
+        Log.log("createDefect");
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int unitId=rdata.getId();
+        int defectId = rdata.getId();
+        Log.log("remote defect id = " + defectId);
+        int unitId=rdata.getAttributes().getInt("unitId");
         UnitData unit=ContentCache.getContent(unitId, UnitData.class);
         if (unit == null || !unit.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectData data = new DefectData();
         data.setCreateValues(unit, rdata);
-        data.readBackendRequestData(rdata);
+        data.readRequestData(rdata, RequestType.api);
         Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);

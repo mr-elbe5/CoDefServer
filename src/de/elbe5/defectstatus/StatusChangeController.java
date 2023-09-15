@@ -88,12 +88,14 @@ public class StatusChangeController extends ContentController {
 
     //api
 
-    public IResponse uploadStatusChange(RequestData rdata) {
-        Log.log("uploadStatusChange");
+    public IResponse createStatusChange(RequestData rdata) {
+        Log.log("createStatusChange");
         UserData user = rdata.getLoginUser();
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
-        int defectId = rdata.getId();
+        int defectId = rdata.getAttributes().getInt("defectId");
+        int statusChangeId = rdata.getId();
+        Log.info("remote status change id = " + statusChangeId);
         DefectData defect = ContentCache.getContent(defectId, DefectData.class);
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
