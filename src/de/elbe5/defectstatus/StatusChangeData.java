@@ -111,7 +111,8 @@ public class StatusChangeData extends ContentData {
         Log.log("StatusChangeData.setBackendCreateValues");
         super.setCreateValues(parent, rdata);
         if (parent instanceof DefectData data) {
-            setStatus(data.getStatus());
+            setStatus(data.getLastStatus());
+            setAssignedId(data.getLastAssignedId());
         }
     }
 

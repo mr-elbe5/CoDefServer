@@ -21,10 +21,10 @@
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
-    assert (contentData != null);
+    ProjectData project = ContentData.getCurrentContent(rdata, ProjectData.class);
+    assert (project != null);
     List<CompanyData> companies = CompanyCache.getAllCompanies();
-    String url = "/ctrl/project/saveBackendContent/" + contentData.getId();
+    String url = "/ctrl/project/saveBackendContent/" + project.getId();
     List<GroupData> groups = GroupCache.getAllGroups();
 %>
 <div class="modal-dialog modal-lg" role="document">
@@ -41,43 +41,43 @@
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
                 </h3>
-                <form:line label="_idAndUrl"><%=$I(contentData.getId())%> - <%=$H(contentData.getUrl())%>
+                <form:line label="_idAndUrl"><%=$I(project.getId())%> - <%=$H(project.getUrl())%>
                 </form:line>
-                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(project.getCreationDate())%> - <%=$H(project.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(project.getChangeDate())%> - <%=$H(project.getChangerName())%>
                 </form:line>
-                <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:text name="displayName" label="_name" required="true" value="<%=$H(project.getDisplayName())%>"/>
+                <form:textarea name="description" label="_description" height="5em"><%=$H(project.getDescription())%></form:textarea>
                 <% if (Configuration.useReadRights()){%>
                 <form:line label="_openAccess" padded="true">
-                    <form:check name="openAccess" value="true" checked="<%=contentData.isOpenAccess()%>"/>
+                    <form:check name="openAccess" value="true" checked="<%=project.isOpenAccess()%>"/>
                 </form:line>
                 <%}%>
                 <% if (Configuration.useReadRights() && Configuration.useReadGroup()){%>
                 <form:select name="readerGroupId" label="_readerGroup">
-                    <option value="0"  <%=contentData.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
+                    <option value="0"  <%=project.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
-                    <option value="<%=group.getId()%>" <%=contentData.getReaderGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
+                    <option value="<%=group.getId()%>" <%=project.getReaderGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
                 <%}%>
                 <% if (Configuration.useEditorGroup()){%>
                 <form:select name="editorGroupId" label="_editorGroup">
-                    <option value="0"  <%=contentData.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
+                    <option value="0"  <%=project.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
-                    <option value="<%=group.getId()%>" <%=contentData.getEditorGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
+                    <option value="<%=group.getId()%>" <%=project.getEditorGroupId()==group.getId() ? "selected" : ""%>><%=$H(group.getName())%></option>
                     <%}%>
                 </form:select>
                 <%}%>
                 <form:line label="_companies" padded="true" required="true">
                     <% for (CompanyData company : companies){%>
-                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=contentData.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
+                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=project.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
                     </form:check><br/>
                     <%}%>
                 </form:line>
                 <form:line label="_active" padded="true">
-                    <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
+                    <form:check name="active" value="true" checked="<%=project.isActive()%>"/>
                 </form:line>
             </div>
             <div class="modal-footer">

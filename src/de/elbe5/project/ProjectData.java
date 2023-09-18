@@ -100,7 +100,6 @@ public class ProjectData extends ContentData {
         switch (type){
             case api -> {
                 setOpenAccess(true);
-                setActive(true);
                 setNavType(ContentNavType.HEADER);
             }
             case backend -> {
@@ -119,6 +118,8 @@ public class ProjectData extends ContentData {
                 if (getCompanyIds().isEmpty()){
                     rdata.addIncompleteField("companyIds");
                 }
+            }
+            case frontend -> {
             }
         }
 

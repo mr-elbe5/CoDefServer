@@ -16,9 +16,9 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    UnitData contentData = ContentData.getCurrentContent(rdata, UnitData.class);
-    assert (contentData != null);
-    String url = "/ctrl/unit/saveBackendContent/" + contentData.getId();
+    UnitData unit = ContentData.getCurrentContent(rdata, UnitData.class);
+    assert (unit != null);
+    String url = "/ctrl/unit/saveBackendContent/" + unit.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -34,22 +34,22 @@
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
                 </h3>
-                <form:line label="_idAndUrl"><%=$I(contentData.getId())%> - <%=$H(contentData.getUrl())%>
+                <form:line label="_idAndUrl"><%=$I(unit.getId())%> - <%=$H(unit.getUrl())%>
                 </form:line>
-                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(unit.getCreationDate())%> - <%=$H(unit.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(unit.getChangeDate())%> - <%=$H(unit.getChangerName())%>
                 </form:line>
 
-                <form:text name="displayName" label="_name" required="true" value="<%=$H(contentData.getDisplayName())%>"/>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
-                <% if (contentData.getPlan() == null){%>
+                <form:text name="displayName" label="_name" required="true" value="<%=$H(unit.getDisplayName())%>"/>
+                <form:textarea name="description" label="_description" height="5em"><%=$H(unit.getDescription())%></form:textarea>
+                <% if (unit.getPlan() == null){%>
                 <form:file name="file" label="_plan" />
                 <form:line><%=$SH("_uploadHint")%></form:line>
                 <%}%>
-                <form:date name="approveDate" label="_approveDate" required="false" value="<%=$D(contentData.getApproveDate())%>"/>
+                <form:date name="approveDate" label="_approveDate" required="false" value="<%=$D(unit.getApproveDate())%>"/>
                 <form:line label="_active" padded="true">
-                    <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
+                    <form:check name="active" value="true" checked="<%=unit.isActive()%>"/>
                 </form:line>
             </div>
             <div class="modal-footer">

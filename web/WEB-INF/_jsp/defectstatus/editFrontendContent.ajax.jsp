@@ -23,17 +23,17 @@
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    StatusChangeData contentData = ContentData.getSessionContent(rdata, StatusChangeData.class);
-    DefectData defect = contentData.getParent(DefectData.class);
+    StatusChangeData statusChange = ContentData.getSessionContent(rdata, StatusChangeData.class);
+    DefectData defect = statusChange.getParent(DefectData.class);
     assert (defect != null);
     ProjectData project = defect.getProject();
     assert (project != null);
-    String url = "/ctrl/defectstatus/saveFrontendContent/" + contentData.getId();
+    String url = "/ctrl/defectstatus/saveFrontendContent/" + statusChange.getId();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title"><%=$SH("_editDefectComment")%>
+            <h5 class="modal-title"><%=$H(defect.getDisplayName())%>
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -42,24 +42,24 @@
         <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
-                <form:line label="_defect" padded="true"><%=$H(contentData.getDescription())%></form:line>
-                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:line label="_statusChange" padded="true"><%=$H(statusChange.getDescription())%></form:line>
+                <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(statusChange.getDescription())%></form:textarea>
                 <form:select name="assignedId" label="_assignTo" required="true">
-                    <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
+                    <option value="0" <%=statusChange.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
                     </option>
                     <% for (int companyId : project.getCompanyIds()) {
                         CompanyData company = CompanyCache.getCompany(companyId);%>
-                    <option value="<%=companyId%>" <%=defect.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
+                    <option value="<%=companyId%>" <%=statusChange.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
                     </option>
                     <%}%>
                 </form:select>
                 <form:select name="status" label="_status">
-                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
-                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>
-                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.REJECTED.toString())%></option>
-                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DONE.toString())%></option>
+                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
+                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>
+                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.REJECTED.toString())%></option>
+                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DONE.toString())%></option>
                 </form:select>
-                <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
+                <form:file name="files" label="_addImages" required="false" multiple="true"/>
                 <form:line><%=$SH("_uploadHint")%></form:line>
             </div>
             <div class="modal-footer">

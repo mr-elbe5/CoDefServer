@@ -147,6 +147,8 @@ public class UnitData extends ContentData {
                     rdata.addIncompleteField("displayName");
                 }
             }
+            case frontend -> {
+            }
         }
     }
 

@@ -64,7 +64,7 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_assigned")).append("</label1><content1>").append(xml(defect.getAssignedName())).append("</content1>");
-            sb.append("<label2>").append(sxml("_defectType")).append("</label2><content2>").append(LocalizedStrings.xml(defect.getProjectPhaseString())).append("</content2>");
+            sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(LocalizedStrings.xml(defect.getProjectPhaseString())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_dueDate1")).append("</label1><content1>").append(html(defect.getDueDate1())).append("</content1>");

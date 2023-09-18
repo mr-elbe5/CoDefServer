@@ -21,13 +21,13 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    StatusChangeData contentData = ContentData.getCurrentContent(rdata, StatusChangeData.class);
-    assert (contentData != null);
-    DefectData defect = contentData.getParent(DefectData.class);
+    StatusChangeData statusChange = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+    assert (statusChange != null);
+    DefectData defect = statusChange.getParent(DefectData.class);
     assert (defect != null);
     ProjectData project = defect.getProject();
     assert (project != null);
-    String url = "/ctrl/defectstatus/saveBackendContent/" + contentData.getId();%>
+    String url = "/ctrl/defectstatus/saveBackendContent/" + statusChange.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -42,13 +42,13 @@
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
                 </h3>
-                <form:line label="_id"><%=$I(contentData.getId())%>
+                <form:line label="_id"><%=$I(statusChange.getId())%>
                 </form:line>
-                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(statusChange.getCreationDate())%> - <%=$H(statusChange.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(statusChange.getChangeDate())%> - <%=$H(statusChange.getChangerName())%>
                 </form:line>
-                <form:line label="_name"><%=$H(contentData.getDisplayName())%>
+                <form:line label="_name"><%=$H(statusChange.getDisplayName())%>
                 </form:line>
                 <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
@@ -60,14 +60,14 @@
                     <%}%>
                 </form:select>
                 <form:select name="status" label="_status">
-                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
-                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>
-                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.REJECTED.toString())%></option>
-                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(contentData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DONE.toString())%></option>
+                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
+                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>
+                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.REJECTED.toString())%></option>
+                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(statusChange.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DONE.toString())%></option>
                 </form:select>
-                <form:textarea name="description" label="_notes" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:textarea name="description" label="_notes" height="5em"><%=$H(statusChange.getDescription())%></form:textarea>
                 <form:line label="_active" padded="true">
-                    <form:check name="active" value="true" checked="<%=contentData.isActive()%>"/>
+                    <form:check name="active" value="true" checked="<%=statusChange.isActive()%>"/>
                 </form:line>
             </div>
             <div class="modal-footer">

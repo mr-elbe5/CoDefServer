@@ -41,6 +41,10 @@
                 <div class="boxText"><%=$H(contentData.getCreationDate())%></div>
             </div>
             <div class="box">
+                <div class="boxTitle"><%=$SH("_projectPhase")%></div>
+                <div class="boxText"><%=$SH(contentData.getProjectPhaseString())%></div>
+            </div>
+            <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
                 <div class="boxText"><%=$H(contentData.getChangerName())%></div>
             </div>
@@ -109,9 +113,19 @@
         <div class="boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_statusChange")%>&nbsp;<%=$SH("_by")%>&nbsp;<%=$H(statusData.getCreatorName())%>&nbsp;
-                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtml(statusData.getCreationDate())%> - <%=$SH("_status")%>:<%=$SH(statusData.getStatus().toString())%>
+                    <%=$SH("_ofDate")%>&nbsp;<%=DateHelper.toHtml(statusData.getCreationDate())%>
                 </div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(statusData.getDescription())%></div>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap align-items-stretch boxContainer">
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_status")%></div>
+                <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_assigned")%></div>
+                <div class="boxText"><%=$H(statusData.getAssignedName())%></div>
             </div>
         </div>
         <%

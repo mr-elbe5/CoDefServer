@@ -11,6 +11,7 @@ package de.elbe5.defect;
 import de.elbe5.base.*;
 import de.elbe5.company.CompanyCache;
 import de.elbe5.company.CompanyData;
+import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.content.ContentBean;
@@ -22,7 +23,6 @@ import de.elbe5.project.ProjectData;
 import de.elbe5.file.FileData;
 import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
@@ -226,6 +226,16 @@ public class DefectData extends ContentData {
         return statusChanges.get(statusChanges.size()-1);
     }
 
+    public int getLastAssignedId(){
+        StatusChangeData statusChange = getLastStatusChange();
+        return statusChange != null ? statusChange.getAssignedId() : getAssignedId();
+    }
+
+    public DefectStatus getLastStatus(){
+        StatusChangeData statusChange = getLastStatusChange();
+        return statusChange != null ? statusChange.getStatus() : getStatus();
+    }
+
     public String getAssignedName() {
         if (assignedId==0)
             return "";
@@ -341,7 +351,9 @@ public class DefectData extends ContentData {
                     setDueDate2(rdata.getAttributes().getDate("dueDate2"));
                 }
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-                setNotified(rdata.getAttributes().getBoolean("notified"));
+                if (CodefConfiguration.showNotified()) {
+                    setNotified(rdata.getAttributes().getBoolean("notified"));
+                }
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 if (getAssignedId() == 0) {
                     rdata.addIncompleteField("assignedId");
@@ -361,7 +373,9 @@ public class DefectData extends ContentData {
             case backend ->{
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-                setNotified(rdata.getAttributes().getBoolean("notified"));
+                if (CodefConfiguration.showNotified()) {
+                    setNotified(rdata.getAttributes().getBoolean("notified"));
+                }
                 setDueDate2(rdata.getAttributes().getDate("dueDate2"));
             }
         }

@@ -62,7 +62,7 @@
             <th style="width:8%"><%=$SH("_assigned")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_ASSIGNED%>");>&nbsp;</a>
             </th>
-            <th style="width:8%"><%=$SH("_defectType")%>
+            <th style="width:8%"><%=$SH("_projectPhase")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
             </th>
             <% if (CodefConfiguration.showNotified()){%>

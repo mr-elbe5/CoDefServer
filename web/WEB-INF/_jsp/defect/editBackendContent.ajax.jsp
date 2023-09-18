@@ -23,14 +23,14 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    DefectData contentData = ContentData.getCurrentContent(rdata, DefectData.class);
-    assert (contentData != null);
-    UnitData unit = contentData.getUnit();
+    DefectData defect = ContentData.getCurrentContent(rdata, DefectData.class);
+    assert (defect != null);
+    UnitData unit = defect.getUnit();
     assert(unit !=null);
-    ProjectData project= contentData.getProject();
+    ProjectData project= defect.getProject();
     assert(project!=null);
     List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
-    String url = "/ctrl/defect/saveBackendContent/" + contentData.getId();%>
+    String url = "/ctrl/defect/saveBackendContent/" + defect.getId();%>
 <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -45,44 +45,44 @@
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
                 </h3>
-                <form:line label="_idAndUrl"><%=$I(contentData.getId())%> - <%=$H(contentData.getUrl())%>
+                <form:line label="_idAndUrl"><%=$I(defect.getId())%> - <%=$H(defect.getUrl())%>
                 </form:line>
-                <form:line label="_creation"><%=$H(contentData.getCreationDate())%> - <%=$H(contentData.getCreatorName())%>
+                <form:line label="_creation"><%=$H(defect.getCreationDate())%> - <%=$H(defect.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$H(contentData.getChangeDate())%> - <%=$H(contentData.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(defect.getChangeDate())%> - <%=$H(defect.getChangerName())%>
                 </form:line>
-                <form:line label="_name"><%=$H(contentData.getDisplayName())%>
+                <form:line label="_name"><%=$H(defect.getDisplayName())%>
                 </form:line>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(contentData.getDescription())%></form:textarea>
+                <form:textarea name="description" label="_description" height="5em"><%=$H(defect.getDescription())%></form:textarea>
                 <form:select name="assignedId" label="_assignTo" required="true">
-                    <option value="0" <%=contentData.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
+                    <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
                     <% for (CompanyData company : companies){%>
-                    <option value="<%=company.getId()%>" <%=contentData.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
+                    <option value="<%=company.getId()%>" <%=defect.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
                     <%}%>
                 </form:select>
-                <form:select name="defectType" label="_defectType">
-                    <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(contentData.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVAL.name())%></option>
-                    <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(contentData.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
-                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(contentData.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
+                <form:select name="projectPhase" label="_projectPhase">
+                    <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVAL.name())%></option>
+                    <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
+                    <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
                 </form:select>
                 <% if (CodefConfiguration.showNotified()){%>
-                <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=contentData.isNotified()%>"/></form:line>
+                <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=defect.isNotified()%>"/></form:line>
                 <%}%>
-                <form:date name="dueDate1" label="_dueDate1" value="<%=$D(contentData.getDueDate1())%>" required="true"/>
-                <form:date name="dueDate2" label="_dueDate2" value="<%=$D(contentData.getDueDate2())%>"/>
+                <form:date name="dueDate1" label="_dueDate1" value="<%=$D(defect.getDueDate1())%>" required="true"/>
+                <form:date name="dueDate2" label="_dueDate2" value="<%=$D(defect.getDueDate2())%>"/>
                 <% if (unit.getPlan() != null) {%>
                 <form:line label="_position"> </form:line>
                 <div id="planContainer">
-                    <img id="plan" src="/files/<%=contentData.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
+                    <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
                     <div id="planPositioner">
                         <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
-                        <span><%=contentData.getDisplayId()%></span>
+                        <span><%=defect.getDisplayId()%></span>
                     </div>
                 </div>
-                <input type="hidden" name="positionX" id="positionX" value="<%=contentData.getPositionX()%>"/>
-                <input type="hidden" name="positionY" id="positionY" value="<%=contentData.getPositionY()%>"/>
+                <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
+                <input type="hidden" name="positionY" id="positionY" value="<%=defect.getPositionY()%>"/>
                 <%}%>
-                <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(contentData.getPositionComment())%></form:textarea>
+                <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>
@@ -130,8 +130,8 @@
     });
 
     $plan.load(function () {
-        posX = (<%=contentData.getPositionX()%>)*$plan.width();
-        posY = (<%=contentData.getPositionY()%>)*$plan.height();
+        posX = (<%=defect.getPositionX()%>)*$plan.width();
+        posY = (<%=defect.getPositionY()%>)*$plan.height();
         //console.log('posX,posY=' + posX + ',' + posY);
         setPositioner();
     });

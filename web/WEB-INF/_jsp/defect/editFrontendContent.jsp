@@ -43,15 +43,15 @@
     <form:form url="<%=url%>" name="pageform" multi="true">
         <form:formerror/>
         <form:line label="_id" padded="true"><%=Integer.toString(defect.getDisplayId())%></form:line>
-        <form:line label="_description" padded="true"><%=$HML(defect.getDescription())%></form:line>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
+        <form:textarea name="description" label="_description" height="5em"><%=$H(defect.getDescription())%></form:textarea>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>
             <option value="<%=company.getId()%>" <%=defect.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
             <%}%>
         </form:select>
-        <form:select name="defectType" label="_defectType">
+        <form:select name="projectPhase" label="_projectPhase">
             <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVAL.name())%></option>
             <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
             <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
@@ -64,7 +64,7 @@
         <form:line label="_position"><img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" /></form:line>
         <%}%>
         <form:line label="_positionComment" padded="true"><%=$HML(defect.getPositionComment())%></form:line>
-        <form:file name="files" label="_addDocumentsAndImages" required="false" multiple="true"/>
+        <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
             <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/defect/show/<%=defect.getId()%>');"><%=$SH("_cancel")%>
             </button>
