@@ -119,10 +119,10 @@ public class StatusChangeData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("StatusChangeData.readRequestData");
-        setDescription(rdata.getAttributes().getString("description"));
         setOpenAccess(true);
         setNavType(ContentNavType.NONE);
         setActive(true);
+        setDescription(rdata.getAttributes().getString("description"));
         setAssignedId(rdata.getAttributes().getInt("assignedId"));
         setStatus(rdata.getAttributes().getString("status"));
         switch (type) {

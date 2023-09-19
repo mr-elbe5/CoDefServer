@@ -51,11 +51,11 @@
                 <form:line label="_name"><%=$H(statusChange.getDisplayName())%>
                 </form:line>
                 <form:select name="assignedId" label="_assignTo" required="true">
-                    <option value="0" <%=defect.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
+                    <option value="0" <%=statusChange.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>
                     </option>
                     <% for (int companyId : project.getCompanyIds()) {
                         CompanyData company = CompanyCache.getCompany(companyId);%>
-                    <option value="<%=companyId%>" <%=defect.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
+                    <option value="<%=companyId%>" <%=statusChange.getAssignedId() == company.getId() ? "selected" : ""%>><%=$H(company.getName())%>
                     </option>
                     <%}%>
                 </form:select>

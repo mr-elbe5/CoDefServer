@@ -328,6 +328,7 @@ public class DefectData extends ContentData {
         super.readRequestData(rdata, type);
         switch (type) {
             case api -> {
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
                 setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                 setPositionX(rdata.getAttributes().getDouble("positionX"));

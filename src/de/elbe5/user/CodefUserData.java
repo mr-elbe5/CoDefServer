@@ -157,7 +157,7 @@ public class CodefUserData extends UserData{
                 list.remove(i);
                 continue;
             }
-            if (!getCompanyIds().contains(data.getAssignedId())){
+            if (!getCompanyIds().contains(data.getLastAssignedId())){
                 list.remove(i);
             }
         }
@@ -179,7 +179,7 @@ public class CodefUserData extends UserData{
                     list.remove(i);
                     continue;
                 }
-                if (!getCompanyIds().contains(data.getAssignedId())){
+                if (!getCompanyIds().contains(data.getLastAssignedId())){
                     list.remove(i);
                 }
             }
