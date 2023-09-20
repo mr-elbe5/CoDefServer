@@ -63,7 +63,7 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("<label2>").append(sxml("_on")).append("</label2><content2>").append(html(defect.getCreationDate())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(sxml("_assigned")).append("</label1><content1>").append(xml(defect.getAssignedName())).append("</content1>");
+            sb.append("<label1>").append(sxml("_assigned")).append("</label1><content1>").append(xml(defect.getLastAssignedName())).append("</content1>");
             sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(LocalizedStrings.xml(defect.getProjectPhaseString())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
@@ -71,7 +71,7 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("<label2>").append(sxml("_dueDate2")).append("</label2><content2>").append(html(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getStatus().toString())).append("</content1>");
+            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getLastStatus().toString())).append("</content1>");
             sb.append("<label2>").append(sxml("_closeDate")).append("</label2><content2>").append(html(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
             BinaryFile file;
@@ -123,6 +123,11 @@ public abstract class CodefFopBean extends PdfCreator {
                             .append("</label1><content1>")
                             .append(sxml(changeData.getStatusString()))
                             .append("</content1>");
+                    sb.append("<label2>")
+                            .append(sxml("_assigned"))
+                            .append("</label2><content2>")
+                            .append(html(changeData.getAssignedName()))
+                            .append("</content2>");
                     sb.append("</defectrow>");
                     sb.append("<defectrow>");
                     sb.append("<label1>")

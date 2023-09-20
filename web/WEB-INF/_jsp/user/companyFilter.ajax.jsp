@@ -10,12 +10,9 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.content.ContentCache" %>
-<%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
@@ -24,8 +21,7 @@
     int contentId=rdata.getId();
     String url = "/ctrl/user/setCompanyFilter/"+contentId;
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
-    ProjectData project=ContentCache.getContent(user.getProjectId(), ProjectData.class);
-    List<CompanyData> companies = project!= null ? CompanyCache.getCompanies(project.getCompanyIds()) : new ArrayList<>();
+    List<CompanyData> companies = CompanyCache.getAllCompanies();
 %>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -41,7 +37,7 @@
                 <form:formerror/>
                 <div class="form-check">
                     <%int companyCount = companies.size();%>
-                    <input class="form-check-input" type="checkbox" id="checkall" <%=user.getCompanyIds().size() == companyCount ? "checked" : ""%> onchange="checkAll()">
+                    <input class="form-check-input" type="checkbox" id="checkall" <%=user.getSelectedCompanyIds().size() == companyCount ? "checked" : ""%> onchange="checkAll()">
                     <label class="form-check-label" for="checkall">
                         <%=$SH("_all")%>
                     </label>
@@ -50,7 +46,7 @@
                     <%for (CompanyData company : companies){
                 %>
                 <div class="form-check">
-                    <input class="form-check-input companycheck" name="companyIds" type="checkbox" value="<%=company.getId()%>" id="check<%=company.getId()%>" <%=user.getCompanyIds().contains(company.getId()) ? "checked" : ""%>>
+                    <input class="form-check-input companycheck" name="companyIds" type="checkbox" value="<%=company.getId()%>" id="check<%=company.getId()%>" <%=user.getSelectedCompanyIds().contains(company.getId()) ? "checked" : ""%>>
                     <label class="form-check-label" for="check<%=company.getId()%>">
                         <%=$H(company.getName())%>
                     </label>

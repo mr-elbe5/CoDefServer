@@ -14,6 +14,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -21,7 +22,12 @@
     int contentId=rdata.getId();
     String url = "/ctrl/user/setSyncFilter/"+contentId;
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
-    List<ProjectData> projects = ContentCache.getContents(ProjectData.class);
+    List<ProjectData> projects = new ArrayList<>();
+    for (ProjectData project : ContentCache.getContents(ProjectData.class)){
+        if (project.hasUserReadRight(user)){
+            projects.add(project);
+        }
+    }
     List<Integer> allowedProjectIds = user.getAllowedProjectIds();
     projects.removeIf(data -> !allowedProjectIds.contains(data.getId()));
 %>
@@ -42,7 +48,7 @@
                     <%for (ProjectData data : projects){
                     %>
                     <div class="form-check">
-                        <input class="form-check-input projectcheck" name="projectIds" type="checkbox" value="<%=data.getId()%>" id="check<%=data.getId()%>" <%=user.getProjectIds().contains(data.getId()) ? "checked" : ""%>>
+                        <input class="form-check-input projectcheck" name="projectIds" type="checkbox" value="<%=data.getId()%>" id="check<%=data.getId()%>" <%=user.getSelectedProjectIds().contains(data.getId()) ? "checked" : ""%>>
                         <label class="form-check-label" for="check<%=data.getId()%>">
                             <%=$H(data.getName())%>
                         </label>

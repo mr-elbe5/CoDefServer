@@ -15,6 +15,7 @@ import de.elbe5.project.ProjectData;
 import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.request.RequestData;
+import de.elbe5.user.CodefUserData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
@@ -57,8 +58,9 @@ public class RootData extends ContentData {
     @SuppressWarnings("unchecked")
     public JsonObject getAllDataJson(RequestData rdata) {
         List<ProjectData> projects = new ArrayList<>();
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         for (ProjectData project : ContentCache.getContents(ProjectData.class)){
-            if (project != null && project.isActive() && project.hasUserReadRight(rdata.getLoginUser()))
+            if (project.isActive() && user.getSelectedProjectIds().contains(project.getId()))
                 projects.add(project);
         }
         List<CompanyData> companies = CompanyCache.getAllCompanies();

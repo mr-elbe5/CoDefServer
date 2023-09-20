@@ -31,7 +31,7 @@ public class CodefUserController extends UserController {
         List<Integer> projectIds = ((CodefUserData) data).getAllowedProjectIds();
         if (user.getProjectId()!=0 && !projectIds.contains(user.getProjectId())) {
             user.setProjectId(0);
-            user.getCompanyIds().clear();
+            user.getSelectedCompanyIds().clear();
             CodefUserBean.getInstance().updateUserSettings(user);
         }
     }
@@ -45,8 +45,8 @@ public class CodefUserController extends UserController {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         user.setProjectIds(rdata.getAttributes().getIntegerList("projectIds"));
-        if (user.getProjectId() == 0 && !user.getProjectIds().isEmpty())
-            user.setProjectId(user.getProjectIds().get(0));
+        if (user.getProjectId() == 0 && !user.getSelectedProjectIds().isEmpty())
+            user.setProjectId(user.getSelectedProjectIds().get(0));
         CodefUserBean.getInstance().updateUserSettings(user);
         return new CloseDialogResponse("/ctrl/content/show/" + rdata.getSafeId());
     }

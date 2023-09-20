@@ -84,8 +84,8 @@
             <td><%=$H(defect.getChangeDate())%></td>
             <td><%=$D(defect.getDueDate())%></td>
             <td><%=$D(defect.getCloseDate())%></td>
-            <td><%=$SH(defect.getStatus().toString())%></td>
-            <td><%=$H(defect.getAssignedName())%></td>
+            <td><%=$SH(defect.getLastStatus().toString())%></td>
+            <td><%=$H(defect.getLastAssignedName())%></td>
             <td><%=$SH(defect.getProjectPhaseString())%></td>
             <% if (CodefConfiguration.showNotified()){%>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>

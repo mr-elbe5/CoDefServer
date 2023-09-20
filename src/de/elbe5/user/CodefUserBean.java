@@ -38,8 +38,8 @@ public class CodefUserBean extends UserBean {
                 if (rs.next()) {
                     int i = 1;
                     data.setProjectId(rs.getInt(i++));
-                    data.setProjectIds(rs.getString(i++));
-                    data.setCompanyIds(rs.getString(i++));
+                    data.setSelectedProjectIds(rs.getString(i++));
+                    data.setSelectedCompanyIds(rs.getString(i++));
                     data.setShowClosed(rs.getBoolean(i++));
                     data.setProjectPhase(rs.getString(i));
                 }

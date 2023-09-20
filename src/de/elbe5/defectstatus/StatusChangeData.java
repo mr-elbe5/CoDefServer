@@ -9,6 +9,8 @@
 package de.elbe5.defectstatus;
 
 import de.elbe5.base.*;
+import de.elbe5.company.CompanyCache;
+import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentBean;
@@ -19,7 +21,6 @@ import de.elbe5.file.ImageData;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestType;
 import de.elbe5.user.UserCache;
-import de.elbe5.user.UserData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -62,7 +63,7 @@ public class StatusChangeData extends ContentData {
     public String getAssignedName() {
         if (assignedId==0)
             return "";
-        UserData data= UserCache.getUser(assignedId);
+        CompanyData data= CompanyCache.getCompany(assignedId);
         if (data!=null)
             return data.getName();
         return "";

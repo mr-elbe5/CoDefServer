@@ -245,6 +245,16 @@ public class DefectData extends ContentData {
         return "";
     }
 
+    public String getLastAssignedName() {
+        int id = getLastAssignedId();
+        if (id==0)
+            return "";
+        CompanyData data= CompanyCache.getCompany(id);
+        if (data!=null)
+            return data.getName();
+        return "";
+    }
+
     @Override
     public List<Class<? extends ContentData>> getChildClasses(){
         return DefectData.childClasses;
@@ -298,28 +308,6 @@ public class DefectData extends ContentData {
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
         ProjectData project = (ProjectData) unit.getParent();
         setNavType(ContentNavType.NONE);
-    }
-
-    public void readBackendRequestData(RequestData rdata) {
-        Log.log("DefectData.readBackendRequestData");
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-        setNotified(rdata.getAttributes().getBoolean("notified"));
-        setDueDate1(rdata.getAttributes().getDate("dueDate1"));
-        setDueDate2(rdata.getAttributes().getDate("dueDate2"));
-        setPositionX(rdata.getAttributes().getDouble("positionX"));
-        setPositionY(rdata.getAttributes().getDouble("positionY"));
-        setPositionComment(rdata.getAttributes().getString("positionComment"));
-        if (getDescription().isEmpty()) {
-            rdata.addIncompleteField("description");
-        }
-        if (getAssignedId()==0) {
-            rdata.addIncompleteField("assigned");
-        }
-        if (getDueDate()==null) {
-            rdata.addIncompleteField("dueDate1");
-        }
     }
 
     @Override
@@ -390,8 +378,8 @@ public class DefectData extends ContentData {
         return super.getJson()
                 .add("displayId",getDisplayId())
                 .add("projectPhase", getProjectPhaseString())
-                .add("assignedId",getAssignedId())
-                .add("assignedName",getAssignedName())
+                .add("assignedId",getLastAssignedId())
+                .add("assignedName",getLastAssignedName())
                 .add("positionX",getPositionX())
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())

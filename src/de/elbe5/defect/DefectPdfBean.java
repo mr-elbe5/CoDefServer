@@ -9,6 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.LocalizedStrings;
 import de.elbe5.defectstatus.StatusChangeData;
 import de.elbe5.file.CodefFopBean;
 import de.elbe5.file.FileBean;
@@ -77,8 +78,8 @@ public class DefectPdfBean extends CodefFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_creator"),user.getName());
         addLabeledContent(sb,sxml("_creationDate"),html(data.getCreationDate()));
-        addLabeledContent(sb,sxml("_status"),sxml(data.getStatus().toString()));
-        addLabeledContent(sb,sxml("_assigned"),data.getAssignedName());
+        addLabeledContent(sb,sxml("_status"),sxml(data.getLastStatus().toString()));
+        addLabeledContent(sb,sxml("_assigned"),data.getLastAssignedName());
         addLabeledContent(sb,sxml("_dueDate1"),html(data.getDueDate1()));
         addLabeledContent(sb,sxml("_dueDate2"),html(data.getDueDate2()));
         addLabeledContent(sb,sxml("_closeDate"),html(data.getCloseDate()));
@@ -106,6 +107,8 @@ public class DefectPdfBean extends CodefFopBean {
         sb.append("<title>").append(xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_description"),data.getDescription());
+        addLabeledContent(sb,sxml("_status"),sxml(data.getStatusString()));
+        addLabeledContent(sb,sxml("_assigned"),html(data.getAssignedName()));
         for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
             addLabeledImage(sb, sxml("_image"), file, "5.0cm");

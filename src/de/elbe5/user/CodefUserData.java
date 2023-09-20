@@ -22,8 +22,8 @@ import java.util.List;
 public class CodefUserData extends UserData{
 
     private int projectId = 0;
-    private List<Integer> projectIds = new ArrayList<>();
-    private List<Integer> companyIds = new ArrayList<>();
+    private List<Integer> selectedProjectIds = new ArrayList<>();
+    private List<Integer> selectedCompanyIds = new ArrayList<>();
     private boolean showClosed = true;
     private ProjectPhase projectPhase = null;
 
@@ -48,35 +48,35 @@ public class CodefUserData extends UserData{
     }
 
     public String getProjectIdsString() {
-        return StringHelper.getIntString(projectIds);
+        return StringHelper.getIntString(selectedProjectIds);
     }
 
-    public List<Integer> getProjectIds() {
-        return projectIds;
+    public List<Integer> getSelectedProjectIds() {
+        return selectedProjectIds;
     }
 
-    public void setProjectIds(String projectIdsString) {
-        projectIds = StringHelper.toIntList(projectIdsString);
+    public void setSelectedProjectIds(String projectIdsString) {
+        selectedProjectIds = StringHelper.toIntList(projectIdsString);
     }
 
     public void setProjectIds(List<Integer> ids) {
-        projectIds = ids;
+        selectedProjectIds = ids;
     }
 
     public String getCompanyIdsString() {
-        return StringHelper.getIntString(companyIds);
+        return StringHelper.getIntString(selectedCompanyIds);
     }
 
-    public List<Integer> getCompanyIds() {
-        return companyIds;
+    public List<Integer> getSelectedCompanyIds() {
+        return selectedCompanyIds;
     }
 
-    public void setCompanyIds(String companyIdsString) {
-        companyIds = StringHelper.toIntList(companyIdsString);
+    public void setSelectedCompanyIds(String companyIdsString) {
+        selectedCompanyIds = StringHelper.toIntList(companyIdsString);
     }
 
     public void setCompanyIds(List<Integer> ids) {
-        companyIds = ids;
+        selectedCompanyIds = ids;
     }
 
     public boolean isShowClosed() {
@@ -157,7 +157,7 @@ public class CodefUserData extends UserData{
                 list.remove(i);
                 continue;
             }
-            if (!getCompanyIds().contains(data.getLastAssignedId())){
+            if (!getSelectedCompanyIds().contains(data.getLastAssignedId())){
                 list.remove(i);
             }
         }
@@ -179,7 +179,7 @@ public class CodefUserData extends UserData{
                     list.remove(i);
                     continue;
                 }
-                if (!getCompanyIds().contains(data.getLastAssignedId())){
+                if (!getSelectedCompanyIds().contains(data.getLastAssignedId())){
                     list.remove(i);
                 }
             }

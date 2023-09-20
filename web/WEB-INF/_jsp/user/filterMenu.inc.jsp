@@ -14,7 +14,7 @@
     <a class="fa fa-tablet" onclick="return openModalDialog('/ctrl/user/openSyncFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_synchronization")%></a>
   </li>
   <li>
-    <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/user/openCompanyFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_companies")%>&nbsp;(<%=user.getCompanyIds().size()%>)</a>
+    <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/user/openCompanyFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_companies")%>&nbsp;(<%=user.getSelectedCompanyIds().size()%>)</a>
   </li>
   <li>
     <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/user/openViewFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_view")%></a>

@@ -54,7 +54,7 @@
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
-                <div class="boxText"><%=$H(contentData.getAssignedName())%></div>
+                <div class="boxText"><%=$H(contentData.getLastAssignedName())%></div>
             </div>
             <% if (CodefConfiguration.showNotified()){%>
             <div class="box">
@@ -64,7 +64,7 @@
             <%}%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>
+                <div class="boxText"><%=$SH(contentData.getLastStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate1")%></div>
@@ -121,7 +121,7 @@
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(contentData.getStatus().toString())%></div>
+                <div class="boxText"><%=$SH(statusData.getStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
