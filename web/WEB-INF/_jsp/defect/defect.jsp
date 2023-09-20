@@ -15,6 +15,7 @@
 <%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
+<%@ page import="de.elbe5.file.ImageData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -94,17 +95,14 @@
 
         <% if (!contentData.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : contentData.getFiles()){%>
             <div class="box">
-                <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
+                <div class="boxTitle"><%=$SH("_images")%></div>
                 <div class="boxImage">
-                    <% if (file.isImage()){%>
-                    <a href="<%=file.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
-                    <%}%>
+            <% for (FileData file : contentData.getFiles(ImageData.class)){%>
+                <a href="<%=file.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
+                <%}%>
                 </div>
-                <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
-            <%}%>
         </div>
         <%}%>
     </div>
@@ -131,18 +129,14 @@
         <%
         if (!statusData.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
-            <% for (FileData file : statusData.getFiles()){
-            %>
             <div class="box">
-                <div class="boxTitle"><%=StringHelper.toHtml(file.getDisplayName())%></div>
-                <div class="boxImage">
-                    <% if (file.isImage()){%>
+                <div class="boxTitle"><%=$SH("_images")%></div>
+                <div class="box">
+                <% for (FileData file : statusData.getFiles(ImageData.class)){%>
                     <a href="<%=file.getStaticURL()%>" target="_blank" title="<%=$SH("_view")%>"><img src="/ctrl/image/showPreview/<%=file.getId()%>" alt="" /></a>
                     <%}%>
                 </div>
-                <div class="boxSubtitle"><%=StringHelper.toHtmlMultiline(file.getDescription())%></div>
             </div>
-            <%}%>
         </div>
         <%}%>
     </div>
