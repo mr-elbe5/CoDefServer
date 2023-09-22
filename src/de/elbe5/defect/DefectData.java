@@ -325,6 +325,7 @@ public class DefectData extends ContentData {
             }
             case frontend -> {
                 if (isNew()) {
+                    setDescription(rdata.getAttributes().getString("description"));
                     setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                     setPositionX(rdata.getAttributes().getDouble("positionX"));
                     setPositionY(rdata.getAttributes().getDouble("positionY"));
