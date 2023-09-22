@@ -93,22 +93,38 @@ public class ProjectData extends ContentData {
     // multiple data
 
     @Override
+    public void setCreateValues(ContentData parent, RequestData rdata) {
+        super.setCreateValues(parent, rdata);
+        setNavType(ContentNavType.HEADER);
+        setActive(true);
+        setOpenAccess(true);
+    }
+
+    @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("ProjectData.readRequestData");
-        super.readRequestData(rdata, type);
-        setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
         switch (type){
             case api -> {
-                setOpenAccess(true);
-                setNavType(ContentNavType.HEADER);
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
+                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
             }
             case backend -> {
-                super.readRequestData(rdata, type);
-                setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
-                setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
-                setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
+                if (Configuration.useReadRights()) {
+                    setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
+                }
+                if (Configuration.useReadRights() && Configuration.useReadGroup()) {
+                    setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
+                }
+                if (Configuration.useEditorGroup()) {
+                    setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
+                }
                 setActive(rdata.getAttributes().getBoolean("active"));
-                setNavType(ContentNavType.HEADER);
+                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
                 if (getDisplayName().isEmpty()) {
                     rdata.addIncompleteField("displayName");
                 }
@@ -118,8 +134,6 @@ public class ProjectData extends ContentData {
                 if (getCompanyIds().isEmpty()){
                     rdata.addIncompleteField("companyIds");
                 }
-            }
-            case frontend -> {
             }
         }
 

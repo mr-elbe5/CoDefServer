@@ -70,7 +70,7 @@
                     <%}%>
                 </form:select>
                 <%}%>
-                <form:line label="_companies" padded="true" required="true">
+                <form:line label="_companies" name="companyIds" padded="true" required="true">
                     <% for (CompanyData company : companies){%>
                     <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=project.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
                     </form:check><br/>

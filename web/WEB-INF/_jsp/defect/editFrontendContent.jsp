@@ -43,8 +43,10 @@
     <form:form url="<%=url%>" name="pageform" multi="true">
         <form:formerror/>
         <form:line label="_id" padded="true"><%=Integer.toString(defect.getDisplayId())%></form:line>
+        <% if (!defect.isNew()){%>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
-        <form:textarea name="description" label="_description" height="5em"><%=$H(defect.getDescription())%></form:textarea>
+        <%}%>
+        <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>
@@ -59,10 +61,29 @@
         <% if (CodefConfiguration.showNotified()){%>
         <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=defect.isNotified()%>"/></form:line>
         <%}%>
+        <% if (defect.isNew()){%>
+        <form:date name="dueDate1" label="_dueDate" value="<%=DateHelper.toHtmlDate(defect.getDueDate1())%>" required="true"/>
+        <%}else{%>
         <form:date name="dueDate2" label="_dueDate2" value="<%=$D(defect.getDueDate2())%>" required="true"/>
-        <% if (defect.getPlan()!=null){%>
-        <form:line label="_position"><img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" /></form:line>
         <%}%>
+        <% if (defect.getPlan()!=null){
+            if (defect.isNew()){%>
+        <form:line label="_position"> </form:line>
+        <div id="planContainer">
+            <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
+            <div id="planPositioner">
+                <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
+                <span><%=defect.getDisplayId()%></span>
+            </div>
+        </div>
+        <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
+        <input type="hidden" name="positionY" id="positionY" value="<%=defect.getPositionY()%>"/>
+        <%}else{%>
+        <form:line label="_position">
+            <img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" />
+        </form:line>
+        <%}
+        }%>
         <form:line label="_positionComment" padded="true"><%=$HML(defect.getPositionComment())%></form:line>
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
@@ -73,7 +94,51 @@
         </div>
     </form:form>
 </section>
-<%}%>
+<% if (unit.getPlan() != null && defect.isNew()) {%>
+<script type="text/javascript">
+    let posX = 0;
+    let posY = 0;
+    let $container = $('#planContainer');
+    console.log('posX,posY=' + posX + ',' + posY);
+    console.log('container=' + $container);
+    let $positioner = $('#planPositioner');
+    console.log('positioner=' + $positioner);
+    let $plan = $('#plan');
+    console.log('plan=' + $plan);
+
+    $plan.on('click', function (event) {
+        let offset = $container.offset();
+        console.log('container offset=' + offset.left + ',' + offset.top);
+        posX = Math.round(event.pageX - offset.left );
+        posY = Math.round(event.pageY - offset.top);
+        //console.log('posX,posY=' + posX + ',' + posY);
+        setPositioner();
+    });
+
+    function setPositioner() {
+        $positioner.css('left', posX - 11);
+        //relative, so go top
+        $positioner.css('top', posY - 5 - $plan.height());
+        let positionX=posX/$plan.width();
+        let positionY=posY/$plan.height();
+        //console.log('positionX,positionY=' + positionX + ',' + positionY);
+        $('#positionX').val(positionX);
+        $('#positionY').val(positionY);
+    }
+
+    $('#arrow').load(function () {
+        setPositioner($container.position());
+    });
+
+    $plan.load(function () {
+        posX = (<%=defect.getPositionX()%>)*$plan.width();
+        posY = (<%=defect.getPositionY()%>)*$plan.height();
+        //console.log('posX,posY=' + posX + ',' + posY);
+        setPositioner();
+    });
+
+</script>
+<%}}%>
 
 
 

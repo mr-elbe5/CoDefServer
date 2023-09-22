@@ -68,3 +68,11 @@ alter table t_company add creator_id    INTEGER       NOT NULL DEFAULT 1;
 alter table t_company add changer_id    INTEGER       NOT NULL DEFAULT 1;
 alter table t_company add CONSTRAINT t_company_fk1 FOREIGN KEY (creator_id) REFERENCES t_user (id) ON DELETE SET DEFAULT;
 alter table t_company add CONSTRAINT t_company_fk2 FOREIGN KEY (changer_id) REFERENCES t_user (id) ON DELETE SET DEFAULT;
+
+---
+
+alter table t_defect_status_change rename to t_defect_status;
+alter table t_defect_status rename constraint t_defect_status_change_pk to t_defect_status_pk;
+alter table t_defect_status rename constraint t_defect_status_change_fk1 to t_defect_status_fk1;
+alter table t_defect_status rename constraint t_defect_status_change_fk2 to t_defect_status_fk2;
+update t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type = 'de.elbe5.defectstatus.DefectStatusChangeData';

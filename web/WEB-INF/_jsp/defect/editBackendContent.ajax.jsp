@@ -53,14 +53,14 @@
                 </form:line>
                 <form:line label="_name"><%=$H(defect.getDisplayName())%>
                 </form:line>
-                <form:textarea name="description" label="_description" height="5em"><%=$H(defect.getDescription())%></form:textarea>
+                <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
                 <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
                     <% for (CompanyData company : companies){%>
                     <option value="<%=company.getId()%>" <%=defect.getAssignedId()==company.getId() ? "selected" : ""%>><%=$H(company.getName())%></option>
                     <%}%>
                 </form:select>
-                <form:select name="projectPhase" label="_projectPhase">
+                <form:select name="projectPhase" label="_projectPhase" required="true">
                     <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVAL.name())%></option>
                     <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
                     <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>

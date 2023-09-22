@@ -21,21 +21,21 @@ import de.elbe5.servlet.ControllerCache;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class StatusChangeController extends ContentController {
+public class DefectStatusController extends ContentController {
 
     public static final String KEY = "defectstatus";
 
-    private static StatusChangeController instance = null;
+    private static DefectStatusController instance = null;
 
-    public static void setInstance(StatusChangeController instance) {
-        StatusChangeController.instance = instance;
+    public static void setInstance(DefectStatusController instance) {
+        DefectStatusController.instance = instance;
     }
 
-    public static StatusChangeController getInstance() {
+    public static DefectStatusController getInstance() {
         return instance;
     }
 
-    public static void register(StatusChangeController controller){
+    public static void register(DefectStatusController controller){
         setInstance(controller);
         ControllerCache.addController(controller.getKey(),getInstance());
     }
@@ -49,7 +49,7 @@ public class StatusChangeController extends ContentController {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
         assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
-        StatusChangeData data = new StatusChangeData();
+        DefectStatusData data = new DefectStatusData();
         data.setCreateValues(parent, rdata);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -57,7 +57,7 @@ public class StatusChangeController extends ContentController {
 
     public IResponse openEditFrontendContent(RequestData rdata) {
         int statusId=rdata.getId();
-        StatusChangeData data = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+        DefectStatusData data = ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assertRights(data.hasUserEditRight(rdata.getLoginUser()));
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
@@ -66,17 +66,19 @@ public class StatusChangeController extends ContentController {
     //frontend
     public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
-        StatusChangeData data= ContentData.getCurrentContent(rdata, StatusChangeData.class);
+        DefectStatusData data= ContentData.getCurrentContent(rdata, DefectStatusData.class);
         assert(data != null && data.getId() == contentId);
-        assertRights(data.hasUserEditRight(rdata.getLoginUser()));
+        DefectData defect= ContentCache.getContent(data.getParentId(), DefectData.class);
+        assert(defect != null);
+        assertRights(defect.hasUserEditRight(rdata.getLoginUser()));
         data.readRequestData(rdata, RequestType.frontend);
         if (!rdata.checkFormErrors()) {
-            return new ContentResponse(data);
+            return new ForwardResponse(data.getFrontendEditJsp());
         }
         data.setChangerId(rdata.getUserId());
         if (!ContentBean.getInstance().saveContent(data)) {
             setSaveError(rdata);
-            return new ContentResponse(data);
+            return new ContentResponse(defect);
         }
         data.setNew(false);
         data.setEditMode(false);
@@ -100,10 +102,10 @@ public class StatusChangeController extends ContentController {
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
-        StatusChangeData data = new StatusChangeData();
+        DefectStatusData data = new DefectStatusData();
         data.setCreateValues(defect, rdata);
         data.readRequestData(rdata, RequestType.api);
-        if (!StatusChangeBean.getInstance().saveContent(data)) {
+        if (!DefectStatusBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
         data.setNew(false);

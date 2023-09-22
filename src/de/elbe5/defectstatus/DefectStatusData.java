@@ -27,7 +27,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatusChangeData extends ContentData {
+public class DefectStatusData extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -40,13 +40,13 @@ public class StatusChangeData extends ContentData {
     protected DefectStatus status = DefectStatus.OPEN;
 
     public ContentBean getBean() {
-        return StatusChangeBean.getInstance();
+        return DefectStatusBean.getInstance();
     }
 
     @Override
     public String getDisplayName(){
         if (parent instanceof DefectData defect){
-            String idx = isNew() ? "" : " " + String.valueOf(parent.getChildIndex(this)+1);
+            String idx = isNew() ? "" : " " + (parent.getChildIndex(this)+1);
             return defect.getDisplayName() + "-" + LocalizedStrings.string("_statusChange") + idx;
         }
         return LocalizedStrings.string("_statusChange");
@@ -100,11 +100,11 @@ public class StatusChangeData extends ContentData {
 
     @Override
     public List<Class<? extends ContentData>> getChildClasses(){
-        return StatusChangeData.childClasses;
+        return DefectStatusData.childClasses;
     }
 
     public List<Class<? extends FileData>> getFileClasses(){
-        return StatusChangeData.fileClasses;
+        return DefectStatusData.fileClasses;
     }
 
     @Override
@@ -115,40 +115,54 @@ public class StatusChangeData extends ContentData {
             setStatus(data.getLastStatus());
             setAssignedId(data.getLastAssignedId());
         }
+        setNavType(ContentNavType.NONE);
+        setActive(true);
+        setOpenAccess(true);
     }
 
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("StatusChangeData.readRequestData");
-        setOpenAccess(true);
-        setNavType(ContentNavType.NONE);
-        setActive(true);
-        setDescription(rdata.getAttributes().getString("description"));
-        setAssignedId(rdata.getAttributes().getInt("assignedId"));
-        setStatus(rdata.getAttributes().getString("status"));
         switch (type) {
+            case api -> {
+                setDescription(rdata.getAttributes().getString("description"));
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                setStatus(rdata.getAttributes().getString("status"));
+            }
             case backend -> {
+                setDescription(rdata.getAttributes().getString("description"));
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                setStatus(rdata.getAttributes().getString("status"));
                 setActive(rdata.getAttributes().getBoolean("active"));
+                if (getDescription().isEmpty()) {
+                    rdata.addIncompleteField("description");
+                }
+                if (getAssignedId() == 0) {
+                    rdata.addIncompleteField("assigned");
+                }
             }
             case frontend -> {
+                setDescription(rdata.getAttributes().getString("description"));
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                setStatus(rdata.getAttributes().getString("status"));
                 List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
-                for (BinaryFile f : newFiles) {
-                    if (f.isImage()){
+                for (BinaryFile file : newFiles) {
+                    if (file.isImage()){
                         ImageData image = new ImageData();
                         image.setCreateValues(this, rdata);
-                        if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(),image.getMaxPreviewHeight(), false))
+                        if (!image.createFromBinaryFile(file))
                             continue;
                         image.setChangerId(rdata.getUserId());
                         getFiles().add(image);
                     }
                 }
+                if (getDescription().isEmpty()) {
+                    rdata.addIncompleteField("description");
+                }
+                if (getAssignedId() == 0) {
+                    rdata.addIncompleteField("assigned");
+                }
             }
-        }
-        if (getDescription().isEmpty()) {
-            rdata.addIncompleteField("description");
-        }
-        if (getAssignedId() == 0) {
-            rdata.addIncompleteField("assigned");
         }
     }
 
@@ -201,7 +215,7 @@ public class StatusChangeData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    StatusChangeData statusData = new StatusChangeData();
+                    DefectStatusData statusData = new DefectStatusData();
                     statusData.fromJsonRecursive(jsObj);
                     if (statusData.hasValidData())
                         getChildren().add(statusData);

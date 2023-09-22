@@ -41,8 +41,7 @@ public class UnitData extends ContentData {
 
     public static int STD_PLAN_SIZE = 2190;
 
-    public static int MAX_PLAN_PREVIEW_WIDTH = 600;
-    public static int MAX_PLAN_PREVIEW_HEIGHT = 600;
+    public static int PLAN_PREVIEW_SIZE = 600;
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -131,23 +130,33 @@ public class UnitData extends ContentData {
     // multiple data
 
     @Override
+    public void setCreateValues(ContentData parent, RequestData rdata) {
+        super.setCreateValues(parent, rdata);
+        setNavType(ContentNavType.HEADER);
+        setActive(true);
+        setOpenAccess(true);
+    }
+
+    @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("Unit.readRequestData");
         super.readRequestData(rdata, type);
         switch (type) {
             case api -> {
-                setNavType(ContentNavType.HEADER);
-                setActive(true);
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
+                setApproveDate(rdata.getAttributes().getDate("approveDate"));
             }
             case backend -> {
+                setDisplayName(rdata.getAttributes().getString("displayName").trim());
+                setName(StringHelper.toSafeWebName(getDisplayName()));
+                setDescription(rdata.getAttributes().getString("description"));
                 setApproveDate(rdata.getAttributes().getDate("approveDate"));
-                setNavType(ContentNavType.HEADER);
                 setActive(rdata.getAttributes().getBoolean("active"));
                 if (getDisplayName().isEmpty()) {
                     rdata.addIncompleteField("displayName");
                 }
-            }
-            case frontend -> {
             }
         }
     }
@@ -157,7 +166,9 @@ public class UnitData extends ContentData {
         if (file != null){
             ImageData plan = new ImageData();
             plan.setCreateValues(this,rdata);
-            plan.createFromBinaryFile(file, STD_PLAN_SIZE, STD_PLAN_SIZE, MAX_PLAN_PREVIEW_WIDTH, MAX_PLAN_PREVIEW_HEIGHT, false);
+            plan.setMaxSize(STD_PLAN_SIZE);
+            plan.setPreviewSize(PLAN_PREVIEW_SIZE);
+            plan.createFromBinaryFile(file);
             plan.setDisplayName(LocalizedStrings.string("_plan"));
             return plan;
         }

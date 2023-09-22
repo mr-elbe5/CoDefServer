@@ -11,7 +11,7 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.defect.DefectStatus" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
@@ -21,7 +21,7 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    StatusChangeData statusChange = ContentData.getCurrentContent(rdata, StatusChangeData.class);
+    DefectStatusData statusChange = ContentData.getCurrentContent(rdata, DefectStatusData.class);
     assert (statusChange != null);
     DefectData defect = statusChange.getParent(DefectData.class);
     assert (defect != null);

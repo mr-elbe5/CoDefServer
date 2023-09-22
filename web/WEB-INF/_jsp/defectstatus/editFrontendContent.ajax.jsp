@@ -10,11 +10,11 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.defect.DefectStatus" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
@@ -23,7 +23,7 @@
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
-    StatusChangeData statusChange = ContentData.getSessionContent(rdata, StatusChangeData.class);
+    DefectStatusData statusChange = ContentData.getSessionContent(rdata, DefectStatusData.class);
     DefectData defect = statusChange.getParent(DefectData.class);
     assert (defect != null);
     ProjectData project = defect.getProject();
@@ -42,7 +42,7 @@
         <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
-                <form:line label="_statusChange" padded="true"><%=$H(statusChange.getDescription())%></form:line>
+                <form:line label="_statusChange" padded="true"><%=$H(statusChange.getDisplayName())%></form:line>
                 <form:textarea name="description" label="_description" height="8em" required="true"><%=$H(statusChange.getDescription())%></form:textarea>
                 <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=statusChange.getAssignedId() == 0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%>

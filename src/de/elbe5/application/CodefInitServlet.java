@@ -15,7 +15,7 @@ import de.elbe5.configuration.CodefConfigurationBean;
 import de.elbe5.configuration.Configuration;
 import de.elbe5.configuration.ConfigurationBean;
 import de.elbe5.defect.DefectController;
-import de.elbe5.defectstatus.StatusChangeController;
+import de.elbe5.defectstatus.DefectStatusController;
 import de.elbe5.group.GroupCache;
 import de.elbe5.project.ProjectController;
 import de.elbe5.root.RootController;
@@ -69,7 +69,7 @@ public class CodefInitServlet extends InitServlet {
         ProjectController.register(new ProjectController());
         UnitController.register(new UnitController());
         DefectController.register(new DefectController());
-        StatusChangeController.register(new StatusChangeController());
+        DefectStatusController.register(new DefectStatusController());
 
         CompanyCache.load();
         ContentCache.load();

@@ -12,7 +12,7 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
-<%@ page import="de.elbe5.defectstatus.StatusChangeData" %>
+<%@ page import="de.elbe5.defectstatus.DefectStatusData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
 <%@ page import="de.elbe5.file.ImageData" %>
@@ -106,7 +106,7 @@
         </div>
         <%}%>
     </div>
-    <% for (StatusChangeData statusData : contentData.getStatusChanges()){%>
+    <% for (DefectStatusData statusData : contentData.getStatusChanges()){%>
     <div class="paragraph">
         <div class="boxContainer">
             <div class="box">

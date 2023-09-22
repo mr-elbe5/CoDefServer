@@ -11,9 +11,8 @@ package de.elbe5.defect;
 import de.elbe5.base.*;
 import de.elbe5.company.CompanyCache;
 import de.elbe5.company.CompanyData;
-import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentNavType;
-import de.elbe5.defectstatus.StatusChangeData;
+import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.content.ContentBean;
 import de.elbe5.project.ProjectPhase;
 import de.elbe5.request.RequestType;
@@ -47,7 +46,7 @@ public class DefectData extends ContentData {
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
 
     static {
-        childClasses.add(StatusChangeData.class);
+        childClasses.add(DefectStatusData.class);
         fileClasses.add(ImageData.class);
     }
 
@@ -150,7 +149,7 @@ public class DefectData extends ContentData {
     }
 
     public DefectStatus getStatus() {
-        StatusChangeData statusChange = getLastStatusChange();
+        DefectStatusData statusChange = getLastStatusChange();
         return statusChange == null ? DefectStatus.OPEN : statusChange.getStatus();
     }
 
@@ -214,12 +213,12 @@ public class DefectData extends ContentData {
         this.closeDate = closeDate;
     }
 
-    public List<StatusChangeData> getStatusChanges() {
-        return new ArrayList<>(getChildren(StatusChangeData.class));
+    public List<DefectStatusData> getStatusChanges() {
+        return new ArrayList<>(getChildren(DefectStatusData.class));
     }
 
-    public StatusChangeData getLastStatusChange(){
-        List<StatusChangeData> statusChanges = getStatusChanges();
+    public DefectStatusData getLastStatusChange(){
+        List<DefectStatusData> statusChanges = getStatusChanges();
         if (statusChanges.isEmpty()){
             return null;
         }
@@ -227,12 +226,12 @@ public class DefectData extends ContentData {
     }
 
     public int getLastAssignedId(){
-        StatusChangeData statusChange = getLastStatusChange();
+        DefectStatusData statusChange = getLastStatusChange();
         return statusChange != null ? statusChange.getAssignedId() : getAssignedId();
     }
 
     public DefectStatus getLastStatus(){
-        StatusChangeData statusChange = getLastStatusChange();
+        DefectStatusData statusChange = getLastStatusChange();
         return statusChange != null ? statusChange.getStatus() : getStatus();
     }
 
@@ -286,10 +285,7 @@ public class DefectData extends ContentData {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
         if (isEditMode()) {
-            if (isNew())
-                context.include("/WEB-INF/_jsp/defect/createFrontendContent.jsp");
-            else
-                context.include("/WEB-INF/_jsp/defect/editFrontendContent.jsp");
+            context.include("/WEB-INF/_jsp/defect/editFrontendContent.jsp");
         } else {
             context.include("/WEB-INF/_jsp/defect/defect.jsp");
         }
@@ -308,14 +304,17 @@ public class DefectData extends ContentData {
         setDisplayId(DefectBean.getInstance().getNextDisplayId());
         ProjectData project = (ProjectData) unit.getParent();
         setNavType(ContentNavType.NONE);
+        setActive(true);
+        setOpenAccess(true);
+        setName(StringHelper.toSafeWebName(getDisplayName()));
     }
 
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("DefectData.readRequestData");
-        super.readRequestData(rdata, type);
         switch (type) {
             case api -> {
+                setDescription(rdata.getAttributes().getString("description"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
                 setDueDate1(rdata.getAttributes().getDate("dueDate1"));
@@ -324,15 +323,15 @@ public class DefectData extends ContentData {
                 setPositionComment(rdata.getAttributes().getString("positionComment"));
             }
             case frontend -> {
+                setDescription(rdata.getAttributes().getString("description"));
+                setAssignedId(rdata.getAttributes().getInt("assignedId"));
+                setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+                setNotified(rdata.getAttributes().getBoolean("notified"));
                 if (isNew()) {
-                    setDescription(rdata.getAttributes().getString("description"));
                     setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                     setPositionX(rdata.getAttributes().getDouble("positionX"));
                     setPositionY(rdata.getAttributes().getDouble("positionY"));
                     setPositionComment(rdata.getAttributes().getString("positionComment"));
-                    if (getDescription().isEmpty()) {
-                        rdata.addIncompleteField("description");
-                    }
                     if (getDueDate() == null) {
                         rdata.addIncompleteField("dueDate1");
                     }
@@ -340,37 +339,44 @@ public class DefectData extends ContentData {
                 else{
                     setDueDate2(rdata.getAttributes().getDate("dueDate2"));
                 }
-                setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-                if (CodefConfiguration.showNotified()) {
-                    setNotified(rdata.getAttributes().getBoolean("notified"));
-                }
-                setAssignedId(rdata.getAttributes().getInt("assignedId"));
-                if (getAssignedId() == 0) {
-                    rdata.addIncompleteField("assignedId");
-                }
                 List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
-                for (BinaryFile f : newFiles) {
-                    if (f.isImage()) {
+                for (BinaryFile file : newFiles) {
+                    if (file.isImage()) {
                         ImageData image = new ImageData();
                         image.setCreateValues(this, rdata);
-                        if (!image.createFromBinaryFile(f, image.getMaxWidth(), image.getMaxHeight(), image.getMaxPreviewWidth(), image.getMaxPreviewHeight(), false))
+                        if (!image.createFromBinaryFile(file))
                             continue;
                         image.setChangerId(rdata.getUserId());
                         getFiles().add(image);
                     }
                 }
+                if (getDescription().isEmpty()) {
+                    rdata.addIncompleteField("description");
+                }
+                if (getAssignedId() == 0) {
+                    rdata.addIncompleteField("assignedId");
+                }
             }
             case backend ->{
+                setDescription(rdata.getAttributes().getString("description"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
-                if (CodefConfiguration.showNotified()) {
-                    setNotified(rdata.getAttributes().getBoolean("notified"));
-                }
+                setNotified(rdata.getAttributes().getBoolean("notified"));
+                setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                 setDueDate2(rdata.getAttributes().getDate("dueDate2"));
+                setPositionX(rdata.getAttributes().getDouble("positionX"));
+                setPositionY(rdata.getAttributes().getDouble("positionY"));
+                setPositionComment(rdata.getAttributes().getString("positionComment"));
+                if (getDescription().isEmpty()) {
+                    rdata.addIncompleteField("description");
+                }
+                if (getAssignedId() == 0) {
+                    rdata.addIncompleteField("assignedId");
+                }
+                if (getDueDate() == null) {
+                    rdata.addIncompleteField("dueDate1");
+                }
             }
-        }
-        if (getAssignedId() == 0) {
-            rdata.addIncompleteField("assigned");
         }
     }
 
@@ -385,15 +391,14 @@ public class DefectData extends ContentData {
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())
                 .add("state", getStatus().toString())
-                .add("dueDate", getDueDate())
-                .add("phase", "DEFAULT");
+                .add("dueDate", getDueDate());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public JsonObject getJsonRecursive(){
         JSONArray jsStatusChanges = new JSONArray();
-        for (StatusChangeData statusChange : getStatusChanges()) {
+        for (DefectStatusData statusChange : getStatusChanges()) {
             JsonObject jsStatusChange = statusChange.getJsonRecursive();
             jsStatusChanges.add(jsStatusChange);
         }
@@ -442,10 +447,10 @@ public class DefectData extends ContentData {
         if (jsStatusChanges != null){
             for (Object obj : jsStatusChanges){
                 if (obj instanceof JSONObject jsObj){
-                    StatusChangeData statusChange = new StatusChangeData();
-                    statusChange.fromJsonRecursive(jsObj);
-                    if (statusChange.hasValidData())
-                        getChildren().add(statusChange);
+                    DefectStatusData statusData = new DefectStatusData();
+                    statusData.fromJsonRecursive(jsObj);
+                    if (statusData.hasValidData())
+                        getChildren().add(statusData);
                 }
             }
         }

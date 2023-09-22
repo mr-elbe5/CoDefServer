@@ -15,22 +15,22 @@ import de.elbe5.file.FileData;
 
 import java.sql.*;
 
-public class StatusChangeBean extends ContentBean {
+public class DefectStatusBean extends ContentBean {
 
-    private static StatusChangeBean instance = null;
+    private static DefectStatusBean instance = null;
 
-    public static StatusChangeBean getInstance() {
+    public static DefectStatusBean getInstance() {
         if (instance == null) {
-            instance = new StatusChangeBean();
+            instance = new DefectStatusBean();
         }
         return instance;
     }
 
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status, assigned_id FROM t_defect_status_change  WHERE id=?";
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT status, assigned_id FROM t_defect_status  WHERE id=?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof StatusChangeData data))
+        if (!(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -48,11 +48,11 @@ public class StatusChangeBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status_change (status,assigned_id,id) values(?,?,?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect_status (status,assigned_id,id) values(?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!contentData.isNew() || !(contentData instanceof StatusChangeData data))
+        if (!contentData.isNew() || !(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {
@@ -71,11 +71,11 @@ public class StatusChangeBean extends ContentBean {
         }
     }
 
-    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status_change set status=?,assigned_id=? where id=? ";
+    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_defect_status set status=?,assigned_id=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof StatusChangeData data))
+        if (!(contentData instanceof DefectStatusData data))
             return;
         PreparedStatement pst = null;
         try {

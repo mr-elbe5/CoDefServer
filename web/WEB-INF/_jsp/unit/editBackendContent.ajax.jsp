@@ -32,7 +32,7 @@
         <form:form url="<%=url%>" name="pageform" ajax="true" multi="true">
             <div class="modal-body">
                 <form:formerror/>
-                <h3><%=$SH("_settings")%>
+                <h3><%=$SH("_unit")%>
                 </h3>
                 <form:line label="_idAndUrl"><%=$I(unit.getId())%> - <%=$H(unit.getUrl())%>
                 </form:line>
