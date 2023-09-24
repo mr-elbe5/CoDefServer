@@ -86,6 +86,10 @@ public class CompanyData extends BaseData {
 
     // multiple data
 
+    public void setNewId(){
+        setId(CompanyBean.getInstance().getNextId());
+    }
+
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         setName(rdata.getAttributes().getString("name"));

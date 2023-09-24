@@ -31,7 +31,7 @@
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/defect/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
-        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/defectstatuschange/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defectstatus.StatusChangeData');" title="<%=$SH("_newDefectStatus")%>"></a>
+        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/defectstatus/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defectstatus.DefectStatusData');" title="<%=$SH("_newDefectStatus")%>"></a>
     </div>
     <%}%>
     <ul>

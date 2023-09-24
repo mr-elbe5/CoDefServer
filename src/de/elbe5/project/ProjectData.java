@@ -93,8 +93,8 @@ public class ProjectData extends ContentData {
     // multiple data
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent, rdata);
+    public void setCreateValues(RequestData rdata, RequestType type) {
+        super.setCreateValues(rdata, type);
         setNavType(ContentNavType.HEADER);
         setActive(true);
         setOpenAccess(true);
@@ -105,9 +105,7 @@ public class ProjectData extends ContentData {
         Log.log("ProjectData.readRequestData");
         switch (type){
             case api -> {
-                setDisplayName(rdata.getAttributes().getString("displayName").trim());
-                setName(StringHelper.toSafeWebName(getDisplayName()));
-                setDescription(rdata.getAttributes().getString("description"));
+                super.readRequestData(rdata, type);
                 setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
             }
             case backend -> {

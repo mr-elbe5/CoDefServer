@@ -295,17 +295,17 @@ public class DefectData extends ContentData {
     // multiple data
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent, rdata);
-        if (!(this.parent instanceof UnitData unit)) {
-            Log.error("parent of defect page should be unit page");
-            return;
-        }
-        setDisplayId(DefectBean.getInstance().getNextDisplayId());
-        ProjectData project = (ProjectData) unit.getParent();
+    public void setCreateValues(RequestData rdata, RequestType type) {
+        super.setCreateValues(rdata, type);
         setNavType(ContentNavType.NONE);
         setActive(true);
         setOpenAccess(true);
+    }
+
+    @Override
+    public void setNewId(){
+        super.setNewId();
+        setDisplayId(DefectBean.getInstance().getNextDisplayId());
         setName(StringHelper.toSafeWebName(getDisplayName()));
     }
 
@@ -343,7 +343,8 @@ public class DefectData extends ContentData {
                 for (BinaryFile file : newFiles) {
                     if (file.isImage()) {
                         ImageData image = new ImageData();
-                        image.setCreateValues(this, rdata);
+                        image.setCreateValues(rdata, RequestType.frontend);
+                        image.setParentValues(this);
                         if (!image.createFromBinaryFile(file))
                             continue;
                         image.setChangerId(rdata.getUserId());

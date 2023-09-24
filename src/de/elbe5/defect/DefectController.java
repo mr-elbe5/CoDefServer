@@ -53,9 +53,11 @@ public class DefectController extends ContentController {
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         UnitData parent= ContentCache.getContent(parentId, UnitData.class);
-        assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
+        assert parent != null;
+        assertRights(parent.hasUserEditRight(rdata.getLoginUser()));
         DefectData data = new DefectData();
-        data.setCreateValues(parent, rdata);
+        data.setCreateValues(rdata, RequestType.frontend);
+        data.setParentValues(parent);
         data.setEditMode(true);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ContentResponse(data);
@@ -160,8 +162,8 @@ public class DefectController extends ContentController {
 
     //api
 
-    public IResponse createDefect(RequestData rdata) {
-        Log.log("createDefect");
+    public IResponse uploadDefect(RequestData rdata) {
+        Log.log("uploadDefect");
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
@@ -173,7 +175,8 @@ public class DefectController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectData data = new DefectData();
-        data.setCreateValues(unit, rdata);
+        data.setCreateValues(rdata, RequestType.api);
+        data.setParentValues(unit);
         data.readRequestData(rdata, RequestType.api);
         Log.log(data.getJson().toJSONString());
         if (!ContentBean.getInstance().saveContent(data)) {

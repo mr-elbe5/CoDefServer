@@ -108,16 +108,21 @@ public class DefectStatusData extends ContentData {
     }
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        Log.log("StatusChangeData.setBackendCreateValues");
-        super.setCreateValues(parent, rdata);
+    public void setCreateValues(RequestData rdata, RequestType type) {
+        Log.log("StatusChangeData.setCreateValues");
+        super.setCreateValues(rdata, type);
+        setNavType(ContentNavType.NONE);
+        setActive(true);
+        setOpenAccess(true);
+    }
+
+    @Override
+    public void setParentValues(ContentData parent){
+        super.setParentValues(parent);
         if (parent instanceof DefectData data) {
             setStatus(data.getLastStatus());
             setAssignedId(data.getLastAssignedId());
         }
-        setNavType(ContentNavType.NONE);
-        setActive(true);
-        setOpenAccess(true);
     }
 
     @Override
@@ -149,7 +154,8 @@ public class DefectStatusData extends ContentData {
                 for (BinaryFile file : newFiles) {
                     if (file.isImage()){
                         ImageData image = new ImageData();
-                        image.setCreateValues(this, rdata);
+                        image.setCreateValues(rdata, RequestType.frontend);
+                        image.setParentValues(this);
                         if (!image.createFromBinaryFile(file))
                             continue;
                         image.setChangerId(rdata.getUserId());

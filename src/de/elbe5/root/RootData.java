@@ -56,7 +56,7 @@ public class RootData extends ContentData {
     }
 
     @SuppressWarnings("unchecked")
-    public JsonObject getAllDataJson(RequestData rdata) {
+    public JsonObject getAllDataAsJson(RequestData rdata) {
         List<ProjectData> projects = new ArrayList<>();
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         for (ProjectData project : ContentCache.getContents(ProjectData.class)){

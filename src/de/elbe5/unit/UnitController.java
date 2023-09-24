@@ -72,7 +72,7 @@ public class UnitController extends ContentController {
             setSaveError(rdata);
             return showEditBackendContent(data);
         }
-        ImageData plan = data.readPlanFile(rdata);
+        ImageData plan = data.readPlanFile(rdata, RequestType.backend);
         if (plan != null){
             ImageBean.getInstance().saveFile(plan, true);
         }
@@ -151,8 +151,8 @@ public class UnitController extends ContentController {
         return new MemoryFileResponse(file);
     }
 
-    public IResponse createUnit(RequestData rdata){
-        Log.log("createUnit");
+    public IResponse uploadUnit(RequestData rdata){
+        Log.log("uploadUnit");
         assertApiCall(rdata);
         UserData user = rdata.getLoginUser();
         if (user==null)
@@ -160,16 +160,16 @@ public class UnitController extends ContentController {
         int unitId=rdata.getId();
         Log.log("remote unit id = " + unitId);
         int projectId=rdata.getAttributes().getInt("projectId");
-        Log.log("project id = " + projectId);
         ProjectData project=ContentCache.getContent(projectId, ProjectData.class);
         if (project == null || !project.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         UnitData data = new UnitData();
-        data.setCreateValues(project, rdata);
-        Log.log("new unit id = " + data.getId());
+        data.setCreateValues(rdata, RequestType.api);
+        data.setParentValues(project);
         data.readRequestData(rdata, RequestType.api);
-        Log.log(data.getJson().toJSONString());
+        data.setNewId();
+        Log.log("new unit id = " + data.getId());
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }

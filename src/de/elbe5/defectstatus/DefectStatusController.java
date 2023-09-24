@@ -48,9 +48,11 @@ public class DefectStatusController extends ContentController {
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         DefectData parent = ContentCache.getContent(parentId, DefectData.class);
-        assertRights(parent != null && parent.hasUserEditRight(rdata.getLoginUser()));
+        assert parent != null;
+        assertRights(parent.hasUserEditRight(rdata.getLoginUser()));
         DefectStatusData data = new DefectStatusData();
-        data.setCreateValues(parent, rdata);
+        data.setCreateValues(rdata, RequestType.frontend);
+        data.setParentValues(parent);
         rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
         return new ForwardResponse(data.getFrontendEditJsp());
     }
@@ -90,21 +92,24 @@ public class DefectStatusController extends ContentController {
 
     //api
 
-    public IResponse createStatusChange(RequestData rdata) {
-        Log.log("createStatusChange");
+    public IResponse uploadStatusData(RequestData rdata) {
+        Log.log("uploadStatusData");
         UserData user = rdata.getLoginUser();
         if (user == null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int defectId = rdata.getAttributes().getInt("defectId");
-        int statusChangeId = rdata.getId();
-        Log.info("remote status change id = " + statusChangeId);
+        int statusDataId = rdata.getId();
+        Log.info("remote status data id = " + statusDataId);
         DefectData defect = ContentCache.getContent(defectId, DefectData.class);
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
         DefectStatusData data = new DefectStatusData();
-        data.setCreateValues(defect, rdata);
+        data.setCreateValues(rdata, RequestType.api);
+        data.setParentValues(defect);
         data.readRequestData(rdata, RequestType.api);
+        data.setNewId();
+        Log.info("new status data id = " + data.getId());
         if (!DefectStatusBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }

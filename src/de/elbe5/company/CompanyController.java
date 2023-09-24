@@ -49,8 +49,7 @@ public class CompanyController extends Controller {
         assertSessionCall(rdata);
         assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         CompanyData data = new CompanyData();
-        data.setCreateValues(rdata);
-        data.setId(CompanyBean.getInstance().getNextId());
+        data.setCreateValues(rdata, RequestType.backend);
         rdata.setSessionObject("companyData", data);
         return showEditCompany();
     }

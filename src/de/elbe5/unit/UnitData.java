@@ -130,8 +130,8 @@ public class UnitData extends ContentData {
     // multiple data
 
     @Override
-    public void setCreateValues(ContentData parent, RequestData rdata) {
-        super.setCreateValues(parent, rdata);
+    public void setCreateValues(RequestData rdata, RequestType type) {
+        super.setCreateValues(rdata, type);
         setNavType(ContentNavType.HEADER);
         setActive(true);
         setOpenAccess(true);
@@ -161,11 +161,12 @@ public class UnitData extends ContentData {
         }
     }
 
-    public ImageData readPlanFile(RequestData rdata){
+    public ImageData readPlanFile(RequestData rdata, RequestType type){
         BinaryFile file = rdata.getAttributes().getFile("file");
         if (file != null){
             ImageData plan = new ImageData();
-            plan.setCreateValues(this,rdata);
+            plan.setCreateValues(rdata, type);
+            plan.setParentValues(this);
             plan.setMaxSize(STD_PLAN_SIZE);
             plan.setPreviewSize(PLAN_PREVIEW_SIZE);
             plan.createFromBinaryFile(file);
