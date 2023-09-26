@@ -83,7 +83,7 @@
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_position")%></div>
-                <% if (contentData.getPlanId()!=0){%>
+                <% if (contentData.getPlanId()!=0 && contentData.hasValidPosition()){%>
                 <div class="boxImage"><a href="#" onclick="return openModalDialog('/ctrl/defect/openFullDefectPlan/<%=contentData.getId()%>');"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></a></div>
                 <%}%>
             </div>

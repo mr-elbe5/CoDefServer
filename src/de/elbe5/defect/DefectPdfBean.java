@@ -83,7 +83,7 @@ public class DefectPdfBean extends CodefFopBean {
         addLabeledContent(sb,sxml("_dueDate2"),html(data.getDueDate2()));
         addLabeledContent(sb,sxml("_closeDate"),html(data.getCloseDate()));
         BinaryFile file;
-        if (data.getPositionX()>0 || data.getPositionY()>0) {
+        if (data.hasValidPosition()) {
             ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
             byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
             file = data.createCroppedDefectPlan(plan, arrowBytes, data.getDisplayId(), data.getPositionX(), data.getPositionY());

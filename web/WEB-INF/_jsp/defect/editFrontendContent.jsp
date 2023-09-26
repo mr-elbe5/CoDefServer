@@ -78,7 +78,7 @@
         </div>
         <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
         <input type="hidden" name="positionY" id="positionY" value="<%=defect.getPositionY()%>"/>
-        <%}else{%>
+        <%}else if (defect.hasValidPosition()){%>
         <form:line label="_position">
             <img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" />
         </form:line>
@@ -87,8 +87,13 @@
         <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
+            <% if (defect.isNew()){%>
+            <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/unit/show/<%=unit.getId()%>');"><%=$SH("_cancel")%>
+            </button>
+            <%}else{%>
             <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/defect/show/<%=defect.getId()%>');"><%=$SH("_cancel")%>
             </button>
+            <%}%>
             <button type="submit" class="btn btn-primary"><%=$SH("_save")%>
             </button>
         </div>

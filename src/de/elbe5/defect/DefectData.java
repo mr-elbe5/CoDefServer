@@ -177,6 +177,10 @@ public class DefectData extends ContentData {
         this.positionY = positionY;
     }
 
+    public boolean hasValidPosition(){
+        return positionX != 0 || positionY != 0;
+    }
+
     public String getPositionComment() {
         return positionComment;
     }
