@@ -130,6 +130,7 @@ public class DefectStatusData extends ContentData {
         Log.log("StatusChangeData.readRequestData");
         switch (type) {
             case api -> {
+                super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setStatus(rdata.getAttributes().getString("status"));

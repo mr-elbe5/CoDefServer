@@ -146,7 +146,7 @@ public class UnitData extends ContentData {
                 setDisplayName(rdata.getAttributes().getString("displayName").trim());
                 setName(StringHelper.toSafeWebName(getDisplayName()));
                 setDescription(rdata.getAttributes().getString("description"));
-                setApproveDate(rdata.getAttributes().getDate("approveDate"));
+                setApproveDate(rdata.getAttributes().getIsoDate("approveDate"));
             }
             case backend -> {
                 setDisplayName(rdata.getAttributes().getString("displayName").trim());
