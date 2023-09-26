@@ -84,7 +84,7 @@
         </form:line>
         <%}
         }%>
-        <form:line label="_positionComment" padded="true"><%=$HML(defect.getPositionComment())%></form:line>
+        <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
             <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/defect/show/<%=defect.getId()%>');"><%=$SH("_cancel")%>
