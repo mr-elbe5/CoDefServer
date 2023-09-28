@@ -397,7 +397,8 @@ public class DefectData extends ContentData {
                 .add("positionY",getPositionY())
                 .add("positionComment",getPositionComment())
                 .add("state", getStatus().toString())
-                .add("dueDate", getDueDate());
+                .add("dueDate1", getDueDate1())
+                .add("dueDate2", getDueDate2());
     }
 
     @Override

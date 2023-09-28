@@ -178,7 +178,7 @@ public class DefectController extends ContentController {
         data.setCreateValues(rdata, RequestType.api);
         data.setParentValues(unit);
         data.readRequestData(rdata, RequestType.api);
-        Log.log(data.getJson().toJSONString());
+        data.setNewId();
         if (!ContentBean.getInstance().saveContent(data)) {
             return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
         }
