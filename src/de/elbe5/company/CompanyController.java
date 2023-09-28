@@ -10,15 +10,17 @@ package de.elbe5.company;
 
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.BaseData;
+import de.elbe5.base.Log;
+import de.elbe5.content.ContentBean;
+import de.elbe5.content.ContentCache;
+import de.elbe5.project.ProjectData;
 import de.elbe5.request.*;
-import de.elbe5.response.StatusResponse;
+import de.elbe5.response.*;
 import de.elbe5.rights.GlobalRight;
 import de.elbe5.servlet.Controller;
 import de.elbe5.servlet.ControllerCache;
-import de.elbe5.response.CloseDialogResponse;
-import de.elbe5.response.IResponse;
-import de.elbe5.response.ForwardResponse;
 
+import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CompanyController extends Controller {
@@ -93,6 +95,28 @@ public class CompanyController extends Controller {
         CompanyCache.setDirty();
         rdata.setMessage(LocalizedStrings.string("_companyDeleted"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return new ForwardResponse("/ctrl/admin/openPersonAdministration");
+    }
+
+    public IResponse uploadCompany(RequestData rdata){
+        Log.log("uploadCompany");
+        assertApiCall(rdata);
+        UserData user = rdata.getLoginUser();
+        if (user==null)
+            return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        int companyId=rdata.getId();
+        Log.log("remote company id = " + companyId);
+        CompanyData data = new CompanyData();
+        data.setCreateValues(rdata, RequestType.api);
+        data.readRequestData(rdata, RequestType.api);
+        data.setNewId();
+        Log.log("new company id = " + data.getId());
+        Log.log(data.getJson().toJSONString());
+        if (!CompanyBean.getInstance().saveCompany(data)) {
+            return new StatusResponse(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        data.setNew(false);
+        CompanyCache.setDirty();
+        return new JsonResponse(data.getIdJson().toJSONString());
     }
 
     protected IResponse showEditCompany() {

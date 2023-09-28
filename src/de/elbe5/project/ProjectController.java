@@ -59,11 +59,13 @@ public class ProjectController extends ContentController {
     }
 
     public IResponse uploadProject(RequestData rdata){
-        Log.log("createProject");
+        Log.log("uploadProject");
         assertApiCall(rdata);
         UserData user = rdata.getLoginUser();
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
+        int projectId=rdata.getId();
+        Log.log("remote project id = " + projectId);
         ProjectData data = new ProjectData();
         data.setCreateValues(rdata, RequestType.api);
         data.setParentValues(ContentCache.getContentRoot());
