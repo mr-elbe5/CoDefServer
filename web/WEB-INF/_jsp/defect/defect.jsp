@@ -31,7 +31,7 @@
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_id")%></div>
-                <div class="boxText"><%=$I(contentData.getDisplayId())%></div>
+                <div class="boxText"><%=$I(contentData.getId())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_creator")%></div>

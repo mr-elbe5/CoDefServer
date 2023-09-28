@@ -42,7 +42,7 @@
 <section class="contentSection" id="content">
     <form:form url="<%=url%>" name="pageform" multi="true">
         <form:formerror/>
-        <form:line label="_id" padded="true"><%=Integer.toString(defect.getDisplayId())%></form:line>
+        <form:line label="_id" padded="true"><%=Integer.toString(defect.getId())%></form:line>
         <% if (!defect.isNew()){%>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
         <%}%>
@@ -73,7 +73,7 @@
             <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
             <div id="planPositioner">
                 <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
-                <span><%=defect.getDisplayId()%></span>
+                <span><%=defect.getId()%></span>
             </div>
         </div>
         <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>

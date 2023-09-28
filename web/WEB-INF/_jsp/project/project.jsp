@@ -76,7 +76,7 @@
         <tbody>
         <% for (DefectData defect : defects){%>
         <tr>
-            <td><%=defect.getDisplayId()%></td>
+            <td><%=defect.getId()%></td>
             <td><%=$H(defect.getDescription())%></td>
             <td><%=$H(defect.getUnit().getName())%></td>
             <td><%=$H(defect.getCreationDate())%></td>

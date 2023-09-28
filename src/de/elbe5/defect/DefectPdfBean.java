@@ -45,7 +45,7 @@ public class DefectPdfBean extends CodefFopBean {
         addDefectFooterXml(sb,data,now);
         sb.append("</root>");
         //System.out.println(sb.toString());
-        String fileName="report-of-defect-" + data.getDisplayId() + "-" + html(now).replace(' ','-')+".pdf";
+        String fileName="report-of-defect-" + data.getId() + "-" + html(now).replace(' ','-')+".pdf";
         return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
     }
 
@@ -73,7 +73,7 @@ public class DefectPdfBean extends CodefFopBean {
     private void addDefectXml(StringBuilder sb, DefectData data, String host) {
         sb.append("<defect>");
         addLabeledContent(sb,sxml("_description"),data.getDescription());
-        addLabeledContent(sb,sxml("_id"),Integer.toString(data.getDisplayId()));
+        addLabeledContent(sb,sxml("_id"),Integer.toString(data.getId()));
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_creator"),user.getName());
         addLabeledContent(sb,sxml("_creationDate"),html(data.getCreationDate()));
@@ -86,7 +86,7 @@ public class DefectPdfBean extends CodefFopBean {
         if (data.hasValidPosition()) {
             ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
             byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
-            file = data.createCroppedDefectPlan(plan, arrowBytes, data.getDisplayId(), data.getPositionX(), data.getPositionY());
+            file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
             addLabeledImage(sb, sxml("_position"), file, "5.0cm");
         }
         addLabeledContent(sb,sxml("_positionComment"),data.getPositionComment());

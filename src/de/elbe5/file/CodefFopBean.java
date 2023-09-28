@@ -55,7 +55,7 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("<unitdefect>");
             sb.append("<description>").append(sxml("_defect")).append(": ").append(xml(defect.getDescription())).append("</description>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(sxml("_id")).append("</label1><content1>").append(defect.getDisplayId()).append("</content1>");
+            sb.append("<label1>").append(sxml("_id")).append("</label1><content1>").append(defect.getId()).append("</content1>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             UserData user= UserCache.getUser(defect.getCreatorId());

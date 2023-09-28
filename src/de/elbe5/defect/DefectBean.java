@@ -29,11 +29,7 @@ public class DefectBean extends ContentBean {
         return instance;
     }
 
-    public int getNextDisplayId() {
-        return getNextId("s_defect_id");
-    }
-
-    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT display_id, assigned_id, project_phase, notified, " +
+    private static final String GET_CONTENT_EXTRAS_SQL = "SELECT assigned_id, project_phase, notified, " +
             "position_x, position_y, position_comment, " +
             "due_date1, due_date2, close_date  " +
             "FROM t_defect  WHERE id=?";
@@ -49,7 +45,6 @@ public class DefectBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     int i=1;
-                    data.setDisplayId(rs.getInt(i++));
                     data.setAssignedId(rs.getInt(i++));
                     data.setProjectPhase(rs.getString(i++));
                     data.setNotified(rs.getBoolean(i++));
@@ -70,10 +65,10 @@ public class DefectBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_defect (" +
-            "display_id,assigned_id, project_phase, notified, " +
+            "assigned_id, project_phase, notified, " +
             "due_date1, " +
             "position_x, position_y,position_comment,id) " +
-            "values(?,?,?,?,?,?,?,?,?)";
+            "values(?,?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -83,7 +78,6 @@ public class DefectBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i = 1;
-            pst.setInt(i++,data.getDisplayId());
             pst.setInt(i++, data.getAssignedId());
             pst.setString(i++, data.getProjectPhaseString());
             pst.setBoolean(i++, data.isNotified());

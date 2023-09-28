@@ -187,18 +187,15 @@ CREATE TABLE IF NOT EXISTS t_unit
     CONSTRAINT t_unit_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
-CREATE SEQUENCE IF NOT EXISTS s_defect_id START 1000;
-
 CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
-    display_id       INTEGER       NOT NULL,
     project_phase    VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     assigned_id      INTEGER       NOT NULL,
     position_x       REAL          NOT NULL DEFAULT 0.0,
     position_y       REAL          NOT NULL DEFAULT 0.0,
-    position_comment VARCHAR(255)  NOT NULL DEFAULT '',
+    position_comment VARCHAR(1000) NOT NULL DEFAULT '',
     due_date1        TIMESTAMP     NULL,
     due_date2        TIMESTAMP     NULL,
     close_date       TIMESTAMP     NULL,

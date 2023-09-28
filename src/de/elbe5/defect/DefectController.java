@@ -123,7 +123,7 @@ public class DefectController extends ContentController {
         double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
-        BinaryFile file = data.createCroppedDefectPlan(plan,arrowBytes,data.getDisplayId(),x,y);
+        BinaryFile file = data.createCroppedDefectPlan(plan,arrowBytes,data.getId(),x,y);
         assert(file!=null);
         return new MemoryFileResponse(file);
     }
@@ -144,7 +144,7 @@ public class DefectController extends ContentController {
         double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
         byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
-        BinaryFile file = data.createFullDefectPlan(plan,arrowBytes,data.getDisplayId(),x,y);
+        BinaryFile file = data.createFullDefectPlan(plan,arrowBytes,data.getId(),x,y);
         assert(file!=null);
         return new MemoryFileResponse(file);
     }

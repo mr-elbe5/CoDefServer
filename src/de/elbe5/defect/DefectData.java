@@ -50,7 +50,6 @@ public class DefectData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
-    protected int displayId = 0;
     protected int assignedId = 0;
 
     protected ProjectPhase projectPhase = ProjectPhase.PREAPPROVAL;
@@ -70,20 +69,12 @@ public class DefectData extends ContentData {
 
     @Override
     public String getName(){
-        return "defect-"+getDisplayId();
+        return "defect-"+getId();
     }
 
     @Override
     public String getDisplayName(){
-        return LocalizedStrings.string("_defect") + " " +getDisplayId();
-    }
-
-    public int getDisplayId() {
-        return displayId;
-    }
-
-    public void setDisplayId(int displayId) {
-        this.displayId = displayId;
+        return LocalizedStrings.string("_defect") + " " +getId();
     }
 
     public UnitData getUnit() {
@@ -309,7 +300,6 @@ public class DefectData extends ContentData {
     @Override
     public void setNewId(){
         super.setNewId();
-        setDisplayId(DefectBean.getInstance().getNextDisplayId());
         setName(StringHelper.toSafeWebName(getDisplayName()));
     }
 
@@ -322,6 +312,7 @@ public class DefectData extends ContentData {
                 setDescription(rdata.getAttributes().getString("description"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+                setNotified(rdata.getAttributes().getBoolean("notified"));
                 setDueDate1(rdata.getAttributes().getIsoDate("dueDate1"));
                 setPositionX(rdata.getAttributes().getDouble("positionX"));
                 setPositionY(rdata.getAttributes().getDouble("positionY"));
@@ -389,16 +380,17 @@ public class DefectData extends ContentData {
     @Override
     public JsonObject getJson(){
         return super.getJson()
-                .add("displayId",getDisplayId())
                 .add("projectPhase", getProjectPhaseString())
+                .add("notified", isNotified())
                 .add("assignedId",getLastAssignedId())
                 .add("assignedName",getLastAssignedName())
-                .add("positionX",getPositionX())
-                .add("positionY",getPositionY())
-                .add("positionComment",getPositionComment())
                 .add("state", getStatus().toString())
                 .add("dueDate1", getDueDate1())
-                .add("dueDate2", getDueDate2());
+                .add("dueDate2", getDueDate2())
+                .add("positionX",getPositionX())
+                .add("positionY",getPositionY())
+                .add("positionComment",getPositionComment());
+
     }
 
     @Override
@@ -418,13 +410,10 @@ public class DefectData extends ContentData {
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
-        int i = getInt(json, "displayId");
         String s = getString(json, "projectPhase");
         if (s != null)
             setProjectPhase(s);
-        if (i!=0)
-            setDisplayId(i);
-        i = getInt(json, "assignedId");
+        int i = getInt(json, "assignedId");
         if (i!=0)
             setAssignedId(i);
         i = getInt(json, "positionX");

@@ -76,3 +76,9 @@ alter table t_defect_status rename constraint t_defect_status_change_pk to t_def
 alter table t_defect_status rename constraint t_defect_status_change_fk1 to t_defect_status_fk1;
 alter table t_defect_status rename constraint t_defect_status_change_fk2 to t_defect_status_fk2;
 update t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type = 'de.elbe5.defectstatus.DefectStatusChangeData';
+
+--
+
+alter table t_defect alter column position_comment type VARCHAR(1000);
+alter table t_defect drop column display_id;
+drop sequence s_defect_id;
