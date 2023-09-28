@@ -92,13 +92,27 @@ public class CompanyData extends BaseData {
 
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
-        setName(rdata.getAttributes().getString("name"));
-        setStreet(rdata.getAttributes().getString("street"));
-        setZipCode(rdata.getAttributes().getString("zipCode"));
-        setCity(rdata.getAttributes().getString("city"));
-        setEmail(rdata.getAttributes().getString("email"));
-        setPhone(rdata.getAttributes().getString("phone"));
-        setNotes(rdata.getAttributes().getString("notes"));
+        switch (type){
+            case api -> {
+                super.readRequestData(rdata, type);
+                setName(rdata.getAttributes().getString("name"));
+                setStreet(rdata.getAttributes().getString("street"));
+                setZipCode(rdata.getAttributes().getString("zipCode"));
+                setCity(rdata.getAttributes().getString("city"));
+                setEmail(rdata.getAttributes().getString("email"));
+                setPhone(rdata.getAttributes().getString("phone"));
+                setNotes(rdata.getAttributes().getString("notes"));
+            }
+            case backend -> {
+                setName(rdata.getAttributes().getString("name"));
+                setStreet(rdata.getAttributes().getString("street"));
+                setZipCode(rdata.getAttributes().getString("zipCode"));
+                setCity(rdata.getAttributes().getString("city"));
+                setEmail(rdata.getAttributes().getString("email"));
+                setPhone(rdata.getAttributes().getString("phone"));
+                setNotes(rdata.getAttributes().getString("notes"));
+            }
+        }
     }
 
     @Override
