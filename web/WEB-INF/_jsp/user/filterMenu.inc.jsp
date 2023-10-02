@@ -7,8 +7,8 @@
 <%
   RequestData rdata = RequestData.getRequestData(request);
   CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+  if (user != null){
 %>
-
 <ul class="nav filter justify-content-end">
   <li>
     <a class="fa fa-tablet" onclick="return openModalDialog('/ctrl/user/openSyncFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_synchronization")%></a>
@@ -20,3 +20,4 @@
     <a class="fa fa-filter" onclick="return openModalDialog('/ctrl/user/openViewFilter/<%=rdata.getId()%>');">&nbsp;<%=$SH("_view")%></a>
   </li>
 </ul>
+<%}%>
