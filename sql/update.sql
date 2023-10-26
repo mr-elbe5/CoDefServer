@@ -82,3 +82,7 @@ update t_content set type = 'de.elbe5.defectstatus.DefectStatusData' where type 
 alter table t_defect alter column position_comment type VARCHAR(1000);
 alter table t_defect drop column display_id;
 drop sequence s_defect_id;
+
+--
+
+alter table t_configuration add sync_project_companies BOOLEAN NOT NULL DEFAULT true;

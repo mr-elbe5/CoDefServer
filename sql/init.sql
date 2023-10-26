@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS t_configuration
     use_read_group   BOOLEAN NOT NULL DEFAULT false,
     use_editor_group BOOLEAN NOT NULL DEFAULT false,
     show_inactive_content BOOLEAN NOT NULL DEFAULT false,
-    use_notified BOOLEAN NOT NULL DEFAULT false
+    use_notified BOOLEAN NOT NULL DEFAULT false,
+    sync_project_companies BOOLEAN NOT NULL DEFAULT true
 );
 
 CREATE SEQUENCE s_user_id START 1000;

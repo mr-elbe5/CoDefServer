@@ -14,6 +14,8 @@ public class CodefConfiguration {
 
     private static boolean useNotified = false;
 
+    private static boolean syncProjectCompamiesOnly = true;
+
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
     }
@@ -30,4 +32,11 @@ public class CodefConfiguration {
         return useNotified;
     }
 
+    public static boolean syncProjectCompamiesOnly() {
+        return syncProjectCompamiesOnly;
+    }
+
+    public static void setSyncProjectCompamiesOnly(boolean syncProjectCompamiesOnly) {
+        CodefConfiguration.syncProjectCompamiesOnly = syncProjectCompamiesOnly;
+    }
 }

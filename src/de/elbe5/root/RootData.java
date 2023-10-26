@@ -10,6 +10,7 @@ package de.elbe5.root;
 
 import de.elbe5.base.*;
 import de.elbe5.company.CompanyCache;
+import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentData;
 import de.elbe5.project.ProjectData;
 import de.elbe5.company.CompanyData;
@@ -23,7 +24,9 @@ import org.json.simple.JSONArray;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RootData extends ContentData {
 
@@ -63,7 +66,14 @@ public class RootData extends ContentData {
             if (project.isActive() && user.getSelectedProjectIds().contains(project.getId()))
                 projects.add(project);
         }
-        List<CompanyData> companies = CompanyCache.getAllCompanies();
+        List<CompanyData> companies = new ArrayList<>(CompanyCache.getAllCompanies());
+        if (CodefConfiguration.syncProjectCompamiesOnly()) {
+            Set<Integer> projectCompanyIds = new HashSet<>();
+            for (ProjectData project : projects) {
+                projectCompanyIds.addAll(project.getCompanyIds());
+            }
+            companies.removeIf(company -> !projectCompanyIds.contains(company.getId()));
+        }
         JSONArray jsCompanies = new JSONArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
