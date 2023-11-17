@@ -76,7 +76,7 @@
                     <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
                     <div id="planPositioner">
                         <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
-                        <span><%=defect.getDisplayId()%></span>
+                        <span><%=defect.getId()%></span>
                     </div>
                 </div>
                 <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
