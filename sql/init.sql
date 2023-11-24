@@ -191,6 +191,7 @@ CREATE TABLE IF NOT EXISTS t_unit
 CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
+    remaining_work   BOOLEAN       NOT NULL DEFAULT FALSE,
     project_phase    VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     assigned_id      INTEGER       NOT NULL,

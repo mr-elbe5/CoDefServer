@@ -50,6 +50,7 @@ public class DefectData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
+    protected boolean remainingWork = false;
     protected int assignedId = 0;
 
     protected ProjectPhase projectPhase = ProjectPhase.PREAPPROVAL;
@@ -91,6 +92,14 @@ public class DefectData extends ContentData {
 
     public int getPlanId(){
         return (getPlan() == null ? 0 : getPlan().getId());
+    }
+
+    public boolean isRemainingWork() {
+        return remainingWork;
+    }
+
+    public void setRemainingWork(boolean remainingWork) {
+        this.remainingWork = remainingWork;
     }
 
     public int getAssignedId() {
