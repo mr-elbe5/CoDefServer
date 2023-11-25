@@ -15,7 +15,7 @@
     RequestData rdata = RequestData.getRequestData(request);
     ContentData contentData = ContentData.getCurrentContent(rdata);
 %>
-<li class="open">
+<li class="">
     <span class="published">
         <a href="/ctrl/root/setEntryPoint/<%=contentData.getId()%>"><%=$H(contentData.getDisplayName())%></a>
     </span>

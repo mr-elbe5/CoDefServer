@@ -19,7 +19,7 @@
     assert contentData != null;
 %>
 <% if (contentData.isActive() || CodefConfiguration.isShowInactiveContent()){%>
-<li class="open">
+<li class="">
     <span class="<%=!contentData.isActive() ? "inactive" : ""%>">
         <%=$H(contentData.getDisplayName())%>
     </span>

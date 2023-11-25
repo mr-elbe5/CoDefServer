@@ -10,6 +10,7 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.content.ContentComparator" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -21,6 +22,7 @@
     </span>
     <ul>
         <%if (contentData.hasChildren()) {
+            ContentComparator.instance.sort(contentData.getChildren());
             for (ContentData childData : contentData.getChildren()) {
                 childData.displayFrontendTreeContent(pageContext, rdata);
             }
