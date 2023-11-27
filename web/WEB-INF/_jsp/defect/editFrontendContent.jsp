@@ -47,6 +47,12 @@
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
         <%}%>
         <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
+        <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
+        <% if (CodefConfiguration.showRemainingWork()){%>
+        <form:line label="_remainingWork" padded = "true">
+            <form:check name="remainingWork" value="true" checked="<%=defect.isRemainingWork()%>"/>
+        </form:line>
+        <%}%>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>
@@ -72,7 +78,7 @@
         <div id="planContainer">
             <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
             <div id="planPositioner">
-                <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
+                <img id="arrow" src="/static-content/img/<%=defect.isRemainingWork() ? "bluearrow.png" : "redarrow.png"%>" alt=""/>
                 <span><%=defect.getId()%></span>
             </div>
         </div>
@@ -84,7 +90,6 @@
         </form:line>
         <%}
         }%>
-        <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
             <% if (defect.isNew()){%>

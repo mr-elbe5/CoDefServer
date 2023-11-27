@@ -14,6 +14,8 @@ public class CodefConfiguration {
 
     private static boolean useNotified = false;
 
+    private static boolean useRemainingWork = false;
+
     private static boolean syncProjectCompamiesOnly = true;
 
     public static boolean isShowInactiveContent() {
@@ -30,6 +32,10 @@ public class CodefConfiguration {
 
     public static boolean showNotified() {
         return useNotified;
+    }
+
+    public static boolean showRemainingWork() {
+        return useRemainingWork;
     }
 
     public static boolean syncProjectCompamiesOnly() {

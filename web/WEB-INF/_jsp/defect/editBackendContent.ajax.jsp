@@ -54,6 +54,10 @@
                 <form:line label="_name"><%=$H(defect.getDisplayName())%>
                 </form:line>
                 <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
+                <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
+                <% if (CodefConfiguration.showRemainingWork()){%>
+                <form:line label="_remainingWork" padded = "true"><form:check name="remainingWork" value="true" checked="<%=defect.isRemainingWork()%>"/></form:line>
+                <%}%>
                 <form:select name="assignedId" label="_assignTo" required="true">
                     <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
                     <% for (CompanyData company : companies){%>
@@ -75,14 +79,13 @@
                 <div id="planContainer">
                     <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
                     <div id="planPositioner">
-                        <img id="arrow" src="/static-content/img/redarrow.png" alt=""/>
+                        <img id="arrow" src="/static-content/img/<%=defect.isRemainingWork() ? "bluearrow.png" : "redarrow.png"%>" alt=""/>
                         <span><%=defect.getId()%></span>
                     </div>
                 </div>
                 <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
                 <input type="hidden" name="positionY" id="positionY" value="<%=defect.getPositionY()%>"/>
                 <%}%>
-                <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_close")%>

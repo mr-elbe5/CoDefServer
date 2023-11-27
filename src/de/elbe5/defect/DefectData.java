@@ -70,12 +70,12 @@ public class DefectData extends ContentData {
 
     @Override
     public String getName(){
-        return "defect-"+getId();
+        return remainingWork ? "remainingwork-" : "defect-"+getId();
     }
 
     @Override
     public String getDisplayName(){
-        return LocalizedStrings.string("_defect") + " " +getId();
+        return LocalizedStrings.string(remainingWork ? "_remainingWork" : "_defect") + " " +getId();
     }
 
     public UnitData getUnit() {
@@ -319,6 +319,7 @@ public class DefectData extends ContentData {
             case api -> {
                 super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
+                setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
                 setNotified(rdata.getAttributes().getBoolean("notified"));
@@ -329,6 +330,7 @@ public class DefectData extends ContentData {
             }
             case frontend -> {
                 setDescription(rdata.getAttributes().getString("description"));
+                setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
                 setNotified(rdata.getAttributes().getBoolean("notified"));
@@ -365,6 +367,7 @@ public class DefectData extends ContentData {
             }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
+                setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
                 setNotified(rdata.getAttributes().getBoolean("notified"));
@@ -391,6 +394,7 @@ public class DefectData extends ContentData {
         return super.getJson()
                 .add("projectPhase", getProjectPhaseString())
                 .add("notified", isNotified())
+                .add("remainingWork",isRemainingWork())
                 .add("assignedId",getLastAssignedId())
                 .add("assignedName",getLastAssignedName())
                 .add("state", getStatus().toString())
@@ -422,6 +426,9 @@ public class DefectData extends ContentData {
         String s = getString(json, "projectPhase");
         if (s != null)
             setProjectPhase(s);
+        s = getString(json, "remainingWork");
+        if (s != null)
+            setRemainingWork(s.equalsIgnoreCase(Boolean.TRUE.toString()));
         int i = getInt(json, "assignedId");
         if (i!=0)
             setAssignedId(i);

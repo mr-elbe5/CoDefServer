@@ -28,6 +28,9 @@
 <section class="contentSection" id="content">
     <div class="paragraph">
         <h3><%=$H(contentData.getDescription())%></h3>
+        <%if (contentData.isRemainingWork()){%>
+        <div><%=$SH("_remainingWork")%></div>
+        <%}%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_id")%></div>
