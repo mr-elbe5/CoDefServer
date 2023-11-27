@@ -53,9 +53,9 @@ public class DefectPdfBean extends CodefFopBean {
         sb.append("<defectheader><title>");
         sb.append(sxml("_report"));
         sb.append(": ");
-        sb.append(xml(data.getProject().getName()));
+        sb.append(xml(data.getProject().getDisplayName()));
         sb.append(", ");
-        sb.append(xml(data.getUnit().getName()));
+        sb.append(xml(data.getUnit().getDisplayName()));
         sb.append(", ");
         sb.append(xml(data.getDisplayName()));
         sb.append("</title></defectheader>");
