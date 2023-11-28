@@ -49,9 +49,9 @@
         <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
         <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
         <% if (CodefConfiguration.showRemainingWork()){%>
-        <form:line label="_remainingWork" padded = "true">
-            <form:check name="remainingWork" value="true" checked="<%=defect.isRemainingWork()%>"/>
+        <form:line label="_defectType"><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect")%>
         </form:line>
+        <input type="hidden" name="remainingWork" value="<%=Boolean.toString(defect.isRemainingWork())%>" />
         <%}%>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
@@ -78,7 +78,7 @@
         <div id="planContainer">
             <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
             <div id="planPositioner">
-                <img id="arrow" src="/static-content/img/<%=defect.isRemainingWork() ? "bluearrow.png" : "redarrow.png"%>" alt=""/>
+                <img id="arrow" src="/static-content/img/<%=defect.getIconName()%>" alt=""/>
                 <span><%=defect.getId()%></span>
             </div>
         </div>
@@ -106,8 +106,10 @@
 </section>
 <% if (unit.getPlan() != null && defect.isNew()) {%>
 <script type="text/javascript">
-    let posX = 0;
-    let posY = 0;
+    let posxInput = $('#positionX');
+    let posYInput = $('#positionY');
+    let posX = posxInput.val();
+    let posY = posYInput.val();
     let $container = $('#planContainer');
     console.log('posX,posY=' + posX + ',' + posY);
     console.log('container=' + $container);
@@ -121,7 +123,7 @@
         console.log('container offset=' + offset.left + ',' + offset.top);
         posX = Math.round(event.pageX - offset.left );
         posY = Math.round(event.pageY - offset.top);
-        //console.log('posX,posY=' + posX + ',' + posY);
+        console.log('click: posX,posY=' + posX + ',' + posY);
         setPositioner();
     });
 
@@ -131,20 +133,24 @@
         $positioner.css('top', posY - 5 - $plan.height());
         let positionX=posX/$plan.width();
         let positionY=posY/$plan.height();
-        //console.log('positionX,positionY=' + positionX + ',' + positionY);
-        $('#positionX').val(positionX);
-        $('#positionY').val(positionY);
+        console.log('set: positionX,positionY=' + positionX + ',' + positionY);
+        posxInput.val(positionX);
+        posYInput.val(positionY);
     }
 
     $('#arrow').load(function () {
         setPositioner($container.position());
     });
 
-    $plan.load(function () {
+    $plan.one("load", function() {
         posX = (<%=defect.getPositionX()%>)*$plan.width();
         posY = (<%=defect.getPositionY()%>)*$plan.height();
-        //console.log('posX,posY=' + posX + ',' + posY);
+        console.log('load: posX,posY=' + posX + ',' + posY);
         setPositioner();
+    }).each(function() {
+        if(this.complete) {
+            $(this).trigger('load');
+        }
     });
 
 </script>

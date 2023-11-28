@@ -11,6 +11,7 @@ package de.elbe5.unit;
 import de.elbe5.base.*;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
+import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
 import de.elbe5.content.ContentBean;
@@ -226,11 +227,10 @@ public class UnitData extends ContentData {
         }
     }
 
-    public BinaryFile createUnitDefectPlan(ImageData plan, byte[] primaryArrowBytes, List<DefectData> defects, float scale){
+    public BinaryFile createUnitDefectPlan(ImageData plan, List<DefectData> defects, float scale){
         BinaryFile file=null;
         try {
             BufferedImage bi = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
-            BufferedImage redbi = ImageHelper.createImage(primaryArrowBytes,"image/png");
             assert(bi!=null);
             if (scale!=1){
                 bi=ImageHelper.copyImage(bi,scale);
@@ -248,7 +248,8 @@ public class UnitData extends ContentData {
                     g.setColor(Color.RED);
                     int posX=(int)(biWidth*defect.getPositionX());
                     int posY=(int)(biHeight*defect.getPositionY());
-                    g.drawImage(redbi, null, posX - 9, posY - 2);
+                    BufferedImage arrowbi = ImageHelper.createImage(FileBean.getInstance().getImageBytes(defect.getIconName()),"image/png");
+                    g.drawImage(arrowbi, null, posX - 9, posY - 2);
                     g.drawString(Integer.toString(defect.getId()), posX + 5, posY + 16);
                 }
             }

@@ -328,6 +328,9 @@ table.defect-table th div.dropdown-menu label {
 table.defect-table th div.dropdown-menu a {
   cursor: pointer;
 }
+table.defect-table tr {
+  border-bottom: 1px solid lightgray;
+}
 
 div.defectimage {
   height: 150px;

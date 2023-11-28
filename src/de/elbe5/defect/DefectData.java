@@ -102,6 +102,10 @@ public class DefectData extends ContentData {
         this.remainingWork = remainingWork;
     }
 
+    public String getIconName(){
+        return isRemainingWork() ? "bluearrow.png" : "redarrow.png";
+    }
+
     public int getAssignedId() {
         return assignedId;
     }
@@ -525,11 +529,11 @@ public class DefectData extends ContentData {
         return file;
     }
 
-    public BinaryFile createFullDefectPlan(ImageData plan, byte[] primaryArrawBytes, int defectDisplayId, double positionX, double positionY) {
+    public BinaryFile createFullDefectPlan(ImageData plan, byte[] primaryArrowBytes, int defectDisplayId, double positionX, double positionY) {
         BinaryFile file = null;
         try {
             BufferedImage bi = ImageHelper.createImage(plan.getBytes(), "image/jpeg");
-            BufferedImage redbi = ImageHelper.createImage(primaryArrawBytes, "image/png");
+            BufferedImage arrowbi = ImageHelper.createImage(primaryArrowBytes, "image/png");
             assert (bi != null);
             Graphics2D g = bi.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -539,7 +543,7 @@ public class DefectData extends ContentData {
             g.setColor(Color.RED);
             int posX=(int)(bi.getWidth()*positionX);
             int posY=(int)(bi.getHeight()*positionY);
-            g.drawImage(redbi, null, posX -9 , posY- 2);
+            g.drawImage(arrowbi, null, posX -9 , posY- 2);
             g.drawString(Integer.toString(defectDisplayId), posX + 5, posY + 16);
             file = new BinaryFile();
             file.setFileName("defectPlan" + defectDisplayId + ".jpg");

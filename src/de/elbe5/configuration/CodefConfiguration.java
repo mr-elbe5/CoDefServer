@@ -30,6 +30,10 @@ public class CodefConfiguration {
         CodefConfiguration.useNotified = useNotified;
     }
 
+    public static void setUseRemainingWork(boolean useRemainingWork) {
+        CodefConfiguration.useRemainingWork = useRemainingWork;
+    }
+
     public static boolean showNotified() {
         return useNotified;
     }

@@ -79,7 +79,7 @@
                 <div id="planContainer">
                     <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red; width:100%"/>
                     <div id="planPositioner">
-                        <img id="arrow" src="/static-content/img/<%=defect.isRemainingWork() ? "bluearrow.png" : "redarrow.png"%>" alt=""/>
+                        <img id="arrow" src="/static-content/img/<%=defect.getIconName()%>" alt=""/>
                         <span><%=defect.getId()%></span>
                     </div>
                 </div>

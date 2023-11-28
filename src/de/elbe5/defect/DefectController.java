@@ -13,6 +13,7 @@ import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
 import de.elbe5.request.RequestType;
+import de.elbe5.rights.GlobalRight;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.*;
 import de.elbe5.file.FileBean;
@@ -50,6 +51,23 @@ public class DefectController extends ContentController {
         return KEY;
     }
 
+    @Override
+    public IResponse openCreateBackendContent(RequestData rdata) {
+        assertLoggedInSessionCall(rdata);
+        assertRights(GlobalRight.hasGlobalContentEditRight(rdata.getLoginUser()));
+        int parentId = rdata.getAttributes().getInt("parentId");
+        boolean isRemainingWork=rdata.getAttributes().getBoolean("remainingWork");
+        ContentData parentData = ContentCache.getContent(parentId);
+        String type = rdata.getAttributes().getString("type");
+        DefectData data = new DefectData();
+        data.setRemainingWork(isRemainingWork);
+        data.setCreateValues(rdata, RequestType.backend);
+        data.setParentValues(parentData);
+        rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT, data);
+        return showEditBackendContent(data);
+    }
+
+    @Override
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
         boolean isRemainingWork=rdata.getAttributes().getBoolean("remainingWork");
@@ -65,6 +83,7 @@ public class DefectController extends ContentController {
         return new ContentResponse(data);
     }
 
+    @Override
     public IResponse openEditFrontendContent(RequestData rdata) {
         int defectId=rdata.getId();
         DefectData data = ContentBean.getInstance().getContent(defectId,DefectData.class);
@@ -77,6 +96,7 @@ public class DefectController extends ContentController {
     }
 
     //frontend
+    @Override
     public IResponse saveFrontendContent(RequestData rdata) {
         int contentId=rdata.getId();
         DefectData data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DefectData.class);
@@ -124,7 +144,7 @@ public class DefectController extends ContentController {
         double x=rdata.getAttributes().getDouble("x",data.getPositionX());
         double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
-        byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
+        byte[] arrowBytes = FileBean.getInstance().getImageBytes(data.getIconName());
         BinaryFile file = data.createCroppedDefectPlan(plan,arrowBytes,data.getId(),x,y);
         assert(file!=null);
         return new MemoryFileResponse(file);
@@ -145,7 +165,7 @@ public class DefectController extends ContentController {
         double x=rdata.getAttributes().getDouble("x",data.getPositionX());
         double y=rdata.getAttributes().getDouble("y",data.getPositionY());
         ImageData plan = FileBean.getInstance().getFile(data.getPlanId(),true,ImageData.class);
-        byte[] arrowBytes = FileBean.getInstance().getImageBytes("redarrow.png");
+        byte[] arrowBytes = FileBean.getInstance().getImageBytes(data.getIconName());
         BinaryFile file = data.createFullDefectPlan(plan,arrowBytes,data.getId(),x,y);
         assert(file!=null);
         return new MemoryFileResponse(file);

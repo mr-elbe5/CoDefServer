@@ -50,9 +50,8 @@ public class UnitPdfBean extends CodefFopBean {
         ImageData plan = unit.getPlan();
         if (plan!=null) {
             ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
-            byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
             defects = user.getUnitDefects(unit.getId());
-            BinaryFile file = unit.createUnitDefectPlan(fullplan,arrowBytes, defects, 1);
+            BinaryFile file = unit.createUnitDefectPlan(fullplan,defects, 1);
             addUnitPlanXml(sb, unit, plan, file);
         }
         addUnitDefectsXml(sb,unit, defects, includeStatusChanges);

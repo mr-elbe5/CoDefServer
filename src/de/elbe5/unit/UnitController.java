@@ -96,9 +96,8 @@ public class UnitController extends ContentController {
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
-        byte[] arrowBytes = UnitBean.getInstance().getImageBytes("redarrow.png");
         List<DefectData> defects = user.getUnitDefects(data.getId());
-        BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,1);
+        BinaryFile file = data.createUnitDefectPlan(plan,defects,1);
         assert(file!=null);
         return new MemoryFileResponse(file);
     }
@@ -141,9 +140,8 @@ public class UnitController extends ContentController {
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
-        byte[] arrowBytes = UnitBean.getInstance().getImageBytes("red_arrow.png");
         List<DefectData> defects = user.getUnitDefects(data.getId());
-        BinaryFile file = data.createUnitDefectPlan(plan,arrowBytes,defects,((float)scalePercent)/100);
+        BinaryFile file = data.createUnitDefectPlan(plan,defects,((float)scalePercent)/100);
         if (file==null) {
             Log.error("file is null");
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);

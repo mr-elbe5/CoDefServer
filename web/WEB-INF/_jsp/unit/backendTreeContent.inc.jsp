@@ -33,7 +33,15 @@
         <a class="icon fa fa-eye" href="" onclick="return linkTo('/ctrl/content/show/<%=contentData.getId()%>');" title="<%=$SH("_view")%>"> </a>
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/unit/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
-        <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/defect/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defect.DefectData');" title="<%=$SH("_newDefect")%>"></a>
+        <a class="icon fa fa-plus dropdown-toggle" data-toggle="dropdown" title="<%=$SH("_newContent")%>"></a>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="return openModalDialog('/ctrl/defect/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defect.DefectData');"><%=$SH("_newDefect")%>
+            </a>
+            <% if (CodefConfiguration.showRemainingWork()){%>
+            <a class="dropdown-item" onclick="return openModalDialog('/ctrl/defect/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defect.DefectData&remainingWork=true');"><%=$SH("_newRemainingWork")%>
+            </a>
+            <%}%>
+        </div>
     </div>
     <%}%>
     <ul>

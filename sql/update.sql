@@ -88,3 +88,5 @@ drop sequence s_defect_id;
 alter table t_configuration add sync_project_companies BOOLEAN NOT NULL DEFAULT true;
 
 alter table t_defect add remaining_work   BOOLEAN       NOT NULL DEFAULT FALSE;
+
+alter table t_configuration add use_remaining_work BOOLEAN NOT NULL DEFAULT true;

@@ -37,6 +37,10 @@
     <div class = contentTop>
         <a class="btn btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>"><%=$SH("_createDefect")%>
         </a>
+        <% if (CodefConfiguration.showRemainingWork()){%>
+        <a class="btn btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>&remainingWork=true"><%=$SH("_createRemainingWork")%>
+        </a>
+        <%}%>
     </div>
     <%}%>
     <table id="defectTable" class="defect-table">
@@ -44,16 +48,21 @@
             <tr>
                 <th style="width:5%"><%=$SH("_id")%>
                 </th>
-                <th style="width:18%"><%=$SH("_description")%>
+                <th style="width:9%"><%=$SH("_description")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
                 </th>
-                <th style="width:9%"><%=$SH("_creationDate")%>
+                <% if (CodefConfiguration.showRemainingWork()){%>
+                <th style="width:5%"><%=$SH("_defectType")%>
+                    <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
+                </th>
+                <%}%>
+                <th style="width:5%"><%=$SH("_creationDate")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CREATION%>");>&nbsp;</a>
                 </th>
                 <th style="width:9%"><%=$SH("_editedBy")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CHANGER%>");>&nbsp;</a>
                 </th>
-                <th style="width:9%"><%=$SH("_changeDate")%>
+                <th style="width:5%"><%=$SH("_changeDate")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CHANGE%>");>&nbsp;</a>
                 </th>
                 <th style="width:9%"><%=$SH("_due")%>
@@ -69,7 +78,7 @@
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_ASSIGNED%>");>&nbsp;</a>
                 </th>
                 <th style="width:9%"><%=$SH("_projectPhase")%>
-                    <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
+                    <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTPHASE%>");>&nbsp;</a>
                 </th>
                 <% if (CodefConfiguration.showNotified()){%>
                 <th style="width:9%"><%=$SH("_notified")%>
@@ -84,6 +93,9 @@
             <tr class="tableRow">
                 <td><%=defect.getId()%></td>
                 <td><%=$H(defect.getDescription())%></td>
+                <% if (CodefConfiguration.showRemainingWork()){%>
+                <td><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect") %></td>
+                <%}%>
                 <td><%=$H(defect.getCreationDate())%></td>
                 <td><%=$H(defect.getChangerName())%></td>
                 <td><%=$H(defect.getChangeDate())%></td>
