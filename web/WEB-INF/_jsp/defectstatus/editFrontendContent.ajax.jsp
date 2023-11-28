@@ -63,9 +63,9 @@
                 <form:line><%=$SH("_uploadHint")%></form:line>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"><%=$SH("_cancel")%>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal"><%=$SH("_cancel")%>
                 </button>
-                <button type="submit" class="btn btn-primary"><%=$SH("_save")%>
+                <button type="submit" class="btn btn-sm btn-primary"><%=$SH("_save")%>
                 </button>
             </div>
         </form:form>

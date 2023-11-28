@@ -29,7 +29,7 @@
 <% if (project.hasUserReadRight(rdata.getLoginUser())){%>
 <form:message/>
 <section class="contentSection tableContent" id="content">
-    <h3><%=$SH("_defects")%></h3>
+    <h3><%=$SH("_defectsAndRemainingWork")%></h3>
     <table id="defectTable" class="defect-table">
         <thead>
         <tr>
@@ -38,11 +38,9 @@
             <th style="width:9%"><%=$SH("_description")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
             </th>
-            <% if (CodefConfiguration.showRemainingWork()){%>
             <th style="width:5%"><%=$SH("_defectType")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
             </th>
-            <%}%>
             <th style="width:8%"><%=$SH("_unit")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/project/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_UNIT%>");>&nbsp;</a>
             </th>
@@ -83,9 +81,7 @@
         <tr>
             <td><%=defect.getId()%></td>
             <td><%=$H(defect.getDescription())%></td>
-            <% if (CodefConfiguration.showRemainingWork()){%>
             <td><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect") %></td>
-            <%}%>
             <td><%=$H(defect.getUnit().getName())%></td>
             <td><%=$H(defect.getCreationDate())%></td>
             <td><%=$H(defect.getChangerName())%></td>
@@ -108,9 +104,9 @@
     </table>
     <% if (project.hasUserEditRight(rdata.getLoginUser())){%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>');"><%=$SH("_downloadPdf")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
     </div>
     <%}%>

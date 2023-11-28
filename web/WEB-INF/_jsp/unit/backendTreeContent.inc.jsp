@@ -37,10 +37,8 @@
         <div class="dropdown-menu">
             <a class="dropdown-item" onclick="return openModalDialog('/ctrl/defect/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defect.DefectData');"><%=$SH("_newDefect")%>
             </a>
-            <% if (CodefConfiguration.showRemainingWork()){%>
             <a class="dropdown-item" onclick="return openModalDialog('/ctrl/defect/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.defect.DefectData&remainingWork=true');"><%=$SH("_newRemainingWork")%>
             </a>
-            <%}%>
         </div>
     </div>
     <%}%>

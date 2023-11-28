@@ -35,12 +35,11 @@
 <section class="contentSection tableContent" id="content">
     <% if (unit.hasUserEditRight(rdata.getLoginUser())){%>
     <div class = contentTop>
-        <a class="btn btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>"><%=$SH("_createDefect")%>
+        <h3><%=$SH("_defectsAndRemainingWork")%></h3>
+        <a class="btn btn-sm btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>"><%=$SH("_createDefect")%>
         </a>
-        <% if (CodefConfiguration.showRemainingWork()){%>
-        <a class="btn btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>&remainingWork=true"><%=$SH("_createRemainingWork")%>
+        <a class="btn btn-sm btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>&remainingWork=true"><%=$SH("_createRemainingWork")%>
         </a>
-        <%}%>
     </div>
     <%}%>
     <table id="defectTable" class="defect-table">
@@ -51,11 +50,9 @@
                 <th style="width:9%"><%=$SH("_description")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
                 </th>
-                <% if (CodefConfiguration.showRemainingWork()){%>
                 <th style="width:5%"><%=$SH("_defectType")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DEFECTTYPE%>");>&nbsp;</a>
                 </th>
-                <%}%>
                 <th style="width:5%"><%=$SH("_creationDate")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_CREATION%>");>&nbsp;</a>
                 </th>
@@ -93,9 +90,7 @@
             <tr class="tableRow">
                 <td><%=defect.getId()%></td>
                 <td><%=$H(defect.getDescription())%></td>
-                <% if (CodefConfiguration.showRemainingWork()){%>
                 <td><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect") %></td>
-                <%}%>
                 <td><%=$H(defect.getCreationDate())%></td>
                 <td><%=$H(defect.getChangerName())%></td>
                 <td><%=$H(defect.getChangeDate())%></td>
@@ -121,9 +116,9 @@
     </div>
     <%}%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>');"><%=$SH("_downloadPdf")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
     </div>
 </section>

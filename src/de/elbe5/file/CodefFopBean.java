@@ -53,7 +53,7 @@ public abstract class CodefFopBean extends PdfCreator {
     protected void addUnitDefectsXml(StringBuilder sb, UnitData data, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
             sb.append("<unitdefect>");
-            sb.append("<description>").append(xml(defect.getDescription())).append("</description>");
+            sb.append("<description>").append(sxml(defect.isRemainingWork() ? "_remainingWork" : "_defect")).append(": ").append(xml(defect.getDescription())).append("</description>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_id")).append("</label1><content1>").append(defect.getId()).append("</content1>");
             sb.append("<label2>").append(sxml("_defectType")).append("</label2><content2>").append(sxml(defect.isRemainingWork() ? "_remainingWork" : "_defect")).append("</content2>");

@@ -48,11 +48,9 @@
         <%}%>
         <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
         <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
-        <% if (CodefConfiguration.showRemainingWork()){%>
         <form:line label="_defectType"><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect")%>
         </form:line>
         <input type="hidden" name="remainingWork" value="<%=Boolean.toString(defect.isRemainingWork())%>" />
-        <%}%>
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>
@@ -93,13 +91,13 @@
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
         <div>
             <% if (defect.isNew()){%>
-            <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/unit/show/<%=unit.getId()%>');"><%=$SH("_cancel")%>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="linkTo('/ctrl/unit/show/<%=unit.getId()%>');"><%=$SH("_cancel")%>
             </button>
             <%}else{%>
-            <button type="button" class="btn btn-outline-secondary" onclick="linkTo('/ctrl/defect/show/<%=defect.getId()%>');"><%=$SH("_cancel")%>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="linkTo('/ctrl/defect/show/<%=defect.getId()%>');"><%=$SH("_cancel")%>
             </button>
             <%}%>
-            <button type="submit" class="btn btn-primary"><%=$SH("_save")%>
+            <button type="submit" class="btn btn-sm btn-primary"><%=$SH("_save")%>
             </button>
         </div>
     </form:form>

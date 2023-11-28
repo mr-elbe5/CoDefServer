@@ -227,6 +227,9 @@ div#pageContent .contentSection.tableContent {
   overflow-y: hidden;
   overflow-x: scroll;
 }
+div#pageContent .contentSection.tableContent h3 {
+  margin-bottom: 1rem;
+}
 div#pageContent .asideSection .paragraph {
   background: #f8f9fa;
   border-color: #343a40;

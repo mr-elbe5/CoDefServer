@@ -27,7 +27,7 @@ public class CodefConfigurationBean extends DbBean {
         return instance;
     }
 
-    private static final String GET_CONFIGURATION_SQL = "SELECT show_inactive_content,use_notified,use_remaining_work,sync_project_companies FROM t_configuration";
+    private static final String GET_CONFIGURATION_SQL = "SELECT show_inactive_content,use_notified,sync_project_companies FROM t_configuration";
 
     public void readConfiguration() {
         Connection con = getConnection();
@@ -39,7 +39,6 @@ public class CodefConfigurationBean extends DbBean {
                     int i = 1;
                     CodefConfiguration.setShowInactiveContent(rs.getBoolean(i++));
                     CodefConfiguration.setUseNotified(rs.getBoolean(i++));
-                    CodefConfiguration.setUseRemainingWork(rs.getBoolean(i++));
                     CodefConfiguration.setSyncProjectCompamiesOnly(rs.getBoolean(i));
                 }
             }

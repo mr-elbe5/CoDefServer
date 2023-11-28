@@ -148,14 +148,14 @@
     if (!contentData.isClosed()){%>
     <div class=buttonLine>
         <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=contentData.getId()%>',null);"><%=$SH("_edit")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/openEditFrontendContent/<%=contentData.getId()%>',null);"><%=$SH("_edit")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatus/openCreateFrontendContent?parentId=<%=contentData.getId()%>',null);"><%=$SH("_statusChange")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return openModalDialog('/ctrl/defectstatus/openCreateFrontendContent?parentId=<%=contentData.getId()%>',null);"><%=$SH("_statusChange")%>
         </button>
-        <button type="button" class="btn btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeDefect/<%=contentData.getId()%>',null);"><%=$SH("_closeDefect")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return openModalDialog('/ctrl/defect/closeDefect/<%=contentData.getId()%>',null);"><%=$SH("_closeDefect")%>
         </button>
         <%}%>
-        <button type="button" class="btn btn-outline-secondary" onclick="return linkTo('/ctrl/defect/getPdfFile/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/defect/getPdfFile/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
         </button>
     </div>
     <%}%>

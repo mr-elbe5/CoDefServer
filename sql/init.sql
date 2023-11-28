@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS t_configuration
     use_editor_group BOOLEAN NOT NULL DEFAULT false,
     show_inactive_content BOOLEAN NOT NULL DEFAULT false,
     use_notified BOOLEAN NOT NULL DEFAULT false,
-    use_remaining_work BOOLEAN NOT NULL DEFAULT true,
     sync_project_companies BOOLEAN NOT NULL DEFAULT true
 );
 
