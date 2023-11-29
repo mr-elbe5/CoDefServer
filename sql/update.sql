@@ -88,3 +88,8 @@ drop sequence s_defect_id;
 alter table t_configuration add sync_project_companies BOOLEAN NOT NULL DEFAULT true;
 
 alter table t_defect add remaining_work   BOOLEAN       NOT NULL DEFAULT FALSE;
+
+alter table t_codef_user add only_remaining_work BOOLEAN     NOT NULL DEFAULT false;
+
+alter table t_codef_user alter column project_ids type VARCHAR(120);
+alter table t_codef_user alter column company_ids type VARCHAR(120);

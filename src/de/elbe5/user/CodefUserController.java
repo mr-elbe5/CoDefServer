@@ -74,6 +74,7 @@ public class CodefUserController extends UserController {
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
         user.setProjectPhase(rdata.getAttributes().getString("projectPhase"));
+        user.setShowOnlyRemainingWork(rdata.getAttributes().getBoolean("showOnlyRemainingWork"));
         CodefUserBean.getInstance().updateUserSettings(user);
         return new CloseDialogResponse("/ctrl/content/show/" + rdata.getSafeId());
     }

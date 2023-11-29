@@ -41,6 +41,9 @@
                 <form:line label="_showClosedDefects" padded="true">
                     <form:check name="showClosed" value="true" checked="<%=user.isShowClosed()%>"> </form:check>
                 </form:line>
+                <form:line label="_showOnlyRemainingWork" padded="true">
+                    <form:check name="showOnlyRemainingWork" value="true" checked="<%=user.isShowOnlyRemainingWork()%>"> </form:check>
+                </form:line>
                 <form:select name="projectPhase" label="_restrictToProjectPhase">
                     <option value="" <%=(user.getProjectPhase() == null) ? "selected" : ""%>><%=$SH("_noRestriction")%></option>
                     <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(user.getProjectPhase()) ? "selected" : ""%>><%=$SH("_showPreapproval")%></option>

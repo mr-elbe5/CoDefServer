@@ -26,6 +26,7 @@ public class CodefUserData extends UserData{
     private List<Integer> selectedCompanyIds = new ArrayList<>();
     private boolean showClosed = true;
     private ProjectPhase projectPhase = null;
+    private boolean showOnlyRemainingWork = false;
 
     //runtime
 
@@ -99,6 +100,14 @@ public class CodefUserData extends UserData{
         this.projectPhase = projectPhase;
     }
 
+    public boolean isShowOnlyRemainingWork() {
+        return showOnlyRemainingWork;
+    }
+
+    public void setShowOnlyRemainingWork(boolean showOnlyRemainingWork) {
+        this.showOnlyRemainingWork = showOnlyRemainingWork;
+    }
+
     public void setProjectPhase(String projectPhaseString) {
         if (projectPhaseString.isEmpty()){
             projectPhase = null;
@@ -149,7 +158,11 @@ public class CodefUserData extends UserData{
         List<DefectData> list = unit.getChildren(DefectData.class);
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);
-            if (!showClosed && data.isClosed()){
+            if (!isShowClosed() && data.isClosed()){
+                list.remove(i);
+                continue;
+            }
+            if (isShowOnlyRemainingWork() && !data.isRemainingWork()){
                 list.remove(i);
                 continue;
             }
@@ -175,7 +188,15 @@ public class CodefUserData extends UserData{
             List<DefectData> list = unit.getChildren(DefectData.class);
             for (int i=list.size()-1;i>=0;i--){
                 DefectData data=list.get(i);
-                if (!showClosed && data.isClosed()){
+                if (!isShowClosed() && data.isClosed()){
+                    list.remove(i);
+                    continue;
+                }
+                if (isShowOnlyRemainingWork() && !data.isRemainingWork()){
+                    list.remove(i);
+                    continue;
+                }
+                if (getProjectPhase() != null && getProjectPhase() != data.getProjectPhase()) {
                     list.remove(i);
                     continue;
                 }
