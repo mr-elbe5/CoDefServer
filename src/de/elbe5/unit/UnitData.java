@@ -171,7 +171,7 @@ public class UnitData extends ContentData {
             plan.setMaxSize(STD_PLAN_SIZE);
             plan.setPreviewSize(PLAN_PREVIEW_SIZE);
             plan.createFromBinaryFile(file);
-            plan.setDisplayName(LocalizedStrings.string("_plan"));
+            plan.setDisplayName(LocalizedStrings.getInstance().string("_plan"));
             return plan;
         }
         return null;

@@ -17,7 +17,7 @@
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupCache" %>
-<%@ page import="de.elbe5.configuration.Configuration" %>
+<%@ page import="de.elbe5.configuration.StaticConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -49,12 +49,12 @@
                 </form:line>
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(project.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(project.getDescription())%></form:textarea>
-                <% if (Configuration.useReadRights()){%>
+                <% if (StaticConfiguration.useReadRights()){%>
                 <form:line label="_openAccess" padded="true">
                     <form:check name="openAccess" value="true" checked="<%=project.isOpenAccess()%>"/>
                 </form:line>
                 <%}%>
-                <% if (Configuration.useReadRights() && Configuration.useReadGroup()){%>
+                <% if (StaticConfiguration.useReadRights() && StaticConfiguration.useReadGroup()){%>
                 <form:select name="readerGroupId" label="_readerGroup">
                     <option value="0"  <%=project.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
@@ -62,7 +62,7 @@
                     <%}%>
                 </form:select>
                 <%}%>
-                <% if (Configuration.useEditorGroup()){%>
+                <% if (StaticConfiguration.useEditorGroup()){%>
                 <form:select name="editorGroupId" label="_editorGroup">
                     <option value="0"  <%=project.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>

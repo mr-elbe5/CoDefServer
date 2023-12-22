@@ -8,12 +8,8 @@
  */
 package de.elbe5.company;
 
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.BaseData;
 import de.elbe5.base.Log;
-import de.elbe5.content.ContentBean;
-import de.elbe5.content.ContentCache;
-import de.elbe5.project.ProjectData;
 import de.elbe5.request.*;
 import de.elbe5.response.*;
 import de.elbe5.rights.GlobalRight;
@@ -79,7 +75,7 @@ public class CompanyController extends Controller {
         }
         CompanyBean.getInstance().saveCompany(data);
         CompanyCache.setDirty();
-        rdata.setMessage(LocalizedStrings.string("_companySaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        rdata.setMessage($S("_companySaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return new CloseDialogResponse("/ctrl/admin/openPersonAdministration?companyId=" + data.getId());
     }
 
@@ -88,12 +84,12 @@ public class CompanyController extends Controller {
         assertRights(GlobalRight.hasGlobalUserEditRight(rdata.getLoginUser()));
         int id = rdata.getId();
         if (id < BaseData.ID_MIN) {
-            rdata.setMessage(LocalizedStrings.string("_notDeletable"), RequestKeys.MESSAGE_TYPE_ERROR);
+            rdata.setMessage($S("_notDeletable"), RequestKeys.MESSAGE_TYPE_ERROR);
             return new ForwardResponse("/ctrl/admin/openPersonAdministration");
         }
         CompanyBean.getInstance().deleteCompany(id);
         CompanyCache.setDirty();
-        rdata.setMessage(LocalizedStrings.string("_companyDeleted"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        rdata.setMessage($S("_companyDeleted"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return new ForwardResponse("/ctrl/admin/openPersonAdministration");
     }
 

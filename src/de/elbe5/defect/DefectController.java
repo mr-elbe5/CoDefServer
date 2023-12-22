@@ -114,7 +114,7 @@ public class DefectController extends ContentController {
         data.setNew(false);
         data.setEditMode(false);
         ContentCache.setDirty();
-        rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        rdata.setMessage($S("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return show(rdata);
     }
 
@@ -129,7 +129,7 @@ public class DefectController extends ContentController {
             return new ContentResponse(data);
         }
         ContentCache.setDirty();
-        rdata.setMessage(LocalizedStrings.string("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        rdata.setMessage($S("_defectClosed"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return new ForwardResponse("/ctrl/content/show/" + data.getParentId());
     }
 
