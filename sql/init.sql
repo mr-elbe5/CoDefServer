@@ -1,15 +1,12 @@
 CREATE TABLE IF NOT EXISTS t_configuration
 (
-    title            VARCHAR(100) NOT NULL DEFAULT '',
-    salt             VARCHAR(100) NOT NULL DEFAULT '',
-    locale           VARCHAR(30) NOT NULL DEFAULT 'GERMAN',
-    show_date_time   BOOLEAN NOT NULL DEFAULT false,
-    use_read_rights  BOOLEAN NOT NULL DEFAULT false,
-    use_read_group   BOOLEAN NOT NULL DEFAULT false,
-    use_editor_group BOOLEAN NOT NULL DEFAULT false,
-    show_inactive_content BOOLEAN NOT NULL DEFAULT false,
-    use_notified BOOLEAN NOT NULL DEFAULT false,
-    sync_project_companies BOOLEAN NOT NULL DEFAULT true
+    smtp_host        VARCHAR(30) NOT NULL DEFAULT '',
+    smtp_port        INTEGER NOT NULL DEFAULT 25,
+    smtp_connection_type VARCHAR(30) NOT NULL DEFAULT 'plain',
+    smtp_user        VARCHAR(100) NOT NULL DEFAULT '',
+    smtp_password    VARCHAR(100) NOT NULL DEFAULT '',
+    mail_sender      VARCHAR(100) NOT NULL DEFAULT '',
+    mail_receiver    VARCHAR(100) NOT NULL DEFAULT ''
 );
 
 CREATE SEQUENCE s_user_id START 1000;
