@@ -10,22 +10,22 @@
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
-<%@ page import="de.elbe5.configuration.Configuration" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.response.IMasterInclude" %>
 <%@ page import="de.elbe5.request.RequestKeys" %>
+<%@ page import="de.elbe5.configuration.StaticConfiguration" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     ContentData contentData = ContentData.getCurrentContent(rdata);
     IMasterInclude masterInclude = rdata.getRequestObject(RequestKeys.KEY_MASTERINCLUDE, IMasterInclude.class);
     List<Integer> parentIds = ContentCache.getParentContentIds(contentData);
-    String title = Configuration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
+    String title = StaticConfiguration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
 %>
 <!DOCTYPE html>
-<html lang="<%=Configuration.getLocale().getLanguage()%>">
+<html lang="<%=StaticConfiguration.getLocale().getLanguage()%>">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

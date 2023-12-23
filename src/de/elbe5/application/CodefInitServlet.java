@@ -11,9 +11,7 @@ package de.elbe5.application;
 import de.elbe5.administration.AdminController;
 import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
-import de.elbe5.configuration.CodefConfigurationBean;
-import de.elbe5.configuration.Configuration;
-import de.elbe5.configuration.ConfigurationBean;
+import de.elbe5.configuration.*;
 import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatus.DefectStatusController;
 import de.elbe5.group.GroupCache;
@@ -46,16 +44,16 @@ public class CodefInitServlet extends InitServlet {
         super.init(servletConfig);
         System.out.println("initializing Codef Application...");
         ServletContext context=servletConfig.getServletContext();
+        ConfigurationBean.getInstance().readConfiguration();
         ApplicationPath.initializePath(ApplicationPath.getCatalinaAppDir(context), ApplicationPath.getCatalinaAppROOTDir(context));
         Log.initLog(ApplicationPath.getAppName());
-        if (!DbConnector.getInstance().initialize("jdbc/codef"))
+        if (!DbConnector.getInstance().initialize())
             return;
-        ConfigurationBean.getInstance().readConfiguration();
-        //ConfigurationBean.getInstance().readMailConfiguration();
         CodefConfigurationBean.getInstance().readConfiguration();
-        LocalizedStrings.addBundle("bandika", Configuration.getLocale());
-        LocalizedStrings.addBundle("application", Configuration.getLocale());
+        LocalizedStrings.getInstance().addBundle("bandika", StaticConfiguration.getLocale());
+        LocalizedStrings.getInstance().addBundle("application", StaticConfiguration.getLocale());
         AdminController.register(new AdminController());
+        ConfigurationController.register(new ConfigurationController());
         ContentController.register(new ContentController());
         DocumentController.register(new DocumentController());
         FileController.register(new FileController());

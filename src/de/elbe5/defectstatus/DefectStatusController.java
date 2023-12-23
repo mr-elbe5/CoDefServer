@@ -85,7 +85,7 @@ public class DefectStatusController extends ContentController {
         data.setNew(false);
         data.setEditMode(false);
         ContentCache.setDirty();
-        rdata.setMessage(LocalizedStrings.string("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        rdata.setMessage($S("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         rdata.setId(data.getParentId());
         return show(rdata);
     }

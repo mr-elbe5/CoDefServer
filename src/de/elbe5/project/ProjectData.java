@@ -12,6 +12,7 @@ import de.elbe5.configuration.Configuration;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
+import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
@@ -112,13 +113,13 @@ public class ProjectData extends ContentData {
                 setDisplayName(rdata.getAttributes().getString("displayName").trim());
                 setName(StringHelper.toSafeWebName(getDisplayName()));
                 setDescription(rdata.getAttributes().getString("description"));
-                if (Configuration.useReadRights()) {
+                if (StaticConfiguration.useReadRights()) {
                     setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
                 }
-                if (Configuration.useReadRights() && Configuration.useReadGroup()) {
+                if (StaticConfiguration.useReadRights() && StaticConfiguration.useReadGroup()) {
                     setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
                 }
-                if (Configuration.useEditorGroup()) {
+                if (StaticConfiguration.useEditorGroup()) {
                     setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
                 }
                 setActive(rdata.getAttributes().getBoolean("active"));
@@ -126,7 +127,7 @@ public class ProjectData extends ContentData {
                 if (getDisplayName().isEmpty()) {
                     rdata.addIncompleteField("displayName");
                 }
-                if (Configuration.useEditorGroup() && getEditorGroupId() == 0){
+                if (StaticConfiguration.useEditorGroup() && getEditorGroupId() == 0){
                     rdata.addIncompleteField("editorGroupId");
                 }
                 if (getCompanyIds().isEmpty()){

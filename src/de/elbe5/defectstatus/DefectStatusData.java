@@ -47,9 +47,9 @@ public class DefectStatusData extends ContentData {
     public String getDisplayName(){
         if (parent instanceof DefectData defect){
             String idx = isNew() ? "" : " " + (parent.getChildIndex(this)+1);
-            return defect.getDisplayName() + "-" + LocalizedStrings.string("_statusChange") + idx;
+            return defect.getDisplayName() + "-" + LocalizedStrings.getInstance().string("_statusChange") + idx;
         }
-        return LocalizedStrings.string("_statusChange");
+        return LocalizedStrings.getInstance().string("_statusChange");
     }
 
     public int getAssignedId() {
@@ -91,10 +91,10 @@ public class DefectStatusData extends ContentData {
     }
 
     public String geTitle(){
-        return LocalizedStrings.string("_statusChange")
-                +" "+ LocalizedStrings.string("_by")
+        return LocalizedStrings.getInstance().string("_statusChange")
+                +" "+ LocalizedStrings.getInstance().string("_by")
                 +" "+ UserCache.getUser(getCreatorId()).getName()
-                +" "+ LocalizedStrings.string("_ofDate")
+                +" "+ LocalizedStrings.getInstance().string("_ofDate")
                 +" "+ DateHelper.toHtml(getCreationDate());
     }
 

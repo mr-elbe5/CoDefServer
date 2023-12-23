@@ -9,7 +9,6 @@
 package de.elbe5.file;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
@@ -65,14 +64,14 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_assigned")).append("</label1><content1>").append(xml(defect.getLastAssignedName())).append("</content1>");
-            sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(LocalizedStrings.xml(defect.getProjectPhaseString())).append("</content2>");
+            sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(sxml(defect.getProjectPhaseString())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_dueDate1")).append("</label1><content1>").append(html(defect.getDueDate1())).append("</content1>");
             sb.append("<label2>").append(sxml("_dueDate2")).append("</label2><content2>").append(html(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(LocalizedStrings.xml(defect.getLastStatus().toString())).append("</content1>");
+            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(sxml(defect.getLastStatus().toString())).append("</content1>");
             sb.append("<label2>").append(sxml("_closeDate")).append("</label2><content2>").append(html(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
             BinaryFile file;
@@ -84,7 +83,7 @@ public abstract class CodefFopBean extends PdfCreator {
             }
             if (!defect.getPositionComment().isEmpty()) {
                 sb.append("<defectrow>");
-                sb.append("<label1>").append(LocalizedStrings.xml("_positionComment")).append("</label1><content1>").append(xml(defect.getPositionComment())).append("</content1>");
+                sb.append("<label1>").append(sxml("_positionComment")).append("</label1><content1>").append(xml(defect.getPositionComment())).append("</content1>");
                 sb.append("</defectrow>");
             }
             List<ImageData> files = defect.getFiles(ImageData.class);
@@ -120,7 +119,7 @@ public abstract class CodefFopBean extends PdfCreator {
                     sb.append("</defectrow>");
                     sb.append("<defectrow>");
                     sb.append("<label1>")
-                            .append(LocalizedStrings.xml("_status"))
+                            .append(sxml("_status"))
                             .append("</label1><content1>")
                             .append(sxml(changeData.getStatusString()))
                             .append("</content1>");
@@ -132,7 +131,7 @@ public abstract class CodefFopBean extends PdfCreator {
                     sb.append("</defectrow>");
                     sb.append("<defectrow>");
                     sb.append("<label1>")
-                            .append(LocalizedStrings.xml("_description"))
+                            .append(sxml("_description"))
                             .append("</label1><content1>")
                             .append(xml(changeData.getDescription()))
                             .append("</content1>");

@@ -10,11 +10,11 @@
 <%response.setContentType("text/html;charset=UTF-8");%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
-<%@ page import="de.elbe5.configuration.Configuration" %>
+<%@ page import="de.elbe5.configuration.StaticConfiguration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 
 <%
-    String title = Configuration.getAppTitle();
+    String title = StaticConfiguration.getAppTitle();
 %>
 <html lang="en">
 <head>
@@ -36,7 +36,7 @@
         <form:message/>
         <section class="mainSection loginSection text-center">
             <form class="form" action="/ctrl/user/login" method="post" name="loginForm" accept-charset="UTF-8">
-                <img class="mb-4" src="/static-content/img/logo.png" alt="<%=Configuration.getAppTitle()%>">
+                <img class="mb-4" src="/static-content/img/logo.png" alt="<%=StaticConfiguration.getAppTitle()%>">
                 <label for="login" class="sr-only"><%=$SH("_loginName")%>
                 </label>
                 <input type="text" id="login" name="login" class="form-control"

@@ -75,7 +75,7 @@ public class DefectData extends ContentData {
 
     @Override
     public String getDisplayName(){
-        return LocalizedStrings.string(remainingWork ? "_remainingWork" : "_defect") + " " +getId();
+        return LocalizedStrings.getInstance().string(remainingWork ? "_remainingWork" : "_defect") + " " +getId();
     }
 
     public UnitData getUnit() {
