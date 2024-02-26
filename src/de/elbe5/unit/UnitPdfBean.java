@@ -45,7 +45,7 @@ public class UnitPdfBean extends CodefFopBean {
         sb.append("<root>");
         addUnitHeaderXml(sb,unit);
         sb.append("<unit>");
-        addLabeledContent(sb,sxml("_approveDate"),html(unit.getApproveDate()));
+        addLabeledContent(sb, unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
         List<DefectData> defects = user.getUnitDefects(unit.getId());
         ImageData plan = unit.getPlan();
         if (plan!=null) {

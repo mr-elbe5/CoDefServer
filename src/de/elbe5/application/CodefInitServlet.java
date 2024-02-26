@@ -9,7 +9,9 @@
 package de.elbe5.application;
 
 import de.elbe5.administration.AdminController;
+import de.elbe5.base.JsonWebToken;
 import de.elbe5.base.LocalizedStrings;
+import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.base.Log;
 import de.elbe5.configuration.*;
 import de.elbe5.defect.DefectController;
@@ -44,14 +46,17 @@ public class CodefInitServlet extends InitServlet {
         super.init(servletConfig);
         System.out.println("initializing Codef Application...");
         ServletContext context=servletConfig.getServletContext();
-        ConfigurationBean.getInstance().readConfiguration();
+        StaticConfiguration.initialize(context);
         ApplicationPath.initializePath(ApplicationPath.getCatalinaAppDir(context), ApplicationPath.getCatalinaAppROOTDir(context));
         Log.initLog(ApplicationPath.getAppName());
         if (!DbConnector.getInstance().initialize())
             return;
+        ConfigurationBean.getInstance().readConfiguration();
         CodefConfigurationBean.getInstance().readConfiguration();
         LocalizedStrings.getInstance().addBundle("bandika", StaticConfiguration.getLocale());
+        LocalizedSystemStrings.getInstance().addBundle("systemStrings", StaticConfiguration.getLocale());
         LocalizedStrings.getInstance().addBundle("application", StaticConfiguration.getLocale());
+        JsonWebToken.createSecretKey(StaticConfiguration.getSalt());
         AdminController.register(new AdminController());
         ConfigurationController.register(new ConfigurationController());
         ContentController.register(new ContentController());

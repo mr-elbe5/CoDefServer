@@ -93,3 +93,13 @@ alter table t_codef_user add only_remaining_work BOOLEAN     NOT NULL DEFAULT fa
 
 alter table t_codef_user alter column project_ids type VARCHAR(120);
 alter table t_codef_user alter column company_ids type VARCHAR(120);
+
+alter table t_configuration add smtp_host        VARCHAR(30) NOT NULL DEFAULT '';
+alter table t_configuration add smtp_port        INTEGER NOT NULL DEFAULT 25;
+alter table t_configuration add smtp_connection_type VARCHAR(30) NOT NULL DEFAULT 'plain';
+alter table t_configuration add smtp_user        VARCHAR(100) NOT NULL DEFAULT '';
+alter table t_configuration add smtp_password    VARCHAR(100) NOT NULL DEFAULT '';
+alter table t_configuration add mail_sender      VARCHAR(100) NOT NULL DEFAULT '';
+alter table t_configuration add  mail_receiver    VARCHAR(100) NOT NULL DEFAULT '';
+
+alter table t_codef_user alter column company_ids type VARCHAR(255);

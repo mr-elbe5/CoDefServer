@@ -1,4 +1,4 @@
-<%@ page import="de.elbe5.configuration.Configuration" %><%--
+<%--
   Bandika CMS - A Java based modular Content Management System
   Copyright (C) 2009-2021 Michael Roennau
 

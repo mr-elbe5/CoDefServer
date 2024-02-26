@@ -15,7 +15,6 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ page import="de.elbe5.project.ProjectPhase" %>
-<%@ page import="java.util.List" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);

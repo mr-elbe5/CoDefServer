@@ -54,7 +54,7 @@ public class ProjectPdfBean extends CodefFopBean {
                 sb.append(": ");
                 sb.append(xml(unit.getDisplayName()));
                 sb.append("</title></unitheader>");
-                addLabeledContent(sb,sxml("_approveDate"),html(unit.getApproveDate()));
+                addLabeledContent(sb, unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
                 ImageData plan = unit.getPlan();
                 if (plan != null) {
                     ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);

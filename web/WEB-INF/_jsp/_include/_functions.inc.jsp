@@ -42,15 +42,15 @@
     }
 
     public String $SH(String key){
-        return LocalizedStrings.html(key);
+        return LocalizedStrings.getInstance().html(key);
     }
 
     public String $SHM(String key){
-        return LocalizedStrings.htmlMultiline(key);
+        return LocalizedStrings.getInstance().htmlMultiline(key);
     }
 
     public String $SJ(String key){
-        return LocalizedStrings.js(key);
+        return LocalizedStrings.getInstance().js(key);
     }
 
     public String $I(int i){
