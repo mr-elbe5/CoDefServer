@@ -17,6 +17,7 @@
 <%@ page import="de.elbe5.defect.DefectComparator" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
+<%@ page import="de.elbe5.base.LocalizedSystemStrings" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -96,9 +97,9 @@
                 <td><%=$H(defect.getChangeDate())%></td>
                 <td><%=$D(defect.getDueDate())%></td>
                 <td><%=$D(defect.getCloseDate())%></td>
-                <td><%=$SH(defect.getLastStatus().toString())%></td>
+                <td><%=LocalizedSystemStrings.getInstance().html(defect.getLastStatus().toString())%></td>
                 <td><%=$H(defect.getLastAssignedName())%></td>
-                <td><%=$SH(defect.getProjectPhaseString())%></td>
+                <td><%=LocalizedSystemStrings.getInstance().html(defect.getProjectPhaseString())%></td>
                 <% if (CodefConfiguration.showNotified()){%>
                 <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
                 <%}%>

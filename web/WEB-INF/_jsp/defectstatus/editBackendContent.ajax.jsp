@@ -17,6 +17,7 @@
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="de.elbe5.defect.DefectData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="de.elbe5.base.LocalizedSystemStrings" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -60,10 +61,10 @@
                     <%}%>
                 </form:select>
                 <form:select name="status" label="_status">
-                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(statusData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.OPEN.toString())%></option>
-                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(statusData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DISPUTED.toString())%></option>
-                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(statusData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.REJECTED.toString())%></option>
-                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(statusData.getStatus()) ? "selected" : ""%>><%=$SH(DefectStatus.DONE.toString())%></option>
+                    <option value="<%=DefectStatus.OPEN.toString()%>" <%=DefectStatus.OPEN.equals(statusData.getStatus()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(DefectStatus.OPEN.toString())%></option>
+                    <option value="<%=DefectStatus.DISPUTED.toString()%>" <%=DefectStatus.DISPUTED.equals(statusData.getStatus()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(DefectStatus.DISPUTED.toString())%></option>
+                    <option value="<%=DefectStatus.REJECTED.toString()%>" <%=DefectStatus.REJECTED.equals(statusData.getStatus()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(DefectStatus.REJECTED.toString())%></option>
+                    <option value="<%=DefectStatus.DONE.toString()%>" <%=DefectStatus.DONE.equals(statusData.getStatus()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(DefectStatus.DONE.toString())%></option>
                 </form:select>
                 <form:textarea name="description" label="_notes" height="5em"><%=$H(statusData.getDescription())%></form:textarea>
                 <form:line label="_active" padded="true">

@@ -9,6 +9,7 @@
 package de.elbe5.file;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
@@ -64,14 +65,14 @@ public abstract class CodefFopBean extends PdfCreator {
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_assigned")).append("</label1><content1>").append(xml(defect.getLastAssignedName())).append("</content1>");
-            sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(sxml(defect.getProjectPhaseString())).append("</content2>");
+            sb.append("<label2>").append(sxml("_projectPhase")).append("</label2><content2>").append(LocalizedSystemStrings.getInstance().xml(defect.getProjectPhaseString())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
             sb.append("<label1>").append(sxml("_dueDate1")).append("</label1><content1>").append(html(defect.getDueDate1())).append("</content1>");
             sb.append("<label2>").append(sxml("_dueDate2")).append("</label2><content2>").append(html(defect.getDueDate2())).append("</content2>");
             sb.append("</defectrow>");
             sb.append("<defectrow>");
-            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(sxml(defect.getLastStatus().toString())).append("</content1>");
+            sb.append("<label1>").append(sxml("_status")).append("</label1><content1>").append(LocalizedSystemStrings.getInstance().xml(defect.getLastStatus().toString())).append("</content1>");
             sb.append("<label2>").append(sxml("_closeDate")).append("</label2><content2>").append(html(defect.getCloseDate())).append("</content2>");
             sb.append("</defectrow>");
             BinaryFile file;
@@ -79,7 +80,7 @@ public abstract class CodefFopBean extends PdfCreator {
                 ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
                 byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
                 file = defect.createCroppedDefectPlan(plan, arrowBytes, data.getId(), defect.getPositionX(), defect.getPositionY());
-                addLabeledImage(sb, sxml("_position"), file, "5.0cm");
+                addLabeledImage(sb, sxml("_defectPosition"), file, "5.0cm");
             }
             if (!defect.getPositionComment().isEmpty()) {
                 sb.append("<defectrow>");
@@ -121,7 +122,7 @@ public abstract class CodefFopBean extends PdfCreator {
                     sb.append("<label1>")
                             .append(sxml("_status"))
                             .append("</label1><content1>")
-                            .append(sxml(changeData.getStatusString()))
+                            .append(LocalizedSystemStrings.getInstance().xml(changeData.getStatusString()))
                             .append("</content1>");
                     sb.append("<label2>")
                             .append(sxml("_assigned"))

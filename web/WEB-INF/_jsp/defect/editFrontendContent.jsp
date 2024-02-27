@@ -19,6 +19,7 @@
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.project.ProjectPhase" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
+<%@ page import="de.elbe5.base.LocalizedSystemStrings" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -58,9 +59,9 @@
             <%}%>
         </form:select>
         <form:select name="projectPhase" label="_projectPhase">
-            <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.PREAPPROVAL.name())%></option>
-            <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.APPROVAL.name())%></option>
-            <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=$SH(ProjectPhase.LIABILITY.name())%></option>
+            <option value="<%=ProjectPhase.PREAPPROVAL.toString()%>" <%=ProjectPhase.PREAPPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(ProjectPhase.PREAPPROVAL.name())%></option>
+            <option value="<%=ProjectPhase.APPROVAL.toString()%>" <%=ProjectPhase.APPROVAL.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(ProjectPhase.APPROVAL.name())%></option>
+            <option value="<%=ProjectPhase.LIABILITY.toString()%>" <%=ProjectPhase.LIABILITY.equals(defect.getProjectPhase()) ? "selected" : ""%>><%=LocalizedSystemStrings.getInstance().html(ProjectPhase.LIABILITY.name())%></option>
         </form:select>
         <% if (CodefConfiguration.showNotified()){%>
         <form:line label="_notified" padded = "true"><form:check name="notified" value="true" checked="<%=defect.isNotified()%>"/></form:line>
@@ -72,7 +73,7 @@
         <%}%>
         <% if (defect.getPlan()!=null){
             if (defect.isNew()){%>
-        <form:line label="_position"> </form:line>
+        <form:line label="_defectPosition"> </form:line>
         <div id="planContainer">
             <img id="plan" src="/files/<%=defect.getPlanId()%>" alt="" style="border:1px solid red"/>
             <div id="planPositioner">
@@ -83,7 +84,7 @@
         <input type="hidden" name="positionX" id="positionX" value="<%=defect.getPositionX()%>"/>
         <input type="hidden" name="positionY" id="positionY" value="<%=defect.getPositionY()%>"/>
         <%}else if (defect.hasValidPosition()){%>
-        <form:line label="_position">
+        <form:line label="_defectPosition">
             <img src="/ctrl/defect/showCroppedDefectPlan/<%=defect.getId()%>" alt="" />
         </form:line>
         <%}

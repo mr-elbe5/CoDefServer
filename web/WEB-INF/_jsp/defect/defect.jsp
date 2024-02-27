@@ -16,6 +16,7 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
 <%@ page import="de.elbe5.file.ImageData" %>
+<%@ page import="de.elbe5.base.LocalizedSystemStrings" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -46,7 +47,7 @@
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_projectPhase")%></div>
-                <div class="boxText"><%=$SH(contentData.getProjectPhaseString())%></div>
+                <div class="boxText"><%=LocalizedSystemStrings.getInstance().html(contentData.getProjectPhaseString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
@@ -68,7 +69,7 @@
             <%}%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(contentData.getLastStatus().toString())%></div>
+                <div class="boxText"><%=LocalizedSystemStrings.getInstance().html(contentData.getLastStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_dueDate1")%></div>
@@ -85,7 +86,7 @@
         </div>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_position")%></div>
+                <div class="boxTitle"><%=$SH("_defectPosition")%></div>
                 <% if (contentData.getPlanId()!=0 && contentData.hasValidPosition()){%>
                 <div class="boxImage"><a href="#" onclick="return openModalDialog('/ctrl/defect/openFullDefectPlan/<%=contentData.getId()%>');"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></a></div>
                 <%}%>
@@ -122,7 +123,7 @@
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_status")%></div>
-                <div class="boxText"><%=$SH(statusData.getStatus().toString())%></div>
+                <div class="boxText"><%=LocalizedSystemStrings.getInstance().html(statusData.getStatus().toString())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>

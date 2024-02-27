@@ -9,6 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.file.CodefFopBean;
 import de.elbe5.file.FileBean;
@@ -77,7 +78,7 @@ public class DefectPdfBean extends CodefFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_creator"),user.getName());
         addLabeledContent(sb,sxml("_creationDate"),html(data.getCreationDate()));
-        addLabeledContent(sb,sxml("_status"),sxml(data.getLastStatus().toString()));
+        addLabeledContent(sb,sxml("_status"),LocalizedSystemStrings.getInstance().xml(data.getLastStatus().toString()));
         addLabeledContent(sb,sxml("_assigned"),data.getLastAssignedName());
         addLabeledContent(sb,sxml("_dueDate1"),html(data.getDueDate1()));
         addLabeledContent(sb,sxml("_dueDate2"),html(data.getDueDate2()));
@@ -87,7 +88,7 @@ public class DefectPdfBean extends CodefFopBean {
             ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
             byte[] arrowBytes = FileBean.getInstance().getImageBytes(data.getIconName());
             file = data.createCroppedDefectPlan(plan, arrowBytes, data.getId(), data.getPositionX(), data.getPositionY());
-            addLabeledImage(sb, sxml("_position"), file, "5.0cm");
+            addLabeledImage(sb, sxml("_defectPosition"), file, "5.0cm");
         }
         addLabeledContent(sb,sxml("_positionComment"),data.getPositionComment());
         List<ImageData> files = data.getFiles(ImageData.class);
@@ -106,7 +107,7 @@ public class DefectPdfBean extends CodefFopBean {
         sb.append("<title>").append(xml(data.geTitle())).append("</title>");
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_description"),data.getDescription());
-        addLabeledContent(sb,sxml("_status"),sxml(data.getStatusString()));
+        addLabeledContent(sb, LocalizedSystemStrings.getInstance().xml("_status"),sxml(data.getStatusString()));
         addLabeledContent(sb,sxml("_assigned"),html(data.getAssignedName()));
         for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());

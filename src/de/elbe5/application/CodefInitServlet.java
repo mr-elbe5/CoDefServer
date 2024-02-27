@@ -55,7 +55,8 @@ public class CodefInitServlet extends InitServlet {
         CodefConfigurationBean.getInstance().readConfiguration();
         LocalizedStrings.getInstance().addBundle("bandika", StaticConfiguration.getLocale());
         LocalizedSystemStrings.getInstance().addBundle("systemStrings", StaticConfiguration.getLocale());
-        LocalizedStrings.getInstance().addBundle("application", StaticConfiguration.getLocale());
+        LocalizedSystemStrings.getInstance().addBundle("codefSystemStrings", StaticConfiguration.getLocale());
+        LocalizedStrings.getInstance().addBundle("codef", StaticConfiguration.getLocale());
         JsonWebToken.createSecretKey(StaticConfiguration.getSalt());
         AdminController.register(new AdminController());
         ConfigurationController.register(new ConfigurationController());
