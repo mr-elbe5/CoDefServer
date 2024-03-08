@@ -73,7 +73,10 @@ public class DefectStatusController extends ContentController {
         DefectData defect= ContentCache.getContent(data.getParentId(), DefectData.class);
         assert(defect != null);
         assertRights(defect.hasUserEditRight(rdata.getLoginUser()));
+        int lastAssignedId = defect.getLastAssignedId();
         data.readRequestData(rdata, RequestType.frontend);
+        if (data.getAssignedId() == 0)
+            data.setAssignedId(lastAssignedId);
         if (!rdata.checkFormErrors()) {
             return new ForwardResponse(data.getFrontendEditJsp());
         }
@@ -104,10 +107,13 @@ public class DefectStatusController extends ContentController {
         if (defect == null || !defect.hasUserReadRight(user)) {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         }
+        int lastAssignedId = defect.getLastAssignedId();
         DefectStatusData data = new DefectStatusData();
         data.setCreateValues(rdata, RequestType.api);
         data.setParentValues(defect);
         data.readRequestData(rdata, RequestType.api);
+        if (data.getAssignedId() == 0)
+            data.setAssignedId(lastAssignedId);
         data.setNewId();
         Log.info("new status data id = " + data.getId());
         if (!DefectStatusBean.getInstance().saveContent(data)) {
