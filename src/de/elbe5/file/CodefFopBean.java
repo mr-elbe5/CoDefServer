@@ -127,7 +127,7 @@ public abstract class CodefFopBean extends PdfCreator {
                     sb.append("<label2>")
                             .append(sxml("_assigned"))
                             .append("</label2><content2>")
-                            .append(html(changeData.getAssignedName()))
+                            .append(xml(changeData.getAssignedName()))
                             .append("</content2>");
                     sb.append("</defectrow>");
                     sb.append("<defectrow>");

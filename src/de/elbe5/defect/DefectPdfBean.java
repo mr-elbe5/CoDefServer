@@ -108,7 +108,7 @@ public class DefectPdfBean extends CodefFopBean {
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sb,sxml("_description"),data.getDescription());
         addLabeledContent(sb, LocalizedSystemStrings.getInstance().xml("_status"),sxml(data.getStatusString()));
-        addLabeledContent(sb,sxml("_assigned"),html(data.getAssignedName()));
+        addLabeledContent(sb,sxml("_assigned"),xml(data.getAssignedName()));
         for (ImageData image : data.getFiles(ImageData.class)){
             BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
             addLabeledImage(sb, sxml("_image"), file, "5.0cm");
