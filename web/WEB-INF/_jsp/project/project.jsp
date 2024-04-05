@@ -109,6 +109,8 @@
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getCsv/<%=project.getId()%>');"><%=$SH("_downloadCsv")%>
+        </button>
     </div>
     <%}%>
 </section>

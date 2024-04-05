@@ -49,6 +49,16 @@ public class ProjectController extends ContentController {
         return view;
     }
 
+    public IResponse getCsv(RequestData rdata) {
+        boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
+        int contentId = rdata.getId();
+        BinaryFile file = new ProjectCsvBean().getCsvFile(contentId);
+        assert(file!=null);
+        MemoryFileResponse view=new MemoryFileResponse(file);
+        view.setForceDownload(true);
+        return view;
+    }
+
     public IResponse sort(RequestData rdata) {
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         if (user==null)
