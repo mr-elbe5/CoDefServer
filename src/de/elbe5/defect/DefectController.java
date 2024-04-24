@@ -70,12 +70,10 @@ public class DefectController extends ContentController {
     @Override
     public IResponse openCreateFrontendContent(RequestData rdata) {
         int parentId=rdata.getAttributes().getInt("parentId");
-        boolean isRemainingWork=rdata.getAttributes().getBoolean("remainingWork");
         UnitData parent= ContentCache.getContent(parentId, UnitData.class);
         assert parent != null;
         assertRights(parent.hasUserEditRight(rdata.getLoginUser()));
         DefectData data = new DefectData();
-        data.setRemainingWork(isRemainingWork);
         data.setCreateValues(rdata, RequestType.frontend);
         data.setParentValues(parent);
         data.setEditMode(true);

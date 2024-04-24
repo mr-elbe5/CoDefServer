@@ -36,10 +36,8 @@
 <section class="contentSection tableContent" id="content">
     <% if (unit.hasUserEditRight(rdata.getLoginUser())){%>
     <div class = contentTop>
-        <h3><%=$SH("_defectsAndRemainingWork")%></h3>
+        <h3><%=$SH("_defects")%></h3>
         <a class="btn btn-sm btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>"><%=$SH("_createDefect")%>
-        </a>
-        <a class="btn btn-sm btn-outline-primary" href="/ctrl/defect/openCreateFrontendContent?parentId=<%=unit.getId()%>&remainingWork=true"><%=$SH("_createRemainingWork")%>
         </a>
     </div>
     <%}%>
@@ -48,7 +46,7 @@
             <tr>
                 <th style="width:5%"><%=$SH("_id")%>
                 </th>
-                <th style="width:9%"><%=$SH("_description")%>
+                <th style="width:9%"><%=$SH("_defect")%>
                     <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
                 </th>
                 <th style="width:5%"><%=$SH("_defectType")%>

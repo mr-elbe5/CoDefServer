@@ -28,8 +28,9 @@ public class ProjectCsvBean extends CsvCreator {
 
     static String[] projectFields = {""};
     static String[] unitFields = {"_unit","_approveDate"};
-    static String[] defectFields = {"_defect","_description","_defectType","_creationDate","_editedBy","_changeDate",
-            "_due","_closed","_status","_assigned","_projectPhase"};
+    static String[] defectFields = {"_id","_defect","_defectComment","_positionComment","_defectType","_assigned","_status",
+            "_dueDate","_dueDate2","_closed",
+            "_projectPhase","_creationDate","_editedBy","_changeDate"};
     static String[] statusFields = {"_statusChangeBy","_on","_status","_assigned","_description"};
 
     @Override
@@ -70,15 +71,18 @@ public class ProjectCsvBean extends CsvCreator {
             list.add("");
         list.add(String.valueOf(defect.getId()));
         list.add(csv(defect.getDescription()));
+        list.add(csv(defect.getComment()));
+        list.add(csv(defect.getPositionComment()));
         list.add(csv(defect.isRemainingWork() ? scsv("_remainingWork") : scsv("_defect") ));
+        list.add(csv(defect.getLastAssignedName()));
+        list.add(csv(LocalizedSystemStrings.getInstance().csv(defect.getLastStatus().toString())));
+        list.add(csv(defect.getDueDate()));
+        list.add(csv(defect.getDueDate2()));
+        list.add(csv(defect.getCloseDate()));
+        list.add(csv(LocalizedSystemStrings.getInstance().csv(defect.getProjectPhaseString())));
         list.add(csv(defect.getCreationDate()));
         list.add(csv(defect.getChangerName()));
         list.add(csv(defect.getChangeDate()));
-        list.add(csv(defect.getDueDate()));
-        list.add(csv(defect.getCloseDate()));
-        list.add(csv(LocalizedSystemStrings.getInstance().csv(defect.getLastStatus().toString())));
-        list.add(csv(defect.getLastAssignedName()));
-        list.add(csv(LocalizedSystemStrings.getInstance().csv(defect.getProjectPhaseString())));
         writeLine(writer,list);
         for (DefectStatusData status : defect.getChildren(DefectStatusData.class)) {
             writeDefectStatus(writer, status);

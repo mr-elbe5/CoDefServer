@@ -28,15 +28,23 @@
 <form:message/>
 <section class="contentSection" id="content">
     <div class="paragraph">
-        <h3><%=$H(contentData.getDescription())%></h3>
-        <%if (contentData.isRemainingWork()){%>
-        <div><%=$SH("_remainingWork")%></div>
-        <%}%>
+        <h3><%=$SH("_defect")%>&nbsp;<%=$I(contentData.getId())%></h3>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_id")%></div>
-                <div class="boxText"><%=$I(contentData.getId())%></div>
+                <div class="boxTitle"><%=$SH("_defect")%></div>
+                <div class="boxText"><%=$H(contentData.getDescription())%></div>
             </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_comment")%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getComment())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_positionComment")%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getPositionComment())%></div>
+            </div>
+            <%if (contentData.isRemainingWork()){%>
+            <div><%=$SH("_remainingWork")%></div>
+            <%}%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_creator")%></div>
                 <div class="boxText"><%=$H(contentData.getCreatorName())%></div>
@@ -90,10 +98,6 @@
                 <% if (contentData.getPlanId()!=0 && contentData.hasValidPosition()){%>
                 <div class="boxImage"><a href="#" onclick="return openModalDialog('/ctrl/defect/openFullDefectPlan/<%=contentData.getId()%>');"><img src="/ctrl/defect/showCroppedDefectPlan/<%=contentData.getId()%>" alt="" /></a></div>
                 <%}%>
-            </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_positionComment")%></div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getPositionComment())%></div>
             </div>
         </div>
 

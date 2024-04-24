@@ -47,11 +47,12 @@
         <% if (!defect.isNew()){%>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
         <%}%>
-        <form:textarea name="description" label="_description" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
+        <form:textarea name="description" label="_defect" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
+        <form:textarea name="comment" label="_defectComment" height="5em"><%=$H(defect.getComment())%></form:textarea>
         <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
-        <form:line label="_defectType"><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect")%>
+        <form:line label="_remainingWork">
+            <form:check name="remainingWork" value="true" checked="<%=defect.isRemainingWork()%>"/>
         </form:line>
-        <input type="hidden" name="remainingWork" value="<%=Boolean.toString(defect.isRemainingWork())%>" />
         <form:select name="assignedId" label="_assignTo" required="true">
             <option value="0" <%=defect.getAssignedId()==0 ? "selected" : ""%>><%=$SH("_pleaseSelect")%></option>
             <% for (CompanyData company : companies){%>

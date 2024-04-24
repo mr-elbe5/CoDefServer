@@ -103,3 +103,4 @@ alter table t_configuration add mail_sender      VARCHAR(100) NOT NULL DEFAULT '
 alter table t_configuration add  mail_receiver    VARCHAR(100) NOT NULL DEFAULT '';
 
 alter table t_codef_user alter column company_ids type VARCHAR(255);
+

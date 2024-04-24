@@ -36,7 +36,7 @@
         <tr>
             <th style="width:5%"><%=$SH("_id")%>
             </th>
-            <th style="width:9%"><%=$SH("_description")%>
+            <th style="width:9%"><%=$SH("_defect")%>
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_DESCRIPTION%>");>&nbsp;</a>
             </th>
             <th style="width:5%"><%=$SH("_defectType")%>

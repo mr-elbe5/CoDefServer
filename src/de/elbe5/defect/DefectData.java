@@ -50,6 +50,8 @@ public class DefectData extends ContentData {
         fileClasses.add(ImageData.class);
     }
 
+    protected String comment = "";
+    protected String positionComment = "";
     protected boolean remainingWork = false;
     protected int assignedId = 0;
 
@@ -57,7 +59,6 @@ public class DefectData extends ContentData {
     protected boolean notified = false;
     protected double positionX = 0; //width fraction
     protected double positionY = 0; //height fraction
-    protected String positionComment = "";
     protected LocalDate dueDate1 = null;
     protected LocalDate dueDate2 = null;
     protected LocalDate closeDate = null;
@@ -92,6 +93,22 @@ public class DefectData extends ContentData {
 
     public int getPlanId(){
         return (getPlan() == null ? 0 : getPlan().getId());
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getPositionComment() {
+        return positionComment;
+    }
+
+    public void setPositionComment(String positionComment) {
+        this.positionComment = positionComment;
     }
 
     public boolean isRemainingWork() {
@@ -183,14 +200,6 @@ public class DefectData extends ContentData {
 
     public boolean hasValidPosition(){
         return positionX != 0 || positionY != 0;
-    }
-
-    public String getPositionComment() {
-        return positionComment;
-    }
-
-    public void setPositionComment(String positionComment) {
-        this.positionComment = positionComment;
     }
 
     public LocalDate getDueDate1() {
@@ -323,6 +332,8 @@ public class DefectData extends ContentData {
             case api -> {
                 super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
+                setPositionComment(rdata.getAttributes().getString("comment"));
+                setPositionComment(rdata.getAttributes().getString("positionComment"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -330,10 +341,11 @@ public class DefectData extends ContentData {
                 setDueDate1(rdata.getAttributes().getIsoDate("dueDate1"));
                 setPositionX(rdata.getAttributes().getDouble("positionX"));
                 setPositionY(rdata.getAttributes().getDouble("positionY"));
-                setPositionComment(rdata.getAttributes().getString("positionComment"));
             }
             case frontend -> {
                 setDescription(rdata.getAttributes().getString("description"));
+                setPositionComment(rdata.getAttributes().getString("comment"));
+                setPositionComment(rdata.getAttributes().getString("positionComment"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -342,7 +354,6 @@ public class DefectData extends ContentData {
                     setDueDate1(rdata.getAttributes().getDate("dueDate1"));
                     setPositionX(rdata.getAttributes().getDouble("positionX"));
                     setPositionY(rdata.getAttributes().getDouble("positionY"));
-                    setPositionComment(rdata.getAttributes().getString("positionComment"));
                     if (getDueDate() == null) {
                         rdata.addIncompleteField("dueDate1");
                     }
@@ -371,6 +382,8 @@ public class DefectData extends ContentData {
             }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
+                setPositionComment(rdata.getAttributes().getString("comment"));
+                setPositionComment(rdata.getAttributes().getString("positionComment"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -379,7 +392,6 @@ public class DefectData extends ContentData {
                 setDueDate2(rdata.getAttributes().getDate("dueDate2"));
                 setPositionX(rdata.getAttributes().getDouble("positionX"));
                 setPositionY(rdata.getAttributes().getDouble("positionY"));
-                setPositionComment(rdata.getAttributes().getString("positionComment"));
                 if (getDescription().isEmpty()) {
                     rdata.addIncompleteField("description");
                 }
@@ -398,6 +410,8 @@ public class DefectData extends ContentData {
         return super.getJson()
                 .add("projectPhase", getProjectPhaseString())
                 .add("notified", isNotified())
+                .add("comment",getComment())
+                .add("positionComment",getPositionComment())
                 .add("remainingWork",isRemainingWork())
                 .add("assignedId",getLastAssignedId())
                 .add("assignedName",getLastAssignedName())
@@ -405,8 +419,7 @@ public class DefectData extends ContentData {
                 .add("dueDate1", getDueDate1())
                 .add("dueDate2", getDueDate2())
                 .add("positionX",getPositionX())
-                .add("positionY",getPositionY())
-                .add("positionComment",getPositionComment());
+                .add("positionY",getPositionY());
 
     }
 
@@ -430,6 +443,12 @@ public class DefectData extends ContentData {
         String s = getString(json, "projectPhase");
         if (s != null)
             setProjectPhase(s);
+        s = getString(json, "comment");
+        if (s != null)
+            setComment(s);
+        s = getString(json, "positionComment");
+        if (s != null)
+            setPositionComment(s);
         s = getString(json, "remainingWork");
         if (s != null)
             setRemainingWork(s.equalsIgnoreCase(Boolean.TRUE.toString()));
@@ -442,9 +461,6 @@ public class DefectData extends ContentData {
         i = getInt(json, "positionY");
         if (i!=0)
             setPositionY(i);
-        s = getString(json, "positionComment");
-        if (s != null)
-            setPositionComment(s);
         LocalDate date = getLocalDate(json, "dueDate");
         if (date != null)
             setDueDate1(date);
