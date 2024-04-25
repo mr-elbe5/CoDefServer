@@ -15,8 +15,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProjectBean extends ContentBean {
 
@@ -29,10 +27,28 @@ public class ProjectBean extends ContentBean {
         return instance;
     }
 
+    private static final String GET_CONTENT_EXTRAS_SQL = " SELECT zip_code, city, street, weather_station FROM t_project where id = ?";
+
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
         if (!(contentData instanceof ProjectData data))
             return;
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(GET_CONTENT_EXTRAS_SQL);
+            pst.setInt(1, data.getId());
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    int i=1;
+                    data.setZipCode(rs.getString(i++));
+                    data.setCity(rs.getString(i++));
+                    data.setStreet(rs.getString(i++));
+                    data.setWeatherStation(rs.getString(i));
+                }
+            }
+        } finally {
+            closeStatement(pst);
+        }
         readProjectCompanies(con, data);
     }
 
@@ -54,7 +70,7 @@ public class ProjectBean extends ContentBean {
         }
     }
 
-    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_project (id) values(?)";
+    private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_project (id, zip_code, city, street, weather_station) values(?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -64,7 +80,11 @@ public class ProjectBean extends ContentBean {
         try {
             pst = con.prepareStatement(INSERT_CONTENT_EXTRAS_SQL);
             int i=1;
-            pst.setInt(i, data.getId());
+            pst.setInt(i++, data.getId());
+            pst.setString(i++, data.getZipCode());
+            pst.setString(i++, data.getCity());
+            pst.setString(i++, data.getStreet());
+            pst.setString(i, data.getWeatherStation());
             pst.executeUpdate();
             pst.close();
             writeProjectCompanies(con, data);
@@ -74,10 +94,28 @@ public class ProjectBean extends ContentBean {
         }
     }
 
+    private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project " +
+            "set zip_code=?, city=?, street=?, weather_station=? where id=? ";
+
+
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
         if (!(contentData instanceof ProjectData data))
             return;
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
+            int i = 1;
+            pst.setString(i++, data.getZipCode());
+            pst.setString(i++, data.getCity());
+            pst.setString(i++, data.getStreet());
+            pst.setString(i++, data.getWeatherStation());
+            pst.setInt(i, data.getId());
+            pst.executeUpdate();
+            pst.close();
+        } finally {
+            closeStatement(pst);
+        }
         writeProjectCompanies(con, data);
     }
 

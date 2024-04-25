@@ -163,9 +163,39 @@ CREATE TABLE IF NOT EXISTS t_company
 
 CREATE TABLE IF NOT EXISTS t_project
 (
-    id INTEGER NOT NULL,
+    id          INTEGER NOT NULL,
+    zip_code    VARCHAR(20) NOT NULL DEFAULT '',
+    city        VARCHAR(255) NOT NULL DEFAULT '',
+    street      VARCHAR(255) NOT NULL DEFAULT '',
+    weather_station VARCHAR(255) NOT NULL DEFAULT '',
     CONSTRAINT t_project_pk PRIMARY KEY (id),
     CONSTRAINT t_project_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS t_project_diary
+(
+    id              INTEGER NOT NULL,
+    idx             INTEGER NOT NULL DEFAULT 0,
+    weather_coco    INTEGER NOT NULL DEFAULT 0,
+    weather_wspd    INTEGER NOT NULL DEFAULT 0,
+    weather_wdir    INTEGER NOT NULL DEFAULT 0,
+    weather_temp    INTEGER NOT NULL DEFAULT 0,
+    weather_rhum    INTEGER NOT NULL DEFAULT 0,
+    weather_prcp    INTEGER NOT NULL DEFAULT 0,
+    activity        VARCHAR(1000) NOT NULL DEFAULT '',
+    briefing        VARCHAR(1000) NOT NULL DEFAULT '',
+    CONSTRAINT t_project_diary_pk PRIMARY KEY (id),
+    CONSTRAINT t_project_diary_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_project_diary_uq1 UNIQUE (idx)
+);
+
+CREATE TABLE IF NOT EXISTS t_company2project_diary
+(
+    company_id INTEGER     NOT NULL,
+    project_diary_id  INTEGER     NOT NULL,
+    CONSTRAINT t_company2project_diary_pk PRIMARY KEY (company_id, project_diary_id),
+    CONSTRAINT t_company2project_diary_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2project_diary_fk2 FOREIGN KEY (project_diary_id) REFERENCES t_project_diary (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_company2project
@@ -188,13 +218,14 @@ CREATE TABLE IF NOT EXISTS t_unit
 CREATE TABLE IF NOT EXISTS t_defect
 (
     id               INTEGER       NOT NULL,
+    comment          VARCHAR(1000) NOT NULL DEFAULT '',
+    position_comment VARCHAR(1000) NOT NULL DEFAULT '',
     remaining_work   BOOLEAN       NOT NULL DEFAULT FALSE,
     project_phase    VARCHAR(20)   NOT NULL DEFAULT('PREAPPROVE'),
     notified         BOOLEAN       NOT NULL DEFAULT FALSE,
     assigned_id      INTEGER       NOT NULL,
     position_x       REAL          NOT NULL DEFAULT 0.0,
     position_y       REAL          NOT NULL DEFAULT 0.0,
-    position_comment VARCHAR(1000) NOT NULL DEFAULT '',
     due_date1        TIMESTAMP     NULL,
     due_date2        TIMESTAMP     NULL,
     close_date       TIMESTAMP     NULL,

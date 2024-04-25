@@ -8,12 +8,12 @@
  */
 package de.elbe5.project;
 
-import de.elbe5.configuration.Configuration;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
+import de.elbe5.projectdiary.ProjectDiary;
 import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
@@ -42,6 +42,11 @@ public class ProjectData extends ContentData {
         childClasses.add(UnitData.class);
     }
 
+    protected String zipCode = "";
+    protected String city = "";
+    protected String street = "";
+    protected String weatherStation = "";
+
     protected Set<Integer> companyIds = new HashSet<>();
 
     public ProjectData() {
@@ -49,6 +54,48 @@ public class ProjectData extends ContentData {
 
     public ContentBean getBean() {
         return ProjectBean.getInstance();
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getWeatherStation() {
+        return weatherStation;
+    }
+
+    public void setWeatherStation(String weatherStation) {
+        this.weatherStation = weatherStation;
+    }
+
+    public int getNextDiaryIndex(){
+        int idx = 0;
+        for (ProjectDiary diary : getChildren(ProjectDiary.class)){
+            if (diary.getIdx() > idx){
+                idx = diary.getIdx();
+            }
+        }
+        return idx + 1;
     }
 
     public Set<Integer> getCompanyIds() {
@@ -107,12 +154,26 @@ public class ProjectData extends ContentData {
         switch (type){
             case api -> {
                 super.readRequestData(rdata, type);
+                setZipCode(rdata.getAttributes().getString("zipCode"));
+                setCity(rdata.getAttributes().getString("city"));
+                setStreet(rdata.getAttributes().getString("street"));
+                setWeatherStation(rdata.getAttributes().getString("weatherStation"));
+                if (getWeatherStation().isEmpty()){
+                    findWeatherStation();
+                }
                 setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
             }
             case backend -> {
                 setDisplayName(rdata.getAttributes().getString("displayName").trim());
                 setName(StringHelper.toSafeWebName(getDisplayName()));
                 setDescription(rdata.getAttributes().getString("description"));
+                setZipCode(rdata.getAttributes().getString("zipCode"));
+                setCity(rdata.getAttributes().getString("city"));
+                setStreet(rdata.getAttributes().getString("street"));
+                setWeatherStation(rdata.getAttributes().getString("weatherStation"));
+                if (getWeatherStation().isEmpty()){
+                    findWeatherStation();
+                }
                 if (StaticConfiguration.useReadRights()) {
                     setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
                 }
@@ -138,12 +199,21 @@ public class ProjectData extends ContentData {
 
     }
 
+    public void findWeatherStation(){
+
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public JsonObject getJson(){
         JSONArray jsCompanyIds = new JSONArray();
+
         jsCompanyIds.addAll(getCompanyIds());
         return super.getJson()
+                .add("zipCode", getZipCode())
+                .add("city", getCity())
+                .add("street", getStreet())
+                .add("weatherStation", getWeatherStation())
                 .add("companyIds", jsCompanyIds);
     }
 
@@ -156,19 +226,40 @@ public class ProjectData extends ContentData {
                 continue;
             jsUnits.add(unit.getJsonRecursive());
         }
+        JSONArray jsDiaries = new JSONArray();
+        for (ProjectDiary diary : getChildren(ProjectDiary.class)) {
+            if (!diary.isActive())
+                continue;
+            jsDiaries.add(diary.getJsonRecursive());
+        }
         return getJson()
-                .add("units", jsUnits);
+                .add("units", jsUnits)
+                .add("diaries", jsDiaries);
     }
 
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
+        String s = getString(json, "zipCode");
+        if (s!=null) {
+            setZipCode(s);
+        }
+        s = getString(json, "city");
+        if (s!=null)
+            setCity(s);
+        s = getString(json, "street");
+        if (s!=null)
+            setStreet(s);
+        s = getString(json, "weatherStation");
+        if (s!=null)
+            setWeatherStation(s);
     }
 
     @Override
     public void fromJsonRecursive(JSONObject json) {
         fromJson(json);
         addUnitsFromJson(json);
+        addDiariesFromJson(json);
     }
 
     public void addUnitsFromJson(JSONObject json) {
@@ -180,6 +271,20 @@ public class ProjectData extends ContentData {
                     unit.fromJsonRecursive(jsObj);
                     if (unit.hasValidData())
                         getChildren().add(unit);
+                }
+            }
+        }
+    }
+
+    public void addDiariesFromJson(JSONObject json) {
+        JSONArray jsDiaries = getJSONArray(json, "diaries");
+        if (jsDiaries != null){
+            for (Object obj : jsDiaries){
+                if (obj instanceof JSONObject jsObj){
+                    ProjectDiary diary = new ProjectDiary();
+                    diary.fromJsonRecursive(jsObj);
+                    if (diary.hasValidData())
+                        getChildren().add(diary);
                 }
             }
         }

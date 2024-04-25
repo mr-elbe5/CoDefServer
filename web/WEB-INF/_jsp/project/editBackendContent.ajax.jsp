@@ -49,6 +49,10 @@
                 </form:line>
                 <form:text name="displayName" label="_name" required="true" value="<%=$H(project.getDisplayName())%>"/>
                 <form:textarea name="description" label="_description" height="5em"><%=$H(project.getDescription())%></form:textarea>
+                <form:text name="zipCode" label="_zipCode" required="true" value="<%=$H(project.getZipCode())%>"/>
+                <form:text name="city" label="_city" required="true" value="<%=$H(project.getCity())%>"/>
+                <form:text name="street" label="_street" required="true" value="<%=$H(project.getStreet())%>"/>
+                <form:text name="weatherStation" label="_weatherStation" required="false" value="<%=$H(project.getWeatherStation())%>"/>
                 <% if (StaticConfiguration.useReadRights()){%>
                 <form:line label="_openAccess" padded="true">
                     <form:check name="openAccess" value="true" checked="<%=project.isOpenAccess()%>"/>

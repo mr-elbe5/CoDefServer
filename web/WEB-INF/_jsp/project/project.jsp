@@ -30,7 +30,8 @@
 <% if (project.hasUserReadRight(rdata.getLoginUser())){%>
 <form:message/>
 <section class="contentSection tableContent" id="content">
-    <h3><%=$SH("_defectsAndRemainingWork")%></h3>
+    <div><%=$SH("_address")%>: <%=$H(project.getZipCode())%> <%=$H(project.getCity())%>, <%=$H(project.getStreet())%> </div>
+    <h3><%=$SH("_defects")%></h3>
     <table id="defectTable" class="defect-table">
         <thead>
         <tr>

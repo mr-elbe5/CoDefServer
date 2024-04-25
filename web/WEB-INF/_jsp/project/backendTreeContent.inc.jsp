@@ -11,11 +11,15 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.configuration.CodefConfiguration" %>
+<%@ page import="de.elbe5.project.ProjectData" %>
+<%@ page import="de.elbe5.unit.UnitData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ContentData contentData = ContentData.getCurrentContent(rdata);
+    ProjectData contentData = ContentData.getCurrentContent(rdata, ProjectData.class);
     assert contentData != null;
 %>
 <% if (contentData.isActive() || CodefConfiguration.isShowInactiveContent()){%>
@@ -29,14 +33,36 @@
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/project/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
         <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/unit/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
+        <a class="icon fa fa-calendar-o" onclick="return openModalDialog('/ctrl/projectdiary/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.projectdiary.ProjectDiary');" title="<%=$SH("_newDiary")%>"></a>
     </div>
     <%}%>
     <ul>
-        <%if (contentData.hasChildren()) {
-            for (ContentData childData : contentData.getChildren()) {
-                childData.displayBackendTreeContent(pageContext, rdata);
-            }
-        }%>
+        <%List<UnitData> units = contentData.getChildren(UnitData.class);
+        if (!units.isEmpty()) {%>
+            <li class= "open">
+                <span>
+                    <%=$SH("_units")%>
+                </span>
+                <ul>
+            <%for (UnitData unit : units) {
+                unit.displayBackendTreeContent(pageContext, rdata);
+            }%>
+                </ul>
+            </li>
+        <%}
+        List<ProjectDiary> diaries = contentData.getChildren(ProjectDiary.class);
+        if (!diaries.isEmpty()) {%>
+            <li class= "open">
+                <span class="icon fa fa-calendar-o">
+                    <%=$SH("_diaries")%>
+                </span>
+                <ul>
+                    <%for (ProjectDiary diary : diaries) {
+                        diary.displayBackendTreeContent(pageContext, rdata);
+                    }%>
+                </ul>
+            </li>
+        <%}%>
     </ul>
 </li>
 <%}%>

@@ -16,6 +16,8 @@ public class CodefConfiguration {
 
     private static boolean syncProjectCompamiesOnly = true;
 
+    private static String defaultCountry = "Deutschland";
+
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
     }
@@ -34,6 +36,10 @@ public class CodefConfiguration {
 
     public static boolean syncProjectCompamiesOnly() {
         return syncProjectCompamiesOnly;
+    }
+
+    public static String getDefaultCountry() {
+        return defaultCountry;
     }
 
     public static void setSyncProjectCompamiesOnly(boolean syncProjectCompamiesOnly) {
