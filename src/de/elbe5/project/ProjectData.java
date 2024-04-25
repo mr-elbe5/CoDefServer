@@ -8,9 +8,8 @@
  */
 package de.elbe5.project;
 
-import de.elbe5.base.JsonObject;
-import de.elbe5.base.Log;
-import de.elbe5.base.StringHelper;
+import de.elbe5.base.*;
+import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.projectdiary.ProjectDiary;
@@ -26,8 +25,13 @@ import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -199,8 +203,101 @@ public class ProjectData extends ContentData {
 
     }
 
-    public void findWeatherStation(){
+    class Coordinate{
 
+        double lat;
+        double lon;
+
+        Coordinate(double lat, double lon){
+            this.lat = lat;
+            this.lon = lon;
+        }
+    }
+
+    public void findWeatherStation(){
+        Coordinate coordinate = getCoordinate();
+        if (coordinate == null)
+            return;
+        HttpsURLConnection connection = null;
+        try {
+            String sb = "https://meteostat.p.rapidapi.com/stations/nearby?lat=" +
+                    coordinate.lat +
+                    "&lon=" +
+                    coordinate.lon +
+                    "&limit=1";
+            URL url = new URL(sb);
+            connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("accept", "application/json");
+            connection.setRequestProperty("X-RapidApi-Key", CodefConfiguration.getMeteoStatKey());
+            connection.setConnectTimeout(5000);
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                try {
+                    JSONObject jsonObject = (JSONObject) new JsonDeserializer().deserialize(connection.getInputStream());
+                    JSONArray dataArray = (JSONArray) jsonObject.get("data");
+                    JSONObject data = (JSONObject) dataArray.get(0);
+                    String s = ((String)data.get("id"));
+                    if (!s.isEmpty()) {
+                        Log.info("found weather station: " + s);
+                        setWeatherStation(s);
+                    }
+                }
+                catch (Exception e){
+                    Log.error("unable to get weather station from json");
+                }
+            }
+        } catch (Exception e) {
+            Log.error("no connection to meteostat", e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    public Coordinate getCoordinate(){
+        HttpsURLConnection connection = null;
+        Coordinate coordinate = null;
+        try {
+            String sb = "https://nominatim.openstreetmap.org/search?country=" +
+                    CodefConfiguration.getDefaultCountry() +
+                    "&city=" +
+                    StringHelper.toUrl(getCity()) +
+                    "&street=" +
+                    StringHelper.toUrl(getStreet()) +
+                    "&format=json&limit=1";
+            URL url = new URL(sb);
+            connection = (HttpsURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("accept", "application/json");
+            connection.setConnectTimeout(5000);
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                try {
+                    JSONArray jsonArray = (JSONArray) new JsonDeserializer().deserialize(connection.getInputStream());
+                    if (!jsonArray.isEmpty()){
+                        JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+                        double lat = Double.parseDouble(jsonObject.get("lat").toString());
+                        double lon = Double.parseDouble(jsonObject.get("lon").toString());
+                        Log.log("received coordinates:" + lat + ", " + lon);
+                        coordinate = new Coordinate(lat,lon);
+                    }
+                }
+                catch (Exception e){
+                    Log.error("unable to get coordinates from json");
+                }
+            }
+        } catch (Exception e) {
+            Log.error("no connection to nominatim", e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return coordinate;
     }
 
     @Override

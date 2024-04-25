@@ -16,7 +16,9 @@ public class CodefConfiguration {
 
     private static boolean syncProjectCompamiesOnly = true;
 
-    private static String defaultCountry = "Deutschland";
+    private static String defaultCountry = "de";
+
+    private static String meteoStatKey = "";
 
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
@@ -40,6 +42,18 @@ public class CodefConfiguration {
 
     public static String getDefaultCountry() {
         return defaultCountry;
+    }
+
+    public static void setDefaultCountry(String defaultCountry) {
+        CodefConfiguration.defaultCountry = defaultCountry;
+    }
+
+    public static String getMeteoStatKey() {
+        return meteoStatKey;
+    }
+
+    public static void setMeteoStatKey(String meteoStatKey) {
+        CodefConfiguration.meteoStatKey = meteoStatKey;
     }
 
     public static void setSyncProjectCompamiesOnly(boolean syncProjectCompamiesOnly) {

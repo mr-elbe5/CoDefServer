@@ -6,7 +6,9 @@ CREATE TABLE IF NOT EXISTS t_configuration
     smtp_user        VARCHAR(100) NOT NULL DEFAULT '',
     smtp_password    VARCHAR(100) NOT NULL DEFAULT '',
     mail_sender      VARCHAR(100) NOT NULL DEFAULT '',
-    mail_receiver    VARCHAR(100) NOT NULL DEFAULT ''
+    mail_receiver    VARCHAR(100) NOT NULL DEFAULT '',
+    country_code VARCHAR(20) NOT NULL DEFAULT 'de',
+    meteostat_key VARCHAR(80) NOT NULL DEFAULT ''
 );
 
 CREATE SEQUENCE s_user_id START 1000;

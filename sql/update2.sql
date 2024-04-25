@@ -9,6 +9,9 @@ alter table t_project add city VARCHAR(255) NOT NULL DEFAULT '';
 alter table t_project add street VARCHAR(255) NOT NULL DEFAULT '';
 alter table t_project add weather_station VARCHAR(20) NOT NULL DEFAULT '';
 
+alter table t_configuration add country_code VARCHAR(20) NOT NULL DEFAULT 'de';
+alter table t_configuration add meteostat_key VARCHAR(80) NOT NULL DEFAULT '';
+
 CREATE TABLE IF NOT EXISTS t_project_diary
 (
     id              INTEGER NOT NULL,
