@@ -28,10 +28,9 @@ import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

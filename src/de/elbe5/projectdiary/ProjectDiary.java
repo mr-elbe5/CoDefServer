@@ -1,5 +1,6 @@
 package de.elbe5.projectdiary;
 
+import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.JsonObject;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
@@ -17,6 +18,7 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -124,6 +126,20 @@ public class ProjectDiary extends ContentData {
 
     public void setWeatherCoco(int weatherCoco) {
         this.weatherCoco = weatherCoco;
+    }
+
+    public boolean getWeather() {
+        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), LocalDateTime.now());
+        if (weatherData != null) {
+            setWeatherCoco(weatherData.weatherCoco);
+            setWeatherWspd(weatherData.weatherWspd);
+            setWeatherWdir(weatherData.weatherWdir);
+            setWeatherRhum(weatherData.weatherRhum);
+            setWeatherTemp(weatherData.weatherTemp);
+            setWeatherPrcp(weatherData.weatherPrcp);
+            return true;
+        }
+        return false;
     }
 
     public Set<Integer> getCompanyIds() {
