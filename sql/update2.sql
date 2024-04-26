@@ -1,7 +1,5 @@
 
 alter table t_defect add comment VARCHAR(1000) NOT NULL DEFAULT '';
-update t_defect set comment = position_comment;
-update t_defect set position_comment = '';
 
 alter table t_project add idx INTEGER NOT NULL DEFAULT 0;
 alter table t_project add zip_code VARCHAR(20) NOT NULL DEFAULT '';
@@ -10,18 +8,19 @@ alter table t_project add street VARCHAR(255) NOT NULL DEFAULT '';
 alter table t_project add weather_station VARCHAR(20) NOT NULL DEFAULT '';
 
 alter table t_configuration add country_code VARCHAR(20) NOT NULL DEFAULT 'de';
+alter table t_configuration add timezone_name VARCHAR(40) NOT NULL DEFAULT 'Europe/Berlin';
 alter table t_configuration add meteostat_key VARCHAR(80) NOT NULL DEFAULT '';
 
 CREATE TABLE IF NOT EXISTS t_project_diary
 (
     id              INTEGER NOT NULL,
     idx             INTEGER NOT NULL DEFAULT 0,
-    weather_coco    INTEGER NOT NULL DEFAULT 0,
-    weather_wspd    INTEGER NOT NULL DEFAULT 0,
-    weather_wdir    INTEGER NOT NULL DEFAULT 0,
-    weather_temp    INTEGER NOT NULL DEFAULT 0,
-    weather_rhum    INTEGER NOT NULL DEFAULT 0,
-    weather_prcp    INTEGER NOT NULL DEFAULT 0,
+    weather_coco    VARCHAR(100) NOT NULL DEFAULT '',
+    weather_wspd    VARCHAR(40) NOT NULL DEFAULT '',
+    weather_wdir    VARCHAR(40) NOT NULL DEFAULT '',
+    weather_temp    VARCHAR(40) NOT NULL DEFAULT '',
+    weather_rhum    VARCHAR(40) NOT NULL DEFAULT '',
+    weather_prcp    VARCHAR(40) NOT NULL DEFAULT '',
     activity        VARCHAR(1000) NOT NULL DEFAULT '',
     briefing        VARCHAR(1000) NOT NULL DEFAULT '',
     CONSTRAINT t_project_diary_pk PRIMARY KEY (id),

@@ -46,6 +46,11 @@
                 </form:line>
                 <form:line label="_name"><%=$H(diary.getDisplayName())%>
                 </form:line>
+                <form:text name="weatherCoco" label="_weatherConditions" required="false" value="<%=$H(diary.getWeatherCoco())%>"/>
+                <form:text name="weatherWsdp" label="_windSpeed" required="false" value="<%=$H(diary.getWeatherWspd())%>"/>
+                <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(diary.getWeatherWdir())%>"/>
+                <form:text name="weatherTemp" label="_temperature" required="false" value="<%=$H(diary.getWeatherTemp())%>"/>
+                <form:text name="weatherRhum" label="_relativeHumidity" required="false" value="<%=$H(diary.getWeatherRhum())%>"/>
                 <form:textarea name="activity" label="_activity" height="5em"><%=$H(diary.getActivity())%></form:textarea>
                 <form:textarea name="briefing" label="_briefing" height="5em"><%=$H(diary.getBriefing())%></form:textarea>
                 <form:line label="_active" padded="true">

@@ -1,9 +1,8 @@
 package de.elbe5.projectdiary;
 
 import de.elbe5.application.MeteostatClient;
-import de.elbe5.base.JsonObject;
-import de.elbe5.base.Log;
-import de.elbe5.base.StringHelper;
+import de.elbe5.base.*;
+import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.content.ContentNavType;
@@ -34,12 +33,11 @@ public class ProjectDiary extends ContentData {
     }
 
     int idx = 0;
-    int weatherCoco = 0;
-    int weatherWspd = 0;
-    int weatherWdir = 0;
-    int weatherTemp = 0;
-    int weatherRhum = 0;
-    int weatherPrcp = 0;
+    String weatherCoco = "";
+    String weatherWspd = "";
+    String weatherWdir = "";
+    String weatherTemp = "";
+    String weatherRhum = "";
     String activity = "";
     String briefing = "";
 
@@ -56,12 +54,77 @@ public class ProjectDiary extends ContentData {
         return getParent(ProjectData.class);
     }
 
+    @Override
+    public String getDisplayName(){
+        return getIdx() + " (" + DateHelper.toHtmlDate(getCreationDate()) + ")";
+    }
+
     public int getIdx() {
         return idx;
     }
 
     public void setIdx(int idx) {
         this.idx = idx;
+    }
+
+    public String getWeatherCoco() {
+        return weatherCoco;
+    }
+
+    public void setWeatherCoco(String weatherCoco) {
+        this.weatherCoco = weatherCoco;
+    }
+
+    public void setWeatherCoco(int value) {
+        setWeatherCoco(MeteostatClient.getWeatherCoco(value));
+    }
+
+    public String getWeatherWspd() {
+        return weatherWspd;
+    }
+
+    public void setWeatherWspd(String weatherWspd) {
+        this.weatherWspd = weatherWspd;
+    }
+
+    public void setWeatherWspd(double value) {
+        this.weatherWspd = value + " km/h";
+    }
+
+    public String getWeatherWdir() {
+        return weatherWdir;
+    }
+
+    public void setWeatherWdir(String weatherWdir) {
+        this.weatherWdir = weatherWdir;
+    }
+
+    public void setWeatherWdir(double value) {
+        this.weatherWdir = MeteostatClient.getWindDirection(value);
+    }
+
+    public String getWeatherTemp() {
+        return weatherTemp;
+    }
+
+    public void setWeatherTemp(String weatherTemp) {
+        this.weatherTemp = weatherTemp;
+    }
+
+    public void setWeatherTemp(double value) {
+        this.weatherTemp = String.format("%.1f °C", value);
+    }
+
+    public String getWeatherRhum() {
+        return weatherRhum;
+    }
+
+    public void setWeatherRhum(String weatherRhum) {
+        this.weatherRhum = weatherRhum;
+    }
+
+    public void setWeatherRhum(double value) {
+        this.weatherRhum = String.format("%d %%", (int) value);
     }
 
     public String getBriefing() {
@@ -80,63 +143,14 @@ public class ProjectDiary extends ContentData {
         this.activity = activity;
     }
 
-    public int getWeatherPrcp() {
-        return weatherPrcp;
-    }
-
-    public void setWeatherPrcp(int weatherPrcp) {
-        this.weatherPrcp = weatherPrcp;
-    }
-
-    public int getWeatherRhum() {
-        return weatherRhum;
-    }
-
-    public void setWeatherRhum(int weatherRhum) {
-        this.weatherRhum = weatherRhum;
-    }
-
-    public int getWeatherTemp() {
-        return weatherTemp;
-    }
-
-    public void setWeatherTemp(int weatherTemp) {
-        this.weatherTemp = weatherTemp;
-    }
-
-    public int getWeatherWdir() {
-        return weatherWdir;
-    }
-
-    public void setWeatherWdir(int weatherWdir) {
-        this.weatherWdir = weatherWdir;
-    }
-
-    public int getWeatherWspd() {
-        return weatherWspd;
-    }
-
-    public void setWeatherWspd(int weatherWspd) {
-        this.weatherWspd = weatherWspd;
-    }
-
-    public int getWeatherCoco() {
-        return weatherCoco;
-    }
-
-    public void setWeatherCoco(int weatherCoco) {
-        this.weatherCoco = weatherCoco;
-    }
-
     public boolean getWeather() {
-        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), LocalDateTime.now());
+        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), LocalDateTime.now(), CodefConfiguration.getTimeZoneName());
         if (weatherData != null) {
             setWeatherCoco(weatherData.weatherCoco);
             setWeatherWspd(weatherData.weatherWspd);
             setWeatherWdir(weatherData.weatherWdir);
             setWeatherRhum(weatherData.weatherRhum);
             setWeatherTemp(weatherData.weatherTemp);
-            setWeatherPrcp(weatherData.weatherPrcp);
             return true;
         }
         return false;
@@ -189,6 +203,10 @@ public class ProjectDiary extends ContentData {
     public void setParentValues(ContentData parent){
         super.setParentValues(parent);
         setIdx(getProject().getNextDiaryIndex());
+        if (!getProject().getWeatherStation().isEmpty() && getWeatherCoco().isEmpty()){
+            if (getWeather())
+                Log.info("got weather for project diary " + getDisplayName() + " of project " + getProject().getName());
+        }
     }
 
     @Override
@@ -207,11 +225,10 @@ public class ProjectDiary extends ContentData {
                 int i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);
-                    setWeatherPrcp(rdata.getAttributes().getInt("weatherPrcp"));
-                    setWeatherRhum(rdata.getAttributes().getInt("weatherRhum"));
-                    setWeatherTemp(rdata.getAttributes().getInt("weatherTemp"));
-                    setWeatherWdir(rdata.getAttributes().getInt("weatherWdir"));
-                    setWeatherWspd(rdata.getAttributes().getInt("weatherWspd"));
+                    setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
+                    setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
+                    setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
+                    setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
                 setActivity(rdata.getAttributes().getString("activity"));
                 setBriefing(rdata.getAttributes().getString("briefing"));
@@ -221,11 +238,10 @@ public class ProjectDiary extends ContentData {
                 int i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);
-                    setWeatherPrcp(rdata.getAttributes().getInt("weatherPrcp"));
-                    setWeatherRhum(rdata.getAttributes().getInt("weatherRhum"));
-                    setWeatherTemp(rdata.getAttributes().getInt("weatherTemp"));
-                    setWeatherWdir(rdata.getAttributes().getInt("weatherWdir"));
-                    setWeatherWspd(rdata.getAttributes().getInt("weatherWspd"));
+                    setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
+                    setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
+                    setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
+                    setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
                 setActivity(rdata.getAttributes().getString("activity"));
                 setBriefing(rdata.getAttributes().getString("briefing"));
@@ -237,7 +253,6 @@ public class ProjectDiary extends ContentData {
     public JsonObject getJson(){
         return super.getJson()
                 .add("weatherCoco", getWeatherCoco())
-                .add("weatherPrcp", getWeatherPrcp())
                 .add("weatherRhum", getWeatherRhum())
                 .add("weatherTemp", getWeatherTemp())
                 .add("weatherWdir", getWeatherWdir())
@@ -255,16 +270,15 @@ public class ProjectDiary extends ContentData {
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
-        int i = getInt(json, "weatherCoco");
-        if (i>0) {
-            setWeatherCoco(i);
-            setWeatherPrcp(getInt(json, "weatherPrcp"));
-            setWeatherRhum(getInt(json, "weatherRhum"));
-            setWeatherTemp(getInt(json, "weatherTemp"));
-            setWeatherWdir(getInt(json, "weatherWdir"));
-            setWeatherWspd(getInt(json, "weatherWspd"));
+        String s = getString(json, "weatherCoco");
+        if (!s.isEmpty()) {
+            setWeatherCoco(s);
+            setWeatherRhum(getString(json, "weatherRhum"));
+            setWeatherTemp(getString(json, "weatherTemp"));
+            setWeatherWdir(getString(json, "weatherWdir"));
+            setWeatherWspd(getString(json, "weatherWspd"));
         }
-        String s = getString(json, "activity");
+        s = getString(json, "activity");
         if (s != null)
             setActivity(s);
         s = getString(json, "briefing");

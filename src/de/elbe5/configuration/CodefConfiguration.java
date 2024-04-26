@@ -18,6 +18,8 @@ public class CodefConfiguration {
 
     private static String defaultCountry = "de";
 
+    private static String timeZoneName = "Europe/Berlin";
+
     private static String meteoStatKey = "";
 
     public static boolean isShowInactiveContent() {
@@ -46,6 +48,14 @@ public class CodefConfiguration {
 
     public static void setDefaultCountry(String defaultCountry) {
         CodefConfiguration.defaultCountry = defaultCountry;
+    }
+
+    public static String getTimeZoneName() {
+        return timeZoneName;
+    }
+
+    public static void setTimeZoneName(String timeZoneName) {
+        CodefConfiguration.timeZoneName = timeZoneName;
     }
 
     public static String getMeteoStatKey() {

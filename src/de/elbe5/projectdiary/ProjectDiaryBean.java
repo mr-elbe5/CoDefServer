@@ -19,7 +19,7 @@ public class ProjectDiaryBean extends ContentBean {
     }
 
     private static final String GET_CONTENT_EXTRAS_SQL = " SELECT idx, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum, weather_prcp, activity, briefing FROM t_project_diary where id = ?";
+            "weather_temp, weather_rhum, activity, briefing FROM t_project_diary where id = ?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -33,12 +33,11 @@ public class ProjectDiaryBean extends ContentBean {
                 if (rs.next()) {
                     int i=1;
                     data.setIdx(rs.getInt(i++));
-                    data.setWeatherCoco(rs.getInt(i++));
-                    data.setWeatherWspd(rs.getInt(i++));
-                    data.setWeatherWdir(rs.getInt(i++));
-                    data.setWeatherTemp(rs.getInt(i++));
-                    data.setWeatherRhum(rs.getInt(i++));
-                    data.setWeatherPrcp(rs.getInt(i++));
+                    data.setWeatherCoco(rs.getString(i++));
+                    data.setWeatherWspd(rs.getString(i++));
+                    data.setWeatherWdir(rs.getString(i++));
+                    data.setWeatherTemp(rs.getString(i++));
+                    data.setWeatherRhum(rs.getString(i++));
                     data.setActivity(rs.getString(i++));
                     data.setBriefing(rs.getString(i));
                 }
@@ -68,8 +67,8 @@ public class ProjectDiaryBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_project_diary (id, idx, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum, weather_prcp, activity, briefing) " +
-            "values(?,?,?,?,?,?,?,?,?,?)";
+            "weather_temp, weather_rhum, activity, briefing) " +
+            "values(?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -81,12 +80,11 @@ public class ProjectDiaryBean extends ContentBean {
             int i=1;
             pst.setInt(i++, data.getId());
             pst.setInt(i++, data.getIdx());
-            pst.setInt(i++, data.getWeatherCoco());
-            pst.setInt(i++, data.getWeatherWspd());
-            pst.setInt(i++, data.getWeatherWdir());
-            pst.setInt(i++, data.getWeatherTemp());
-            pst.setInt(i++, data.getWeatherRhum());
-            pst.setInt(i++, data.getWeatherPrcp());
+            pst.setString(i++, data.getWeatherCoco());
+            pst.setString(i++, data.getWeatherWspd());
+            pst.setString(i++, data.getWeatherWdir());
+            pst.setString(i++, data.getWeatherTemp());
+            pst.setString(i++, data.getWeatherRhum());
             pst.setString(i++, data.getActivity());
             pst.setString(i, data.getBriefing());
             pst.executeUpdate();
@@ -101,7 +99,7 @@ public class ProjectDiaryBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project_diary " +
-            "set idx=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=?, weather_prcp=?, activity=?, briefing=? where id=? ";
+            "set idx=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=?, activity=?, briefing=? where id=? ";
 
 
     @Override
@@ -114,12 +112,11 @@ public class ProjectDiaryBean extends ContentBean {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
             int i = 1;
             pst.setInt(i++, data.getIdx());
-            pst.setInt(i++, data.getWeatherCoco());
-            pst.setInt(i++, data.getWeatherWspd());
-            pst.setInt(i++, data.getWeatherWdir());
-            pst.setInt(i++, data.getWeatherTemp());
-            pst.setInt(i++, data.getWeatherRhum());
-            pst.setInt(i++, data.getWeatherPrcp());
+            pst.setString(i++, data.getWeatherCoco());
+            pst.setString(i++, data.getWeatherWspd());
+            pst.setString(i++, data.getWeatherWdir());
+            pst.setString(i++, data.getWeatherTemp());
+            pst.setString(i++, data.getWeatherRhum());
             pst.setString(i++, data.getActivity());
             pst.setString(i++, data.getBriefing());
             pst.setInt(i, data.getId());
