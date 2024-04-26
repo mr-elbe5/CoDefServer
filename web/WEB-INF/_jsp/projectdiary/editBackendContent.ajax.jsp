@@ -13,6 +13,9 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="java.util.List" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -21,6 +24,7 @@
     assert (diary != null);
     ProjectData project = diary.getProject();
     assert (project != null);
+    List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
     String url = "/ctrl/projectdiary/saveBackendContent/" + diary.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -51,6 +55,12 @@
                 <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(diary.getWeatherWdir())%>"/>
                 <form:text name="weatherTemp" label="_temperature" required="false" value="<%=$H(diary.getWeatherTemp())%>"/>
                 <form:text name="weatherRhum" label="_relativeHumidity" required="false" value="<%=$H(diary.getWeatherRhum())%>"/>
+                <form:line label="_presentCompanies" name="companyIds" padded="true" required="true">
+                    <% for (CompanyData company : companies){%>
+                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=diary.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
+                    </form:check><br/>
+                    <%}%>
+                </form:line>
                 <form:textarea name="activity" label="_activity" height="5em"><%=$H(diary.getActivity())%></form:textarea>
                 <form:textarea name="briefing" label="_briefing" height="5em"><%=$H(diary.getBriefing())%></form:textarea>
                 <form:line label="_active" padded="true">

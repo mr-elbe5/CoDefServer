@@ -6,12 +6,15 @@
 <%@ page import="de.elbe5.content.ContentCache" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
+<%@ page import="de.elbe5.unit.UnitData" %>
+<%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
     if (user!=null && user.getProjectId()!=0){
         ProjectData project = ContentCache.getContent(user.getProjectId(),ProjectData.class);
-        if (project!=null && project.hasUserReadRight(rdata.getLoginUser())){%>
+        if (project!=null && project.hasUserReadRight(rdata.getLoginUser())){
+%>
 <li class="nav-item">
     <a class="nav-link" href="<%=project.getUrl()%>"><%=$H(project.getDisplayName())%>
     </a>
@@ -20,7 +23,7 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"><%=$SH("_units")%>
     </a>
     <div class="dropdown-menu">
-        <% for (ContentData child : project.getChildren()){
+        <% for (ContentData child : project.getChildren(UnitData.class)){
             if (child.isActive()){
         %>
         <a class="dropdown-item" href="<%=child.getUrl()%>"><%=$H(child.getDisplayName())%></a>
@@ -28,6 +31,17 @@
         }%>
     </div>
 </li>
-<%
-        }
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"><%=$SH("_diaries")%>
+    </a>
+    <div class="dropdown-menu">
+        <% for (ContentData child : project.getChildren(ProjectDiary.class)){
+            if (child.isActive()){
+        %>
+        <a class="dropdown-item" href="<%=child.getUrl()%>"><%=$H(child.getDisplayName())%></a>
+        <%}
+        }%>
+    </div>
+</li>
+<%}
     }%>

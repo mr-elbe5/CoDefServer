@@ -57,14 +57,18 @@
                 <div class="boxTitle"><%=$SH("_projectPhase")%></div>
                 <div class="boxText"><%=LocalizedSystemStrings.getInstance().html(contentData.getProjectPhaseString())%></div>
             </div>
+            <% if (contentData.getChangerId() != contentData.getCreatorId()){%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
                 <div class="boxText"><%=$H(contentData.getChangerName())%></div>
             </div>
+            <%}%>
+            <% if (contentData.getChangeDate() != contentData.getCreationDate()){%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_changeDate")%></div>
                 <div class="boxText"><%=$H(contentData.getChangeDate())%></div>
             </div>
+            <%}%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_assigned")%></div>
                 <div class="boxText"><%=$H(contentData.getLastAssignedName())%></div>

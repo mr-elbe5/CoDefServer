@@ -13,14 +13,14 @@
       <base-name>bandika</base-name>
     </custom-resource-bundle>
     <custom-resource-bundle>
-      <file value="file://$PROJECT_DIR$/src/codef_de.properties" />
-      <file value="file://$PROJECT_DIR$/src/codef_en.properties" />
-      <base-name>codef</base-name>
-    </custom-resource-bundle>
-    <custom-resource-bundle>
       <file value="file://$PROJECT_DIR$/src/codefSystemStrings_de.properties" />
       <file value="file://$PROJECT_DIR$/src/codefSystemStrings_en.properties" />
       <base-name>codefSystemStrings</base-name>
+    </custom-resource-bundle>
+    <custom-resource-bundle>
+      <file value="file://$PROJECT_DIR$/src/codef_de.properties" />
+      <file value="file://$PROJECT_DIR$/src/codef_en.properties" />
+      <base-name>codef</base-name>
     </custom-resource-bundle>
   </component>
 </project>

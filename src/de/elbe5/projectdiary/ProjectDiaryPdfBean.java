@@ -49,7 +49,7 @@ public class ProjectDiaryPdfBean extends CodefFopBean {
 
     private void addDiaryHeaderXml(StringBuilder sb, ProjectDiary diary) {
         sb.append("<projectheader><title>");
-        sb.append(sxml("_reports"));
+        sb.append(sxml("_diary"));
         sb.append(": ");
         sb.append(xml(diary.getDisplayName()));
         sb.append("</title></projectheader>");

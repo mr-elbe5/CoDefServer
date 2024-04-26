@@ -25,15 +25,35 @@
 <form:message/>
 <section class="contentSection" id="content">
     <div class="paragraph">
-        <h3><%=$SH("_defect")%>&nbsp;<%=$I(contentData.getId())%></h3>
+        <h3><%=$SH("_diary")%>&nbsp;<%=$H(contentData.getDisplayName())%></h3>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
-                <div class="boxTitle"><%=$SH("_defect")%></div>
-                <div class="boxText"><%=$H(contentData.getDescription())%></div>
+                <div class="boxTitle"><%=$SH("_weatherConditions")%></div>
+                <div class="boxText"><%=$H(contentData.getWeatherCoco())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_windSpeed")%></div>
+                <div class="boxText"><%=$H(contentData.getWeatherWspd())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_windDirection")%></div>
+                <div class="boxText"><%=$H(contentData.getWeatherWdir())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_temperature")%></div>
+                <div class="boxText"><%=$H(contentData.getWeatherTemp())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_relativeHumidity")%></div>
+                <div class="boxText"><%=$H(contentData.getWeatherRhum())%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_activity")%></div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getActivity())%></div>
+            </div>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_presentCompanies")%></div>
+                <div class="boxText"><%=contentData.getCompaniesBoxHtml()%></div>
             </div>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_briefing")%></div>
@@ -43,18 +63,18 @@
                 <div class="boxTitle"><%=$SH("_creator")%></div>
                 <div class="boxText"><%=$H(contentData.getCreatorName())%></div>
             </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_creationDate")%></div>
-                <div class="boxText"><%=$H(contentData.getCreationDate())%></div>
-            </div>
+            <% if (contentData.getChangerId() != contentData.getCreatorId()){%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_editedBy")%></div>
                 <div class="boxText"><%=$H(contentData.getChangerName())%></div>
             </div>
+            <%}%>
+            <% if (contentData.getChangeDate() != contentData.getCreationDate()){%>
             <div class="box">
                 <div class="boxTitle"><%=$SH("_changeDate")%></div>
                 <div class="boxText"><%=$H(contentData.getChangeDate())%></div>
             </div>
+            <%}%>
         </div>
 
         <% if (!contentData.getFiles().isEmpty()){%>
@@ -67,6 +87,12 @@
                 <%}%>
                 </div>
             </div>
+        </div>
+        <%}%>
+        <% if (contentData.hasUserEditRight(rdata.getLoginUser())){%>
+        <div class=buttonLine>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/projectdiary/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
+            </button>
         </div>
         <%}%>
     </div>

@@ -10,6 +10,7 @@
 <%@include file="/WEB-INF/_jsp/_include/_functions.inc.jsp" %>
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
+<%@ page import="de.elbe5.unit.UnitData" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -21,7 +22,7 @@
     </span>
     <ul>
         <%if (contentData.hasChildren()) {
-            for (ContentData childData : contentData.getChildren()) {
+            for (ContentData childData : contentData.getChildren(UnitData.class)) {
                 childData.displayFrontendTreeContent(pageContext, rdata);
             }
         }%>

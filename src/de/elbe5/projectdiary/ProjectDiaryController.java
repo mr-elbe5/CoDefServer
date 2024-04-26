@@ -46,7 +46,7 @@ public class ProjectDiaryController extends ContentController {
         return KEY;
     }
 
-    public IResponse getDiary(RequestData rdata) {
+    public IResponse getPdf(RequestData rdata) {
         int contentId = rdata.getId();
         BinaryFile file = ProjectDiaryPdfBean.getInstance().getProjectDiary(contentId, rdata);
         assert(file!=null);

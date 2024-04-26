@@ -2,6 +2,7 @@ package de.elbe5.projectdiary;
 
 import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.*;
+import de.elbe5.company.CompanyCache;
 import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -160,6 +161,16 @@ public class ProjectDiary extends ContentData {
         return companyIds;
     }
 
+    public String getCompaniesBoxHtml(){
+        StringBuilder sb = new StringBuilder();
+        for (int id : companyIds){
+            if (!sb.isEmpty())
+                sb.append("</br>");
+            sb.append(StringHelper.toHtml(CompanyCache.getCompany(id).getName()));
+        }
+        return sb.toString();
+    }
+
     public void setCompanyIds(Set<Integer> companyIds) {
         this.companyIds = companyIds;
     }
@@ -217,7 +228,7 @@ public class ProjectDiary extends ContentData {
 
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
-        Log.log("DefectData.readRequestData");
+        Log.log("ProjectDiary.readRequestData");
         switch (type) {
             case api -> {
                 super.readRequestData(rdata,type);
@@ -230,6 +241,7 @@ public class ProjectDiary extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
+                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
                 setActivity(rdata.getAttributes().getString("activity"));
                 setBriefing(rdata.getAttributes().getString("briefing"));
             }
@@ -243,6 +255,7 @@ public class ProjectDiary extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
+                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
                 setActivity(rdata.getAttributes().getString("activity"));
                 setBriefing(rdata.getAttributes().getString("briefing"));
             }

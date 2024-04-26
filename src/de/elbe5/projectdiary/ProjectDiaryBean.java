@@ -96,6 +96,7 @@ public class ProjectDiaryBean extends ContentBean {
         for (FileData file : data.getFiles()){
             FileBean.getInstance().saveFile(con, file, true);
         }
+        writeProjectDiaryCompanies(con, data);
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project_diary " +
@@ -106,7 +107,6 @@ public class ProjectDiaryBean extends ContentBean {
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
         if (!(contentData instanceof ProjectDiary data))
             return;
-        writeProjectDiaryCompanies(con, data);
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(UPDATE_CONTENT_EXTRAS_SQL);
