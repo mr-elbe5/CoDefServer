@@ -15,7 +15,7 @@ import de.elbe5.base.*;
 import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
-import de.elbe5.projectdiary.ProjectDiary;
+import de.elbe5.projectdailyreport.ProjectDailyReport;
 import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
@@ -30,7 +30,6 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -93,7 +92,7 @@ public class ProjectData extends ContentData {
 
     public int getNextDiaryIndex(){
         int idx = 0;
-        for (ProjectDiary diary : getChildren(ProjectDiary.class)){
+        for (ProjectDailyReport diary : getChildren(ProjectDailyReport.class)){
             if (diary.getIdx() > idx){
                 idx = diary.getIdx();
             }
@@ -236,7 +235,7 @@ public class ProjectData extends ContentData {
             jsUnits.add(unit.getJsonRecursive());
         }
         JSONArray jsDiaries = new JSONArray();
-        for (ProjectDiary diary : getChildren(ProjectDiary.class)) {
+        for (ProjectDailyReport diary : getChildren(ProjectDailyReport.class)) {
             if (!diary.isActive())
                 continue;
             jsDiaries.add(diary.getJsonRecursive());
@@ -290,7 +289,7 @@ public class ProjectData extends ContentData {
         if (jsDiaries != null){
             for (Object obj : jsDiaries){
                 if (obj instanceof JSONObject jsObj){
-                    ProjectDiary diary = new ProjectDiary();
+                    ProjectDailyReport diary = new ProjectDailyReport();
                     diary.fromJsonRecursive(jsObj);
                     if (diary.hasValidData())
                         getChildren().add(diary);

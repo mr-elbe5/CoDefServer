@@ -1,4 +1,4 @@
-package de.elbe5.projectdiary;
+package de.elbe5.projectdailyreport;
 
 import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.*;
@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ProjectDiary extends ContentData {
+public class ProjectDailyReport extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -44,11 +44,11 @@ public class ProjectDiary extends ContentData {
 
     protected Set<Integer> companyIds = new HashSet<>();
 
-    public ProjectDiary() {
+    public ProjectDailyReport() {
     }
 
     public ContentBean getBean() {
-        return ProjectDiaryBean.getInstance();
+        return ProjectDailyReportBean.getInstance();
     }
 
     public ProjectData getProject(){
@@ -186,19 +186,19 @@ public class ProjectDiary extends ContentData {
 
     @Override
     public String getBackendContentTreeJsp() {
-        return "/WEB-INF/_jsp/projectdiary/backendTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/projectdailyreport/backendTreeContent.inc.jsp";
     }
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/projectdiary/editBackendContent.ajax.jsp";
+        return "/WEB-INF/_jsp/projectdailyreport/editBackendContent.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/projectdiary/projectdiary.jsp");
+        context.include("/WEB-INF/_jsp/projectdailyreport/projectdailyreport.jsp");
         writer.write("</div>");
     }
 
@@ -216,7 +216,7 @@ public class ProjectDiary extends ContentData {
         setIdx(getProject().getNextDiaryIndex());
         if (!getProject().getWeatherStation().isEmpty() && getWeatherCoco().isEmpty()){
             if (getWeather())
-                Log.info("got weather for project diary " + getDisplayName() + " of project " + getProject().getName());
+                Log.info("got weather for daily report " + getDisplayName() + " of project " + getProject().getName());
         }
     }
 
@@ -228,7 +228,7 @@ public class ProjectDiary extends ContentData {
 
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
-        Log.log("ProjectDiary.readRequestData");
+        //Log.log("ProjectDailyReport.readRequestData");
         switch (type) {
             case api -> {
                 super.readRequestData(rdata,type);

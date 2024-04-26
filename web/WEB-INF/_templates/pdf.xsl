@@ -202,6 +202,90 @@
     </fo:block>
   </xsl:template>
 
+  <xsl:template match="weatherheader">
+    <fo:table-row >
+      <fo:table-cell font-weight="bold">
+        <fo:block padding="1mm">
+          <xsl:value-of select="header1"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell font-weight="bold">
+        <fo:block padding="1mm">
+          <xsl:value-of select="header2"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell font-weight="bold">
+        <fo:block padding="1mm">
+          <xsl:value-of select="header3"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell font-weight="bold">
+        <fo:block padding="1mm">
+          <xsl:value-of select="header4"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell font-weight="bold">
+        <fo:block padding="1mm">
+          <xsl:value-of select="header5"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="weatherdata">
+    <fo:table-row >
+      <fo:table-cell>
+        <fo:block padding="1mm">
+          <xsl:value-of select="content1"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell>
+        <fo:block padding="1mm">
+          <xsl:value-of select="content2"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell>
+        <fo:block padding="1mm">
+          <xsl:value-of select="content3"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell>
+        <fo:block padding="1mm">
+          <xsl:value-of select="content4"/>
+        </fo:block>
+      </fo:table-cell>
+      <fo:table-cell>
+        <fo:block padding="1mm">
+          <xsl:value-of select="content5"/>
+        </fo:block>
+      </fo:table-cell>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="dailyreport">
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="30%"/>
+        <fo:table-column column-width="70%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="labeledcontent | labeledimage"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="weatherheader | weatherdata"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
+  </xsl:template>
+
   <xsl:template match="projectheader">
     <fo:block-container background-color="#e8e8e8" padding="0.1cm" margin-bottom= "0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
       <fo:block>

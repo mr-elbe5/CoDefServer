@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS t_company2project
     CONSTRAINT t_company2project_fk2 FOREIGN KEY (project_id) REFERENCES t_project (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS t_project_diary
+CREATE TABLE IF NOT EXISTS t_project_daily_report
 (
     id              INTEGER NOT NULL,
     idx             INTEGER NOT NULL DEFAULT 0,
@@ -192,21 +192,20 @@ CREATE TABLE IF NOT EXISTS t_project_diary
     weather_wdir    VARCHAR(40) NOT NULL DEFAULT '',
     weather_temp    VARCHAR(40) NOT NULL DEFAULT '',
     weather_rhum    VARCHAR(40) NOT NULL DEFAULT '',
-    weather_prcp    VARCHAR(40) NOT NULL DEFAULT '',
     activity        VARCHAR(1000) NOT NULL DEFAULT '',
     briefing        VARCHAR(1000) NOT NULL DEFAULT '',
-    CONSTRAINT t_project_diary_pk PRIMARY KEY (id),
-    CONSTRAINT t_project_diary_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_project_diary_uq1 UNIQUE (idx)
+    CONSTRAINT t_project_daily_report_pk PRIMARY KEY (id),
+    CONSTRAINT t_project_daily_report_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
+    CONSTRAINT t_project_daily_report_uq1 UNIQUE (idx)
 );
 
-CREATE TABLE IF NOT EXISTS t_company2project_diary
+CREATE TABLE IF NOT EXISTS t_company2project_daily_report
 (
     company_id INTEGER     NOT NULL,
-    project_diary_id  INTEGER     NOT NULL,
-    CONSTRAINT t_company2project_diary_pk PRIMARY KEY (company_id, project_diary_id),
-    CONSTRAINT t_company2project_diary_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
-    CONSTRAINT t_company2project_diary_fk2 FOREIGN KEY (project_diary_id) REFERENCES t_project_diary (id) ON DELETE CASCADE
+    project_daily_report_id  INTEGER     NOT NULL,
+    CONSTRAINT t_company2project_daily_report_pk PRIMARY KEY (company_id, project_daily_report_id),
+    CONSTRAINT t_company2project_daily_report_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company2project_daily_reporty_fk2 FOREIGN KEY (project_daily_report_id) REFERENCES t_project_daily_report (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_unit

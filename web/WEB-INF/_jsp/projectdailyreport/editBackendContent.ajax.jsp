@@ -12,7 +12,7 @@
 <%@ page import="de.elbe5.request.RequestData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.project.ProjectData" %>
-<%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
+<%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
@@ -20,12 +20,12 @@
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ProjectDiary diary = ContentData.getCurrentContent(rdata, ProjectDiary.class);
+    ProjectDailyReport diary = ContentData.getCurrentContent(rdata, ProjectDailyReport.class);
     assert (diary != null);
     ProjectData project = diary.getProject();
     assert (project != null);
     List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
-    String url = "/ctrl/projectdiary/saveBackendContent/" + diary.getId();%>
+    String url = "/ctrl/projectdailyreport/saveBackendContent/" + diary.getId();%>
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">

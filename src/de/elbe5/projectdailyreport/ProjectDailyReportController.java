@@ -6,38 +6,33 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.projectdiary;
+package de.elbe5.projectdailyreport;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
-import de.elbe5.content.ContentData;
-import de.elbe5.defect.DefectData;
-import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestType;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.JsonResponse;
 import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
-import de.elbe5.rights.GlobalRight;
-import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class ProjectDiaryController extends ContentController {
+public class ProjectDailyReportController extends ContentController {
 
-    public static final String KEY = "projectdiary";
+    public static final String KEY = "projectdailyreport";
 
-    private static ProjectDiaryController instance = null;
+    private static ProjectDailyReportController instance = null;
 
-    public static void setInstance(ProjectDiaryController instance) {
-        ProjectDiaryController.instance = instance;
+    public static void setInstance(ProjectDailyReportController instance) {
+        ProjectDailyReportController.instance = instance;
     }
 
-    public static ProjectDiaryController getInstance() {
+    public static ProjectDailyReportController getInstance() {
         return instance;
     }
 
@@ -48,7 +43,7 @@ public class ProjectDiaryController extends ContentController {
 
     public IResponse getPdf(RequestData rdata) {
         int contentId = rdata.getId();
-        BinaryFile file = ProjectDiaryPdfBean.getInstance().getProjectDiary(contentId, rdata);
+        BinaryFile file = ProjectDailyReportPdfBean.getInstance().getProjectDailyReport(contentId, rdata);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -65,7 +60,7 @@ public class ProjectDiaryController extends ContentController {
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
         int diaryId=rdata.getId();
         Log.log("remote diary id = " + diaryId);
-        ProjectDiary data = new ProjectDiary();
+        ProjectDailyReport data = new ProjectDailyReport();
         data.setCreateValues(rdata, RequestType.api);
         data.setParentValues(ContentCache.getContentRoot());
         data.readRequestData(rdata, RequestType.api);

@@ -14,7 +14,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
 <%@ page import="java.util.List" %>
-<%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
+<%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -33,7 +33,7 @@
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/project/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
         <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/unit/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
-        <a class="icon fa fa-calendar-o" onclick="return openModalDialog('/ctrl/projectdiary/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.projectdiary.ProjectDiary');" title="<%=$SH("_newDiary")%>"></a>
+        <a class="icon fa fa-calendar-o" onclick="return openModalDialog('/ctrl/projectdailyreport/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.projectdailyreport.ProjectDailyReport');" title="<%=$SH("_newDailyReport")%>"></a>
     </div>
     <%}%>
     <ul>
@@ -50,14 +50,14 @@
                 </ul>
             </li>
         <%}
-        List<ProjectDiary> diaries = contentData.getChildren(ProjectDiary.class);
+        List<ProjectDailyReport> diaries = contentData.getChildren(ProjectDailyReport.class);
         if (!diaries.isEmpty()) {%>
             <li class= "open">
                 <span class="icon fa fa-calendar-o">
-                    <%=$SH("_diaries")%>
+                    <%=$SH("_projectDailyReports")%>
                 </span>
                 <ul>
-                    <%for (ProjectDiary diary : diaries) {
+                    <%for (ProjectDailyReport diary : diaries) {
                         diary.displayBackendTreeContent(pageContext, rdata);
                     }%>
                 </ul>

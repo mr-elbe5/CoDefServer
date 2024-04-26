@@ -13,19 +13,19 @@
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.file.ImageData" %>
-<%@ page import="de.elbe5.projectdiary.ProjectDiary" %>
+<%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ProjectDiary contentData = ContentData.getCurrentContent(rdata, ProjectDiary.class);
+    ProjectDailyReport contentData = ContentData.getCurrentContent(rdata, ProjectDailyReport.class);
     assert(contentData !=null);
     if (contentData.hasUserReadRight(rdata.getLoginUser())){
 %>
 <form:message/>
 <section class="contentSection" id="content">
     <div class="paragraph">
-        <h3><%=$SH("_diary")%>&nbsp;<%=$H(contentData.getDisplayName())%></h3>
+        <h3><%=$SH("_projectDailyReport")%>&nbsp;<%=$H(contentData.getDisplayName())%></h3>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_weatherConditions")%></div>
@@ -91,7 +91,7 @@
         <%}%>
         <% if (contentData.hasUserEditRight(rdata.getLoginUser())){%>
         <div class=buttonLine>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/projectdiary/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/projectdailyreport/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
             </button>
         </div>
         <%}%>

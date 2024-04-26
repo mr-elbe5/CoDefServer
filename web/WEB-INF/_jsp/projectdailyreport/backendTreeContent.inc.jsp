@@ -28,12 +28,12 @@
     </span>
     <%if (contentData.hasUserEditRight(rdata.getLoginUser())) {%>
     <div class="icons">
-        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/projectdiary/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
+        <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/projectdailyreport/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
     </div>
     <%}%>
     <ul>
-        <jsp:include page="/WEB-INF/_jsp/projectdiary/backendTreeContentImages.inc.jsp" flush="true" />
+        <jsp:include page="/WEB-INF/_jsp/projectdailyreport/backendTreeContentImages.inc.jsp" flush="true" />
     </ul>
 </li>
 
