@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectCsvBean extends CsvCreator {
+public class ProjectCsvCreator extends CsvCreator {
 
     ProjectData project;
 

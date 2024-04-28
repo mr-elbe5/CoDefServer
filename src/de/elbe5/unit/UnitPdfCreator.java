@@ -10,7 +10,7 @@ package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
-import de.elbe5.file.CodefFopBean;
+import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
@@ -22,16 +22,7 @@ import de.elbe5.user.CodefUserData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class UnitPdfBean extends CodefFopBean {
-
-    private static UnitPdfBean instance = null;
-
-    public static UnitPdfBean getInstance() {
-        if (instance == null) {
-            instance = new UnitPdfBean();
-        }
-        return instance;
-    }
+public class UnitPdfCreator extends CodefPdfCreator {
 
     public BinaryFile getUnitReport(int unitId, RequestData rdata, boolean includeStatusChanges){
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
@@ -41,11 +32,12 @@ public class UnitPdfBean extends CodefFopBean {
         UnitData unit= ContentCache.getContent(unitId,UnitData.class);
         if (unit==null)
             return null;
+        ProjectData project=unit.getProject();
+        assert(project!=null);
         StringBuilder sb=new StringBuilder();
-        sb.append("<root>");
-        addUnitHeaderXml(sb,unit);
-        sb.append("<unit>");
-        addLabeledContent(sb, unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
+        addTopHeader(sxml("_reports") + ": " + xml(project.getDisplayName()) + ", "
+                + xml(unit.getDisplayName()));
+        addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
         List<DefectData> defects = user.getUnitDefects(unit.getId());
         ImageData plan = unit.getPlan();
         if (plan!=null) {
@@ -54,39 +46,12 @@ public class UnitPdfBean extends CodefFopBean {
             BinaryFile file = unit.createUnitDefectPlan(fullplan,defects, 1);
             addUnitPlanXml(sb, unit, plan, file);
         }
-        addUnitDefectsXml(sb,unit, defects, includeStatusChanges);
-        sb.append("</unit>");
-        addUnitFooterXml(sb,unit,now);
-        sb.append("</root>");
-        //System.out.println(sb.toString());
+        addUnitDefectsXml(unit, defects, includeStatusChanges);
+        addFooter(sxml("_project") + " " + xml(project.getDisplayName()) +
+                ", " + sxml("_unit") + " " + xml(unit.getDisplayName()) +
+                " - " + DateHelper.toHtml(now));
         String fileName="report-of-unit-defects-" + unit.getId() + "-" + html(now).replace(' ','-')+".pdf";
-        return getPdf(sb.toString(), "_templates/pdf.xsl", fileName);
-    }
-
-    private void addUnitHeaderXml(StringBuilder sb, UnitData unit) {
-        ProjectData project=unit.getProject();
-        assert(project!=null);
-        sb.append("<unitheader><title>");
-        sb.append(sxml("_reports"));
-        sb.append(": ");
-        sb.append(xml(project.getDisplayName()));
-        sb.append(", ");
-        sb.append(xml(unit.getDisplayName()));
-        sb.append("</title></unitheader>");
-    }
-
-    private void addUnitFooterXml(StringBuilder sb, UnitData unit, LocalDateTime now) {
-        ProjectData project=unit.getProject();
-        assert(project!=null);
-        sb.append("<footer><docAndDate>");
-        sb.append(sxml("_project"))
-                .append(" ")
-                .append(xml(project.getDisplayName()))
-                .append(", ").append(sxml("_unit"))
-                .append(" ").append(xml(unit.getDisplayName()))
-                .append(" - ")
-                .append(DateHelper.toHtml(now));
-        sb.append("</docAndDate></footer>");
+        return getPdf(finishXml(), "_templates/pdf.xsl", fileName);
     }
 
 }

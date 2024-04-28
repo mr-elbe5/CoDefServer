@@ -9,7 +9,6 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
 import de.elbe5.request.RequestType;
@@ -173,7 +172,7 @@ public class DefectController extends ContentController {
         int contentId = rdata.getId();
         DefectData data= ContentCache.getContent(contentId,DefectData.class);
         assert(data!=null);
-        BinaryFile file = DefectPdfBean.getInstance().getDefectPdfFile(data, rdata);
+        BinaryFile file =new DefectPdfCreator().getDefectPdfFile(data, rdata);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);

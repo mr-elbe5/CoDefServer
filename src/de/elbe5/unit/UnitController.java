@@ -9,7 +9,6 @@
 package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.LocalizedStrings;
 import de.elbe5.base.Log;
 import de.elbe5.base.Token;
 import de.elbe5.content.ContentBean;
@@ -105,7 +104,7 @@ public class UnitController extends ContentController {
     public IResponse getReport(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = UnitPdfBean.getInstance().getUnitReport(contentId, rdata, includeStatusChanges);
+        BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, rdata, includeStatusChanges);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);

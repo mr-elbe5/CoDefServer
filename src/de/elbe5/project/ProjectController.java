@@ -42,7 +42,7 @@ public class ProjectController extends ContentController {
     public IResponse getReport(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = ProjectPdfBean.getInstance().getProjectReport(contentId, rdata, includeStatusChanges);
+        BinaryFile file = new ProjectPdfCreator().getProjectReport(contentId, rdata, includeStatusChanges);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -52,7 +52,7 @@ public class ProjectController extends ContentController {
     public IResponse getCsv(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = new ProjectCsvBean().getCsvFile(contentId);
+        BinaryFile file = new ProjectCsvCreator().getCsvFile(contentId);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);

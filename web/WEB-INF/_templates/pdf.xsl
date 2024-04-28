@@ -50,248 +50,118 @@
     </fo:block-container>
   </xsl:template>
 
-  <xsl:template match="labeledcontent">
-    <fo:table-row>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="label"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="0.75mm">
-          <xsl:value-of select="content"/>
-        </fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="labeledimage">
-    <fo:table-row>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="label"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="0.75mm">
-          <fo:external-graphic content-width="scale-to-fit">
-            <xsl:attribute name="src">
-              <xsl:value-of select="src" />
-            </xsl:attribute>
-            <xsl:attribute name="height">
-              <xsl:value-of select="height" />
-            </xsl:attribute>
-          </fo:external-graphic>
-        </fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="defectheader">
+  <xsl:template match="topheader">
     <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
-      <fo:block>
-        <xsl:value-of select="title"/>
+      <fo:block font-weight="bold" font-size="15pt">
+        <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
   </xsl:template>
 
-  <xsl:template match="defect">
-    <fo:block page-break-inside="auto">
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="30%"/>
-        <fo:table-column column-width="70%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="labeledcontent | labeledimage"/>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="statuschange">
-    <fo:block page-break-inside="auto">
-      <fo:block font-size="12pt" margin-top="0.5cm" padding-top="0.1cm" padding-bottom="0.1cm"
-              border-color="#333333" border-top-style="solid" border-bottom-style="solid">
-        <xsl:value-of select="title" />
-      </fo:block>
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="30%"/>
-        <fo:table-column column-width="70%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="labeledcontent | labeledimage"/>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="defectrow">
-    <fo:table-row >
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="label1"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="0.75mm">
-          <xsl:value-of select="content1"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="label2"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="0.75mm">
-          <xsl:value-of select="content2"/>
-        </fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="unitheader">
-    <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
-      <fo:block>
-        <xsl:value-of select="title"/>
+  <xsl:template match="subheader">
+    <fo:block-container background-color="#f8f8f8" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
+      <fo:block font-weight="bold" font-size="12pt">
+        <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
   </xsl:template>
 
-  <xsl:template match="unitdefect">
-    <fo:block page-break-inside="auto" page-break-after="always" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
-      <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="2mm">
-        <xsl:value-of select="description" />
+  <xsl:template match="textline">
+    <fo:block-container padding="0.1cm" >
+      <fo:block>
+        <xsl:value-of select="text"/>
       </fo:block>
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="30%"/>
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="30%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="defectrow | labeledimage"/>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
+    </fo:block-container>
   </xsl:template>
 
-  <xsl:template match="unitplan">
-    <fo:block page-break-inside="avoid" page-break-after="always" margin-bottom="5mm">
-      <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="1mm">
-        <xsl:value-of select="name" />
-      </fo:block>
+  <xsl:template match="image">
+    <fo:block-container padding="0.1cm" >
       <fo:block margin-left="1.5mm" border-color="#333333" border-bottom-style="solid" margin-bottom="1mm">
         <fo:external-graphic content-width="scale-to-fit" width="18cm">
-            <xsl:attribute name="src">
-              <xsl:value-of select="src" />
-            </xsl:attribute>
-          </fo:external-graphic>
-      </fo:block>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="unit">
-    <fo:block>
-      <xsl:apply-templates select="unitheader"/>
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="30%"/>
-        <fo:table-column column-width="70%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="labeledcontent | labeledimage"/>
-        </fo:table-body>
-      </fo:table>
-      <xsl:apply-templates select="unitdefect | unitplan"/>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="weatherheader">
-    <fo:table-row >
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="header1"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="header2"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="header3"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="header4"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell font-weight="bold">
-        <fo:block padding="1mm">
-          <xsl:value-of select="header5"/>
-        </fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="weatherdata">
-    <fo:table-row >
-      <fo:table-cell>
-        <fo:block padding="1mm">
-          <xsl:value-of select="content1"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="1mm">
-          <xsl:value-of select="content2"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="1mm">
-          <xsl:value-of select="content3"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="1mm">
-          <xsl:value-of select="content4"/>
-        </fo:block>
-      </fo:table-cell>
-      <fo:table-cell>
-        <fo:block padding="1mm">
-          <xsl:value-of select="content5"/>
-        </fo:block>
-      </fo:table-cell>
-    </fo:table-row>
-  </xsl:template>
-
-  <xsl:template match="dailyreport">
-    <fo:block page-break-inside="auto">
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="30%"/>
-        <fo:table-column column-width="70%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="labeledcontent | labeledimage"/>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
-    <fo:block page-break-inside="auto">
-      <fo:table table-layout="fixed" width="100%" font-size="10pt">
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="20%"/>
-        <fo:table-column column-width="20%"/>
-        <fo:table-body margin-left="1.5mm">
-          <xsl:apply-templates select="weatherheader | weatherdata"/>
-        </fo:table-body>
-      </fo:table>
-    </fo:block>
-  </xsl:template>
-
-  <xsl:template match="projectheader">
-    <fo:block-container background-color="#e8e8e8" padding="0.1cm" margin-bottom= "0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
-      <fo:block>
-        <xsl:value-of select="title"/>
+          <xsl:attribute name="src">
+            <xsl:value-of select="src" />
+          </xsl:attribute>
+        </fo:external-graphic>
       </fo:block>
     </fo:block-container>
+  </xsl:template>
+
+  <xsl:template match="tablecell">
+    <fo:table-cell>
+      <fo:block padding="1mm">
+        <xsl:value-of select="text"/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="tablecellbold">
+    <fo:table-cell font-weight="bold">
+      <fo:block padding="1mm">
+        <xsl:value-of select="text"/>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="tablecellimage">
+    <fo:table-cell>
+      <fo:block padding="0.75mm">
+        <fo:external-graphic content-width="scale-to-fit">
+          <xsl:attribute name="src">
+            <xsl:value-of select="src" />
+          </xsl:attribute>
+          <xsl:attribute name="height">
+            <xsl:value-of select="height" />
+          </xsl:attribute>
+        </fo:external-graphic>
+      </fo:block>
+    </fo:table-cell>
+  </xsl:template>
+
+  <xsl:template match="tablerow">
+    <fo:table-row>
+      <xsl:apply-templates select="tablecell | tablecellbold | tablecellimage"/>
+    </fo:table-row>
+  </xsl:template>
+
+  <xsl:template match="table2col">
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="30%"/>
+        <fo:table-column column-width="70%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="tablerow"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="table4col">
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="30%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="30%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="tablerow"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="table5col">
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-column column-width="20%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="tablerow"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
   </xsl:template>
 
 </xsl:stylesheet>
