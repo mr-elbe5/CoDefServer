@@ -10,6 +10,7 @@ package de.elbe5.project;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
+import de.elbe5.base.Log;
 import de.elbe5.file.ImageData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
@@ -32,28 +33,31 @@ public class ProjectPdfCreator extends CodefPdfCreator {
         ProjectData project= ContentCache.getContent(projectId,ProjectData.class);
         if (project==null)
             return null;
-        StringBuilder sb=new StringBuilder();
+        startXml();
         addTopHeader(sxml("_reports") + ": " + xml(project.getDisplayName()));
         for (UnitData unit : project.getChildren(UnitData.class)) {
             List<DefectData> defects = user.getUnitDefects(unit.getId());
             if (!defects.isEmpty()) {
                 addSubHeader(sxml("_unit") + ": " + xml(unit.getDisplayName()));
+                startTable2Col();
                 addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
+                endTable2Col();
                 ImageData plan = unit.getPlan();
                 if (plan != null) {
                     ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
                     defects = user.getUnitDefects(unit.getId());
                     BinaryFile file = unit.createUnitDefectPlan(fullplan, defects, 1);
-                    addUnitPlanXml(sb, unit, plan, file);
+                    addImage(getBase64SrcString(file));
                 }
-
                 addUnitDefectsXml(unit, defects, includeStatusChanges);
-                add("</unit>");
             }
         }
         addFooter(sxml("_project") + " " + xml(project.getDisplayName()) + " - " + (DateHelper.toHtml(now)));
+        finishXml();
+        String xml = getXml();
+        //Log.log(xml);
         String fileName="report-of-project-defects-" + project.getId() + "-" + DateHelper.toHtml(now).replace(' ','-')+".pdf";
-        return getPdf(finishXml(), "_templates/pdf.xsl", fileName);
+        return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 
 }

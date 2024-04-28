@@ -25,19 +25,10 @@ public class DefectPdfCreator extends CodefPdfCreator {
     
     public BinaryFile getDefectPdfFile(DefectData data, RequestData rdata){
         LocalDateTime now= LocalDateTime.now();
+        startXml();
         addTopHeader(sxml("_report") + ": " + xml(data.getProject().getDisplayName()) + ", "
                 + xml(data.getUnit().getDisplayName()) + ", " + xml(data.getDisplayName()));
-        addDefectXml(data,rdata.getSessionHost());
-        for (DefectStatusData statusChange : data.getStatusChanges()){
-            addDefectStatusChangeXml( data, statusChange, rdata.getSessionHost());
-        }
-        addFooter(xml(data.getDisplayName()) + " - " + html(now));
-        //System.out.println(sb.toString());
-        String fileName="report-of-defect-" + data.getId() + "-" + html(now).replace(' ','-')+".pdf";
-        return getPdf(finishXml(), "_templates/pdf.xsl", fileName);
-    }
-
-    private void addDefectXml(DefectData data, String host) {
+        startTable2Col();
         addLabeledContent(sxml("_description"),data.getDescription());
         addLabeledContent(sxml("_id"),Integer.toString(data.getId()));
         addLabeledContent(sxml("_defectType"),data.isRemainingWork() ? sxml("_remainingWork") : sxml("_defect"));
@@ -65,11 +56,26 @@ public class DefectPdfCreator extends CodefPdfCreator {
                 addLabeledImage( image.getDisplayName(), file,"5.0cm");
             }
         }
+        endTable2Col();
+        for (DefectStatusData statusChange : data.getStatusChanges()){
+            addDefectStatusChangeXml( data, statusChange, rdata.getSessionHost());
+        }
+        addFooter(xml(data.getDisplayName()) + " - " + html(now));
+        finishXml();
+        String xml = getXml();
+        //Log.log(xml);
+        String fileName="report-of-defect-" + data.getId() + "-" + html(now).replace(' ','-')+".pdf";
+        return getPdf(xml, "_templates/pdf.xsl", fileName);
+    }
+
+    private void addDefectXml(DefectData data, String host) {
+
     }
 
     private void addDefectStatusChangeXml(DefectData defect, DefectStatusData data, String host) {
         addSubHeader(xml(data.geTitle()));
         UserData user= UserCache.getUser(data.getCreatorId());
+        startTable2Col();
         addLabeledContent(sxml("_description"),data.getDescription());
         addLabeledContent( LocalizedSystemStrings.getInstance().xml("_status"),sxml(data.getStatusString()));
         addLabeledContent(sxml("_assigned"),xml(data.getAssignedName()));
@@ -77,6 +83,7 @@ public class DefectPdfCreator extends CodefPdfCreator {
             BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
             addLabeledImage( sxml("_image"), file, "5.0cm");
         }
+        endTable2Col();
     }
 
 }

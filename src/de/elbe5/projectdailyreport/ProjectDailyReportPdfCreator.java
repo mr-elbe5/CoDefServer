@@ -10,6 +10,7 @@ package de.elbe5.projectdailyreport;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
+import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
@@ -29,13 +30,16 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
         ProjectDailyReport data = ContentCache.getContent(projectDiaryId, ProjectDailyReport.class);
         if (data==null)
             return null;
+        startXml();
         addTopHeader(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()));
+        startTable2Col();
         addLabeledContent(sxml("_project"),data.getProject().getDisplayName());
         addLabeledContent(sxml("_location"),xml(data.getProject().getZipCode()) + " " + data.getProject().getCity());
         addLabeledContent(sxml("_reportNumber"),String.valueOf(data.getIdx()));
         addLabeledContent(sxml("_creationDate"),html(data.getCreationDate()));
         UserData user= UserCache.getUser(data.getCreatorId());
         addLabeledContent(sxml("_creator"),user.getName());
+        endTable2Col();
 
         startTable5Col();
         startTableRow();
@@ -56,16 +60,21 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
 
         List<ImageData> files = data.getFiles(ImageData.class);
         if (!files.isEmpty()) {
+            startTable2Col();
             addLabeledContent(sxml("_images"),"");
             for (ImageData image : files) {
                 BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
                 addLabeledImage(image.getDisplayName(), file,"5.0cm");
             }
+            endTable2Col();
         }
 
         addFooter(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()) + " - " + html(now));
+        finishXml();
+        String xml = getXml();
+        //Log.log(xml);
         String fileName="dailyreport-" + StringHelper.toSafeWebFileName(data.getDisplayName()) + "-" + DateHelper.toHtml(data.getCreationDate()).replace(' ','-')+".pdf";
-        return getPdf(finishXml(), "_templates/pdf.xsl", fileName);
+        return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 
 }

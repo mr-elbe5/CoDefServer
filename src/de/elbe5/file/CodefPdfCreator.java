@@ -9,7 +9,6 @@
 package de.elbe5.file;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.defect.DefectData;
@@ -47,6 +46,10 @@ public abstract class CodefPdfCreator extends PdfCreator {
 
     public void addTableCellBold(String text){
         add("<tablecellbold><text>").add(text).add("</text></tablecellbold>");
+    }
+
+    public void addTableCellImage(String src){
+        add("<tablecellimage><src>").add(src).add("</src></tablecellimage>");
     }
 
     public void addTableCellImage(String src, String height){
@@ -90,6 +93,13 @@ public abstract class CodefPdfCreator extends PdfCreator {
         startTableRow();
         addTableCellBold(label);
         addTableCell(content);
+        endTableRow();
+    }
+
+    public void addLabeledImage(String label,BinaryFile file){
+        startTableRow();
+        addTableCellBold(label);
+        addTableCellImage(getBase64SrcString(file));
         endTableRow();
     }
 
@@ -152,6 +162,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
             endTable4Col();
 
             BinaryFile file;
+            startTable2Col();
             if (defect.getPositionX()>0 || defect.getPositionY()>0) {
                 ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
                 byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
@@ -169,6 +180,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
                     addLabeledImage("", file, "8.0cm");
                 }
             }
+            endTable2Col();
             if (includeStatusChanges) {
                 startTable4Col();
                 for (DefectStatusData changeData : defect.getStatusChanges()) {
@@ -207,13 +219,6 @@ public abstract class CodefPdfCreator extends PdfCreator {
                 endTable4Col();
             }
         }
-    }
-
-    protected void addUnitPlanXml(StringBuilder sb, UnitData data, ImageData plan, BinaryFile file) {
-        add("<unitplan>");
-        add("<name>").add(xml(plan.getDisplayName())).add("</name>");
-        add("<src>").add(getBase64SrcString(file)).add("</src>");
-        add("</unitplan>");
     }
 
 }

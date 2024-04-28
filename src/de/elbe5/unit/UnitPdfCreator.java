@@ -10,6 +10,7 @@ package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
+import de.elbe5.base.Log;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.defect.DefectData;
 import de.elbe5.file.ImageData;
@@ -28,30 +29,35 @@ public class UnitPdfCreator extends CodefPdfCreator {
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         if (user==null)
             return null;
-        LocalDateTime now= LocalDateTime.now();
         UnitData unit= ContentCache.getContent(unitId,UnitData.class);
         if (unit==null)
             return null;
         ProjectData project=unit.getProject();
         assert(project!=null);
-        StringBuilder sb=new StringBuilder();
+        LocalDateTime now= LocalDateTime.now();
+        startXml();
         addTopHeader(sxml("_reports") + ": " + xml(project.getDisplayName()) + ", "
                 + xml(unit.getDisplayName()));
+        startTable2Col();
         addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
+        endTable2Col();
         List<DefectData> defects = user.getUnitDefects(unit.getId());
         ImageData plan = unit.getPlan();
         if (plan!=null) {
             ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
             defects = user.getUnitDefects(unit.getId());
             BinaryFile file = unit.createUnitDefectPlan(fullplan,defects, 1);
-            addUnitPlanXml(sb, unit, plan, file);
+            addImage(getBase64SrcString(file));
         }
         addUnitDefectsXml(unit, defects, includeStatusChanges);
         addFooter(sxml("_project") + " " + xml(project.getDisplayName()) +
                 ", " + sxml("_unit") + " " + xml(unit.getDisplayName()) +
                 " - " + DateHelper.toHtml(now));
+        finishXml();
+        String xml = getXml();
+        //Log.log(xml);
         String fileName="report-of-unit-defects-" + unit.getId() + "-" + html(now).replace(' ','-')+".pdf";
-        return getPdf(finishXml(), "_templates/pdf.xsl", fileName);
+        return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 
 }
