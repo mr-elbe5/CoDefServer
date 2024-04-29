@@ -9,7 +9,6 @@
 package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.DateHelper;
 import de.elbe5.base.Log;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.defect.DefectData;
@@ -39,7 +38,7 @@ public class UnitPdfCreator extends CodefPdfCreator {
         addTopHeader(sxml("_reports") + ": " + xml(project.getDisplayName()) + ", "
                 + xml(unit.getDisplayName()));
         startTable2Col();
-        addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
+        addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), xml(unit.getApproveDate()));
         endTable2Col();
         List<DefectData> defects = user.getUnitDefects(unit.getId());
         ImageData plan = unit.getPlan();
@@ -52,11 +51,11 @@ public class UnitPdfCreator extends CodefPdfCreator {
         addUnitDefectsXml(unit, defects, includeStatusChanges);
         addFooter(sxml("_project") + " " + xml(project.getDisplayName()) +
                 ", " + sxml("_unit") + " " + xml(unit.getDisplayName()) +
-                " - " + DateHelper.toHtml(now));
+                " - " + xml(now));
         finishXml();
         String xml = getXml();
         //Log.log(xml);
-        String fileName="report-of-unit-defects-" + unit.getId() + "-" + html(now).replace(' ','-')+".pdf";
+        String fileName="report-of-unit-defects-" + unit.getId() + "-" + xml(now).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 

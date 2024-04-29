@@ -33,12 +33,12 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
         startXml();
         addTopHeader(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()));
         startTable2Col();
-        addLabeledContent(sxml("_project"),data.getProject().getDisplayName());
-        addLabeledContent(sxml("_location"),xml(data.getProject().getZipCode()) + " " + data.getProject().getCity());
+        addLabeledContent(sxml("_project"),xml(data.getProject().getDisplayName()));
+        addLabeledContent(sxml("_location"),xml(data.getProject().getZipCode()) + " " + xml(data.getProject().getCity()));
         addLabeledContent(sxml("_reportNumber"),String.valueOf(data.getIdx()));
-        addLabeledContent(sxml("_creationDate"),html(data.getCreationDate()));
+        addLabeledContent(sxml("_creationDate"),xml(data.getCreationDate()));
         UserData user= UserCache.getUser(data.getCreatorId());
-        addLabeledContent(sxml("_creator"),user.getName());
+        addLabeledContent(sxml("_creator"),xml(user.getName()));
         endTable2Col();
 
         startTable5Col();
@@ -50,7 +50,7 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
         addTableCellBold(sxml("_humidity"));
         endTableRow();
         startTableRow();
-        addTableCell(DateHelper.toHtmlTime(data.getCreationDate().toLocalTime()));
+        addTableCell(xml(DateHelper.toHtmlTime(data.getCreationDate().toLocalTime())));
         addTableCell(xml(data.getWeatherCoco()));
         addTableCell(xml(data.getWeatherWspd() + " " + data.getWeatherWdir() ));
         addTableCell(xml(data.getWeatherTemp()));
@@ -69,11 +69,11 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
             endTable2Col();
         }
 
-        addFooter(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()) + " - " + html(now));
+        addFooter(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()) + " - " + xml(now));
         finishXml();
         String xml = getXml();
         //Log.log(xml);
-        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(data.getDisplayName()) + "-" + DateHelper.toHtml(data.getCreationDate()).replace(' ','-')+".pdf";
+        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(data.getDisplayName()) + "-" + xml(data.getCreationDate()).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 

@@ -40,7 +40,7 @@ public class ProjectPdfCreator extends CodefPdfCreator {
             if (!defects.isEmpty()) {
                 addSubHeader(sxml("_unit") + ": " + xml(unit.getDisplayName()));
                 startTable2Col();
-                addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), html(unit.getApproveDate()));
+                addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), xml(unit.getApproveDate()));
                 endTable2Col();
                 ImageData plan = unit.getPlan();
                 if (plan != null) {
@@ -52,11 +52,11 @@ public class ProjectPdfCreator extends CodefPdfCreator {
                 addUnitDefectsXml(unit, defects, includeStatusChanges);
             }
         }
-        addFooter(sxml("_project") + " " + xml(project.getDisplayName()) + " - " + (DateHelper.toHtml(now)));
+        addFooter(sxml("_project") + " " + xml(project.getDisplayName()) + " - " + (xml(now)));
         finishXml();
         String xml = getXml();
         //Log.log(xml);
-        String fileName="report-of-project-defects-" + project.getId() + "-" + DateHelper.toHtml(now).replace(' ','-')+".pdf";
+        String fileName="report-of-project-defects-" + project.getId() + "-" + xml(now).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 

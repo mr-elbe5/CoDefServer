@@ -139,7 +139,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
             addTableCellBold(sxml("_createdBy"));
             addTableCell(xml(user.getName()));
             addTableCellBold(sxml("_on"));
-            addTableCell(html(defect.getCreationDate()));
+            addTableCell(xml(defect.getCreationDate()));
             endTableRow();
             startTableRow();
             addTableCellBold(sxml("_assigned"));
@@ -149,15 +149,15 @@ public abstract class CodefPdfCreator extends PdfCreator {
             endTableRow();
             startTableRow();
             addTableCellBold(sxml("_dueDate1"));
-            addTableCell(html(defect.getDueDate1()));
+            addTableCell(xml(defect.getDueDate1()));
             addTableCellBold(sxml("_dueDate2"));
-            addTableCell(html(defect.getDueDate2()));
+            addTableCell(xml(defect.getDueDate2()));
             endTableRow();
             startTableRow();
             addTableCellBold(sxml("_status"));
             addTableCell(LocalizedSystemStrings.getInstance().xml(defect.getLastStatus().toString()));
             addTableCellBold(sxml("_closeDate"));
-            addTableCell(html(defect.getCloseDate()));
+            addTableCell(xml(defect.getCloseDate()));
             endTableRow();
             endTable4Col();
 
@@ -182,41 +182,44 @@ public abstract class CodefPdfCreator extends PdfCreator {
             }
             endTable2Col();
             if (includeStatusChanges) {
-                startTable4Col();
-                for (DefectStatusData changeData : defect.getStatusChanges()) {
-                    startTableRow();
-                    addTableCellBold(sxml("_statusChange"));
-                    endTableRow();
-                    startTableRow();
-                    addTableCellBold(sxml("_by"));
-                    addTableCell(xml(changeData.getCreatorName()));
-                    addTableCellBold(sxml("_on"));
-                    addTableCell(html(changeData.getCreationDate()));
-                    endTableRow();
-                    startTableRow();
-                    addTableCellBold(sxml("_status"));
-                    addTableCell(LocalizedSystemStrings.getInstance().xml(changeData.getStatusString()));
-                    addTableCellBold(sxml("_assigned"));
-                    addTableCell(xml(changeData.getAssignedName()));
-                    endTableRow();
-                    startTableRow();
-                    addTableCellBold(sxml("_description"));
-                    addTableCell(xml(changeData.getDescription()));
-                    endTableRow();
-                    files = changeData.getFiles(ImageData.class);
-                    if (!files.isEmpty()) {
+                List<DefectStatusData> statusChanges = defect.getStatusChanges();
+                if (!statusChanges.isEmpty()) {
+                    startTable4Col();
+                    for (DefectStatusData changeData : defect.getStatusChanges()) {
                         startTableRow();
-                        addTableCellBold(sxml("_images"));
+                        addTableCellBold(sxml("_statusChange"));
+                        endTableRow();
+                        startTableRow();
+                        addTableCellBold(sxml("_by"));
+                        addTableCell(xml(changeData.getCreatorName()));
+                        addTableCellBold(sxml("_on"));
+                        addTableCell(xml(changeData.getCreationDate()));
+                        endTableRow();
+                        startTableRow();
+                        addTableCellBold(sxml("_status"));
+                        addTableCell(LocalizedSystemStrings.getInstance().xml(changeData.getStatusString()));
+                        addTableCellBold(sxml("_assigned"));
+                        addTableCell(xml(changeData.getAssignedName()));
+                        endTableRow();
+                        startTableRow();
+                        addTableCellBold(sxml("_description"));
                         addTableCell(xml(changeData.getDescription()));
                         endTableRow();
-                        List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
-                        for (ImageData image : statusChangeImages) {
-                            file = FileBean.getInstance().getBinaryFile(image.getId());
-                            addLabeledImage("", file, "8.0cm");
+                        files = changeData.getFiles(ImageData.class);
+                        if (!files.isEmpty()) {
+                            startTableRow();
+                            addTableCellBold(sxml("_images"));
+                            addTableCell(xml(changeData.getDescription()));
+                            endTableRow();
+                            List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
+                            for (ImageData image : statusChangeImages) {
+                                file = FileBean.getInstance().getBinaryFile(image.getId());
+                                addLabeledImage("", file, "8.0cm");
+                            }
                         }
                     }
+                    endTable4Col();
                 }
-                endTable4Col();
             }
         }
     }

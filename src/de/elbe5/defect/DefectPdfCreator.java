@@ -10,6 +10,7 @@ package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.LocalizedSystemStrings;
+import de.elbe5.base.Log;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.file.FileBean;
@@ -29,17 +30,17 @@ public class DefectPdfCreator extends CodefPdfCreator {
         addTopHeader(sxml("_report") + ": " + xml(data.getProject().getDisplayName()) + ", "
                 + xml(data.getUnit().getDisplayName()) + ", " + xml(data.getDisplayName()));
         startTable2Col();
-        addLabeledContent(sxml("_description"),data.getDescription());
+        addLabeledContent(sxml("_description"),xml(data.getDescription()));
         addLabeledContent(sxml("_id"),Integer.toString(data.getId()));
         addLabeledContent(sxml("_defectType"),data.isRemainingWork() ? sxml("_remainingWork") : sxml("_defect"));
         UserData user= UserCache.getUser(data.getCreatorId());
-        addLabeledContent(sxml("_creator"),user.getName());
-        addLabeledContent(sxml("_creationDate"),html(data.getCreationDate()));
+        addLabeledContent(sxml("_creator"),xml(user.getName()));
+        addLabeledContent(sxml("_creationDate"),xml(data.getCreationDate()));
         addLabeledContent(sxml("_status"),LocalizedSystemStrings.getInstance().xml(data.getLastStatus().toString()));
-        addLabeledContent(sxml("_assigned"),data.getLastAssignedName());
-        addLabeledContent(sxml("_dueDate1"),html(data.getDueDate1()));
-        addLabeledContent(sxml("_dueDate2"),html(data.getDueDate2()));
-        addLabeledContent(sxml("_closeDate"),html(data.getCloseDate()));
+        addLabeledContent(sxml("_assigned"),xml(data.getLastAssignedName()));
+        addLabeledContent(sxml("_dueDate1"),xml(data.getDueDate1()));
+        addLabeledContent(sxml("_dueDate2"),xml(data.getDueDate2()));
+        addLabeledContent(sxml("_closeDate"),xml(data.getCloseDate()));
         BinaryFile file;
         if (data.hasValidPosition()) {
             ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
@@ -60,11 +61,11 @@ public class DefectPdfCreator extends CodefPdfCreator {
         for (DefectStatusData statusChange : data.getStatusChanges()){
             addDefectStatusChangeXml( data, statusChange, rdata.getSessionHost());
         }
-        addFooter(xml(data.getDisplayName()) + " - " + html(now));
+        addFooter(xml(data.getDisplayName()) + " - " + xml(now));
         finishXml();
         String xml = getXml();
         //Log.log(xml);
-        String fileName="report-of-defect-" + data.getId() + "-" + html(now).replace(' ','-')+".pdf";
+        String fileName="report-of-defect-" + data.getId() + "-" + xml(now).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 
@@ -76,7 +77,7 @@ public class DefectPdfCreator extends CodefPdfCreator {
         addSubHeader(xml(data.geTitle()));
         UserData user= UserCache.getUser(data.getCreatorId());
         startTable2Col();
-        addLabeledContent(sxml("_description"),data.getDescription());
+        addLabeledContent(sxml("_description"),xml(data.getDescription()));
         addLabeledContent( LocalizedSystemStrings.getInstance().xml("_status"),sxml(data.getStatusString()));
         addLabeledContent(sxml("_assigned"),xml(data.getAssignedName()));
         for (ImageData image : data.getFiles(ImageData.class)){
