@@ -9,47 +9,30 @@
 package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
-import de.elbe5.base.Log;
 import de.elbe5.file.CodefPdfCreator;
-import de.elbe5.defect.DefectData;
-import de.elbe5.file.ImageData;
-import de.elbe5.project.ProjectData;
 import de.elbe5.content.ContentCache;
-import de.elbe5.file.ImageBean;
 import de.elbe5.request.RequestData;
 import de.elbe5.user.CodefUserData;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class UnitPdfCreator extends CodefPdfCreator {
 
     public BinaryFile getUnitReport(int unitId, RequestData rdata, boolean includeStatusChanges){
-        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
-        if (user==null)
-            return null;
-        UnitData unit= ContentCache.getContent(unitId,UnitData.class);
-        if (unit==null)
-            return null;
-        ProjectData project=unit.getProject();
-        assert(project!=null);
         LocalDateTime now= LocalDateTime.now();
+        CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        UnitData unit= ContentCache.getContent(unitId,UnitData.class);
+        if (user==null || unit==null || unit.getProject()==null)
+            return null;
+
         startXml();
-        addTopHeader(sxml("_reports") + ": " + xml(project.getDisplayName()) + ", "
-                + xml(unit.getDisplayName()));
-        startTable2Col();
-        addLabeledContent(unit.getApproveDate()==null ? "" : sxml("_approveDate"), xml(unit.getApproveDate()));
-        endTable2Col();
-        List<DefectData> defects = user.getUnitDefects(unit.getId());
-        ImageData plan = unit.getPlan();
-        if (plan!=null) {
-            ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
-            defects = user.getUnitDefects(unit.getId());
-            BinaryFile file = unit.createUnitDefectPlan(fullplan,defects, 1);
-            addImage(getBase64SrcString(file));
-        }
-        addUnitDefectsXml(unit, defects, includeStatusChanges);
-        addFooter(sxml("_project") + " " + xml(project.getDisplayName()) +
+
+        addTopHeader(sxml("_unit") + ": " + xml(unit.getProject().getDisplayName()));
+        addHeaderComment(sxml("_project") + ": " + xml(unit.getProject().getDisplayName()));
+
+        addUnit(unit, user, includeStatusChanges);
+
+        addFooter(sxml("_project") + " " + xml(unit.getProject().getDisplayName()) +
                 ", " + sxml("_unit") + " " + xml(unit.getDisplayName()) +
                 " - " + xml(now));
         finishXml();

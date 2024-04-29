@@ -16,17 +16,18 @@
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
+<%@ page import="de.elbe5.projectdailyreport.CompanyDailyBriefing" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ProjectDailyReport diary = ContentData.getCurrentContent(rdata, ProjectDailyReport.class);
-    assert (diary != null);
-    ProjectData project = diary.getProject();
+    ProjectDailyReport report = ContentData.getCurrentContent(rdata, ProjectDailyReport.class);
+    assert (report != null);
+    ProjectData project = report.getProject();
     assert (project != null);
     List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
-    String url = "/ctrl/projectdailyreport/saveBackendContent/" + diary.getId();%>
-<div class="modal-dialog modal-lg" role="document">
+    String url = "/ctrl/projectdailyreport/saveBackendContent/" + report.getId();%>
+<div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title"><%=$SH("_edit")%>
@@ -40,31 +41,37 @@
                 <form:formerror/>
                 <h3><%=$SH("_settings")%>
                 </h3>
-                <form:line label="_id"><%=$I(diary.getId())%>
+                <form:line label="_id"><%=$I(report.getId())%>
                 </form:line>
-                <form:line label="_idx"><%=$I(diary.getIdx())%>
+                <form:line label="_idx"><%=$I(report.getIdx())%>
                 </form:line>
-                <form:line label="_creation"><%=$H(diary.getCreationDate())%> - <%=$H(diary.getCreatorName())%>
+                <form:line label="_creation"><%=$H(report.getCreationDate())%> - <%=$H(report.getCreatorName())%>
                 </form:line>
-                <form:line label="_lastChange"><%=$H(diary.getChangeDate())%> - <%=$H(diary.getChangerName())%>
+                <form:line label="_lastChange"><%=$H(report.getChangeDate())%> - <%=$H(report.getChangerName())%>
                 </form:line>
-                <form:line label="_name"><%=$H(diary.getDisplayName())%>
+                <form:line label="_name"><%=$H(report.getDisplayName())%>
                 </form:line>
-                <form:text name="weatherCoco" label="_weatherConditions" required="false" value="<%=$H(diary.getWeatherCoco())%>"/>
-                <form:text name="weatherWsdp" label="_windSpeed" required="false" value="<%=$H(diary.getWeatherWspd())%>"/>
-                <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(diary.getWeatherWdir())%>"/>
-                <form:text name="weatherTemp" label="_temperature" required="false" value="<%=$H(diary.getWeatherTemp())%>"/>
-                <form:text name="weatherRhum" label="_relativeHumidity" required="false" value="<%=$H(diary.getWeatherRhum())%>"/>
-                <form:line label="_presentCompanies" name="companyIds" padded="true" required="true">
-                    <% for (CompanyData company : companies){%>
-                    <form:check name="companyIds" value="<%=Integer.toString(company.getId())%>" checked="<%=diary.getCompanyIds().contains(company.getId())%>"><%=$H(company.getName())%>
-                    </form:check><br/>
-                    <%}%>
+                <form:text name="weatherCoco" label="_weatherConditions" required="false" value="<%=$H(report.getWeatherCoco())%>"/>
+                <form:text name="weatherWsdp" label="_windSpeed" required="false" value="<%=$H(report.getWeatherWspd())%>"/>
+                <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(report.getWeatherWdir())%>"/>
+                <form:text name="weatherTemp" label="_temperature" required="false" value="<%=$H(report.getWeatherTemp())%>"/>
+                <form:text name="weatherRhum" label="_relativeHumidity" required="false" value="<%=$H(report.getWeatherRhum())%>"/>
+                <form:line label="_presentCompanies" padded="true">
+                    <table style="width:100%">
+                        <tr><th><%=$SH("_company")%><th><%=$SH("_activity")%></th><th><%=$SH("_briefing")%></tr>
+                        <% for (CompanyData company : companies){
+                            CompanyDailyBriefing briefing = report.getCompanyBriefing(company.getId());
+                        %>
+                                <tr>
+                                    <td style="vertical-align: top;"><input type="checkbox" name="company_<%=company.getId()%>_present" value="true" <%=briefing == null ? "" : "checked"%> /> <label><%=$H(company.getName())%></label></td>
+                                    <td><textarea style="height: 60px;"  name="company_<%=company.getId()%>_activity" class="form-control"><%=briefing == null ? "" : $H(briefing.getActivity())%></textarea></td>
+                                    <td><textarea style="height: 60px;"  name="company_<%=company.getId()%>_briefing" class="form-control"><%=briefing == null ? "" : $H(briefing.getBriefing())%></textarea></td>
+                                </tr>
+                        <%}%>
+                    </table>
                 </form:line>
-                <form:textarea name="activity" label="_activity" height="5em"><%=$H(diary.getActivity())%></form:textarea>
-                <form:textarea name="briefing" label="_briefing" height="5em"><%=$H(diary.getBriefing())%></form:textarea>
                 <form:line label="_active" padded="true">
-                    <form:check name="active" value="true" checked="<%=diary.isActive()%>"/>
+                    <form:check name="active" value="true" checked="<%=report.isActive()%>"/>
                 </form:line>
             </div>
             <div class="modal-footer">

@@ -51,7 +51,7 @@
   </xsl:template>
 
   <xsl:template match="topheader">
-    <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
+    <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
       <fo:block font-weight="bold" font-size="15pt">
         <xsl:value-of select="text"/>
       </fo:block>
@@ -59,8 +59,16 @@
   </xsl:template>
 
   <xsl:template match="subheader">
-    <fo:block-container background-color="#f8f8f8" padding="0.1cm" margin-bottom="0.1cm" text-align="center" border-color="#333333" border-bottom-style="solid" border-top-style="solid">
+    <fo:block-container background-color="#f8f8f8" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
       <fo:block font-weight="bold" font-size="12pt">
+        <xsl:value-of select="text"/>
+      </fo:block>
+    </fo:block-container>
+  </xsl:template>
+
+  <xsl:template match="headercomment">
+    <fo:block-container background-color="#fffff8" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
+      <fo:block font-size="12pt">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
@@ -128,6 +136,19 @@
       <fo:table table-layout="fixed" width="100%" font-size="10pt">
         <fo:table-column column-width="30%"/>
         <fo:table-column column-width="70%"/>
+        <fo:table-body margin-left="1.5mm">
+          <xsl:apply-templates select="tablerow"/>
+        </fo:table-body>
+      </fo:table>
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="table3col">
+    <fo:block page-break-inside="auto">
+      <fo:table table-layout="fixed" width="100%" font-size="10pt">
+        <fo:table-column column-width="33%"/>
+        <fo:table-column column-width="33%"/>
+        <fo:table-column column-width="33%"/>
         <fo:table-body margin-left="1.5mm">
           <xsl:apply-templates select="tablerow"/>
         </fo:table-body>

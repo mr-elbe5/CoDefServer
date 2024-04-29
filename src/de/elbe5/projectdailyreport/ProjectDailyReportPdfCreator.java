@@ -12,6 +12,8 @@ import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
 import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
+import de.elbe5.company.CompanyCache;
+import de.elbe5.company.CompanyData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.file.FileBean;
@@ -27,19 +29,23 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
     
     public BinaryFile getProjectDailyReport(int projectDiaryId, RequestData rdata){
         LocalDateTime now = LocalDateTime.now();
-        ProjectDailyReport data = ContentCache.getContent(projectDiaryId, ProjectDailyReport.class);
-        if (data==null)
+        ProjectDailyReport report = ContentCache.getContent(projectDiaryId, ProjectDailyReport.class);
+        if (report==null || report.getProject() == null)
             return null;
+
         startXml();
-        addTopHeader(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()));
+        addTopHeader(sxml("_project") + ": " + xml(report.getProject().getDisplayName()));
+        addSubHeader(sxml("_projectDailyReport") + " " + xml(report.getDisplayName()));
+
         startTable2Col();
-        addLabeledContent(sxml("_project"),xml(data.getProject().getDisplayName()));
-        addLabeledContent(sxml("_location"),xml(data.getProject().getZipCode()) + " " + xml(data.getProject().getCity()));
-        addLabeledContent(sxml("_reportNumber"),String.valueOf(data.getIdx()));
-        addLabeledContent(sxml("_creationDate"),xml(data.getCreationDate()));
-        UserData user= UserCache.getUser(data.getCreatorId());
+        addLabeledContent(sxml("_location"),xml(report.getProject().getZipCode()) + " " + xml(report.getProject().getCity()));
+        addLabeledContent(sxml("_reportNumber"),String.valueOf(report.getIdx()));
+        addLabeledContent(sxml("_creationDate"),xml(report.getCreationDate()));
+        UserData user= UserCache.getUser(report.getCreatorId());
         addLabeledContent(sxml("_creator"),xml(user.getName()));
         endTable2Col();
+
+        addSubHeader(sxml("_weather"));
 
         startTable5Col();
         startTableRow();
@@ -49,31 +55,54 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
         addTableCellBold(sxml("_temperature"));
         addTableCellBold(sxml("_humidity"));
         endTableRow();
+
         startTableRow();
-        addTableCell(xml(DateHelper.toHtmlTime(data.getCreationDate().toLocalTime())));
-        addTableCell(xml(data.getWeatherCoco()));
-        addTableCell(xml(data.getWeatherWspd() + " " + data.getWeatherWdir() ));
-        addTableCell(xml(data.getWeatherTemp()));
-        addTableCell(xml(data.getWeatherRhum()));
+        addTableCell(xml(DateHelper.toHtmlTime(report.getCreationDate().toLocalTime())));
+        addTableCell(xml(report.getWeatherCoco()));
+        addTableCell(xml(report.getWeatherWspd() + " " + report.getWeatherWdir() ));
+        addTableCell(xml(report.getWeatherTemp()));
+        addTableCell(xml(report.getWeatherRhum()));
         endTableRow();
         endTable5Col();
 
-        List<ImageData> files = data.getFiles(ImageData.class);
+        addSubHeader(sxml("_participants"));
+
+        if (!report.getCompanyBriefings().isEmpty()){
+            startTable3Col();
+            startTableRow();
+            addTableCellBold(sxml("_company"));
+            addTableCellBold(sxml("_activity"));
+            addTableCellBold(sxml("_briefing"));
+            endTableRow();
+            for (CompanyDailyBriefing briefing : report.getCompanyBriefings()){
+                CompanyData company = CompanyCache.getCompany(briefing.getCompanyId());
+                startTableRow();
+                addTableCell(xml(company.getName()));
+                addTableCell(xml(briefing.getActivity()));
+                addTableCell(xml(briefing.getBriefing()));
+                endTableRow();
+            }
+            endTable3Col();
+        }
+
+        List<ImageData> files = report.getFiles(ImageData.class);
         if (!files.isEmpty()) {
             startTable2Col();
             addLabeledContent(sxml("_images"),"");
             for (ImageData image : files) {
                 BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
-                addLabeledImage(image.getDisplayName(), file,"5.0cm");
+                addLabeledImage("", file,"5.0cm");
             }
             endTable2Col();
         }
 
-        addFooter(sxml("_projectDailyReport") + " " + xml(data.getDisplayName()) + " - " + xml(now));
+
+
+        addFooter(sxml("_projectDailyReport") + " " + xml(report.getDisplayName()) + " - " + xml(now));
         finishXml();
         String xml = getXml();
-        //Log.log(xml);
-        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(data.getDisplayName()) + "-" + xml(data.getCreationDate()).replace(' ','-')+".pdf";
+        Log.log(xml);
+        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(report.getDisplayName()) + "-" + xml(report.getCreationDate()).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 

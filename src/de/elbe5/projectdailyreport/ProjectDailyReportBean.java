@@ -19,7 +19,7 @@ public class ProjectDailyReportBean extends ContentBean {
     }
 
     private static final String GET_CONTENT_EXTRAS_SQL = " SELECT idx, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum, activity, briefing FROM t_project_daily_report where id = ?";
+            "weather_temp, weather_rhum FROM t_project_daily_report where id = ?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -37,9 +37,7 @@ public class ProjectDailyReportBean extends ContentBean {
                     data.setWeatherWspd(rs.getString(i++));
                     data.setWeatherWdir(rs.getString(i++));
                     data.setWeatherTemp(rs.getString(i++));
-                    data.setWeatherRhum(rs.getString(i++));
-                    data.setActivity(rs.getString(i++));
-                    data.setBriefing(rs.getString(i));
+                    data.setWeatherRhum(rs.getString(i));
                 }
             }
         } finally {
@@ -48,7 +46,7 @@ public class ProjectDailyReportBean extends ContentBean {
         readProjectDiaryCompanies(con, data);
     }
 
-    private static final String READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "SELECT company_id FROM t_company2project_daily_report WHERE project_daily_report_id=?";
+    private static final String READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "SELECT company_id, activity, briefing FROM t_company2project_daily_report WHERE project_daily_report_id=?";
 
     protected void readProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
         PreparedStatement pst = null;
@@ -56,9 +54,13 @@ public class ProjectDailyReportBean extends ContentBean {
             pst = con.prepareStatement(READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL);
             pst.setInt(1, data.getId());
             try (ResultSet rs = pst.executeQuery()) {
-                data.getCompanyIds().clear();
+                data.getCompanyBriefings().clear();
                 while (rs.next()) {
-                    data.getCompanyIds().add(rs.getInt(1));
+                    CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                    briefing.setCompanyId(rs.getInt(1));
+                    briefing.setActivity(rs.getString(2));
+                    briefing.setBriefing(rs.getString(3));
+                    data.getCompanyBriefings().add(briefing);
                 }
             }
         } finally {
@@ -67,8 +69,8 @@ public class ProjectDailyReportBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_project_daily_report (id, idx, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum, activity, briefing) " +
-            "values(?,?,?,?,?,?,?,?,?)";
+            "weather_temp, weather_rhum) " +
+            "values(?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -84,9 +86,7 @@ public class ProjectDailyReportBean extends ContentBean {
             pst.setString(i++, data.getWeatherWspd());
             pst.setString(i++, data.getWeatherWdir());
             pst.setString(i++, data.getWeatherTemp());
-            pst.setString(i++, data.getWeatherRhum());
-            pst.setString(i++, data.getActivity());
-            pst.setString(i, data.getBriefing());
+            pst.setString(i, data.getWeatherRhum());
             pst.executeUpdate();
             pst.close();
             writeProjectDiaryCompanies(con, data);
@@ -100,7 +100,7 @@ public class ProjectDailyReportBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project_daily_report " +
-            "set idx=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=?, activity=?, briefing=? where id=? ";
+            "set idx=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=? where id=? ";
 
 
     @Override
@@ -117,8 +117,6 @@ public class ProjectDailyReportBean extends ContentBean {
             pst.setString(i++, data.getWeatherWdir());
             pst.setString(i++, data.getWeatherTemp());
             pst.setString(i++, data.getWeatherRhum());
-            pst.setString(i++, data.getActivity());
-            pst.setString(i++, data.getBriefing());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();
@@ -134,7 +132,7 @@ public class ProjectDailyReportBean extends ContentBean {
     }
 
     private static final String DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "DELETE FROM t_company2project_daily_report WHERE project_daily_report_id=?";
-    private static final String INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "INSERT INTO t_company2project_daily_report (project_daily_report_id,company_id) VALUES(?,?)";
+    private static final String INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "INSERT INTO t_company2project_daily_report (project_daily_report_id,company_id, activity, briefing) VALUES(?,?,?,?)";
 
     protected void writeProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
         PreparedStatement pst = null;
@@ -142,12 +140,14 @@ public class ProjectDailyReportBean extends ContentBean {
             pst = con.prepareStatement(DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL);
             pst.setInt(1, data.getId());
             pst.execute();
-            if (data.getCompanyIds() != null) {
+            if (data.getCompanyBriefings() != null) {
                 pst.close();
                 pst = con.prepareStatement(INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL);
                 pst.setInt(1, data.getId());
-                for (int companyId : data.getCompanyIds()) {
-                    pst.setInt(2, companyId);
+                for (CompanyDailyBriefing briefing : data.getCompanyBriefings()) {
+                    pst.setInt(2, briefing.getCompanyId());
+                    pst.setString(3, briefing.getActivity());
+                    pst.setString(4, briefing.getBriefing());
                     pst.executeUpdate();
                 }
             }

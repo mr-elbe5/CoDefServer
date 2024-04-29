@@ -20,9 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ProjectDailyReport extends ContentData {
 
@@ -33,16 +31,14 @@ public class ProjectDailyReport extends ContentData {
         childClasses.add(UnitData.class);
     }
 
-    int idx = 0;
-    String weatherCoco = "";
-    String weatherWspd = "";
-    String weatherWdir = "";
-    String weatherTemp = "";
-    String weatherRhum = "";
-    String activity = "";
-    String briefing = "";
+    protected int idx = 0;
+    protected String weatherCoco = "";
+    protected String weatherWspd = "";
+    protected String weatherWdir = "";
+    protected String weatherTemp = "";
+    protected String weatherRhum = "";
 
-    protected Set<Integer> companyIds = new HashSet<>();
+    protected List<CompanyDailyBriefing> companyBriefings = new ArrayList<>();
 
     public ProjectDailyReport() {
     }
@@ -128,22 +124,6 @@ public class ProjectDailyReport extends ContentData {
         this.weatherRhum = String.format("%d %%", (int) value);
     }
 
-    public String getBriefing() {
-        return briefing;
-    }
-
-    public void setBriefing(String briefing) {
-        this.briefing = briefing;
-    }
-
-    public String getActivity() {
-        return activity;
-    }
-
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
-
     public boolean getWeather() {
         MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), LocalDateTime.now(), CodefConfiguration.getTimeZoneName());
         if (weatherData != null) {
@@ -157,22 +137,17 @@ public class ProjectDailyReport extends ContentData {
         return false;
     }
 
-    public Set<Integer> getCompanyIds() {
-        return companyIds;
+    public List<CompanyDailyBriefing> getCompanyBriefings() {
+        return companyBriefings;
     }
 
-    public String getCompaniesBoxHtml(){
-        StringBuilder sb = new StringBuilder();
-        for (int id : companyIds){
-            if (!sb.isEmpty())
-                sb.append("</br>");
-            sb.append(StringHelper.toHtml(CompanyCache.getCompany(id).getName()));
+    public CompanyDailyBriefing getCompanyBriefing(int companyId) {
+        for (CompanyDailyBriefing companyBriefing : companyBriefings) {
+            if (companyBriefing.getCompanyId() == companyId) {
+                return companyBriefing;
+            }
         }
-        return sb.toString();
-    }
-
-    public void setCompanyIds(Set<Integer> companyIds) {
-        this.companyIds = companyIds;
+        return null;
     }
 
     @Override
@@ -241,9 +216,15 @@ public class ProjectDailyReport extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
-                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
-                setActivity(rdata.getAttributes().getString("activity"));
-                setBriefing(rdata.getAttributes().getString("briefing"));
+                getCompanyBriefings().clear();
+                List<KeyValueMap>  maps = rdata.getAttributes().getSubList("companyBriefings");
+                for (KeyValueMap map : maps) {
+                    CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                    briefing.setCompanyId(map.getInt("companyId"));
+                    briefing.setActivity(map.getString("activity"));
+                    briefing.setBriefing(map.getString("briefing"));
+                    getCompanyBriefings().add(briefing);
+                }
             }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
@@ -255,9 +236,16 @@ public class ProjectDailyReport extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
-                setCompanyIds(rdata.getAttributes().getIntegerSet("companyIds"));
-                setActivity(rdata.getAttributes().getString("activity"));
-                setBriefing(rdata.getAttributes().getString("briefing"));
+                getCompanyBriefings().clear();
+                for (int companyId : getProject().getCompanyIds()){
+                   if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
+                       CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                       briefing.setCompanyId(companyId);
+                       briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
+                       briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
+                       getCompanyBriefings().add(briefing);
+                   }
+                }
             }
         }
     }
@@ -270,8 +258,7 @@ public class ProjectDailyReport extends ContentData {
                 .add("weatherTemp", getWeatherTemp())
                 .add("weatherWdir", getWeatherWdir())
                 .add("weatherWspd", getWeatherWspd())
-                .add("activity", getActivity())
-                .add("briefing", getBriefing());
+                ;
     }
 
     @Override
@@ -291,12 +278,7 @@ public class ProjectDailyReport extends ContentData {
             setWeatherWdir(getString(json, "weatherWdir"));
             setWeatherWspd(getString(json, "weatherWspd"));
         }
-        s = getString(json, "activity");
-        if (s != null)
-            setActivity(s);
-        s = getString(json, "briefing");
-        if (s != null)
-            setBriefing(s);
+
     }
 
     @Override

@@ -13,6 +13,7 @@ import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.defect.DefectData;
 import de.elbe5.unit.UnitData;
+import de.elbe5.user.CodefUserData;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 
@@ -26,6 +27,10 @@ public abstract class CodefPdfCreator extends PdfCreator {
 
     public void addSubHeader(String text){
         add("<subheader><text>").add(text).add("</text></subheader>");
+    }
+
+    public void addHeaderComment(String text){
+        add("<headercomment><text>").add(text).add("</text></headercomment>");
     }
 
     public void addTextLine(String text){
@@ -71,6 +76,14 @@ public abstract class CodefPdfCreator extends PdfCreator {
 
     public void endTable2Col(){
         add("</table2col>");
+    }
+
+    public void startTable3Col(){
+        add("<table3col>");
+    }
+
+    public void endTable3Col(){
+        add("</table3col>");
     }
 
     public void startTable4Col(){
@@ -123,8 +136,27 @@ public abstract class CodefPdfCreator extends PdfCreator {
         add("</docAndDate></footer>");
     }
 
-    //todo
-    protected void addUnitDefectsXml(UnitData data, List<DefectData> defects, boolean includeStatusChanges) {
+    protected void addUnit(UnitData unit, CodefUserData user, boolean includeStatusChanges){
+        List<DefectData> defects = user.getUnitDefects(unit.getId());
+        if (!defects.isEmpty()) {
+            addSubHeader(sxml("_unit") + ": " + xml(unit.getDisplayName()));
+
+            if (unit.getApproveDate()!=null) {
+                addTextLine(sxml("_approveDate") + ": " + xml(unit.getApproveDate()));
+            }
+
+            ImageData plan = unit.getPlan();
+            if (plan != null) {
+                ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
+                defects = user.getUnitDefects(unit.getId());
+                BinaryFile file = unit.createUnitDefectPlan(fullplan, defects, 1);
+                addImage(getBase64SrcString(file));
+            }
+            addDefectList(unit, defects, includeStatusChanges);
+        }
+    }
+
+    protected void addDefectList(UnitData unit, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
             addTextLine(sxml(defect.isRemainingWork() ? "_remainingWork" : "_defect") + ": "+ xml(defect.getDescription()));
             startTable4Col();
@@ -164,13 +196,13 @@ public abstract class CodefPdfCreator extends PdfCreator {
             BinaryFile file;
             startTable2Col();
             if (defect.getPositionX()>0 || defect.getPositionY()>0) {
-                ImageData plan = FileBean.getInstance().getFile(data.getPlan().getId(), true, ImageData.class);
+                ImageData plan = FileBean.getInstance().getFile(unit.getPlan().getId(), true, ImageData.class);
                 byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
-                file = defect.createCroppedDefectPlan(plan, arrowBytes, data.getId(), defect.getPositionX(), defect.getPositionY());
+                file = defect.createCroppedDefectPlan(plan, arrowBytes, unit.getId(), defect.getPositionX(), defect.getPositionY());
                 addLabeledImage(sxml("_defectPosition"), file, "5.0cm");
             }
-            if (!defect.getPositionComment().isEmpty()) {
-                addLabeledContent(sxml("_positionComment"), xml(defect.getPositionComment()));
+            if (!defect.getComment().isEmpty()) {
+                addLabeledContent(sxml("_positionComment"), xml(defect.getComment()));
             }
             List<ImageData> files = defect.getFiles(ImageData.class);
             if (!files.isEmpty()) {
@@ -181,46 +213,51 @@ public abstract class CodefPdfCreator extends PdfCreator {
                 }
             }
             endTable2Col();
+
             if (includeStatusChanges) {
-                List<DefectStatusData> statusChanges = defect.getStatusChanges();
-                if (!statusChanges.isEmpty()) {
-                    startTable4Col();
-                    for (DefectStatusData changeData : defect.getStatusChanges()) {
-                        startTableRow();
-                        addTableCellBold(sxml("_statusChange"));
-                        endTableRow();
-                        startTableRow();
-                        addTableCellBold(sxml("_by"));
-                        addTableCell(xml(changeData.getCreatorName()));
-                        addTableCellBold(sxml("_on"));
-                        addTableCell(xml(changeData.getCreationDate()));
-                        endTableRow();
-                        startTableRow();
-                        addTableCellBold(sxml("_status"));
-                        addTableCell(LocalizedSystemStrings.getInstance().xml(changeData.getStatusString()));
-                        addTableCellBold(sxml("_assigned"));
-                        addTableCell(xml(changeData.getAssignedName()));
-                        endTableRow();
-                        startTableRow();
-                        addTableCellBold(sxml("_description"));
-                        addTableCell(xml(changeData.getDescription()));
-                        endTableRow();
-                        files = changeData.getFiles(ImageData.class);
-                        if (!files.isEmpty()) {
-                            startTableRow();
-                            addTableCellBold(sxml("_images"));
-                            addTableCell(xml(changeData.getDescription()));
-                            endTableRow();
-                            List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
-                            for (ImageData image : statusChangeImages) {
-                                file = FileBean.getInstance().getBinaryFile(image.getId());
-                                addLabeledImage("", file, "8.0cm");
-                            }
-                        }
+                addStatusList(defect);
+            }
+        }
+    }
+
+    protected void addStatusList(DefectData defect) {
+        List<DefectStatusData> statusChanges = defect.getStatusChanges();
+        if (!statusChanges.isEmpty()) {
+            startTable4Col();
+            for (DefectStatusData changeData : defect.getStatusChanges()) {
+                startTableRow();
+                addTableCellBold(sxml("_statusChange"));
+                endTableRow();
+                startTableRow();
+                addTableCellBold(sxml("_by"));
+                addTableCell(xml(changeData.getCreatorName()));
+                addTableCellBold(sxml("_on"));
+                addTableCell(xml(changeData.getCreationDate()));
+                endTableRow();
+                startTableRow();
+                addTableCellBold(sxml("_status"));
+                addTableCell(LocalizedSystemStrings.getInstance().xml(changeData.getStatusString()));
+                addTableCellBold(sxml("_assigned"));
+                addTableCell(xml(changeData.getAssignedName()));
+                endTableRow();
+                startTableRow();
+                addTableCellBold(sxml("_description"));
+                addTableCell(xml(changeData.getDescription()));
+                endTableRow();
+                List<ImageData> files = changeData.getFiles(ImageData.class);
+                if (!files.isEmpty()) {
+                    startTableRow();
+                    addTableCellBold(sxml("_images"));
+                    addTableCell(xml(changeData.getDescription()));
+                    endTableRow();
+                    List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
+                    for (ImageData image : statusChangeImages) {
+                        BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
+                        addLabeledImage("", file, "8.0cm");
                     }
-                    endTable4Col();
                 }
             }
+            endTable4Col();
         }
     }
 

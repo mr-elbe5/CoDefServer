@@ -14,6 +14,9 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.file.ImageData" %>
 <%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
+<%@ page import="de.elbe5.projectdailyreport.CompanyDailyBriefing" %>
+<%@ page import="de.elbe5.company.CompanyData" %>
+<%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -26,6 +29,27 @@
 <section class="contentSection" id="content">
     <div class="paragraph">
         <h3><%=$SH("_projectDailyReport")%>&nbsp;<%=$H(contentData.getDisplayName())%></h3>
+        <div class="d-flex flex-wrap align-items-stretch boxContainer">
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_creator")%></div>
+                <div class="boxText"><%=$H(contentData.getCreatorName())%></div>
+            </div>
+            <% if (contentData.getChangerId() != contentData.getCreatorId()){%>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_editedBy")%></div>
+                <div class="boxText"><%=$H(contentData.getChangerName())%></div>
+            </div>
+            <%}%>
+            <% if (contentData.getChangeDate() != contentData.getCreationDate()){%>
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_changeDate")%></div>
+                <div class="boxText"><%=$H(contentData.getChangeDate())%></div>
+            </div>
+            <%}%>
+        </div>
+
+        <h4 style="font-weight: bold"><%=$SH("_weather")%></h4>
+
         <div class="d-flex flex-wrap align-items-stretch boxContainer">
             <div class="box">
                 <div class="boxTitle"><%=$SH("_weatherConditions")%></div>
@@ -47,35 +71,21 @@
                 <div class="boxTitle"><%=$SH("_relativeHumidity")%></div>
                 <div class="boxText"><%=$H(contentData.getWeatherRhum())%></div>
             </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_activity")%></div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getActivity())%></div>
-            </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_presentCompanies")%></div>
-                <div class="boxText"><%=contentData.getCompaniesBoxHtml()%></div>
-            </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_briefing")%></div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getBriefing())%></div>
-            </div>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_creator")%></div>
-                <div class="boxText"><%=$H(contentData.getCreatorName())%></div>
-            </div>
-            <% if (contentData.getChangerId() != contentData.getCreatorId()){%>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_editedBy")%></div>
-                <div class="boxText"><%=$H(contentData.getChangerName())%></div>
-            </div>
-            <%}%>
-            <% if (contentData.getChangeDate() != contentData.getCreationDate()){%>
-            <div class="box">
-                <div class="boxTitle"><%=$SH("_changeDate")%></div>
-                <div class="boxText"><%=$H(contentData.getChangeDate())%></div>
-            </div>
-            <%}%>
         </div>
+
+        <h4 style="font-weight: bold"><%=$SH("_presentCompanies")%></h4>
+        <table style="width:100%">
+            <tr><th><%=$SH("_company")%><th><%=$SH("_activity")%></th><th><%=$SH("_briefing")%></tr>
+        <% for (CompanyDailyBriefing briefing : contentData.getCompanyBriefings()){
+            CompanyData company = CompanyCache.getCompany(briefing.getCompanyId());
+        %>
+            <tr style="border-top: 1px solid #0b2e13">
+                <td style="vertical-align: top;"><%=$H(company.getName())%></td>
+                <td><%=$HML(briefing.getActivity())%></td>
+                <td><%=$HML(briefing.getBriefing())%></td>
+            </tr>
+            <%}%>
+        </table>
 
         <% if (!contentData.getFiles().isEmpty()){%>
         <div class="d-flex flex-wrap align-items-stretch boxContainer">

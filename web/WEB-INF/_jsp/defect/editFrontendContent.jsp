@@ -48,8 +48,8 @@
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
         <%}%>
         <form:textarea name="description" label="_defect" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
-        <form:textarea name="comment" label="_defectComment" height="5em"><%=$H(defect.getComment())%></form:textarea>
-        <form:textarea name="positionComment" label="_positionComment" height="5em"><%=$H(defect.getPositionComment())%></form:textarea>
+        <form:textarea name="comment" label="_commentOrDescription" height="5em"><%=$H(defect.getComment())%></form:textarea>
+        <form:textarea name="location" label="_unitOrLocationt" height="5em"><%=$H(defect.getLocation())%></form:textarea>
         <form:line label="_remainingWork">
             <form:check name="remainingWork" value="true" checked="<%=defect.isRemainingWork()%>"/>
         </form:line>

@@ -51,7 +51,7 @@ public class DefectData extends ContentData {
     }
 
     protected String comment = "";
-    protected String positionComment = "";
+    protected String location = "";
     protected boolean remainingWork = false;
     protected int assignedId = 0;
 
@@ -103,12 +103,12 @@ public class DefectData extends ContentData {
         this.comment = comment;
     }
 
-    public String getPositionComment() {
-        return positionComment;
+    public String getLocation() {
+        return location;
     }
 
-    public void setPositionComment(String positionComment) {
-        this.positionComment = positionComment;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public boolean isRemainingWork() {
@@ -332,8 +332,8 @@ public class DefectData extends ContentData {
             case api -> {
                 super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
-                setPositionComment(rdata.getAttributes().getString("comment"));
-                setPositionComment(rdata.getAttributes().getString("positionComment"));
+                setComment(rdata.getAttributes().getString("positionComment"));
+                setLocation(rdata.getAttributes().getString("location"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -344,8 +344,8 @@ public class DefectData extends ContentData {
             }
             case frontend -> {
                 setDescription(rdata.getAttributes().getString("description"));
-                setPositionComment(rdata.getAttributes().getString("comment"));
-                setPositionComment(rdata.getAttributes().getString("positionComment"));
+                setComment(rdata.getAttributes().getString("comment"));
+                setLocation(rdata.getAttributes().getString("location"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -382,8 +382,8 @@ public class DefectData extends ContentData {
             }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
-                setPositionComment(rdata.getAttributes().getString("comment"));
-                setPositionComment(rdata.getAttributes().getString("positionComment"));
+                setComment(rdata.getAttributes().getString("comment"));
+                setLocation(rdata.getAttributes().getString("location"));
                 setRemainingWork(rdata.getAttributes().getBoolean("remainingWork"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setProjectPhase(rdata.getAttributes().getString("projectPhase"));
@@ -410,8 +410,8 @@ public class DefectData extends ContentData {
         return super.getJson()
                 .add("projectPhase", getProjectPhaseString())
                 .add("notified", isNotified())
-                .add("comment",getComment())
-                .add("positionComment",getPositionComment())
+                .add("comment", getLocation())
+                .add("positionComment", getComment())
                 .add("remainingWork",isRemainingWork())
                 .add("assignedId",getLastAssignedId())
                 .add("assignedName",getLastAssignedName())
@@ -445,10 +445,10 @@ public class DefectData extends ContentData {
             setProjectPhase(s);
         s = getString(json, "comment");
         if (s != null)
-            setComment(s);
+            setLocation(s);
         s = getString(json, "positionComment");
         if (s != null)
-            setPositionComment(s);
+            setComment(s);
         s = getString(json, "remainingWork");
         if (s != null)
             setRemainingWork(s.equalsIgnoreCase(Boolean.TRUE.toString()));

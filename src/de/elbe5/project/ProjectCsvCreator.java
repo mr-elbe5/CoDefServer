@@ -28,7 +28,7 @@ public class ProjectCsvCreator extends CsvCreator {
 
     static String[] projectFields = {""};
     static String[] unitFields = {"_unit","_approveDate"};
-    static String[] defectFields = {"_id","_defect","_defectComment","_positionComment","_defectType","_assigned","_status",
+    static String[] defectFields = {"_id","_defect","_commentOrDescription","_unitOrLocation","_defectType","_assigned","_status",
             "_dueDate","_dueDate2","_closed",
             "_projectPhase","_creationDate","_editedBy","_changeDate"};
     static String[] statusFields = {"_statusChangeBy","_on","_status","_assigned","_description"};
@@ -72,7 +72,7 @@ public class ProjectCsvCreator extends CsvCreator {
         list.add(String.valueOf(defect.getId()));
         list.add(csv(defect.getDescription()));
         list.add(csv(defect.getComment()));
-        list.add(csv(defect.getPositionComment()));
+        list.add(csv(defect.getLocation()));
         list.add(csv(defect.isRemainingWork() ? scsv("_remainingWork") : scsv("_defect") ));
         list.add(csv(defect.getLastAssignedName()));
         list.add(csv(LocalizedSystemStrings.getInstance().csv(defect.getLastStatus().toString())));

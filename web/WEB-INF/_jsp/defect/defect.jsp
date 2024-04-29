@@ -35,12 +35,12 @@
                 <div class="boxText"><%=$H(contentData.getDescription())%></div>
             </div>
             <div class="box">
-                <div class="boxTitle"><%=$SH("_comment")%></div>
+                <div class="boxTitle"><%=$SH("_commentOrDescription")%></div>
                 <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getComment())%></div>
             </div>
             <div class="box">
-                <div class="boxTitle"><%=$SH("_positionComment")%></div>
-                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getPositionComment())%></div>
+                <div class="boxTitle"><%=$SH("_unitOrLocation")%></div>
+                <div class="boxText"><%=StringHelper.toHtmlMultiline(contentData.getLocation())%></div>
             </div>
             <%if (contentData.isRemainingWork()){%>
             <div><%=$SH("_remainingWork")%></div>
