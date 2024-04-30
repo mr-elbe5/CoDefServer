@@ -12,15 +12,9 @@ public class CodefConfiguration {
 
     private static boolean showInactiveContent = false;
 
-    private static boolean useNotified = false;
-
     private static boolean syncProjectCompamiesOnly = true;
 
-    private static String defaultCountry = "de";
-
-    private static String timeZoneName = "Europe/Berlin";
-
-    private static String meteoStatKey = "";
+    private final static ServerSettings serverSettings = new ServerSettings();
 
     public static boolean isShowInactiveContent() {
         return showInactiveContent;
@@ -31,11 +25,11 @@ public class CodefConfiguration {
     }
 
     public static void setUseNotified(boolean useNotified) {
-        CodefConfiguration.useNotified = useNotified;
+        serverSettings.useNotified = useNotified;
     }
 
     public static boolean showNotified() {
-        return useNotified;
+        return serverSettings.useNotified;
     }
 
     public static boolean syncProjectCompamiesOnly() {
@@ -43,27 +37,31 @@ public class CodefConfiguration {
     }
 
     public static String getDefaultCountry() {
-        return defaultCountry;
+        return serverSettings.defaultCountry;
     }
 
     public static void setDefaultCountry(String defaultCountry) {
-        CodefConfiguration.defaultCountry = defaultCountry;
+        serverSettings.defaultCountry = defaultCountry;
     }
 
     public static String getTimeZoneName() {
-        return timeZoneName;
+        return serverSettings.timeZoneName;
     }
 
     public static void setTimeZoneName(String timeZoneName) {
-        CodefConfiguration.timeZoneName = timeZoneName;
+        serverSettings.timeZoneName = timeZoneName;
     }
 
     public static String getMeteoStatKey() {
-        return meteoStatKey;
+        return serverSettings.meteoStatKey;
     }
 
     public static void setMeteoStatKey(String meteoStatKey) {
-        CodefConfiguration.meteoStatKey = meteoStatKey;
+        serverSettings.meteoStatKey = meteoStatKey;
+    }
+
+    public static ServerSettings getServerSettings() {
+        return serverSettings;
     }
 
     public static void setSyncProjectCompamiesOnly(boolean syncProjectCompamiesOnly) {

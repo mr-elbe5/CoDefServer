@@ -20,6 +20,7 @@ import de.elbe5.user.CodefUserData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -74,6 +75,8 @@ public class RootData extends ContentData {
             }
             companies.removeIf(company -> !projectCompanyIds.contains(company.getId()));
         }
+        JsonObject jsServerSettings = CodefConfiguration.getServerSettings().getJson();
+
         JSONArray jsCompanies = new JSONArray();
         for (CompanyData company : companies) {
             JsonObject jsCompany = company.getJson();
@@ -85,6 +88,7 @@ public class RootData extends ContentData {
             jsProjects.add(jsProject);
         }
         return new JsonObject()
+                .add("serverSettings", jsServerSettings)
                 .add("companies", jsCompanies)
                 .add("projects", jsProjects);
     }
