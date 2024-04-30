@@ -46,7 +46,7 @@ public class ProjectDailyReportBean extends ContentBean {
         readProjectDiaryCompanies(con, data);
     }
 
-    private static final String READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "SELECT company_id, activity, briefing FROM t_company2project_daily_report WHERE project_daily_report_id=?";
+    private static final String READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "SELECT company_id, activity, briefing FROM t_company_briefing WHERE project_daily_report_id=?";
 
     protected void readProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
         PreparedStatement pst = null;
@@ -56,7 +56,7 @@ public class ProjectDailyReportBean extends ContentBean {
             try (ResultSet rs = pst.executeQuery()) {
                 data.getCompanyBriefings().clear();
                 while (rs.next()) {
-                    CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                    CompanyBriefing briefing = new CompanyBriefing();
                     briefing.setCompanyId(rs.getInt(1));
                     briefing.setActivity(rs.getString(2));
                     briefing.setBriefing(rs.getString(3));
@@ -131,8 +131,8 @@ public class ProjectDailyReportBean extends ContentBean {
         writeProjectDiaryCompanies(con, data);
     }
 
-    private static final String DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "DELETE FROM t_company2project_daily_report WHERE project_daily_report_id=?";
-    private static final String INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "INSERT INTO t_company2project_daily_report (project_daily_report_id,company_id, activity, briefing) VALUES(?,?,?,?)";
+    private static final String DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "DELETE FROM t_company_briefing WHERE project_daily_report_id=?";
+    private static final String INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "INSERT INTO t_company_briefing (project_daily_report_id,company_id, activity, briefing) VALUES(?,?,?,?)";
 
     protected void writeProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
         PreparedStatement pst = null;
@@ -144,7 +144,7 @@ public class ProjectDailyReportBean extends ContentBean {
                 pst.close();
                 pst = con.prepareStatement(INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL);
                 pst.setInt(1, data.getId());
-                for (CompanyDailyBriefing briefing : data.getCompanyBriefings()) {
+                for (CompanyBriefing briefing : data.getCompanyBriefings()) {
                     pst.setInt(2, briefing.getCompanyId());
                     pst.setString(3, briefing.getActivity());
                     pst.setString(4, briefing.getBriefing());

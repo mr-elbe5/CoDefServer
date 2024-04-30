@@ -215,7 +215,6 @@ public class ProjectData extends ContentData {
     @SuppressWarnings("unchecked")
     public JsonObject getJson(){
         JSONArray jsCompanyIds = new JSONArray();
-
         jsCompanyIds.addAll(getCompanyIds());
         return super.getJson()
                 .add("zipCode", getZipCode())
@@ -234,15 +233,15 @@ public class ProjectData extends ContentData {
                 continue;
             jsUnits.add(unit.getJsonRecursive());
         }
-        JSONArray jsDiaries = new JSONArray();
-        for (ProjectDailyReport diary : getChildren(ProjectDailyReport.class)) {
-            if (!diary.isActive())
+        JSONArray jsDailyReports = new JSONArray();
+        for (ProjectDailyReport report : getChildren(ProjectDailyReport.class)) {
+            if (!report.isActive())
                 continue;
-            jsDiaries.add(diary.getJsonRecursive());
+            jsDailyReports.add(report.getJsonRecursive());
         }
         return getJson()
                 .add("units", jsUnits)
-                .add("diaries", jsDiaries);
+                .add("dailyReports", jsDailyReports);
     }
 
     @Override
@@ -267,7 +266,7 @@ public class ProjectData extends ContentData {
     public void fromJsonRecursive(JSONObject json) {
         fromJson(json);
         addUnitsFromJson(json);
-        addDiariesFromJson(json);
+        addDailyReportsFromJson(json);
     }
 
     public void addUnitsFromJson(JSONObject json) {
@@ -284,15 +283,15 @@ public class ProjectData extends ContentData {
         }
     }
 
-    public void addDiariesFromJson(JSONObject json) {
-        JSONArray jsDiaries = getJSONArray(json, "diaries");
-        if (jsDiaries != null){
-            for (Object obj : jsDiaries){
+    public void addDailyReportsFromJson(JSONObject json) {
+        JSONArray jsReports = getJSONArray(json, "dailyReports");
+        if (jsReports != null){
+            for (Object obj : jsReports){
                 if (obj instanceof JSONObject jsObj){
-                    ProjectDailyReport diary = new ProjectDailyReport();
-                    diary.fromJsonRecursive(jsObj);
-                    if (diary.hasValidData())
-                        getChildren().add(diary);
+                    ProjectDailyReport report = new ProjectDailyReport();
+                    report.fromJsonRecursive(jsObj);
+                    if (report.hasValidData())
+                        getChildren().add(report);
                 }
             }
         }

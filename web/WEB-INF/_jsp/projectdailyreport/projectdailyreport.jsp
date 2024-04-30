@@ -14,7 +14,7 @@
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.file.ImageData" %>
 <%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
-<%@ page import="de.elbe5.projectdailyreport.CompanyDailyBriefing" %>
+<%@ page import="de.elbe5.projectdailyreport.CompanyBriefing" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
@@ -76,7 +76,7 @@
         <h4 style="font-weight: bold"><%=$SH("_presentCompanies")%></h4>
         <table style="width:100%">
             <tr><th><%=$SH("_company")%><th><%=$SH("_activity")%></th><th><%=$SH("_briefing")%></tr>
-        <% for (CompanyDailyBriefing briefing : contentData.getCompanyBriefings()){
+        <% for (CompanyBriefing briefing : contentData.getCompanyBriefings()){
             CompanyData company = CompanyCache.getCompany(briefing.getCompanyId());
         %>
             <tr style="border-top: 1px solid #0b2e13">

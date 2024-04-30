@@ -74,7 +74,7 @@ public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
             addTableCellBold(sxml("_activity"));
             addTableCellBold(sxml("_briefing"));
             endTableRow();
-            for (CompanyDailyBriefing briefing : report.getCompanyBriefings()){
+            for (CompanyBriefing briefing : report.getCompanyBriefings()){
                 CompanyData company = CompanyCache.getCompany(briefing.getCompanyId());
                 startTableRow();
                 addTableCell(xml(company.getName()));

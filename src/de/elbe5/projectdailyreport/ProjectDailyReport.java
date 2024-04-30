@@ -2,7 +2,6 @@ package de.elbe5.projectdailyreport;
 
 import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.*;
-import de.elbe5.company.CompanyCache;
 import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -14,6 +13,7 @@ import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.jsp.PageContext;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class ProjectDailyReport extends ContentData {
     protected String weatherTemp = "";
     protected String weatherRhum = "";
 
-    protected List<CompanyDailyBriefing> companyBriefings = new ArrayList<>();
+    protected List<CompanyBriefing> companyBriefings = new ArrayList<>();
 
     public ProjectDailyReport() {
     }
@@ -137,12 +137,12 @@ public class ProjectDailyReport extends ContentData {
         return false;
     }
 
-    public List<CompanyDailyBriefing> getCompanyBriefings() {
+    public List<CompanyBriefing> getCompanyBriefings() {
         return companyBriefings;
     }
 
-    public CompanyDailyBriefing getCompanyBriefing(int companyId) {
-        for (CompanyDailyBriefing companyBriefing : companyBriefings) {
+    public CompanyBriefing getCompanyBriefing(int companyId) {
+        for (CompanyBriefing companyBriefing : companyBriefings) {
             if (companyBriefing.getCompanyId() == companyId) {
                 return companyBriefing;
             }
@@ -208,7 +208,10 @@ public class ProjectDailyReport extends ContentData {
             case api -> {
                 super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
-                int i = rdata.getAttributes().getInt("weatherCoco");
+                int i = rdata.getAttributes().getInt("idx");
+                if (i>0)
+                    setIdx(i);
+                i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);
                     setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
@@ -219,7 +222,7 @@ public class ProjectDailyReport extends ContentData {
                 getCompanyBriefings().clear();
                 List<KeyValueMap>  maps = rdata.getAttributes().getSubList("companyBriefings");
                 for (KeyValueMap map : maps) {
-                    CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                    CompanyBriefing briefing = new CompanyBriefing();
                     briefing.setCompanyId(map.getInt("companyId"));
                     briefing.setActivity(map.getString("activity"));
                     briefing.setBriefing(map.getString("briefing"));
@@ -239,7 +242,7 @@ public class ProjectDailyReport extends ContentData {
                 getCompanyBriefings().clear();
                 for (int companyId : getProject().getCompanyIds()){
                    if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
-                       CompanyDailyBriefing briefing = new CompanyDailyBriefing();
+                       CompanyBriefing briefing = new CompanyBriefing();
                        briefing.setCompanyId(companyId);
                        briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
                        briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
@@ -253,6 +256,7 @@ public class ProjectDailyReport extends ContentData {
     @Override
     public JsonObject getJson(){
         return super.getJson()
+                .add("idx", getIdx())
                 .add("weatherCoco", getWeatherCoco())
                 .add("weatherRhum", getWeatherRhum())
                 .add("weatherTemp", getWeatherTemp())
@@ -261,15 +265,27 @@ public class ProjectDailyReport extends ContentData {
                 ;
     }
 
+    @SuppressWarnings("unchecked")
+    public JSONArray getCompanyBriefingsForJson() {
+        JSONArray jsCompanyBriefings = new JSONArray();
+        for (CompanyBriefing companyBriefing : getCompanyBriefings()) {
+            JsonObject jsCompanyBriefing = companyBriefing.getJson();
+            jsCompanyBriefings.add(jsCompanyBriefing);
+        }
+        return jsCompanyBriefings;
+    }
+
     @Override
     public JsonObject getJsonRecursive(){
         return getJson()
-                .add("images", getImagesForJson());
+                .add("images", getImagesForJson())
+                .add("companyBriefings", getCompanyBriefingsForJson());
     }
 
     @Override
     public void fromJson(JSONObject json) {
         super.fromJson(json);
+        setIdx(getInt(json,"idx"));
         String s = getString(json, "weatherCoco");
         if (!s.isEmpty()) {
             setWeatherCoco(s);

@@ -197,15 +197,15 @@ CREATE TABLE IF NOT EXISTS t_project_daily_report
     CONSTRAINT t_project_daily_report_uq1 UNIQUE (idx)
 );
 
-CREATE TABLE IF NOT EXISTS t_company2project_daily_report
+CREATE TABLE IF NOT EXISTS t_company_briefing
 (
     company_id INTEGER     NOT NULL,
     project_daily_report_id  INTEGER     NOT NULL,
     activity        VARCHAR(1000) NOT NULL DEFAULT '',
     briefing        VARCHAR(1000) NOT NULL DEFAULT '',
-    CONSTRAINT t_company2project_daily_report_pk PRIMARY KEY (company_id, project_daily_report_id),
-    CONSTRAINT t_company2project_daily_report_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
-    CONSTRAINT t_company2project_daily_reporty_fk2 FOREIGN KEY (project_daily_report_id) REFERENCES t_project_daily_report (id) ON DELETE CASCADE
+    CONSTRAINT t_company_briefing_pk PRIMARY KEY (company_id, project_daily_report_id),
+    CONSTRAINT t_company_briefing_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
+    CONSTRAINT t_company_briefing_fk2 FOREIGN KEY (project_daily_report_id) REFERENCES t_project_daily_report (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_unit

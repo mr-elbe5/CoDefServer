@@ -8,6 +8,7 @@
  */
 package de.elbe5.root;
 
+import de.elbe5.base.Log;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentData;
 import de.elbe5.content.ContentController;
@@ -49,6 +50,7 @@ public class RootController extends ContentController {
         if (data==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         JSONObject json = data.getAllDataAsJson(rdata);
+        //Log.log(json.toJSONString());
         return new JsonResponse(json.toJSONString());
     }
 

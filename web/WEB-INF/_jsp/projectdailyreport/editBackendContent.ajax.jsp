@@ -16,7 +16,7 @@
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
-<%@ page import="de.elbe5.projectdailyreport.CompanyDailyBriefing" %>
+<%@ page import="de.elbe5.projectdailyreport.CompanyBriefing" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -60,7 +60,7 @@
                     <table style="width:100%">
                         <tr><th><%=$SH("_company")%><th><%=$SH("_activity")%></th><th><%=$SH("_briefing")%></tr>
                         <% for (CompanyData company : companies){
-                            CompanyDailyBriefing briefing = report.getCompanyBriefing(company.getId());
+                            CompanyBriefing briefing = report.getCompanyBriefing(company.getId());
                         %>
                                 <tr>
                                     <td style="vertical-align: top;"><input type="checkbox" name="company_<%=company.getId()%>_present" value="true" <%=briefing == null ? "" : "checked"%> /> <label><%=$H(company.getName())%></label></td>
