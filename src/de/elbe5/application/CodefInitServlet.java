@@ -18,7 +18,7 @@ import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatus.DefectStatusController;
 import de.elbe5.group.GroupCache;
 import de.elbe5.project.ProjectController;
-import de.elbe5.projectdailyreport.ProjectDailyReportController;
+import de.elbe5.dailyreport.DailyReportController;
 import de.elbe5.root.RootController;
 import de.elbe5.unit.UnitController;
 import de.elbe5.company.CompanyCache;
@@ -73,7 +73,7 @@ public class CodefInitServlet extends InitServlet {
         RootController.register(new RootController());
         ProjectController.register(new ProjectController());
         UnitController.register(new UnitController());
-        ProjectDailyReportController.register(new ProjectDailyReportController());
+        DailyReportController.register(new DailyReportController());
         DefectController.register(new DefectController());
         DefectStatusController.register(new DefectStatusController());
 

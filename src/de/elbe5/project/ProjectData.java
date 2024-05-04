@@ -15,7 +15,7 @@ import de.elbe5.base.*;
 import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
-import de.elbe5.projectdailyreport.ProjectDailyReport;
+import de.elbe5.dailyreport.DailyReport;
 import de.elbe5.request.RequestType;
 import de.elbe5.unit.UnitData;
 import de.elbe5.content.ContentBean;
@@ -92,7 +92,7 @@ public class ProjectData extends ContentData {
 
     public int getNextDiaryIndex(){
         int idx = 0;
-        for (ProjectDailyReport diary : getChildren(ProjectDailyReport.class)){
+        for (DailyReport diary : getChildren(DailyReport.class)){
             if (diary.getIdx() > idx){
                 idx = diary.getIdx();
             }
@@ -234,7 +234,7 @@ public class ProjectData extends ContentData {
             jsUnits.add(unit.getJsonRecursive());
         }
         JSONArray jsDailyReports = new JSONArray();
-        for (ProjectDailyReport report : getChildren(ProjectDailyReport.class)) {
+        for (DailyReport report : getChildren(DailyReport.class)) {
             if (!report.isActive())
                 continue;
             jsDailyReports.add(report.getJsonRecursive());
@@ -288,7 +288,7 @@ public class ProjectData extends ContentData {
         if (jsReports != null){
             for (Object obj : jsReports){
                 if (obj instanceof JSONObject jsObj){
-                    ProjectDailyReport report = new ProjectDailyReport();
+                    DailyReport report = new DailyReport();
                     report.fromJsonRecursive(jsObj);
                     if (report.hasValidData())
                         getChildren().add(report);

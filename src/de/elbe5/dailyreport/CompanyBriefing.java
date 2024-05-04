@@ -1,4 +1,4 @@
-package de.elbe5.projectdailyreport;
+package de.elbe5.dailyreport;
 
 import de.elbe5.base.IJsonData;
 import de.elbe5.base.JsonObject;

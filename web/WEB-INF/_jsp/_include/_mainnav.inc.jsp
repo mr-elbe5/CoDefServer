@@ -7,7 +7,7 @@
 <%@ page import="de.elbe5.project.ProjectData" %>
 <%@ page import="de.elbe5.user.CodefUserData" %>
 <%@ page import="de.elbe5.unit.UnitData" %>
-<%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
+<%@ page import="de.elbe5.dailyreport.DailyReport" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
     CodefUserData user = rdata.getLoginUser(CodefUserData.class);
@@ -35,7 +35,7 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="" role="button" aria-haspopup="true" aria-expanded="false"><%=$SH("_projectDailyReports")%>
     </a>
     <div class="dropdown-menu">
-        <% for (ContentData child : project.getChildren(ProjectDailyReport.class)){
+        <% for (ContentData child : project.getChildren(DailyReport.class)){
             if (child.isActive()){
         %>
         <a class="dropdown-item" href="<%=child.getUrl()%>"><%=$H(child.getDisplayName())%></a>

@@ -6,7 +6,7 @@
  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.elbe5.projectdailyreport;
+package de.elbe5.dailyreport;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
@@ -25,11 +25,11 @@ import de.elbe5.user.UserData;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ProjectDailyReportPdfCreator extends CodefPdfCreator {
+public class DailyReportPdfCreator extends CodefPdfCreator {
     
     public BinaryFile getProjectDailyReport(int projectDiaryId, RequestData rdata){
         LocalDateTime now = LocalDateTime.now();
-        ProjectDailyReport report = ContentCache.getContent(projectDiaryId, ProjectDailyReport.class);
+        DailyReport report = ContentCache.getContent(projectDiaryId, DailyReport.class);
         if (report==null || report.getProject() == null)
             return null;
 

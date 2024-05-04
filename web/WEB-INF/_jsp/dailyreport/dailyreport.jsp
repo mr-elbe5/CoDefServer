@@ -13,15 +13,15 @@
 <%@ page import="de.elbe5.file.FileData" %>
 <%@ page import="de.elbe5.content.ContentData" %>
 <%@ page import="de.elbe5.file.ImageData" %>
-<%@ page import="de.elbe5.projectdailyreport.ProjectDailyReport" %>
-<%@ page import="de.elbe5.projectdailyreport.CompanyBriefing" %>
+<%@ page import="de.elbe5.dailyreport.DailyReport" %>
+<%@ page import="de.elbe5.dailyreport.CompanyBriefing" %>
 <%@ page import="de.elbe5.company.CompanyData" %>
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
-    ProjectDailyReport contentData = ContentData.getCurrentContent(rdata, ProjectDailyReport.class);
+    DailyReport contentData = ContentData.getCurrentContent(rdata, DailyReport.class);
     assert(contentData !=null);
     if (contentData.hasUserReadRight(rdata.getLoginUser())){
 %>

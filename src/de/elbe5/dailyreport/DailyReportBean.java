@@ -1,4 +1,4 @@
-package de.elbe5.projectdailyreport;
+package de.elbe5.dailyreport;
 
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
@@ -7,13 +7,13 @@ import de.elbe5.file.FileData;
 
 import java.sql.*;
 
-public class ProjectDailyReportBean extends ContentBean {
+public class DailyReportBean extends ContentBean {
 
-    private static ProjectDailyReportBean instance = null;
+    private static DailyReportBean instance = null;
 
-    public static ProjectDailyReportBean getInstance() {
+    public static DailyReportBean getInstance() {
         if (instance == null) {
-            instance = new ProjectDailyReportBean();
+            instance = new DailyReportBean();
         }
         return instance;
     }
@@ -23,7 +23,7 @@ public class ProjectDailyReportBean extends ContentBean {
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectDailyReport data))
+        if (!(contentData instanceof DailyReport data))
             return;
         PreparedStatement pst = null;
         try {
@@ -48,7 +48,7 @@ public class ProjectDailyReportBean extends ContentBean {
 
     private static final String READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "SELECT company_id, activity, briefing FROM t_company_briefing WHERE project_daily_report_id=?";
 
-    protected void readProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
+    protected void readProjectDiaryCompanies(Connection con, DailyReport data) throws SQLException {
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(READ_PROJECT_DAILY_REPORTS_COMPANIES_SQL);
@@ -74,7 +74,7 @@ public class ProjectDailyReportBean extends ContentBean {
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectDailyReport data))
+        if (!(contentData instanceof DailyReport data))
             return;
         PreparedStatement pst = null;
         try {
@@ -105,7 +105,7 @@ public class ProjectDailyReportBean extends ContentBean {
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
-        if (!(contentData instanceof ProjectDailyReport data))
+        if (!(contentData instanceof DailyReport data))
             return;
         PreparedStatement pst = null;
         try {
@@ -134,7 +134,7 @@ public class ProjectDailyReportBean extends ContentBean {
     private static final String DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "DELETE FROM t_company_briefing WHERE project_daily_report_id=?";
     private static final String INSERT_PROJECT_DAILY_REPORTS_COMPANIES_SQL = "INSERT INTO t_company_briefing (project_daily_report_id,company_id, activity, briefing) VALUES(?,?,?,?)";
 
-    protected void writeProjectDiaryCompanies(Connection con, ProjectDailyReport data) throws SQLException {
+    protected void writeProjectDiaryCompanies(Connection con, DailyReport data) throws SQLException {
         PreparedStatement pst = null;
         try {
             pst = con.prepareStatement(DELETE_PROJECT_DAILY_REPORTS_COMPANIES_SQL);

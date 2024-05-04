@@ -1,4 +1,4 @@
-package de.elbe5.projectdailyreport;
+package de.elbe5.dailyreport;
 
 import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.*;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectDailyReport extends ContentData {
+public class DailyReport extends ContentData {
 
     public static List<Class<? extends ContentData>> childClasses = new ArrayList<>();
     public static List<Class<? extends FileData>> fileClasses = new ArrayList<>();
@@ -40,11 +40,11 @@ public class ProjectDailyReport extends ContentData {
 
     protected List<CompanyBriefing> companyBriefings = new ArrayList<>();
 
-    public ProjectDailyReport() {
+    public DailyReport() {
     }
 
     public ContentBean getBean() {
-        return ProjectDailyReportBean.getInstance();
+        return DailyReportBean.getInstance();
     }
 
     public ProjectData getProject(){
@@ -161,19 +161,19 @@ public class ProjectDailyReport extends ContentData {
 
     @Override
     public String getBackendContentTreeJsp() {
-        return "/WEB-INF/_jsp/projectdailyreport/backendTreeContent.inc.jsp";
+        return "/WEB-INF/_jsp/dailyreport/backendTreeContent.inc.jsp";
     }
 
     @Override
     public String getBackendEditJsp() {
-        return "/WEB-INF/_jsp/projectdailyreport/editBackendContent.ajax.jsp";
+        return "/WEB-INF/_jsp/dailyreport/editBackendContent.ajax.jsp";
     }
 
     @Override
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/projectdailyreport/projectdailyreport.jsp");
+        context.include("/WEB-INF/_jsp/dailyreport/dailyreport.jsp");
         writer.write("</div>");
     }
 
@@ -220,13 +220,14 @@ public class ProjectDailyReport extends ContentData {
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
                 getCompanyBriefings().clear();
-                List<KeyValueMap>  maps = rdata.getAttributes().getSubList("companyBriefings");
-                for (KeyValueMap map : maps) {
-                    CompanyBriefing briefing = new CompanyBriefing();
-                    briefing.setCompanyId(map.getInt("companyId"));
-                    briefing.setActivity(map.getString("activity"));
-                    briefing.setBriefing(map.getString("briefing"));
-                    getCompanyBriefings().add(briefing);
+                for (int companyId : getProject().getCompanyIds()){
+                    if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
+                        CompanyBriefing briefing = new CompanyBriefing();
+                        briefing.setCompanyId(companyId);
+                        briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
+                        briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
+                        getCompanyBriefings().add(briefing);
+                    }
                 }
             }
             case backend ->{

@@ -1,7 +1,6 @@
 
 alter table t_defect add location VARCHAR(1000) NOT NULL DEFAULT '';
 
-alter table t_project add idx INTEGER NOT NULL DEFAULT 0;
 alter table t_project add zip_code VARCHAR(20) NOT NULL DEFAULT '';
 alter table t_project add city VARCHAR(255) NOT NULL DEFAULT '';
 alter table t_project add street VARCHAR(255) NOT NULL DEFAULT '';
