@@ -101,7 +101,7 @@
         <%}%>
         <% if (contentData.hasUserEditRight(rdata.getLoginUser())){%>
         <div class=buttonLine>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/projectdailyreport/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/dailyreport/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>
             </button>
         </div>
         <%}%>

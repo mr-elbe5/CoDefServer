@@ -26,7 +26,7 @@
     ProjectData project = report.getProject();
     assert (project != null);
     List<CompanyData> companies = CompanyCache.getCompanies(project.getCompanyIds());
-    String url = "/ctrl/projectdailyreport/saveBackendContent/" + report.getId();%>
+    String url = "/ctrl/dailyreport/saveBackendContent/" + report.getId();%>
 <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <div class="modal-header">

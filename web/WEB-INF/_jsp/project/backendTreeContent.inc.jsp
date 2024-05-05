@@ -33,7 +33,7 @@
         <a class="icon fa fa-pencil" href="" onclick="return openModalDialog('/ctrl/project/openEditBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_edit")%>"> </a>
         <a class="icon fa fa-trash-o" href="" onclick="if (confirmDelete()) return linkTo('/ctrl/content/deleteBackendContent/<%=contentData.getId()%>');" title="<%=$SH("_delete")%>"> </a>
         <a class="icon fa fa-plus" onclick="return openModalDialog('/ctrl/unit/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.unit.UnitData');" title="<%=$SH("_newUnit")%>"></a>
-        <a class="icon fa fa-calendar-o" onclick="return openModalDialog('/ctrl/projectdailyreport/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.dailyreport.ProjectDailyReport');" title="<%=$SH("_newDailyReport")%>"></a>
+        <a class="icon fa fa-calendar-o" onclick="return openModalDialog('/ctrl/dailyreport/openCreateBackendContent?parentId=<%=contentData.getId()%>&type=de.elbe5.dailyreport.DailyReport');" title="<%=$SH("_newDailyReport")%>"></a>
     </div>
     <%}%>
     <ul>
