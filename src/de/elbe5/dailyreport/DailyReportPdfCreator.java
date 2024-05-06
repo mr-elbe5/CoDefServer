@@ -101,7 +101,7 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
         addFooter(sxml("_projectDailyReport") + " " + xml(report.getDisplayName()) + " - " + xml(now));
         finishXml();
         String xml = getXml();
-        Log.log(xml);
+        //Log.log(xml);
         String fileName="dailyreport-" + StringHelper.toSafeWebFileName(report.getDisplayName()) + "-" + xml(report.getCreationDate()).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
