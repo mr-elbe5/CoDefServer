@@ -13,13 +13,18 @@ import de.elbe5.base.Log;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
+import de.elbe5.content.ContentResponse;
+import de.elbe5.defect.DefectData;
 import de.elbe5.project.ProjectData;
+import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
+import de.elbe5.request.RequestKeys;
 import de.elbe5.request.RequestType;
 import de.elbe5.response.IResponse;
 import de.elbe5.response.JsonResponse;
 import de.elbe5.response.MemoryFileResponse;
 import de.elbe5.response.StatusResponse;
+import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -49,6 +54,43 @@ public class DailyReportController extends ContentController {
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
         return view;
+    }
+
+    @Override
+    public IResponse openCreateFrontendContent(RequestData rdata) {
+        int parentId=rdata.getAttributes().getInt("parentId");
+        ProjectData parent= ContentCache.getContent(parentId, ProjectData.class);
+        assert parent != null;
+        assertRights(parent.hasUserEditRight(rdata.getLoginUser()));
+        DailyReport data = new DailyReport();
+        data.setCreateValues(rdata, RequestType.frontend);
+        data.setParentValues(parent);
+        data.setEditMode(true);
+        rdata.setSessionObject(ContentRequestKeys.KEY_CONTENT,data);
+        return new ContentResponse(data);
+    }
+
+    //frontend
+    @Override
+    public IResponse saveFrontendContent(RequestData rdata) {
+        int contentId=rdata.getId();
+        DailyReport data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DailyReport.class);
+        assert(data != null && data.getId() == contentId);
+        assertRights(data.hasUserEditRight(rdata.getLoginUser()));
+        data.readRequestData(rdata, RequestType.frontend);
+        if (!rdata.checkFormErrors()) {
+            return new ContentResponse(data);
+        }
+        data.setChangerId(rdata.getUserId());
+        if (!ContentBean.getInstance().saveContent(data)) {
+            setSaveError(rdata);
+            return new ContentResponse(data);
+        }
+        data.setNew(false);
+        data.setEditMode(false);
+        ContentCache.setDirty();
+        rdata.setMessage($S("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
+        return show(rdata);
     }
 
     // api

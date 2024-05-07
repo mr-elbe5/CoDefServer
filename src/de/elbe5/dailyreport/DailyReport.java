@@ -7,6 +7,7 @@ import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.file.FileData;
+import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestType;
@@ -165,6 +166,11 @@ public class DailyReport extends ContentData {
     }
 
     @Override
+    public String getFrontendEditJsp() {
+        return "/WEB-INF/_jsp/dailyreport/editFrontendContent.jsp";
+    }
+
+    @Override
     public String getBackendEditJsp() {
         return "/WEB-INF/_jsp/dailyreport/editBackendContent.ajax.jsp";
     }
@@ -173,7 +179,11 @@ public class DailyReport extends ContentData {
     public void displayContent(PageContext context, RequestData rdata) throws IOException, ServletException {
         Writer writer = context.getOut();
         writer.write("<div id=\"pageContent\" class=\"viewArea\">");
-        context.include("/WEB-INF/_jsp/dailyreport/dailyreport.jsp");
+        if (isEditMode()) {
+            context.include("/WEB-INF/_jsp/dailyreport/editFrontendContent.jsp");
+        } else {
+            context.include("/WEB-INF/_jsp/dailyreport/dailyreport.jsp");
+        }
         writer.write("</div>");
     }
 
@@ -230,6 +240,39 @@ public class DailyReport extends ContentData {
                     }
                 }
             }
+            case frontend -> {
+                setDescription(rdata.getAttributes().getString("description"));
+                int i = rdata.getAttributes().getInt("weatherCoco");
+                if (i>0) {
+                    setWeatherCoco(i);
+                    setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
+                    setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
+                    setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
+                    setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
+                }
+                getCompanyBriefings().clear();
+                for (int companyId : getProject().getCompanyIds()){
+                    if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
+                        CompanyBriefing briefing = new CompanyBriefing();
+                        briefing.setCompanyId(companyId);
+                        briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
+                        briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
+                        getCompanyBriefings().add(briefing);
+                    }
+                }
+                List<BinaryFile> newFiles = rdata.getAttributes().getFileList("files");
+                for (BinaryFile file : newFiles) {
+                    if (file.isImage()) {
+                        ImageData image = new ImageData();
+                        image.setCreateValues(rdata, RequestType.frontend);
+                        image.setParentValues(this);
+                        if (!image.createFromBinaryFile(file))
+                            continue;
+                        image.setChangerId(rdata.getUserId());
+                        getFiles().add(image);
+                    }
+                }
+            }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
                 int i = rdata.getAttributes().getInt("weatherCoco");
@@ -242,13 +285,13 @@ public class DailyReport extends ContentData {
                 }
                 getCompanyBriefings().clear();
                 for (int companyId : getProject().getCompanyIds()){
-                   if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
-                       CompanyBriefing briefing = new CompanyBriefing();
-                       briefing.setCompanyId(companyId);
-                       briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
-                       briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
-                       getCompanyBriefings().add(briefing);
-                   }
+                    if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
+                        CompanyBriefing briefing = new CompanyBriefing();
+                        briefing.setCompanyId(companyId);
+                        briefing.setActivity(rdata.getAttributes().getString("company_" + companyId + "_activity"));
+                        briefing.setBriefing(rdata.getAttributes().getString("company_" + companyId + "_briefing"));
+                        getCompanyBriefings().add(briefing);
+                    }
                 }
             }
         }
