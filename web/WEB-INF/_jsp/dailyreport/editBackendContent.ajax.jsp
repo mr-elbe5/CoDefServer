@@ -53,10 +53,14 @@
                 </form:line>
                 <form:text name="reportDate" label="_reportDate" value="<%=DateHelper.toHtmlDateTime(report.getReportDate())%>" required="true"/>
                 <form:text name="weatherCoco" label="_weatherConditions" required="false" value="<%=$H(report.getWeatherCoco())%>"/>
-                <form:text name="weatherWsdp" label="_windSpeed" required="false" value="<%=$H(report.getWeatherWspd())%>"/>
+                <form:text name="weatherWspd" label="_windSpeed" required="false" value="<%=$H(report.getWeatherWspd())%>"/>
                 <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(report.getWeatherWdir())%>"/>
                 <form:text name="weatherTemp" label="_temperature" required="false" value="<%=$H(report.getWeatherTemp())%>"/>
                 <form:text name="weatherRhum" label="_relativeHumidity" required="false" value="<%=$H(report.getWeatherRhum())%>"/>
+                <form:line>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="updateWeather()"><%=$SH("_updateWeatherData")%>
+                    </button>
+                </form:line>
                 <form:line label="_presentCompanies" padded="true">
                     <table style="width:100%">
                         <tr><th><%=$SH("_company")%><th><%=$SH("_activity")%></th><th><%=$SH("_briefing")%></tr>
@@ -84,5 +88,21 @@
         </form:form>
     </div>
 </div>
+<script type="application/javascript">
+    function updateWeather(){
+        let reportDate = $('#reportDate').val()
+        //console.log(reportDate);
+        $.ajax({
+            url: '/ctrl/dailyreport/updateWeather/<%=report.getId()%>', type: 'POST', data: {reportDate : reportDate}, cache: false, dataType: 'json'
+        }).success(function (json, textStatus) {
+            $('#weatherCoco').val(json.weatherCoco);
+            $('#weatherWspd').val(json.weatherWspd);
+            $('#weatherWdir').val(json.weatherWdir);
+            $('#weatherTemp').val(json.weatherTemp);
+            $('#weatherRhum').val(json.weatherRhum);
+        });
+        return false;
+    }
+</script>
 
 

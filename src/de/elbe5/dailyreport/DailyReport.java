@@ -236,9 +236,9 @@ public class DailyReport extends ContentData {
                 if (i>0)
                     setIdx(i);
                 setReportDate(getCreationDate());
-                i = rdata.getAttributes().getInt("weatherCoco");
-                if (i>0) {
-                    setWeatherCoco(i);
+                String s = rdata.getAttributes().getString("weatherCoco");
+                if (!s.isEmpty()) {
+                    setWeatherCoco(s);
                     setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
                     setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
@@ -258,9 +258,9 @@ public class DailyReport extends ContentData {
             case frontend -> {
                 setDescription(rdata.getAttributes().getString("description"));
                 setReportDate(rdata.getAttributes().getDateTime("reportDate"));
-                int i = rdata.getAttributes().getInt("weatherCoco");
-                if (i>0) {
-                    setWeatherCoco(i);
+                String s = rdata.getAttributes().getString("weatherCoco");
+                if (!s.isEmpty()) {
+                    setWeatherCoco(s);
                     setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
                     setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
@@ -292,9 +292,9 @@ public class DailyReport extends ContentData {
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
                 setReportDate(rdata.getAttributes().getDateTime("reportDate"));
-                int i = rdata.getAttributes().getInt("weatherCoco");
-                if (i>0) {
-                    setWeatherCoco(i);
+                String s = rdata.getAttributes().getString("weatherCoco");
+                if (!s.isEmpty()) {
+                    setWeatherCoco(s);
                     setWeatherRhum(rdata.getAttributes().getString("weatherRhum"));
                     setWeatherTemp(rdata.getAttributes().getString("weatherTemp"));
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
