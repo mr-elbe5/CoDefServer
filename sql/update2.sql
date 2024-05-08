@@ -20,8 +20,7 @@ CREATE TABLE IF NOT EXISTS t_project_daily_report
     weather_temp    VARCHAR(40) NOT NULL DEFAULT '',
     weather_rhum    VARCHAR(40) NOT NULL DEFAULT '',
     CONSTRAINT t_project_daily_report_pk PRIMARY KEY (id),
-    CONSTRAINT t_project_daily_report_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE,
-    CONSTRAINT t_project_daily_report_uq1 UNIQUE (idx)
+    CONSTRAINT t_project_daily_report_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS t_company_briefing
@@ -34,3 +33,8 @@ CREATE TABLE IF NOT EXISTS t_company_briefing
     CONSTRAINT t_company_briefing_fk1 FOREIGN KEY (company_id) REFERENCES t_company (id) ON DELETE CASCADE,
     CONSTRAINT t_company_briefing_fk2 FOREIGN KEY (project_daily_report_id) REFERENCES t_project_daily_report (id) ON DELETE CASCADE
 );
+
+--
+
+ALTER TABLE t_project_daily_report ADD report_date TIMESTAMP NOT NULL DEFAULT now();
+UPDATE t_project_daily_report t1 SET report_date = (SELECT t2.creation_date FROM t_content t2 WHERE t2.id = t1.id);

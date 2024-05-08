@@ -40,7 +40,7 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
         startTable2Col();
         addLabeledContent(sxml("_location"),xml(report.getProject().getZipCode()) + " " + xml(report.getProject().getCity()));
         addLabeledContent(sxml("_reportNumber"),String.valueOf(report.getIdx()));
-        addLabeledContent(sxml("_creationDate"),xml(report.getCreationDate()));
+        addLabeledContent(sxml("_reportDate"),xml(report.getReportDate()));
         UserData user= UserCache.getUser(report.getCreatorId());
         addLabeledContent(sxml("_creator"),xml(user.getName()));
         endTable2Col();
@@ -57,7 +57,7 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
         endTableRow();
 
         startTableRow();
-        addTableCell(xml(DateHelper.toHtmlTime(report.getCreationDate().toLocalTime())));
+        addTableCell(xml(DateHelper.toHtmlTime(report.getReportDate().toLocalTime())));
         addTableCell(xml(report.getWeatherCoco()));
         addTableCell(xml(report.getWeatherWspd() + " " + report.getWeatherWdir() ));
         addTableCell(xml(report.getWeatherTemp()));
@@ -102,7 +102,7 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
         finishXml();
         String xml = getXml();
         //Log.log(xml);
-        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(report.getDisplayName()) + "-" + xml(report.getCreationDate()).replace(' ','-')+".pdf";
+        String fileName="dailyreport-" + StringHelper.toSafeWebFileName(report.getDisplayName()) + "-" + xml(report.getReportDate()).replace(' ','-')+".pdf";
         return getPdf(xml, "_templates/pdf.xsl", fileName);
     }
 

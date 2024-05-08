@@ -51,6 +51,7 @@
                 </form:line>
                 <form:line label="_name"><%=$H(report.getDisplayName())%>
                 </form:line>
+                <form:text name="reportDate" label="_reportDate" value="<%=DateHelper.toHtmlDateTime(report.getReportDate())%>" required="true"/>
                 <form:text name="weatherCoco" label="_weatherConditions" required="false" value="<%=$H(report.getWeatherCoco())%>"/>
                 <form:text name="weatherWsdp" label="_windSpeed" required="false" value="<%=$H(report.getWeatherWspd())%>"/>
                 <form:text name="weatherWdir" label="_windDirection" required="false" value="<%=$H(report.getWeatherWdir())%>"/>

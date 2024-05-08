@@ -1,9 +1,6 @@
 package de.elbe5.application;
 
-import de.elbe5.base.JsonDeserializer;
-import de.elbe5.base.LocalizedSystemStrings;
-import de.elbe5.base.Log;
-import de.elbe5.base.StringHelper;
+import de.elbe5.base.*;
 import de.elbe5.configuration.CodefConfiguration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -67,6 +64,16 @@ public class MeteostatClient {
         public double weatherWdir = 0;
         public double weatherTemp = 0;
         public double weatherRhum = 0;
+
+        public String toJsonString(){
+            return new JsonObject()
+                    .add("weatherCoco", getWeatherCoco(weatherCoco))
+                    .add("weatherWspd", weatherWspd + " km/h")
+                    .add("weatherWdir", getWindDirection(weatherWdir))
+                    .add("weatherTemp", weatherTemp + " °C")
+                    .add("weatherRhum", weatherRhum + " %")
+                    .toJSONString();
+        }
     }
 
     static public WeatherData getWeatherData(String station, LocalDateTime time, String timezone){

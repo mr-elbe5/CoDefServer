@@ -52,7 +52,7 @@
 
   <xsl:template match="topheader">
     <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
-      <fo:block font-weight="bold" font-size="15pt">
+      <fo:block font-weight="bold" font-size="15pt" linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
@@ -68,7 +68,7 @@
 
   <xsl:template match="headercomment">
     <fo:block-container background-color="#fffff8" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
-      <fo:block font-size="12pt">
+      <fo:block font-size="12pt" linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
@@ -76,7 +76,7 @@
 
   <xsl:template match="textline">
     <fo:block-container padding="0.1cm" >
-      <fo:block>
+      <fo:block linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:block-container>
@@ -96,7 +96,7 @@
 
   <xsl:template match="tablecell">
     <fo:table-cell>
-      <fo:block padding="1mm">
+      <fo:block padding="1mm" linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:table-cell>
@@ -104,7 +104,7 @@
 
   <xsl:template match="tablecellbold">
     <fo:table-cell font-weight="bold">
-      <fo:block padding="1mm">
+      <fo:block padding="1mm" linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>
     </fo:table-cell>

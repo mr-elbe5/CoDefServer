@@ -33,6 +33,7 @@ public class DailyReport extends ContentData {
     }
 
     protected int idx = 0;
+    protected LocalDateTime reportDate = LocalDateTime.now();
     protected String weatherCoco = "";
     protected String weatherWspd = "";
     protected String weatherWdir = "";
@@ -54,7 +55,7 @@ public class DailyReport extends ContentData {
 
     @Override
     public String getDisplayName(){
-        return getIdx() + " (" + DateHelper.toHtmlDate(getCreationDate()) + ")";
+        return getIdx() + " (" + DateHelper.toHtmlDate(getReportDate()) + ")";
     }
 
     public int getIdx() {
@@ -63,6 +64,14 @@ public class DailyReport extends ContentData {
 
     public void setIdx(int idx) {
         this.idx = idx;
+    }
+
+    public LocalDateTime getReportDate() {
+        return reportDate;
+    }
+
+    public void setReportDate(LocalDateTime reportDate) {
+        this.reportDate = reportDate;
     }
 
     public String getWeatherCoco() {
@@ -125,8 +134,8 @@ public class DailyReport extends ContentData {
         this.weatherRhum = String.format("%d %%", (int) value);
     }
 
-    public boolean getWeather() {
-        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), LocalDateTime.now(), CodefConfiguration.getTimeZoneName());
+    public boolean getWeather(LocalDateTime date) {
+        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(getProject().getWeatherStation(), date, CodefConfiguration.getTimeZoneName());
         if (weatherData != null) {
             setWeatherCoco(weatherData.weatherCoco);
             setWeatherWspd(weatherData.weatherWspd);
@@ -136,6 +145,10 @@ public class DailyReport extends ContentData {
             return true;
         }
         return false;
+    }
+
+    public boolean getWeather() {
+        return getWeather(getReportDate());
     }
 
     public List<CompanyBriefing> getCompanyBriefings() {
@@ -193,6 +206,7 @@ public class DailyReport extends ContentData {
         setNavType(ContentNavType.NONE);
         setActive(true);
         setOpenAccess(true);
+        setReportDate(getCreationDate());
     }
 
     @Override
@@ -221,6 +235,7 @@ public class DailyReport extends ContentData {
                 int i = rdata.getAttributes().getInt("idx");
                 if (i>0)
                     setIdx(i);
+                setReportDate(getCreationDate());
                 i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);
@@ -242,6 +257,7 @@ public class DailyReport extends ContentData {
             }
             case frontend -> {
                 setDescription(rdata.getAttributes().getString("description"));
+                setReportDate(rdata.getAttributes().getDateTime("reportDate"));
                 int i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);
@@ -275,6 +291,7 @@ public class DailyReport extends ContentData {
             }
             case backend ->{
                 setDescription(rdata.getAttributes().getString("description"));
+                setReportDate(rdata.getAttributes().getDateTime("reportDate"));
                 int i = rdata.getAttributes().getInt("weatherCoco");
                 if (i>0) {
                     setWeatherCoco(i);

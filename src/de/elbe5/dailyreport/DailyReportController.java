@@ -8,8 +8,10 @@
  */
 package de.elbe5.dailyreport;
 
+import de.elbe5.application.MeteostatClient;
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
+import de.elbe5.configuration.CodefConfiguration;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
@@ -27,6 +29,8 @@ import de.elbe5.response.StatusResponse;
 import de.elbe5.unit.UnitData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.time.LocalDateTime;
 
 public class DailyReportController extends ContentController {
 
@@ -91,6 +95,15 @@ public class DailyReportController extends ContentController {
         ContentCache.setDirty();
         rdata.setMessage($S("_contentSaved"), RequestKeys.MESSAGE_TYPE_SUCCESS);
         return show(rdata);
+    }
+
+    public IResponse updateWeather(RequestData rdata) {
+        int contentId=rdata.getId();
+        DailyReport data=rdata.getSessionObject(ContentRequestKeys.KEY_CONTENT,DailyReport.class);
+        assert(data != null && data.getId() == contentId);
+        LocalDateTime reportDate = rdata.getAttributes().getDateTime("reportDate");
+        MeteostatClient.WeatherData weatherData = MeteostatClient.getWeatherData(data.getProject().getWeatherStation(), reportDate, CodefConfiguration.getTimeZoneName());
+        return new JsonResponse(weatherData.toJsonString());
     }
 
     // api
