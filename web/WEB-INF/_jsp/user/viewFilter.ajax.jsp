@@ -37,6 +37,18 @@
         <form:form url="<%=url%>" name="filterform" ajax="true">
             <div class="modal-body">
                 <form:formerror/>
+                <form:line label="_showOpenDefects" padded="true">
+                    <form:check name="showOpen" value="true" checked="<%=user.isShowOpen()%>"> </form:check>
+                </form:line>
+                <form:line label="_showDisputedDefects" padded="true">
+                    <form:check name="showDisputed" value="true" checked="<%=user.isShowDisputed()%>"> </form:check>
+                </form:line>
+                <form:line label="_showRejectedDefects" padded="true">
+                    <form:check name="showRejected" value="true" checked="<%=user.isShowRejected()%>"> </form:check>
+                </form:line>
+                <form:line label="_showDoneDefects" padded="true">
+                    <form:check name="showDone" value="true" checked="<%=user.isShowDone()%>"> </form:check>
+                </form:line>
                 <form:line label="_showClosedDefects" padded="true">
                     <form:check name="showClosed" value="true" checked="<%=user.isShowClosed()%>"> </form:check>
                 </form:line>

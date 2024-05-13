@@ -24,6 +24,10 @@ public class CodefUserData extends UserData{
     private int projectId = 0;
     private List<Integer> selectedProjectIds = new ArrayList<>();
     private List<Integer> selectedCompanyIds = new ArrayList<>();
+    private boolean showOpen = true;
+    private boolean showDisputed = true;
+    private boolean showRejected = true;
+    private boolean showDone = true;
     private boolean showClosed = true;
     private ProjectPhase projectPhase = null;
     private boolean showOnlyRemainingWork = false;
@@ -78,6 +82,38 @@ public class CodefUserData extends UserData{
 
     public void setCompanyIds(List<Integer> ids) {
         selectedCompanyIds = ids;
+    }
+
+    public boolean isShowOpen() {
+        return showOpen;
+    }
+
+    public void setShowOpen(boolean showOpen) {
+        this.showOpen = showOpen;
+    }
+
+    public boolean isShowDisputed() {
+        return showDisputed;
+    }
+
+    public void setShowDisputed(boolean showDisputed) {
+        this.showDisputed = showDisputed;
+    }
+
+    public boolean isShowRejected() {
+        return showRejected;
+    }
+
+    public void setShowRejected(boolean showRejected) {
+        this.showRejected = showRejected;
+    }
+
+    public boolean isShowDone() {
+        return showDone;
+    }
+
+    public void setShowDone(boolean showDone) {
+        this.showDone = showDone;
     }
 
     public boolean isShowClosed() {
@@ -158,6 +194,32 @@ public class CodefUserData extends UserData{
         List<DefectData> list = unit.getChildren(DefectData.class);
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);
+            switch (data.getStatus()){
+                case OPEN -> {
+                    if (!isShowOpen()) {
+                        list.remove(i);
+                        continue;
+                    }
+                }
+                case DISPUTED -> {
+                    if (!isShowDisputed()) {
+                        list.remove(i);
+                        continue;
+                    }
+                }
+                case REJECTED -> {
+                    if (!isShowRejected()) {
+                        list.remove(i);
+                        continue;
+                    }
+                }
+                case DONE -> {
+                    if (!isShowDone()) {
+                        list.remove(i);
+                        continue;
+                    }
+                }
+            }
             if (!isShowClosed() && data.isClosed()){
                 list.remove(i);
                 continue;
@@ -188,6 +250,32 @@ public class CodefUserData extends UserData{
             List<DefectData> list = unit.getChildren(DefectData.class);
             for (int i=list.size()-1;i>=0;i--){
                 DefectData data=list.get(i);
+                switch (data.getStatus()){
+                    case OPEN -> {
+                        if (!isShowOpen()) {
+                            list.remove(i);
+                            continue;
+                        }
+                    }
+                    case DISPUTED -> {
+                        if (!isShowDisputed()) {
+                            list.remove(i);
+                            continue;
+                        }
+                    }
+                    case REJECTED -> {
+                        if (!isShowRejected()) {
+                            list.remove(i);
+                            continue;
+                        }
+                    }
+                    case DONE -> {
+                        if (!isShowDone()) {
+                            list.remove(i);
+                            continue;
+                        }
+                    }
+                }
                 if (!isShowClosed() && data.isClosed()){
                     list.remove(i);
                     continue;

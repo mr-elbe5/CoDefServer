@@ -11,6 +11,7 @@ package de.elbe5.unit;
 import de.elbe5.base.*;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.defect.DefectData;
+import de.elbe5.defect.DefectStatus;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
 import de.elbe5.project.ProjectData;
@@ -189,7 +190,7 @@ public class UnitData extends ContentData {
         ImageData plan = getPlan();
         JSONArray jsDefects = new JSONArray();
         for (DefectData defect : getChildren(DefectData.class)) {
-            if (!defect.isActive() || defect.isClosed())
+            if (!defect.isActive() || defect.getStatus() == DefectStatus.DONE || defect.isClosed())
                 continue;
             JsonObject jsDefect = defect.getJsonRecursive();
             jsDefects.add(jsDefect);

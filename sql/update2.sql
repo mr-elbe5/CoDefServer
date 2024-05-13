@@ -38,3 +38,10 @@ CREATE TABLE IF NOT EXISTS t_company_briefing
 
 ALTER TABLE t_project_daily_report ADD report_date TIMESTAMP NOT NULL DEFAULT now();
 UPDATE t_project_daily_report t1 SET report_date = (SELECT t2.creation_date FROM t_content t2 WHERE t2.id = t1.id);
+
+--
+
+ALTER TABLE t_codef_user ADD show_open BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE t_codef_user ADD show_disputed BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE t_codef_user ADD show_rejected BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE t_codef_user ADD show_done BOOLEAN NOT NULL DEFAULT true;

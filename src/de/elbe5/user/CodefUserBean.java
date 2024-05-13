@@ -24,7 +24,7 @@ public class CodefUserBean extends UserBean {
     }
 
     private static final String GET_USER_EXTRAS_SQL = "SELECT " +
-            "project_id,project_ids,company_ids,show_closed,project_phase,only_remaining_work FROM t_codef_user WHERE id=?";
+            "project_id,project_ids,company_ids,show_open,show_disputed,show_rejected,show_done,show_closed,project_phase,only_remaining_work FROM t_codef_user WHERE id=?";
 
     @Override
     public void readUserExtras(Connection con, UserData userData) throws SQLException{
@@ -41,6 +41,10 @@ public class CodefUserBean extends UserBean {
                     data.setProjectId(rs.getInt(i++));
                     data.setSelectedProjectIds(rs.getString(i++));
                     data.setSelectedCompanyIds(rs.getString(i++));
+                    data.setShowOpen(rs.getBoolean(i++));
+                    data.setShowDisputed(rs.getBoolean(i++));
+                    data.setShowRejected(rs.getBoolean(i++));
+                    data.setShowDone(rs.getBoolean(i++));
                     data.setShowClosed(rs.getBoolean(i++));
                     data.setProjectPhase(rs.getString(i++));
                     data.setShowOnlyRemainingWork(rs.getBoolean(i));
@@ -54,8 +58,8 @@ public class CodefUserBean extends UserBean {
     }
 
     private static final String INSERT_EXTENDED_SQL = "insert into t_codef_user " +
-            "(project_id,project_ids,company_ids,show_closed,project_phase,only_remaining_work,id) " +
-            "values(?,?,?,?,?,?,?)";
+            "(project_id,project_ids,company_ids,show_open,show_disputed,show_rejected,show_done,show_closed,project_phase,only_remaining_work,id) " +
+            "values(?,?,?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void createUserExtras(Connection con, UserData userData) throws SQLException{
@@ -73,6 +77,10 @@ public class CodefUserBean extends UserBean {
             }
             pst.setString(i++, data.getProjectIdsString());
             pst.setString(i++, data.getCompanyIdsString());
+            pst.setBoolean(i++, data.isShowOpen());
+            pst.setBoolean(i++, data.isShowDisputed());
+            pst.setBoolean(i++, data.isShowRejected());
+            pst.setBoolean(i++, data.isShowDone());
             pst.setBoolean(i++, data.isShowClosed());
             pst.setString(i++, data.getProjectPhaseString());
             pst.setBoolean(i++, data.isShowOnlyRemainingWork());
@@ -86,7 +94,7 @@ public class CodefUserBean extends UserBean {
     }
 
     private static final String UPDATE_EXTENDED_SQL = "update t_codef_user " +
-            "set project_id=?,project_ids=?,company_ids=?,show_closed=?,project_phase=?,only_remaining_work=? " +
+            "set project_id=?,project_ids=?,company_ids=?,show_open=?,show_disputed=?,show_rejected=?,show_done=?,show_closed=?,project_phase=?,only_remaining_work=? " +
             "where id=?";
 
     @Override
@@ -105,6 +113,10 @@ public class CodefUserBean extends UserBean {
             }
             pst.setString(i++, data.getProjectIdsString());
             pst.setString(i++, data.getCompanyIdsString());
+            pst.setBoolean(i++, data.isShowOpen());
+            pst.setBoolean(i++, data.isShowDisputed());
+            pst.setBoolean(i++, data.isShowRejected());
+            pst.setBoolean(i++, data.isShowDone());
             pst.setBoolean(i++, data.isShowClosed());
             pst.setString(i++, data.getProjectPhaseString());
             pst.setBoolean(i++, data.isShowOnlyRemainingWork());

@@ -72,6 +72,10 @@ public class CodefUserController extends UserController {
     public IResponse setViewFilter(RequestData rdata) {
         assertRights(rdata.isLoggedIn());
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
+        user.setShowOpen(rdata.getAttributes().getBoolean("showOpen"));
+        user.setShowDisputed(rdata.getAttributes().getBoolean("showDisputed"));
+        user.setShowRejected(rdata.getAttributes().getBoolean("showRejected"));
+        user.setShowDone(rdata.getAttributes().getBoolean("showDone"));
         user.setShowClosed(rdata.getAttributes().getBoolean("showClosed"));
         user.setProjectPhase(rdata.getAttributes().getString("projectPhase"));
         user.setShowOnlyRemainingWork(rdata.getAttributes().getBoolean("showOnlyRemainingWork"));
