@@ -10,7 +10,6 @@ import de.elbe5.defectstatus.DefectStatusData;
 import de.elbe5.file.CsvCreator;
 import de.elbe5.unit.UnitData;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ProjectCsvCreator extends CsvCreator {
     public BinaryFile getCsvFile(int projectId){
         project= ContentCache.getContent(projectId,ProjectData.class);
         assert project!= null;
-        String fileName="project-spreadsheet-" + project.getId() + "-" + DateHelper.toHtml(LocalDateTime.now()).replace(' ','-')+".csv";
+        String fileName="project-spreadsheet-" + project.getId() + "-" + DateHelper.toHtml(DateHelper.getCurrentTime()).replace(' ','-')+".csv";
         String csv = createCSV();
         return getCsv(csv, fileName);
     }

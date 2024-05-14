@@ -9,6 +9,7 @@
 package de.elbe5.defect;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.DateHelper;
 import de.elbe5.base.LocalizedSystemStrings;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
@@ -25,7 +26,7 @@ import java.util.List;
 public class DefectPdfCreator extends CodefPdfCreator {
     
     public BinaryFile getDefectPdfFile(DefectData defect, RequestData rdata){
-        LocalDateTime now= LocalDateTime.now();
+        LocalDateTime now = DateHelper.getCurrentTime();
         UnitData unit= ContentCache.getContent(defect.getParentId(),UnitData.class);
         if (unit==null || unit.getProject()==null)
             return null;

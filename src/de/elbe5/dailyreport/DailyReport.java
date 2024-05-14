@@ -33,7 +33,7 @@ public class DailyReport extends ContentData {
     }
 
     protected int idx = 0;
-    protected LocalDateTime reportDate = LocalDateTime.now();
+    protected LocalDateTime reportDate = DateHelper.getCurrentTime();
     protected String weatherCoco = "";
     protected String weatherWspd = "";
     protected String weatherWdir = "";

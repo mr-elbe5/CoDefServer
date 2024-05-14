@@ -10,7 +10,6 @@ package de.elbe5.dailyreport;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.DateHelper;
-import de.elbe5.base.Log;
 import de.elbe5.base.StringHelper;
 import de.elbe5.company.CompanyCache;
 import de.elbe5.company.CompanyData;
@@ -28,7 +27,7 @@ import java.util.List;
 public class DailyReportPdfCreator extends CodefPdfCreator {
     
     public BinaryFile getProjectDailyReport(int projectDiaryId, RequestData rdata){
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = DateHelper.getCurrentTime();
         DailyReport report = ContentCache.getContent(projectDiaryId, DailyReport.class);
         if (report==null || report.getProject() == null)
             return null;

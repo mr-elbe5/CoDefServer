@@ -9,6 +9,7 @@
 package de.elbe5.project;
 
 import de.elbe5.base.BinaryFile;
+import de.elbe5.base.DateHelper;
 import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.unit.UnitData;
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 public class ProjectPdfCreator extends CodefPdfCreator {
 
     public BinaryFile getProjectReport(int projectId, RequestData rdata, boolean includeStatusChanges){
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = DateHelper.getCurrentTime();
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         ProjectData project= ContentCache.getContent(projectId,ProjectData.class);
         if (user==null || project == null)

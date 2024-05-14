@@ -9,10 +9,7 @@
 package de.elbe5.application;
 
 import de.elbe5.administration.AdminController;
-import de.elbe5.base.JsonWebToken;
-import de.elbe5.base.LocalizedStrings;
-import de.elbe5.base.LocalizedSystemStrings;
-import de.elbe5.base.Log;
+import de.elbe5.base.*;
 import de.elbe5.configuration.*;
 import de.elbe5.defect.DefectController;
 import de.elbe5.defectstatus.DefectStatusController;
@@ -53,6 +50,8 @@ public class CodefInitServlet extends InitServlet {
         if (!DbConnector.getInstance().initialize())
             return;
         ConfigurationBean.getInstance().readConfiguration();
+        Log.info("serverTime = " + ConfigurationBean.getInstance().getServerTime());
+        Log.info("localTime = " + DateHelper.getCurrentTime());
         CodefConfigurationBean.getInstance().readConfiguration();
         LocalizedStrings.getInstance().addBundle("bandika", StaticConfiguration.getLocale());
         LocalizedSystemStrings.getInstance().addBundle("systemStrings", StaticConfiguration.getLocale());
