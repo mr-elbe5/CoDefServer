@@ -410,7 +410,7 @@ public class DefectData extends ContentData {
         return super.getJson()
                 .add("projectPhase", getProjectPhaseString())
                 .add("notified", isNotified())
-                .add("comment", getLocation())
+                .add("location", getLocation())
                 .add("positionComment", getComment())
                 .add("remainingWork",isRemainingWork())
                 .add("assignedId",getLastAssignedId())
