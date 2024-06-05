@@ -8,12 +8,12 @@
  */
 package de.elbe5.project;
 
+import de.elbe5.application.Configuration;
 import de.elbe5.application.Coordinate;
 import de.elbe5.application.MeteostatClient;
 import de.elbe5.application.NominatimClient;
 import de.elbe5.base.*;
 import de.elbe5.configuration.CodefConfiguration;
-import de.elbe5.configuration.StaticConfiguration;
 import de.elbe5.content.ContentNavType;
 import de.elbe5.dailyreport.DailyReport;
 import de.elbe5.request.RequestType;
@@ -176,13 +176,13 @@ public class ProjectData extends ContentData {
                 if (getWeatherStation().isEmpty()){
                     findWeatherStation();
                 }
-                if (StaticConfiguration.useReadRights()) {
+                if (Configuration.useReadRights()) {
                     setOpenAccess(rdata.getAttributes().getBoolean("openAccess"));
                 }
-                if (StaticConfiguration.useReadRights() && StaticConfiguration.useReadGroup()) {
+                if (Configuration.useReadRights() && Configuration.useReadGroup()) {
                     setReaderGroupId(rdata.getAttributes().getInt("readerGroupId"));
                 }
-                if (StaticConfiguration.useEditorGroup()) {
+                if (Configuration.useEditorGroup()) {
                     setEditorGroupId(rdata.getAttributes().getInt("editorGroupId"));
                 }
                 setActive(rdata.getAttributes().getBoolean("active"));
@@ -190,7 +190,7 @@ public class ProjectData extends ContentData {
                 if (getDisplayName().isEmpty()) {
                     rdata.addIncompleteField("displayName");
                 }
-                if (StaticConfiguration.useEditorGroup() && getEditorGroupId() == 0){
+                if (Configuration.useEditorGroup() && getEditorGroupId() == 0){
                     rdata.addIncompleteField("editorGroupId");
                 }
                 if (getCompanyIds().isEmpty()){

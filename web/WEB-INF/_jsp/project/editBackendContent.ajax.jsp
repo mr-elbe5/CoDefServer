@@ -17,7 +17,7 @@
 <%@ page import="de.elbe5.company.CompanyCache" %>
 <%@ page import="de.elbe5.group.GroupData" %>
 <%@ page import="de.elbe5.group.GroupCache" %>
-<%@ page import="de.elbe5.configuration.StaticConfiguration" %>
+<%@ page import="de.elbe5.application.Configuration" %>
 <%@ taglib uri="/WEB-INF/formtags.tld" prefix="form" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
@@ -53,12 +53,12 @@
                 <form:text name="city" label="_city" required="true" value="<%=$H(project.getCity())%>"/>
                 <form:text name="street" label="_street" required="true" value="<%=$H(project.getStreet())%>"/>
                 <form:text name="weatherStation" label="_weatherStation" required="false" value="<%=$H(project.getWeatherStation())%>"/>
-                <% if (StaticConfiguration.useReadRights()){%>
+                <% if (Configuration.useReadRights()){%>
                 <form:line label="_openAccess" padded="true">
                     <form:check name="openAccess" value="true" checked="<%=project.isOpenAccess()%>"/>
                 </form:line>
                 <%}%>
-                <% if (StaticConfiguration.useReadRights() && StaticConfiguration.useReadGroup()){%>
+                <% if (Configuration.useReadRights() && Configuration.useReadGroup()){%>
                 <form:select name="readerGroupId" label="_readerGroup">
                     <option value="0"  <%=project.getReaderGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>
@@ -66,7 +66,7 @@
                     <%}%>
                 </form:select>
                 <%}%>
-                <% if (StaticConfiguration.useEditorGroup()){%>
+                <% if (Configuration.useEditorGroup()){%>
                 <form:select name="editorGroupId" label="_editorGroup">
                     <option value="0"  <%=project.getEditorGroupId()==0 ? "selected" : ""%>><%=$SH("_none")%></option>
                     <% for (GroupData group : groups){%>

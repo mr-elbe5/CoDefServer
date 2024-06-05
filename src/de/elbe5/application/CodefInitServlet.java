@@ -44,22 +44,18 @@ public class CodefInitServlet extends InitServlet {
         super.init(servletConfig);
         System.out.println("initializing Codef Application...");
         ServletContext context=servletConfig.getServletContext();
-        StaticConfiguration.initialize(context);
+        Configuration.initialize(context);
         ApplicationPath.initializePath(ApplicationPath.getCatalinaAppDir(context), ApplicationPath.getCatalinaAppROOTDir(context));
         Log.initLog(ApplicationPath.getAppName());
         if (!DbConnector.getInstance().initialize())
             return;
-        ConfigurationBean.getInstance().readConfiguration();
-        Log.info("serverTime = " + ConfigurationBean.getInstance().getServerTime());
-        Log.info("localTime = " + DateHelper.getCurrentTime());
         CodefConfigurationBean.getInstance().readConfiguration();
-        LocalizedStrings.getInstance().addBundle("bandika", StaticConfiguration.getLocale());
-        LocalizedSystemStrings.getInstance().addBundle("systemStrings", StaticConfiguration.getLocale());
-        LocalizedSystemStrings.getInstance().addBundle("codefSystemStrings", StaticConfiguration.getLocale());
-        LocalizedStrings.getInstance().addBundle("codef", StaticConfiguration.getLocale());
-        JsonWebToken.createSecretKey(StaticConfiguration.getSalt());
+        LocalizedStrings.getInstance().addBundle("bandika", Configuration.getLocale());
+        LocalizedSystemStrings.getInstance().addBundle("systemStrings", Configuration.getLocale());
+        LocalizedSystemStrings.getInstance().addBundle("codefSystemStrings", Configuration.getLocale());
+        LocalizedStrings.getInstance().addBundle("codef", Configuration.getLocale());
+        JsonWebToken.createSecretKey(Configuration.getSalt());
         AdminController.register(new AdminController());
-        ConfigurationController.register(new ConfigurationController());
         ContentController.register(new ContentController());
         DocumentController.register(new DocumentController());
         FileController.register(new FileController());

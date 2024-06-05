@@ -15,17 +15,17 @@
 <%@ page import="java.util.List" %>
 <%@ page import="de.elbe5.response.IMasterInclude" %>
 <%@ page import="de.elbe5.request.RequestKeys" %>
-<%@ page import="de.elbe5.configuration.StaticConfiguration" %>
+<%@ page import="de.elbe5.application.Configuration" %>
 <%
     RequestData rdata = RequestData.getRequestData(request);
 
     ContentData contentData = ContentData.getCurrentContent(rdata);
     IMasterInclude masterInclude = rdata.getRequestObject(RequestKeys.KEY_MASTERINCLUDE, IMasterInclude.class);
     List<Integer> parentIds = ContentCache.getParentContentIds(contentData);
-    String title = StaticConfiguration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
+    String title = Configuration.getAppTitle()+ (contentData!=null ? " | " + contentData.getDisplayName() : "");
 %>
 <!DOCTYPE html>
-<html lang="<%=StaticConfiguration.getLocale().getLanguage()%>">
+<html lang="<%=Configuration.getLocale().getLanguage()%>">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
