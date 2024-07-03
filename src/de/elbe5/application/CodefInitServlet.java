@@ -44,12 +44,11 @@ public class CodefInitServlet extends InitServlet {
         super.init(servletConfig);
         System.out.println("initializing Codef Application...");
         ServletContext context=servletConfig.getServletContext();
-        Configuration.initialize(context);
+        CodefConfiguration.initialize(context);
         ApplicationPath.initializePath(ApplicationPath.getCatalinaAppDir(context), ApplicationPath.getCatalinaAppROOTDir(context));
         Log.initLog(ApplicationPath.getAppName());
         if (!DbConnector.getInstance().initialize())
             return;
-        CodefConfigurationBean.getInstance().readConfiguration();
         LocalizedStrings.getInstance().addBundle("bandika", Configuration.getLocale());
         LocalizedSystemStrings.getInstance().addBundle("systemStrings", Configuration.getLocale());
         LocalizedSystemStrings.getInstance().addBundle("codefSystemStrings", Configuration.getLocale());

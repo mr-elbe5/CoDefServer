@@ -51,7 +51,7 @@
   </xsl:template>
 
   <xsl:template match="topheader">
-    <fo:block-container background-color="#f0f0f0" padding="0.1cm" margin-bottom="0.1cm" text-align="center" >
+    <fo:block-container background-color="#f0f0f0" padding="0.2cm" margin-bottom="0.1cm" text-align="center" >
       <fo:block font-weight="bold" font-size="15pt" linefeed-treatment="preserve">
         <xsl:value-of select="text"/>
       </fo:block>

@@ -158,7 +158,25 @@ public abstract class CodefPdfCreator extends PdfCreator {
 
     protected void addDefectList(UnitData unit, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
-            addTextLine(sxml(defect.isRemainingWork() ? "_remainingWork" : "_defect") + ": "+ xml(defect.getDescription()));
+            addTextLine(xml(defect.getDisplayName()));
+            startTable2Col();
+            startTableRow();
+            addTableCellBold(sxml("_defect"));
+            addTableCell(defect.getDescription());
+            endTableRow();
+            if (!defect.getComment().isEmpty()) {
+                startTableRow();
+                addTableCellBold(sxml("_commentOrDescription"));
+                addTableCell(defect.getComment());
+                endTableRow();
+            }
+            if (!defect.getLocation().isEmpty()) {
+                startTableRow();
+                addTableCellBold(sxml("_unitOrLocation"));
+                addTableCell(defect.getLocation());
+                endTableRow();
+            }
+            endTable2Col();
             startTable4Col();
             startTableRow();
             addTableCellBold(sxml("_id"));
@@ -193,27 +211,25 @@ public abstract class CodefPdfCreator extends PdfCreator {
             endTableRow();
             endTable4Col();
 
-            BinaryFile file;
-            startTable2Col();
-            if (defect.getPositionX()>0 || defect.getPositionY()>0) {
-                ImageData plan = FileBean.getInstance().getFile(unit.getPlan().getId(), true, ImageData.class);
-                byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
-                file = defect.createCroppedDefectPlan(plan, arrowBytes, unit.getId(), defect.getPositionX(), defect.getPositionY());
-                addLabeledImage(sxml("_defectPosition"), file, "5.0cm");
-            }
-            if (!defect.getComment().isEmpty()) {
-                addLabeledContent(sxml("_positionComment"), xml(defect.getComment()));
-            }
             List<ImageData> files = defect.getFiles(ImageData.class);
-            if (!files.isEmpty()) {
-                addLabeledContent(sxml("_images"), "");
-                for (ImageData image : files) {
-                    file = FileBean.getInstance().getBinaryFile(image.getId());
-                    addLabeledImage("", file, "8.0cm");
+            if (defect.getPositionX()>0 || defect.getPositionY()>0 || !files.isEmpty()) {
+                BinaryFile file;
+                startTable2Col();
+                if (defect.getPositionX() > 0 || defect.getPositionY() > 0) {
+                    ImageData plan = FileBean.getInstance().getFile(unit.getPlan().getId(), true, ImageData.class);
+                    byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
+                    file = defect.createCroppedDefectPlan(plan, arrowBytes, unit.getId(), defect.getPositionX(), defect.getPositionY());
+                    addLabeledImage(sxml("_defectPosition"), file, "5.0cm");
                 }
+                if (!files.isEmpty()) {
+                    addLabeledContent(sxml("_images"), "");
+                    for (ImageData image : files) {
+                        file = FileBean.getInstance().getBinaryFile(image.getId());
+                        addLabeledImage("", file, "8.0cm");
+                    }
+                }
+                endTable2Col();
             }
-            endTable2Col();
-
             if (includeStatusChanges) {
                 addStatusList(defect);
             }

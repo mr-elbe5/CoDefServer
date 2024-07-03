@@ -8,7 +8,10 @@
  */
 package de.elbe5.configuration;
 
-public class CodefConfiguration {
+import de.elbe5.application.Configuration;
+import jakarta.servlet.ServletContext;
+
+public class CodefConfiguration extends Configuration {
 
     private static boolean showInactiveContent = false;
 
@@ -66,5 +69,16 @@ public class CodefConfiguration {
 
     public static void setSyncProjectCompamiesOnly(boolean syncProjectCompamiesOnly) {
         CodefConfiguration.syncProjectCompamiesOnly = syncProjectCompamiesOnly;
+    }
+
+    public static void initialize(ServletContext context){
+        Configuration.initialize(context);
+        showInactiveContent = getSafeBoolean(context, "showInactiveContent");
+        syncProjectCompamiesOnly = getSafeBoolean(context, "syncProjectCompanies");
+        serverSettings.useNotified = getSafeBoolean(context, "useNotified");
+        serverSettings.defaultCountry = getSafeString(context, "countryCode");
+        serverSettings.timeZoneName = getSafeString(context, "timeZoneName");
+        serverSettings.meteoStatKey = getSafeString(context, "meteostatKey");
+        System.out.println("extended static configuration loaded");
     }
 }

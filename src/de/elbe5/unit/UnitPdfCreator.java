@@ -28,8 +28,7 @@ public class UnitPdfCreator extends CodefPdfCreator {
 
         startXml();
 
-        addTopHeader(sxml("_unit") + ": " + xml(unit.getProject().getDisplayName()));
-        addHeaderComment(sxml("_project") + ": " + xml(unit.getProject().getDisplayName()));
+        addTopHeader(sxml("_project") + ": " + xml(unit.getProject().getDisplayName()));
 
         addUnit(unit, user, includeStatusChanges);
 

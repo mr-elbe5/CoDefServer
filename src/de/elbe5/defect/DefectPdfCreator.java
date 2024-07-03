@@ -37,8 +37,10 @@ public class DefectPdfCreator extends CodefPdfCreator {
                 + xml(unit.getProject().getDisplayName()) + ", " + xml(unit.getDisplayName()));
 
         startTable2Col();
-        addLabeledContent(sxml("_description"),xml(defect.getDescription()));
+        addLabeledContent(sxml("_defect"),xml(defect.getDescription()));
         addLabeledContent(sxml("_id"),Integer.toString(defect.getId()));
+        addLabeledContent(sxml("_commentOrDescription"),xml(defect.getComment()));
+        addLabeledContent(sxml("_unitOrLocation"),xml(defect.getLocation()));
         addLabeledContent(sxml("_defectType"),defect.isRemainingWork() ? sxml("_remainingWork") : sxml("_defect"));
         UserData user= UserCache.getUser(defect.getCreatorId());
         addLabeledContent(sxml("_creator"),xml(user.getName()));
@@ -56,7 +58,6 @@ public class DefectPdfCreator extends CodefPdfCreator {
             file = defect.createCroppedDefectPlan(plan, arrowBytes, defect.getId(), defect.getPositionX(), defect.getPositionY());
             addLabeledImage( sxml("_defectPosition"), file, "5.0cm");
         }
-        addLabeledContent(sxml("_positionComment"),defect.getComment());
         List<ImageData> files = defect.getFiles(ImageData.class);
         if (!files.isEmpty()) {
             addLabeledContent(sxml("_images"),"");
