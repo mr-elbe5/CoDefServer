@@ -119,6 +119,8 @@
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getCsv/<%=unit.getId()%>');"><%=$SH("_downloadCsv")%>
+        </button>
     </div>
 </section>
 <script type="text/javascript">

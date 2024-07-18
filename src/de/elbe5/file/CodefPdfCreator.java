@@ -218,7 +218,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
                 if (defect.getPositionX() > 0 || defect.getPositionY() > 0) {
                     ImageData plan = FileBean.getInstance().getFile(unit.getPlan().getId(), true, ImageData.class);
                     byte[] arrowBytes = FileBean.getInstance().getImageBytes(defect.getIconName());
-                    file = defect.createCroppedDefectPlan(plan, arrowBytes, unit.getId(), defect.getPositionX(), defect.getPositionY());
+                    file = defect.createCroppedDefectPlan(plan, arrowBytes, defect.getId(), defect.getPositionX(), defect.getPositionY());
                     addLabeledImage(sxml("_defectPosition"), file, "5.0cm");
                 }
                 if (!files.isEmpty()) {

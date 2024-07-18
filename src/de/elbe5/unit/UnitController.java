@@ -18,6 +18,7 @@ import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;
 import de.elbe5.file.ImageData;
+import de.elbe5.project.ProjectCsvCreator;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
@@ -105,6 +106,16 @@ public class UnitController extends ContentController {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
         BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, rdata, includeStatusChanges);
+        assert(file!=null);
+        MemoryFileResponse view=new MemoryFileResponse(file);
+        view.setForceDownload(true);
+        return view;
+    }
+
+    public IResponse getCsv(RequestData rdata) {
+        boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
+        int contentId = rdata.getId();
+        BinaryFile file = new UnitCsvCreator().getCsvFile(contentId);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
