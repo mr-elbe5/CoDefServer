@@ -21,6 +21,8 @@ import java.util.List;
 
 public abstract class CodefPdfCreator extends PdfCreator {
 
+    public static int maxImageSize = 1024;
+
     public void addTopHeader(String text){
         add("<topheader><text>").add(text).add("</text></topheader>");
     }
@@ -225,6 +227,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
                     addLabeledContent(sxml("_images"), "");
                     for (ImageData image : files) {
                         file = FileBean.getInstance().getBinaryFile(image.getId());
+                        file.resizeImage(maxImageSize);
                         addLabeledImage("", file, "8.0cm");
                     }
                 }
@@ -269,6 +272,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
                     List<ImageData> statusChangeImages = changeData.getFiles(ImageData.class);
                     for (ImageData image : statusChangeImages) {
                         BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
+                        file.resizeImage(maxImageSize);
                         addLabeledImage("", file, "8.0cm");
                     }
                 }

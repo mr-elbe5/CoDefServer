@@ -103,13 +103,19 @@ public class UnitController extends ContentController {
     }
 
     public IResponse getReport(RequestData rdata) {
-        boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
-        int contentId = rdata.getId();
-        BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, rdata, includeStatusChanges);
-        assert(file!=null);
-        MemoryFileResponse view=new MemoryFileResponse(file);
-        view.setForceDownload(true);
-        return view;
+        try {
+            boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
+            int contentId = rdata.getId();
+            BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, rdata, includeStatusChanges);
+            assert (file != null);
+            MemoryFileResponse view = new MemoryFileResponse(file);
+            view.setForceDownload(true);
+            return view;
+        }
+        catch (Exception e) {
+            Log.error("pdf error", e);
+            return new StatusResponse(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public IResponse getCsv(RequestData rdata) {

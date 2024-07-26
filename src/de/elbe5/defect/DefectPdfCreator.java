@@ -63,6 +63,7 @@ public class DefectPdfCreator extends CodefPdfCreator {
             addLabeledContent(sxml("_images"),"");
             for (ImageData image : files) {
                 file = FileBean.getInstance().getBinaryFile(image.getId());
+                file.resizeImage(maxImageSize);
                 addLabeledImage( image.getDisplayName(), file,"5.0cm");
             }
         }

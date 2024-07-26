@@ -90,6 +90,7 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
             addLabeledContent(sxml("_images"),"");
             for (ImageData image : files) {
                 BinaryFile file = FileBean.getInstance().getBinaryFile(image.getId());
+                file.resizeImage(maxImageSize);
                 addLabeledImage("", file,"5.0cm");
             }
             endTable2Col();
