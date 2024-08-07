@@ -50,6 +50,12 @@
     </fo:block-container>
   </xsl:template>
 
+  <xsl:template match="defect">
+    <fo:block page-break-before="always">
+      <xsl:apply-templates select="*" />
+    </fo:block>       
+  </xsl:template>
+
   <xsl:template match="topheader">
     <fo:block-container background-color="#f0f0f0" padding="0.2cm" margin-bottom="0.1cm" text-align="center" >
       <fo:block font-weight="bold" font-size="15pt" linefeed-treatment="preserve">
