@@ -64,6 +64,14 @@ public abstract class CodefPdfCreator extends PdfCreator {
                 .add(height).add("</height></tablecellimage>");
     }
 
+    public void startDefect(){
+        add("<defect>");
+    }
+
+    public void endDefect(){
+        add("</defect>");
+    }
+
     public void startTableRow(){
         add("<tablerow>");
     }
@@ -160,6 +168,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
 
     protected void addDefectList(UnitData unit, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
+            startDefect();
             addTextLine(xml(defect.getDisplayName()));
             startTable2Col();
             startTableRow();
@@ -236,6 +245,7 @@ public abstract class CodefPdfCreator extends PdfCreator {
             if (includeStatusChanges) {
                 addStatusList(defect);
             }
+            endDefect();
         }
     }
 

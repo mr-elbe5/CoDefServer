@@ -51,7 +51,7 @@
   </xsl:template>
 
   <xsl:template match="defect">
-    <fo:block page-break-before="always">
+    <fo:block page-break-before="always" page-break-after="always">
       <xsl:apply-templates select="*" />
     </fo:block>       
   </xsl:template>
