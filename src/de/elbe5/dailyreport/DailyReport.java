@@ -39,6 +39,7 @@ public class DailyReport extends ContentData {
     protected String weatherWdir = "";
     protected String weatherTemp = "";
     protected String weatherRhum = "";
+    protected String comment = "";
 
     protected List<CompanyBriefing> companyBriefings = new ArrayList<>();
 
@@ -132,6 +133,14 @@ public class DailyReport extends ContentData {
 
     public void setWeatherRhum(double value) {
         this.weatherRhum = String.format("%d %%", (int) value);
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public boolean getWeather(LocalDateTime date) {
@@ -244,6 +253,7 @@ public class DailyReport extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
+                setComment(rdata.getAttributes().getString("comment"));
                 getCompanyBriefings().clear();
                 for (int companyId : getProject().getCompanyIds()){
                     if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
@@ -266,6 +276,7 @@ public class DailyReport extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
+                setComment(rdata.getAttributes().getString("comment"));
                 getCompanyBriefings().clear();
                 for (int companyId : getProject().getCompanyIds()){
                     if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
@@ -300,6 +311,7 @@ public class DailyReport extends ContentData {
                     setWeatherWdir(rdata.getAttributes().getString("weatherWdir"));
                     setWeatherWspd(rdata.getAttributes().getString("weatherWspd"));
                 }
+                setComment(rdata.getAttributes().getString("comment"));
                 getCompanyBriefings().clear();
                 for (int companyId : getProject().getCompanyIds()){
                     if (rdata.getAttributes().getBoolean("company_" + companyId + "_present")){
@@ -323,6 +335,7 @@ public class DailyReport extends ContentData {
                 .add("weatherTemp", getWeatherTemp())
                 .add("weatherWdir", getWeatherWdir())
                 .add("weatherWspd", getWeatherWspd())
+                .add("comment", getComment())
                 ;
     }
 
@@ -354,6 +367,7 @@ public class DailyReport extends ContentData {
             setWeatherTemp(getString(json, "weatherTemp"));
             setWeatherWdir(getString(json, "weatherWdir"));
             setWeatherWspd(getString(json, "weatherWspd"));
+            setComment(getString(json, "comment"));
         }
 
     }

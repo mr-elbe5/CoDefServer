@@ -19,7 +19,7 @@ public class DailyReportBean extends ContentBean {
     }
 
     private static final String GET_CONTENT_EXTRAS_SQL = " SELECT idx, report_date, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum FROM t_project_daily_report where id = ?";
+            "weather_temp, weather_rhum, comment FROM t_project_daily_report where id = ?";
 
     @Override
     public void readContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -38,7 +38,8 @@ public class DailyReportBean extends ContentBean {
                     data.setWeatherWspd(rs.getString(i++));
                     data.setWeatherWdir(rs.getString(i++));
                     data.setWeatherTemp(rs.getString(i++));
-                    data.setWeatherRhum(rs.getString(i));
+                    data.setWeatherRhum(rs.getString(i++));
+                    data.setComment(rs.getString(i));
                 }
             }
         } finally {
@@ -70,8 +71,8 @@ public class DailyReportBean extends ContentBean {
     }
 
     private static final String INSERT_CONTENT_EXTRAS_SQL = "insert into t_project_daily_report (id, idx, report_date, weather_coco, weather_wspd, weather_wdir, " +
-            "weather_temp, weather_rhum) " +
-            "values(?,?,?,?,?,?,?,?)";
+            "weather_temp, weather_rhum, comment) " +
+            "values(?,?,?,?,?,?,?,?,?)";
 
     @Override
     public void createContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -88,7 +89,8 @@ public class DailyReportBean extends ContentBean {
             pst.setString(i++, data.getWeatherWspd());
             pst.setString(i++, data.getWeatherWdir());
             pst.setString(i++, data.getWeatherTemp());
-            pst.setString(i, data.getWeatherRhum());
+            pst.setString(i++, data.getWeatherRhum());
+            pst.setString(i, data.getComment());
             pst.executeUpdate();
             pst.close();
             writeProjectDiaryCompanies(con, data);
@@ -102,7 +104,7 @@ public class DailyReportBean extends ContentBean {
     }
 
     private static final String UPDATE_CONTENT_EXTRAS_SQL = "update t_project_daily_report " +
-            "set idx=?, report_date=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=? where id=? ";
+            "set idx=?, report_date=?, weather_coco=?, weather_wspd=?, weather_wdir=?, weather_temp=?, weather_rhum=?, comment=? where id=? ";
 
     @Override
     public void updateContentExtras(Connection con, ContentData contentData) throws SQLException {
@@ -119,6 +121,7 @@ public class DailyReportBean extends ContentBean {
             pst.setString(i++, data.getWeatherWdir());
             pst.setString(i++, data.getWeatherTemp());
             pst.setString(i++, data.getWeatherRhum());
+            pst.setString(i++, data.getComment());
             pst.setInt(i, data.getId());
             pst.executeUpdate();
             pst.close();

@@ -53,7 +53,7 @@ public class DailyReportController extends ContentController {
 
     public IResponse getPdf(RequestData rdata) {
         int contentId = rdata.getId();
-        BinaryFile file = new DailyReportPdfCreator().getProjectDailyReport(contentId, rdata);
+        BinaryFile file = new DailyReportPdfCreator().getProjectDailyReport(contentId);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);

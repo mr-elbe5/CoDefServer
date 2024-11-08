@@ -45,3 +45,7 @@ ALTER TABLE t_codef_user ADD show_open BOOLEAN NOT NULL DEFAULT true;
 ALTER TABLE t_codef_user ADD show_disputed BOOLEAN NOT NULL DEFAULT true;
 ALTER TABLE t_codef_user ADD show_rejected BOOLEAN NOT NULL DEFAULT true;
 ALTER TABLE t_codef_user ADD show_done BOOLEAN NOT NULL DEFAULT true;
+
+-- new
+
+ALTER TABLE t_project_daily_report ADD comment VARCHAR(2000) NOT NULL DEFAULT '';

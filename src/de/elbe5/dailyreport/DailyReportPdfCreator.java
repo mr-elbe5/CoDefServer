@@ -17,7 +17,6 @@ import de.elbe5.content.ContentCache;
 import de.elbe5.file.CodefPdfCreator;
 import de.elbe5.file.FileBean;
 import de.elbe5.file.ImageData;
-import de.elbe5.request.RequestData;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 
@@ -25,10 +24,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DailyReportPdfCreator extends CodefPdfCreator {
-    
-    public BinaryFile getProjectDailyReport(int projectDiaryId, RequestData rdata){
-        LocalDateTime now = DateHelper.getCurrentTime();
+
+    public BinaryFile getProjectDailyReport(int projectDiaryId) {
         DailyReport report = ContentCache.getContent(projectDiaryId, DailyReport.class);
+        return getProjectDailyReport(report);
+    }
+    
+    public BinaryFile getProjectDailyReport(DailyReport report){
+        LocalDateTime now = DateHelper.getCurrentTime();
         if (report==null || report.getProject() == null)
             return null;
 
@@ -96,7 +99,11 @@ public class DailyReportPdfCreator extends CodefPdfCreator {
             endTable2Col();
         }
 
-
+        if (!report.getComment().isEmpty()) {
+            startTable2Col();
+            addLabeledContent(sxml("_generalComment"), xml(report.getComment()));
+            endTable2Col();
+        }
 
         addFooter(sxml("_projectDailyReport") + " " + xml(report.getDisplayName()) + " - " + xml(now));
         finishXml();

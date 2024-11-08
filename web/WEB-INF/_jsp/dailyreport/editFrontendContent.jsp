@@ -68,6 +68,7 @@
             </table>
         </form:line>
         <form:file name="files" label="_addImages" required="false" multiple="true"/>
+        <form:textarea name="comment" label="_generalComment" height="5rem" required="false"><%=$H(report.getComment())%></form:textarea>
         <div>
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="linkTo('/ctrl/project/show/<%=project.getId()%>');"><%=$SH("_cancel")%>
             </button>

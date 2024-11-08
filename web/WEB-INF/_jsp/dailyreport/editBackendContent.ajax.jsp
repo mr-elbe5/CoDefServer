@@ -75,6 +75,7 @@
                         <%}%>
                     </table>
                 </form:line>
+                <form:textarea name="comment" label="_generalComment" height="5rem" required="false"><%=$H(report.getComment())%></form:textarea>
                 <form:line label="_active" padded="true">
                     <form:check name="active" value="true" checked="<%=report.isActive()%>"/>
                 </form:line>

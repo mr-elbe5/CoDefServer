@@ -112,6 +112,8 @@
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getCsv/<%=project.getId()%>');"><%=$SH("_downloadCsv")%>
         </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getDailyReports/<%=project.getId()%>');"><%=$SH("_downloadDailyReports")%>
+        </button>
     </div>
     <%}%>
 </section>

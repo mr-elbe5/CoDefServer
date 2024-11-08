@@ -10,15 +10,18 @@ package de.elbe5.unit;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
+import de.elbe5.base.StringHelper;
 import de.elbe5.base.Token;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentData;
+import de.elbe5.dailyreport.DailyReport;
+import de.elbe5.dailyreport.DailyReportPdfCreator;
+import de.elbe5.dailyreport.DailyReportZipFile;
 import de.elbe5.defect.DefectData;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
 import de.elbe5.file.ImageBean;
 import de.elbe5.file.ImageData;
-import de.elbe5.project.ProjectCsvCreator;
 import de.elbe5.project.ProjectData;
 import de.elbe5.request.ContentRequestKeys;
 import de.elbe5.request.RequestData;
@@ -31,6 +34,7 @@ import de.elbe5.user.CodefUserData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UnitController extends ContentController {

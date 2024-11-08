@@ -99,6 +99,14 @@
             </div>
         </div>
         <%}%>
+
+        <div class="d-flex flex-wrap align-items-stretch boxContainer">
+            <div class="box">
+                <div class="boxTitle"><%=$SH("_generalComment")%></div>
+                <div class="boxText"><%=$HML(contentData.getComment())%></div>
+            </div>
+        </div>
+
         <% if (contentData.hasUserEditRight(rdata.getLoginUser())){%>
         <div class=buttonLine>
             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/dailyreport/getPdf/<%=contentData.getId()%>');"><%=$SH("_downloadPdf")%>

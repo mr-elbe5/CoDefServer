@@ -193,6 +193,7 @@ CREATE TABLE IF NOT EXISTS t_project_daily_report
     weather_wdir    VARCHAR(40) NOT NULL DEFAULT '',
     weather_temp    VARCHAR(40) NOT NULL DEFAULT '',
     weather_rhum    VARCHAR(40) NOT NULL DEFAULT '',
+    comment         VARCHAR(2000) NOT NULL DEFAULT '',
     CONSTRAINT t_project_daily_report_pk PRIMARY KEY (id),
     CONSTRAINT t_project_daily_report_fk1 FOREIGN KEY (id) REFERENCES t_content (id) ON DELETE CASCADE
 );

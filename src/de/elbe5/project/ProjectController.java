@@ -13,12 +13,22 @@ import de.elbe5.base.Log;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
+import de.elbe5.content.ContentData;
+import de.elbe5.dailyreport.DailyReport;
+import de.elbe5.dailyreport.DailyReportPdfCreator;
+import de.elbe5.dailyreport.DailyReportZipFile;
 import de.elbe5.request.RequestData;
 import de.elbe5.request.RequestType;
-import de.elbe5.response.*;
+import de.elbe5.response.IResponse;
+import de.elbe5.response.JsonResponse;
+import de.elbe5.response.MemoryFileResponse;
+import de.elbe5.response.StatusResponse;
 import de.elbe5.user.CodefUserData;
 import de.elbe5.user.UserData;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectController extends ContentController {
 
@@ -53,6 +63,23 @@ public class ProjectController extends ContentController {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
         BinaryFile file = new ProjectCsvCreator().getCsvFile(contentId);
+        assert(file!=null);
+        MemoryFileResponse view=new MemoryFileResponse(file);
+        view.setForceDownload(true);
+        return view;
+    }
+
+    public IResponse getDailyReports(RequestData rdata) {
+        int contentId = rdata.getId();
+        ProjectData data = ContentCache.getContent(contentId, ProjectData.class);
+        List<DailyReport> reports = data.getChildren(DailyReport.class);
+        DailyReportZipFile zipFile = new DailyReportZipFile();
+        for (DailyReport report : reports) {
+            BinaryFile file = new DailyReportPdfCreator().getProjectDailyReport(report);
+            assert (file != null);
+            zipFile.addFile(file.getFileName(), file.getBytes());
+        }
+        BinaryFile file = zipFile.getZipFile(data.getDisplayName());
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
