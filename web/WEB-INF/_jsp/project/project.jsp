@@ -35,6 +35,7 @@
     <table id="defectTable" class="defect-table">
         <thead>
         <tr>
+            <th style="width:5%"></th>
             <th style="width:5%"><%=$SH("_id")%>
             </th>
             <th style="width:9%"><%=$SH("_defect")%>
@@ -75,12 +76,14 @@
                 <a class="fa fa-sort" onclick=linkTo("/ctrl/unit/sort/<%=id%>?sortType=<%=DefectComparator.TYPE_NOTIFIED%>");>&nbsp;</a>
             </th>
             <%}%>
-            <th style="width:5%"></th>
         </tr>
         </thead>
         <tbody>
         <% for (DefectData defect : defects){%>
         <tr>
+            <td>
+                <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>
+            </td>
             <td><%=defect.getId()%></td>
             <td><%=$H(defect.getDescription())%></td>
             <td><%=defect.isRemainingWork() ? $SH("_remainingWork") : $SH("_defect") %></td>
@@ -96,9 +99,6 @@
             <% if (CodefConfiguration.showNotified()){%>
             <td><%=$SH(defect.isNotified() ? "_yes" : "_no")%></td>
             <%}%>
-            <td>
-                <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>
-            </td>
         </tr>
         <%
             }%>
