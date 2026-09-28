@@ -10,6 +10,7 @@ package de.elbe5.project;
 
 import de.elbe5.base.BinaryFile;
 import de.elbe5.base.Log;
+import de.elbe5.base.StringHelper;
 import de.elbe5.content.ContentBean;
 import de.elbe5.content.ContentCache;
 import de.elbe5.content.ContentController;
@@ -52,7 +53,9 @@ public class ProjectController extends ContentController {
     public IResponse getReport(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = new ProjectPdfCreator().getProjectReport(contentId, rdata, includeStatusChanges);
+        List<Integer> selected = rdata.getAttributes().getIntegerList("selected");
+        Log.info("selected defects: " + StringHelper.getIntString(selected));
+        BinaryFile file = new ProjectPdfCreator().getProjectReport(contentId, selected, rdata, includeStatusChanges);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -62,7 +65,9 @@ public class ProjectController extends ContentController {
     public IResponse getCsv(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = new ProjectCsvCreator().getCsvFile(contentId);
+        List<Integer> selected = rdata.getAttributes().getIntegerList("selected");
+        Log.info("selected defects: " + StringHelper.getIntString(selected));
+        BinaryFile file = new ProjectCsvCreator().getCsvFile(contentId, selected);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -72,6 +77,7 @@ public class ProjectController extends ContentController {
     public IResponse getDailyReports(RequestData rdata) {
         int contentId = rdata.getId();
         ProjectData data = ContentCache.getContent(contentId, ProjectData.class);
+        assert data != null;
         List<DailyReport> reports = data.getChildren(DailyReport.class);
         DailyReportZipFile zipFile = new DailyReportZipFile();
         for (DailyReport report : reports) {

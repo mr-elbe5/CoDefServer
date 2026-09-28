@@ -25,7 +25,7 @@
     UnitData unit = ContentData.getCurrentContent(rdata, UnitData.class);
     assert (unit != null);
     int id= unit.getId();
-    List<DefectData> defects = user.getUnitDefects(id);
+    List<DefectData> defects = user.getUnitDefects(id, null);
 %>
 <form:message/>
 <section class="contentTop">
@@ -41,10 +41,12 @@
         </a>
     </div>
     <%}%>
+    <form method="post" action="" id="tableform">
     <table id="defectTable" class="defect-table">
         <thead class="tableHead">
             <tr>
-                <th style="width:5%"></th>
+                <th style="width:2%"><a class="fa fa-check" href="null" onclick="return toggleCheckBoxes()"></a></th>
+                <th style="width:2%"></th>
                 <th style="width:5%"><%=$SH("_id")%>
                 </th>
                 <th style="width:9%"><%=$SH("_defect")%>
@@ -87,6 +89,7 @@
         <tbody class="tableBody">
         <% for (DefectData defect : defects){%>
             <tr class="tableRow">
+                <td><input type="checkbox" name="selected" value="<%=defect.getId()%>"/></td>
                 <td>
                     <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>
                 </td>
@@ -109,17 +112,18 @@
             }%>
         </tbody>
     </table>
+    </form>
     <% if (unit.getPlan()!=null){%>
     <div class="imageBox">
         <img src="/ctrl/unit/showDefectPlan/<%=unit.getId()%>?planId=<%=unit.getPlan().getId()%>" alt="" />
     </div>
     <%}%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>');"><%=$SH("_downloadPdf")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getReport();"><%=$SH("_downloadPdf")%>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getReportWithStatusChanges();"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/unit/getCsv/<%=unit.getId()%>');"><%=$SH("_downloadCsv")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getCsv();"><%=$SH("_downloadCsv")%>
         </button>
     </div>
 </section>
@@ -131,4 +135,35 @@
     $(window).resize(function(){
         defectTable.resize();
     });
+
+    function selectAll(){
+        $('input[name="selected"]').prop('checked',true);
+    }
+
+    function toggleCheckBoxes(){
+        let checked=$('input[name="selected"]:checked').length > 0;
+        $('input[name="selected"]').prop('checked',!checked);
+        return false;
+    }
+
+    function getReport(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/unit/getReport/<%=unit.getId()%>');
+        $form.submit();
+    }
+
+    function getReportWithStatusChanges(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/unit/getReport/<%=unit.getId()%>?includeStatusChanges=true');
+        $form.submit();
+    }
+
+    function getCsv(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/unit/getCsv/<%=unit.getId()%>');
+        $form.submit();
+    }
+
+    selectAll();
+
 </script>

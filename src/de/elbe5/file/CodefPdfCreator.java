@@ -17,6 +17,7 @@ import de.elbe5.user.CodefUserData;
 import de.elbe5.user.UserCache;
 import de.elbe5.user.UserData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CodefPdfCreator extends PdfCreator {
@@ -146,8 +147,8 @@ public abstract class CodefPdfCreator extends PdfCreator {
         add("</docAndDate></footer>");
     }
 
-    protected void addUnit(UnitData unit, CodefUserData user, boolean includeStatusChanges){
-        List<DefectData> defects = user.getUnitDefects(unit.getId());
+    protected void addUnit(UnitData unit, List<Integer> ids, CodefUserData user, boolean includeStatusChanges){
+        List<DefectData> defects = user.getUnitDefects(unit.getId(), ids);
         if (!defects.isEmpty()) {
             addSubHeader(sxml("_unit") + ": " + xml(unit.getDisplayName()));
 
@@ -158,16 +159,25 @@ public abstract class CodefPdfCreator extends PdfCreator {
             ImageData plan = unit.getPlan();
             if (plan != null) {
                 ImageData fullplan = ImageBean.getInstance().getFile(plan.getId(), true, ImageData.class);
-                defects = user.getUnitDefects(unit.getId());
-                BinaryFile file = unit.createUnitDefectPlan(fullplan, defects, 1);
+                defects = user.getUnitDefects(unit.getId(), ids);
+                List<DefectData> list = new ArrayList<>();
+                for (DefectData defect : defects) {
+                    if (ids==null || ids.contains(defect.getId())) {
+                        list.add(defect);
+                    }
+                }
+                BinaryFile file = unit.createUnitDefectPlan(fullplan, list, 1);
                 addImage(getBase64SrcString(file));
             }
-            addDefectList(unit, defects, includeStatusChanges);
+            addDefectList(unit, ids, defects, includeStatusChanges);
         }
     }
 
-    protected void addDefectList(UnitData unit, List<DefectData> defects, boolean includeStatusChanges) {
+    protected void addDefectList(UnitData unit, List<Integer> ids, List<DefectData> defects, boolean includeStatusChanges) {
         for (DefectData defect : defects){
+            if (ids!= null && !ids.contains(defect.getId())){
+                continue;
+            }
             startDefect();
             addTextLine(xml(defect.getDisplayName()));
             startTable2Col();

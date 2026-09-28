@@ -17,11 +17,11 @@ public class ProjectCsvCreator extends CsvCreator {
 
     ProjectData project;
 
-    public BinaryFile getCsvFile(int projectId){
+    public BinaryFile getCsvFile(int projectId, List<Integer> ids){
         project= ContentCache.getContent(projectId,ProjectData.class);
         assert project!= null;
         String fileName="project-spreadsheet-" + project.getId() + "-" + DateHelper.toHtml(DateHelper.getCurrentTime()).replace(' ','-')+".csv";
-        String csv = createCSV();
+        String csv = createCSV(ids);
         return getCsv(csv, fileName);
     }
 
@@ -33,10 +33,10 @@ public class ProjectCsvCreator extends CsvCreator {
     static String[] statusFields = {"_statusChangeBy","_on","_status","_assigned","_description"};
 
     @Override
-    public void writeContent(CSVWriter writer) {
+    public void writeContent(CSVWriter writer, List<Integer> ids) {
         writeHeader(writer);
         for (UnitData unit : project.getChildren(UnitData.class)) {
-            writeUnit(writer, unit);
+            writeUnit(writer, unit, ids);
         }
     }
 
@@ -52,7 +52,7 @@ public class ProjectCsvCreator extends CsvCreator {
         writeLine(writer,list);
     }
 
-    private void writeUnit(CSVWriter writer, UnitData unit){
+    private void writeUnit(CSVWriter writer, UnitData unit, List<Integer> ids){
         List<String> list = new ArrayList<>();
         for (int i = 0; i < projectFields.length; i++)
             list.add("");
@@ -60,6 +60,9 @@ public class ProjectCsvCreator extends CsvCreator {
         list.add(csv(unit.getApproveDate()));
         writeLine(writer,list);
         for (DefectData defect : unit.getChildren(DefectData.class)) {
+            if (ids != null && !ids.contains(defect.getId())){
+                continue;
+            }
             writeDefect(writer, defect);
         }
     }

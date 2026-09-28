@@ -16,11 +16,11 @@ public class UnitCsvCreator extends CsvCreator {
 
     UnitData unit;
 
-    public BinaryFile getCsvFile(int unitId){
+    public BinaryFile getCsvFile(int unitId, List<Integer> ids){
         unit= ContentCache.getContent(unitId,UnitData.class);
         assert unit!= null;
         String fileName="unit-spreadsheet-" + unit.getId() + "-" + DateHelper.toHtml(DateHelper.getCurrentTime()).replace(' ','-')+".csv";
-        String csv = createCSV();
+        String csv = createCSV(ids);
         return getCsv(csv, fileName);
     }
 
@@ -31,9 +31,12 @@ public class UnitCsvCreator extends CsvCreator {
     static String[] statusFields = {"_statusChangeBy","_on","_status","_assigned","_description"};
 
     @Override
-    public void writeContent(CSVWriter writer) {
+    public void writeContent(CSVWriter writer, List<Integer> ids) {
         writeHeader(writer);
         for (DefectData defect : unit.getChildren(DefectData.class)) {
+            if (ids!=null && !ids.contains(defect.getId())){
+                continue;
+            }
             writeDefect(writer, defect);
         }
     }

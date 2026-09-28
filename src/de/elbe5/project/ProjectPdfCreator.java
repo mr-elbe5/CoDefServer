@@ -17,10 +17,11 @@ import de.elbe5.request.RequestData;
 import de.elbe5.user.CodefUserData;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProjectPdfCreator extends CodefPdfCreator {
 
-    public BinaryFile getProjectReport(int projectId, RequestData rdata, boolean includeStatusChanges){
+    public BinaryFile getProjectReport(int projectId, List<Integer> ids, RequestData rdata, boolean includeStatusChanges){
         LocalDateTime now = DateHelper.getCurrentTime();
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         ProjectData project= ContentCache.getContent(projectId,ProjectData.class);
@@ -31,7 +32,10 @@ public class ProjectPdfCreator extends CodefPdfCreator {
         addTopHeader(sxml("_project") + ": " + xml(project.getDisplayName()));
 
         for (UnitData unit : project.getChildren(UnitData.class)) {
-            addUnit(unit, user, includeStatusChanges);
+            if (ids!= null && !unit.hasAnyChildrenIn(ids)){
+                continue;
+            }
+            addUnit(unit, ids, user, includeStatusChanges);
         }
 
         addFooter(sxml("_project") + " " + xml(project.getDisplayName()) + " - " + (xml(now)));

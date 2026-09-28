@@ -32,10 +32,12 @@
 <section class="contentSection tableContent" id="content">
     <div><%=$SH("_address")%>: <%=$H(project.getZipCode())%> <%=$H(project.getCity())%>, <%=$H(project.getStreet())%> </div>
     <h3><%=$SH("_defects")%></h3>
+    <form method="post" action="" id="tableform">
     <table id="defectTable" class="defect-table">
         <thead>
         <tr>
-            <th style="width:5%"></th>
+            <th style="width:2%"><a class="fa fa-check" href="null" onclick="return toggleCheckBoxes()"></a></th>
+            <th style="width:2%"></th>
             <th style="width:5%"><%=$SH("_id")%>
             </th>
             <th style="width:9%"><%=$SH("_defect")%>
@@ -81,6 +83,7 @@
         <tbody>
         <% for (DefectData defect : defects){%>
         <tr>
+            <td><input type="checkbox" name="selected" value="<%=defect.getId()%>"/></td>
             <td>
                 <a href="" class="fa fa-eye" title="<%=$SH("_show")%>" onclick="return linkTo('/ctrl/content/show/<%=defect.getId()%>',null);"></a>
             </td>
@@ -104,13 +107,14 @@
             }%>
         </tbody>
     </table>
+    </form>
     <% if (project.hasUserEditRight(rdata.getLoginUser())){%>
     <div class=buttonLine>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>');"><%=$SH("_downloadPdf")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getReport();"><%=$SH("_downloadPdf")%>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getReport/<%=project.getId()%>?includeStatusChanges=true');"><%=$SH("_downloadPdfWithStatusChanges")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getReportWithStatusChanges();"><%=$SH("_downloadPdfWithStatusChanges")%>
         </button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getCsv/<%=project.getId()%>');"><%=$SH("_downloadCsv")%>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return getCsv();"><%=$SH("_downloadCsv")%>
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="return linkTo('/ctrl/project/getDailyReports/<%=project.getId()%>');"><%=$SH("_downloadDailyReports")%>
         </button>
@@ -125,5 +129,36 @@
     $(window).resize(function(){
         defectTable.resize();
     });
+
+    function selectAll(){
+        $('input[name="selected"]').prop('checked',true);
+    }
+
+    function toggleCheckBoxes(){
+        let checked=$('input[name="selected"]:checked').length > 0;
+        $('input[name="selected"]').prop('checked',!checked);
+        return false;
+    }
+
+    function getReport(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/project/getReport/<%=project.getId()%>');
+        $form.submit();
+    }
+
+    function getReportWithStatusChanges(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/project/getReport/<%=project.getId()%>?includeStatusChanges=true');
+        $form.submit();
+    }
+
+    function getCsv(){
+        let $form = $('#tableform');
+        $form.attr('action', '/ctrl/project/getCsv/<%=project.getId()%>');
+        $form.submit();
+    }
+
+    selectAll();
+
 </script>
 <%}%>

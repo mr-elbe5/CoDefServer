@@ -100,7 +100,7 @@ public class UnitController extends ContentController {
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
-        List<DefectData> defects = user.getUnitDefects(data.getId());
+        List<DefectData> defects = user.getUnitDefects(data.getId(), null);
         BinaryFile file = data.createUnitDefectPlan(plan,defects,1);
         assert(file!=null);
         return new MemoryFileResponse(file);
@@ -110,7 +110,9 @@ public class UnitController extends ContentController {
         try {
             boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
             int contentId = rdata.getId();
-            BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, rdata, includeStatusChanges);
+            List<Integer> selected = rdata.getAttributes().getIntegerList("selected");
+            Log.info("selected defects: " + StringHelper.getIntString(selected));
+            BinaryFile file = new UnitPdfCreator().getUnitReport(contentId, selected, rdata, includeStatusChanges);
             assert (file != null);
             MemoryFileResponse view = new MemoryFileResponse(file);
             view.setForceDownload(true);
@@ -125,7 +127,9 @@ public class UnitController extends ContentController {
     public IResponse getCsv(RequestData rdata) {
         boolean includeStatusChanges = rdata.getAttributes().getBoolean("includeStatusChanges");
         int contentId = rdata.getId();
-        BinaryFile file = new UnitCsvCreator().getCsvFile(contentId);
+        List<Integer> selected = rdata.getAttributes().getIntegerList("selected");
+        Log.info("selected defects: " + StringHelper.getIntString(selected));
+        BinaryFile file = new UnitCsvCreator().getCsvFile(contentId, selected);
         assert(file!=null);
         MemoryFileResponse view=new MemoryFileResponse(file);
         view.setForceDownload(true);
@@ -143,7 +147,7 @@ public class UnitController extends ContentController {
 
     // api
 
-    public IResponse downloadUnitDefectPlan(RequestData rdata) {
+    public IResponse downloadUnitDefectPlan(List<Integer> ids, RequestData rdata) {
         CodefUserData user = rdata.getLoginUser(CodefUserData.class);
         if (user==null)
             return new StatusResponse(HttpServletResponse.SC_UNAUTHORIZED);
@@ -160,7 +164,7 @@ public class UnitController extends ContentController {
         if (data.getPlan()==null)
             return new StatusResponse(HttpServletResponse.SC_NOT_FOUND);
         ImageData plan = ImageBean.getInstance().getFile(data.getPlan().getId(),true,ImageData.class);
-        List<DefectData> defects = user.getUnitDefects(data.getId());
+        List<DefectData> defects = user.getUnitDefects(data.getId(), ids);
         BinaryFile file = data.createUnitDefectPlan(plan,defects,((float)scalePercent)/100);
         if (file==null) {
             Log.error("file is null");

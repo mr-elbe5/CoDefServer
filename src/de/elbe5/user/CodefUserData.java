@@ -188,12 +188,15 @@ public class CodefUserData extends UserData{
         return ids;
     }
 
-    public List<DefectData> getUnitDefects(int unitId){
+    public List<DefectData> getUnitDefects(int unitId, List<Integer> ids){
         UnitData unit = ContentCache.getContent(unitId, UnitData.class);
         assert unit != null;
         List<DefectData> list = unit.getChildren(DefectData.class);
         for (int i=list.size()-1;i>=0;i--){
             DefectData data=list.get(i);
+            if (ids != null && !ids.contains(data.getId())){
+                continue;
+            }
             switch (data.getStatus()){
                 case OPEN -> {
                     if (!isShowOpen()) {
