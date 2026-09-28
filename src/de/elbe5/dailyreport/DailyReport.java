@@ -237,9 +237,9 @@ public class DailyReport extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         //Log.log("ProjectDailyReport.readRequestData");
+        super.readRequestData(rdata,type);
         switch (type) {
             case api -> {
-                super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
                 int i = rdata.getAttributes().getInt("idx");
                 if (i>0)

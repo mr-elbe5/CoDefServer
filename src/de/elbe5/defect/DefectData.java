@@ -328,9 +328,9 @@ public class DefectData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("DefectData.readRequestData");
+        super.readRequestData(rdata,type);
         switch (type) {
             case api -> {
-                super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
                 setComment(rdata.getAttributes().getString("positionComment"));
                 setLocation(rdata.getAttributes().getString("location"));

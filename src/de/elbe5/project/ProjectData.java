@@ -153,9 +153,9 @@ public class ProjectData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("ProjectData.readRequestData");
+        super.readRequestData(rdata, type);
         switch (type){
             case api -> {
-                super.readRequestData(rdata, type);
                 setZipCode(rdata.getAttributes().getString("zipCode"));
                 setCity(rdata.getAttributes().getString("city"));
                 setStreet(rdata.getAttributes().getString("street"));

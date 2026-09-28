@@ -128,9 +128,9 @@ public class DefectStatusData extends ContentData {
     @Override
     public void readRequestData(RequestData rdata, RequestType type) {
         Log.log("StatusChangeData.readRequestData");
+        super.readRequestData(rdata,type);
         switch (type) {
             case api -> {
-                super.readRequestData(rdata,type);
                 setDescription(rdata.getAttributes().getString("description"));
                 setAssignedId(rdata.getAttributes().getInt("assignedId"));
                 setStatus(rdata.getAttributes().getString("status"));
