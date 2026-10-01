@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 
@@ -343,6 +344,12 @@ public class DefectData extends ContentData {
                 setPositionY(rdata.getAttributes().getDouble("positionY"));
             }
             case frontend -> {
+                if (isNew()) {
+                    LocalDate cDate = rdata.getAttributes().getDate("creationDate");
+                    if (cDate != null && cDate.isBefore(getCreationDate().toLocalDate())) {
+                        setCreationDate(cDate.atTime(12, 0));
+                    }
+                }
                 setDescription(rdata.getAttributes().getString("description"));
                 setComment(rdata.getAttributes().getString("comment"));
                 setLocation(rdata.getAttributes().getString("location"));

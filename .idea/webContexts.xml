@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/web/WEB-INF/_jsp/codef/defect/defect.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/_jsp/codef/defect" />
+        <entry key="file://$PROJECT_DIR$/web/WEB-INF/_jsp/defect/editFrontendContent.jsp" value="file://$PROJECT_DIR$/web/WEB-INF/_jsp/defect" />
       </map>
     </option>
   </component>

@@ -46,6 +46,8 @@
         <form:line label="_id" padded="true"><%=Integer.toString(defect.getId())%></form:line>
         <% if (!defect.isNew()){%>
         <form:line label="_editedBy" padded="true"><%=$H(defect.getChangerName())%> (<%=$H(defect.getChangeDate())%>)</form:line>
+        <%} else{ %>
+        <form:date name="creationDate" label="_creationDate" value="<%=$D(defect.getCreationDate().toLocalDate())%>" required="true"/>
         <%}%>
         <form:textarea name="description" label="_defect" height="5em" required="true"><%=$H(defect.getDescription())%></form:textarea>
         <form:textarea name="comment" label="_commentOrDescription" height="5em"><%=$H(defect.getComment())%></form:textarea>

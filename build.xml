@@ -116,9 +116,9 @@
         <copy todir="${deploy.dir}" overwrite="true">
             <file name="${build.dir}/ROOT.war"/>
         </copy>
-        <!--<copy todir="${deploy2.dir}" overwrite="true">
+        <copy todir="${deploy2.dir}" overwrite="true">
             <file name="${build.dir}/ROOT.war"/>
-        </copy>-->
+        </copy>
     </target>
 
     <target name="undeployProject">
